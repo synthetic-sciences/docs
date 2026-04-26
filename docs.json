@@ -9,8 +9,8 @@
     "dark": "#0e7490"
   },
   "logo": {
-    "light": "/logo/synsc-logo.png",
-    "dark": "/logo/synsc-logo.png"
+    "light": "/logo/wordmark.svg",
+    "dark": "/logo/wordmark.svg"
   },
   "favicon": "/logo/synsc-logo.png",
   "appearance": {
