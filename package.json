@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "mint dev",
-    "build": "mint export --output export.zip && rm -rf out && mkdir -p out && unzip -q -o export.zip -d out",
+    "build": "mint export --output export.zip && rm -rf out && mkdir -p out && unzip -q -o export.zip -d out && node scripts/strip-watermark.js",
     "broken-links": "mint broken-links",
     "validate": "mint validate"
   },
