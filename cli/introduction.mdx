@@ -6,7 +6,7 @@ sidebarTitle: "Introduction"
 
 Synsci CLI is a terminal-native AI coding agent purpose-built for machine learning. It runs alongside your shell, drives Claude, GPT, and Gemini frontier models against your codebase, and ships with the credentials and skills an ML engineer actually needs — Hugging Face, Weights & Biases, Modal, Lambda, AWS, and GCP all syncing automatically, plus 83 bundled ML skills covering GRPO, vLLM, DeepSpeed, Axolotl, and the rest of the modern training stack.
 
-The binary is `synsc`. The npm package is [`@synsci/cli`](https://www.npmjs.com/package/@synsci/cli). The dashboard lives at [cli.syntheticsciences.ai](https://cli.syntheticsciences.ai). It is built on top of the open-source [opencode](https://github.com/SyntheticSciences/cli) project.
+The binary is `synsc`. The npm package is [`@synsci/cli`](https://www.npmjs.com/package/@synsci/cli). The dashboard lives at [cli.syntheticsciences.ai](https://cli.syntheticsciences.ai). To install everything in one shot, run `npx synsci`.
 
 <Note>
   Synsci CLI is a separate product from [Thesis](/introduction). Thesis is the research workspace (graphs, experiments, MCP server). Synsci CLI is a coding agent that runs in your terminal. They're complementary — many users run both.
@@ -29,14 +29,14 @@ The binary is `synsc`. The npm package is [`@synsci/cli`](https://www.npmjs.com/
   </Card>
 </CardGroup>
 
-## Two agents, one keystroke
+## Two agents, one toggle
 
-Switch agents mid-session with <kbd>Tab</kbd>:
+Two top-level agents are available in every UI:
 
 - **build** — the default. Full filesystem and shell access for development work.
 - **plan** — read-only. Use it for analysis, code exploration, and design work where you don't want the agent touching files.
 
-Mention `@general` in any message to delegate a complex search or multi-step task to a sub-agent that runs in its own context.
+Switch with the agent toggle in the [web UI](/cli/web) header, or press <kbd>Tab</kbd> in the TUI. Mention `@general` in any message to delegate a complex search or multi-step task to a sub-agent that runs in its own context.
 
 ## Where it fits
 

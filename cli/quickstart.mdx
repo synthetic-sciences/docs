@@ -1,89 +1,71 @@
 ---
-title: "Synsci CLI quickstart: connect, prompt, switch models"
-description: "From `npm install` to your first agent response in under five minutes. Authenticate, send a prompt, switch agents and models, and inspect usage."
+title: "Synsci CLI quickstart: install, connect, open the web UI"
+description: "From zero to a working agent in under five minutes. One command to install, one to authenticate, and `synsc web` opens the recommended browser UI."
 sidebarTitle: "Quickstart"
 ---
 
-This walkthrough takes you from zero to a productive Synsci CLI session in under five minutes. You'll install the binary, connect it to your dashboard so credits and credentials flow in, send your first prompt, and switch between agents and models mid-session.
+This walkthrough takes you from nothing installed to a productive Synsci CLI session in under five minutes. You'll run a single-command install, authenticate to your dashboard, and open the recommended browser UI with `synsc web`.
 
 <Steps>
-  <Step title="Install Synsci CLI">
-    The fastest path is npm:
+  <Step title="Install in one command">
+    Run the all-in-one installer:
 
     ```bash
-    npm install -g @synsci/cli
+    npx synsci
     ```
 
-    See [Installation](/cli/installation) for Homebrew, curl, and desktop options.
+    This downloads the platform binary, walks you through dashboard authentication, and pre-fetches your synced credentials. When it finishes, `synsc` is on your PATH and ready.
+
+    See [Installation](/cli/installation) if you'd rather use npm, Homebrew, or curl directly.
   </Step>
 
-  <Step title="Connect to your dashboard">
-    Synsci CLI runs against your account at [cli.syntheticsciences.ai](https://cli.syntheticsciences.ai). Authenticate once with the connect command:
-
-    ```bash
-    synsc connect login
-    ```
-
-    The CLI prints a short device code and opens your browser to confirm the login. After confirmation, the CLI receives a Bearer token and can pull your dashboard credits, sync credentials, and report usage.
-
-    Verify the connection:
+  <Step title="Verify the connection">
+    Confirm the install authenticated cleanly:
 
     ```bash
     synsc connect status
     ```
 
-    A healthy connection prints your account email, current credit balance, and the synced credentials it has access to.
+    Healthy output prints your account email, current credit balance, and the synced credentials available — Hugging Face, Weights & Biases, Modal, Lambda, AWS, and GCP all show up if you have them set in the dashboard.
 
     <Tip>
-      On a headless or SSH machine, the CLI falls back to a manual code-paste flow. Open the printed URL on any device, paste the code, and the CLI will pick up the token automatically.
+      Add or rotate credentials at [cli.syntheticsciences.ai](https://cli.syntheticsciences.ai). The CLI picks them up on the next session start.
     </Tip>
   </Step>
 
-  <Step title="Start a session">
-    Run `synsc` with no arguments to drop into the TUI:
+  <Step title="Open the web UI">
+    The recommended way to use Synsci CLI day-to-day is the browser UI:
 
     ```bash
-    synsc
+    synsc web
     ```
 
-    You're now in the **build** agent on the default model. Type a prompt and press Enter:
-
-    ```
-    > Read README.md and summarize what this repo does in three bullets.
-    ```
-
-    The agent reads the file, streams its response, and prompts you for the next message.
+    `synsc web` boots a local server and opens your default browser. You get a clean chat interface, multi-session tabs, side-by-side file diffs, and the same agent surface as the TUI — without giving up a terminal split. See [Web UI](/cli/web) for the full feature set.
   </Step>
 
-  <Step title="Switch agents with Tab">
-    Press <kbd>Tab</kbd> at any point to switch between the two agents:
-
-    - **build** — full filesystem and shell access, the default for development work.
-    - **plan** — read-only mode. Use it when you want analysis without the agent touching anything.
-
-    The status line shows which agent is active.
-
-    To delegate a complex search or multi-step task to a sub-agent, mention `@general` in your message:
+  <Step title="Send your first prompt">
+    In the web UI, type a prompt and press Enter:
 
     ```
-    > @general find every place we call the OpenAI API and list them
+    Read README.md and summarize what this repo does in three bullets.
     ```
+
+    The agent reads the file, streams its response, and prompts you for the next message. You're in the **build** agent on the default model (Claude Sonnet 4.5).
   </Step>
 
-  <Step title="Switch models">
-    List available models:
+  <Step title="Switch agents and models">
+    Two top-level agents are available:
 
-    ```bash
-    synsc models
+    - **build** — full filesystem and shell access (default).
+    - **plan** — read-only mode for analysis without mutations.
+
+    Switch agents with the agent toggle in the UI header (or <kbd>Tab</kbd> in the TUI). Switch models from the model picker — your subscription includes Claude Opus 4, Claude Sonnet 4.5, GPT Codex Mini, and Gemini 2.5 Pro.
+
+    Mention `@general` in a message to delegate a search or multi-step task to a sub-agent that runs in its own context window:
+
     ```
-
-    You'll see Claude Opus 4, Claude Sonnet 4.5, GPT Codex Mini, and Gemini 2.5 Pro. Switch the active model with `/model` inside a session, or set a default with the `--model` flag:
-
-    ```bash
-    synsc --model claude-sonnet-4-5
+    @general find every place we call the OpenAI API and list the call sites
     ```
-
-    Each model has its own strengths and price point. See [Models](/cli/models) for guidance on which to pick.
   </Step>
 
   <Step title="Inspect usage">
@@ -93,33 +75,33 @@ This walkthrough takes you from zero to a productive Synsci CLI session in under
     synsc stats
     ```
 
-    `stats` shows cumulative token usage and credit cost per model and per session. Pair this with [the dashboard](https://cli.syntheticsciences.ai) for a full audit trail.
+    `stats` aggregates token usage and credit cost per model, per session, and across time windows. The full audit trail and billing live on the [dashboard](https://cli.syntheticsciences.ai).
   </Step>
 
   <Step title="Run one-shot prompts (optional)">
-    For scripted workflows, skip the TUI and pipe a single prompt with `synsc run`:
+    For scripted workflows, skip the UI and pipe a single prompt with `synsc run`:
 
     ```bash
     synsc run "Refactor utils/log.ts to use structured logging"
     ```
 
-    The agent runs the prompt to completion and exits. Useful for CI hooks, git hooks, or shell pipelines.
+    The agent runs the prompt to completion and exits — useful for git hooks, CI, and shell pipelines.
   </Step>
 </Steps>
 
 ## What's next
 
 <CardGroup cols={2}>
+  <Card title="Web UI" icon="window" href="/cli/web">
+    The recommended interface — multi-tab sessions, file diffs, command palette.
+  </Card>
   <Card title="Agents" icon="robot" href="/cli/agents">
-    Build vs. plan, the @general subagent, and when to switch.
+    Build vs. plan, plus the @general subagent for delegated work.
   </Card>
   <Card title="Models" icon="microchip" href="/cli/models">
     Pick between Claude Opus 4, Sonnet 4.5, GPT Codex Mini, and Gemini 2.5 Pro.
   </Card>
   <Card title="Credentials" icon="key" href="/cli/credentials">
-    How HuggingFace, W&B, Modal, Lambda, AWS, and GCP tokens get into your subprocesses.
-  </Card>
-  <Card title="Commands reference" icon="terminal" href="/cli/commands">
-    Every `synsc` subcommand with flags and examples.
+    How HuggingFace, W&B, Modal, Lambda, AWS, and GCP tokens reach your subprocesses.
   </Card>
 </CardGroup>

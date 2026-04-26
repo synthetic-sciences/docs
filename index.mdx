@@ -22,7 +22,7 @@ Synthetic Sciences ships two products that work independently and pair naturally
     Sign in, create your first research node, index a source, and connect an agent host.
   </Card>
   <Card title="Install Synsci CLI" icon="download" href="/cli/installation">
-    `npm install -g @synsci/cli`, then `synsc connect login`. You're in.
+    Run `npx synsci` once. The all-in-one installer drops the binary, authenticates you, and pre-fetches credentials. Then `synsc web`.
   </Card>
   <Card title="Connect Thesis to Cursor / Claude Code" icon="plug" href="/mcp/quickstart">
     `npx --yes @synsci/thesis setup` writes the MCP config for every supported host.
@@ -52,7 +52,7 @@ Synthetic Sciences ships two products that work independently and pair naturally
   </Accordion>
 
   <Accordion title="Coding-only — Synsci CLI on its own">
-    Install with `npm install -g @synsci/cli`, run `synsc connect login`, then `synsc`. The bundled skills and credential sync mean you can start running training scripts and managing cloud resources from the terminal in minutes — no Thesis account needed.
+    Install with `npx synsci` (the all-in-one installer), then run `synsc web` to open the browser UI. The bundled skills and credential sync mean you can start running training scripts and managing cloud resources in minutes — no Thesis account needed.
   </Accordion>
 
   <Accordion title="Both — Synsci CLI authoring code, Thesis tracking the program">

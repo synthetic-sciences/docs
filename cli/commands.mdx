@@ -29,9 +29,29 @@ Manage provider-specific API keys (the bring-your-own-key path for Anthropic, Op
 
 ## Sessions
 
-### `synsc` (no args)
+### `synsc web` (recommended)
 
-Start a TUI session in the build agent on the default model.
+Boot a local server and open the browser UI. The recommended day-to-day interface — see [Web UI](/cli/web) for the full feature set.
+
+```bash
+synsc web
+synsc web --port 5555
+synsc web --agent plan
+synsc web --model claude-opus-4
+synsc web --host 0.0.0.0    # expose to LAN (use carefully)
+```
+
+Flags:
+
+- `--port <n>` — port to bind on `127.0.0.1` (default: `4444`).
+- `--host <addr>` — interface to bind on (default: `127.0.0.1`).
+- `--agent <build|plan>` — start in the named agent (default: `build`).
+- `--model <id>` — start on a specific model (default: `claude-sonnet-4-5`).
+- `--no-open` — skip auto-opening the browser.
+
+### `synsc` (no args, TUI mode)
+
+Start a TUI session in the build agent on the default model. Useful when you want everything in the terminal.
 
 ```bash
 synsc
@@ -202,26 +222,18 @@ Run the CLI as a long-lived backend server, exposing an HTTP API. Useful when yo
 synsc serve --port 4444
 ```
 
-### `synsc web`
-
-Open a local web UI for the agent (a lightweight alternative to the desktop app). Streams agent output to a browser tab.
-
-```bash
-synsc web
-```
-
 ### `synsc acp`
 
 Speak the Agent Communication Protocol over stdio. This is what the desktop app and IDE plugins use to talk to the agent. You usually don't run this directly.
 
 ## Slash commands inside a session
 
-Once you're in a TUI session, slash commands give you shortcuts without exiting:
+Slash commands work inside any session — web UI, TUI, or desktop:
 
 | Slash command | Action |
 |---|---|
 | `/model <id>` | Switch to a different model mid-session. |
-| `/agent <name>` | Switch agents (or press <kbd>Tab</kbd>). |
+| `/agent <name>` | Switch agents (also via the agent toggle in web/desktop, or <kbd>Tab</kbd> in TUI). |
 | `/clear` | Clear the conversation context. |
 | `/save` | Save the session to your dashboard. |
 | `/export` | Export the conversation to a markdown file. |

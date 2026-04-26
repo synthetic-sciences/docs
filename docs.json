@@ -1,13 +1,17 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "luma",
-  "name": "Synthetic Sciences",
+  "theme": "mint",
+  "name": "synsci",
   "colors": {
-    "primary": "#7c8484",
-    "light": "#0a0a0b",
-    "dark": "#d2d2d3"
+    "primary": "#525252",
+    "light": "#a3a3a3",
+    "dark": "#171717"
   },
-  "favicon": "https://media.brand.dev/a085c648-aded-4435-b71b-fccf04be330c.svg",
+  "logo": {
+    "light": "/logo/synsc-logo.png",
+    "dark": "/logo/synsc-logo.png"
+  },
+  "favicon": "/logo/synsc-logo.png",
   "navbar": {
     "primary": {
       "type": "github",
@@ -94,7 +98,8 @@
             "pages": [
               "cli/introduction",
               "cli/installation",
-              "cli/quickstart"
+              "cli/quickstart",
+              "cli/web"
             ]
           },
           {
