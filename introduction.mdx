@@ -1,10 +1,14 @@
 ---
-title: "What is Thesis? Graph-based research management tool"
+title: "What is Thesis? Graph-based research workspace"
 description: "Thesis stores hypotheses, experiments, sources, and decisions in a durable, branchable graph. Researchers and AI agents share the same auditable project state."
 sidebarTitle: "Introduction"
 ---
 
-Thesis gives you and your AI agents a shared operating system for scientific work. Instead of letting critical decisions disappear into chat logs, Thesis stores them in explicit, auditable structures: a graph of research nodes, an append-only research log, indexed knowledge sources, tracked artifacts, and a compute approval boundary that keeps humans in control of what runs and what spends.
+Thesis is a graph-based research workspace from Synthetic Sciences. Instead of letting critical decisions disappear into chat logs, Thesis stores them in explicit, auditable structures: a graph of research nodes, an append-only research log, indexed knowledge sources, tracked artifacts, and a compute approval boundary that keeps humans in control of what runs and what spends.
+
+<Note>
+  Looking for the **terminal coding agent**? That's [Synsci CLI](/cli/introduction) — a separate product. Thesis is the research workspace; Synsci CLI is the agent you run in your shell. They pair via MCP if you use both.
+</Note>
 
 ## Who Thesis is for
 
@@ -36,13 +40,17 @@ Thesis combines five capabilities that normally live in separate tools.
 
 ## MCP and CLI surface
 
-The fifth piece connects Thesis to the agents you already use. The MCP server exposes 86 structured tools at `/mcp-server` over JSON-RPC 2.0, and the `@synsci/thesis` npm package writes the configuration for you in one command:
+The fifth piece connects Thesis to the agents you already use. The Thesis MCP server exposes 86 structured tools at `/mcp-server` over JSON-RPC 2.0, and the `@synsci/thesis` npm helper writes the configuration for you in one command:
 
 ```bash
 npx --yes @synsci/thesis setup
 ```
 
-Supported hosts include Claude Code, Codex, Cursor, OpenCode, Pi, Hermes Agent, and OpenClaw. Once connected, your agent host can read and write Thesis graph state, search knowledge, run Oracle research jobs, manage compute leases, and export subgraphs — all through the same typed tools available in the web app.
+Supported hosts include Claude Code, Codex, Cursor, OpenCode, Pi, Hermes Agent, OpenClaw, and [Synsci CLI](/cli/mcp). Once connected, your agent host can read and write Thesis graph state, search knowledge, run Oracle research jobs, manage compute leases, and export subgraphs — all through the same typed tools available in the web app.
+
+<Tip>
+  The `@synsci/thesis` helper is **not** the same as `@synsci/cli`. `@synsci/thesis` writes Thesis MCP configuration into agent hosts; `@synsci/cli` is the [Synsci CLI](/cli/introduction) terminal agent itself.
+</Tip>
 
 <CardGroup cols={2}>
   <Card title="MCP quickstart" icon="plug" href="/mcp/quickstart">

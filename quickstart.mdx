@@ -4,7 +4,11 @@ description: "Sign in, create your first research node, add sources, chat with t
 sidebarTitle: "Quickstart"
 ---
 
-You can go from a blank slate to an active research graph in a few minutes. This page walks you through the core flow: signing in, creating a node, indexing a source, talking to the agent, and — if you want agent-host integration — running the one-command MCP setup.
+You can go from a blank slate to an active research graph in a few minutes. This page walks you through the core Thesis flow: signing in, creating a node, indexing a source, talking to the agent, and — if you want agent-host integration — running the one-command MCP setup.
+
+<Note>
+  This is the **Thesis** quickstart (the research workspace). For the [Synsci CLI](/cli/introduction) terminal coding agent, see the [Synsci CLI quickstart](/cli/quickstart).
+</Note>
 
 <Steps>
   <Step title="Sign in to Thesis">
@@ -67,7 +71,7 @@ You can go from a blank slate to an active research graph in a few minutes. This
   </Step>
 
   <Step title="Connect an MCP host (optional)">
-    If you want your AI coding agent — Claude Code, Codex, Cursor, OpenCode, or another supported host — to read and write your Thesis graph directly, run the setup CLI:
+    If you want your AI coding agent — Claude Code, Codex, Cursor, OpenCode, [Synsci CLI](/cli/mcp), or another supported host — to read and write your Thesis graph directly, run the `@synsci/thesis` MCP helper:
 
     ```bash
     npx --yes @synsci/thesis setup

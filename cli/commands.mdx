@@ -1,0 +1,254 @@
+---
+title: "Synsci CLI commands reference"
+description: "Every `synsc` subcommand: connect, auth, agent, models, run, session, stats, mcp, github, pr, export, import, upgrade, uninstall, web, serve."
+sidebarTitle: "Commands reference"
+---
+
+This page lists every subcommand that ships with `synsc`, what it does, and the most useful flags. The bare `synsc` (no arguments) drops you into the TUI in the build agent.
+
+## Connection and auth
+
+### `synsc connect`
+
+Manage the Bearer token connection between your CLI and your dashboard at [cli.syntheticsciences.ai](https://cli.syntheticsciences.ai).
+
+| Subcommand | Purpose |
+|---|---|
+| `synsc connect login` | Run the device-flow OAuth login. Opens your browser and stores the resulting Bearer token in OS keychain. |
+| `synsc connect status` | Show your account email, synced credentials, and credit balance. |
+| `synsc connect logout` | Invalidate the local Bearer token. |
+
+### `synsc auth`
+
+Manage provider-specific API keys (the bring-your-own-key path for Anthropic, OpenAI, Google, etc.). Use this if you want certain providers to bypass the Synsci credit proxy.
+
+| Subcommand | Purpose |
+|---|---|
+| `synsc auth list` | Show which provider keys are set in the current environment. |
+| `synsc auth login <provider>` | Walk through setting a provider key for the current shell. |
+
+## Sessions
+
+### `synsc` (no args)
+
+Start a TUI session in the build agent on the default model.
+
+```bash
+synsc
+synsc --agent plan
+synsc --model claude-opus-4
+synsc --project research-fork
+```
+
+Flags:
+
+- `--agent <build|plan>` — start in the named agent (default: `build`).
+- `--model <id>` — start on a specific model (default: `claude-sonnet-4-5`).
+- `--project <name>` — tag this session for dashboard rollups.
+- `--cwd <path>` — start the session with this working directory.
+
+### `synsc run`
+
+One-shot run. Sends the prompt, lets the agent run to completion, and exits.
+
+```bash
+synsc run "Refactor utils/log.ts to use structured logging"
+synsc run --model claude-opus-4 "Audit this repo for SQL injection risks"
+synsc run --agent plan "Summarize the architecture of src/"
+```
+
+Useful for git hooks, CI, and shell pipelines.
+
+### `synsc session`
+
+Inspect and manage past sessions stored on the dashboard.
+
+| Subcommand | Purpose |
+|---|---|
+| `synsc session list` | List recent sessions. |
+| `synsc session show <id>` | Print the prompts and assistant messages for a session. |
+| `synsc session resume <id>` | Continue a prior session in the TUI. |
+
+## Models and stats
+
+### `synsc models`
+
+List the models your subscription has access to right now, with rates and provider.
+
+```bash
+synsc models
+synsc models --json
+```
+
+### `synsc stats`
+
+Show per-model and per-session credit usage.
+
+```bash
+synsc stats              # cumulative
+synsc stats --since 7d   # last 7 days
+synsc stats --json       # machine-readable
+```
+
+## Agent management
+
+### `synsc agent`
+
+Manage agent configurations — defaults, per-project overrides, and custom agent profiles.
+
+| Subcommand | Purpose |
+|---|---|
+| `synsc agent list` | Show available agent profiles. |
+| `synsc agent set-default <name>` | Set your default agent. |
+| `synsc agent show <name>` | Print the full configuration for an agent. |
+
+## MCP
+
+### `synsc mcp`
+
+Configure Model Context Protocol servers. Synsci CLI can act as both an MCP host (consuming tools from external MCP servers like Thesis) and an MCP server (exposing its own tools to other hosts).
+
+| Subcommand | Purpose |
+|---|---|
+| `synsc mcp list` | List configured MCP servers. |
+| `synsc mcp add <name> --url <url>` | Register an MCP server. |
+| `synsc mcp remove <name>` | Unregister an MCP server. |
+| `synsc mcp test <name>` | Test connectivity to a registered MCP server. |
+
+To connect Synsci CLI to your Thesis workspace as an MCP host:
+
+```bash
+synsc mcp add thesis --url https://thesis.syntheticsciences.ai/mcp-server
+```
+
+See [Connect Thesis to Synsci CLI](/cli/mcp) for the full MCP integration walkthrough.
+
+## GitHub and PR helpers
+
+### `synsc github`
+
+GitHub helpers that compose with `gh` and the Synsci agent.
+
+| Subcommand | Purpose |
+|---|---|
+| `synsc github review <pr>` | Open a PR and ask the agent to review it. |
+| `synsc github resolve <issue>` | Open an issue and ask the agent to plan a fix. |
+
+### `synsc pr`
+
+PR-focused workflows.
+
+| Subcommand | Purpose |
+|---|---|
+| `synsc pr open` | Create a PR from the current branch with an agent-generated body. |
+| `synsc pr update <pr>` | Update a PR description after new commits. |
+
+## Sessions: export and import
+
+### `synsc export`
+
+Export a session as a JSON document for sharing or archiving.
+
+```bash
+synsc export <session-id> --out session.json
+```
+
+### `synsc import`
+
+Import a session JSON back into your account.
+
+```bash
+synsc import session.json
+```
+
+Useful for handing off context to a teammate or restoring a session on a new machine.
+
+## Distribution and lifecycle
+
+### `synsc upgrade`
+
+Upgrade to the latest published version. Detects how you installed (npm, Homebrew, or direct binary) and runs the matching update flow.
+
+```bash
+synsc upgrade
+synsc upgrade --version 1.2.0   # pin to a specific version
+```
+
+### `synsc uninstall`
+
+Remove the CLI and clear local config.
+
+```bash
+synsc uninstall
+```
+
+The dashboard account, credentials, and session history are unaffected.
+
+### `synsc generate`
+
+Generate boilerplate. The exact templates depend on the version, but typical generators include Synsci CLI plugin scaffolds and skill templates.
+
+```bash
+synsc generate --help
+```
+
+## Server and web modes
+
+### `synsc serve`
+
+Run the CLI as a long-lived backend server, exposing an HTTP API. Useful when you want a remote agent endpoint that other tools can call.
+
+```bash
+synsc serve --port 4444
+```
+
+### `synsc web`
+
+Open a local web UI for the agent (a lightweight alternative to the desktop app). Streams agent output to a browser tab.
+
+```bash
+synsc web
+```
+
+### `synsc acp`
+
+Speak the Agent Communication Protocol over stdio. This is what the desktop app and IDE plugins use to talk to the agent. You usually don't run this directly.
+
+## Slash commands inside a session
+
+Once you're in a TUI session, slash commands give you shortcuts without exiting:
+
+| Slash command | Action |
+|---|---|
+| `/model <id>` | Switch to a different model mid-session. |
+| `/agent <name>` | Switch agents (or press <kbd>Tab</kbd>). |
+| `/clear` | Clear the conversation context. |
+| `/save` | Save the session to your dashboard. |
+| `/export` | Export the conversation to a markdown file. |
+| `/help` | Show available slash commands. |
+
+## Environment variables
+
+Useful env vars the CLI reads at startup:
+
+| Variable | Purpose |
+|---|---|
+| `SYNSC_DASHBOARD_URL` | Override the dashboard URL (default `https://cli.syntheticsciences.ai`). |
+| `SYNSC_DEFAULT_MODEL` | Default model identifier. |
+| `SYNSC_DEFAULT_AGENT` | Default agent (`build` or `plan`). |
+| `ANTHROPIC_API_KEY` | Bring-your-own-key for Anthropic — bypasses the proxy. |
+| `OPENAI_API_KEY` | Bring-your-own-key for OpenAI. |
+| `GOOGLE_API_KEY` | Bring-your-own-key for Google. |
+
+Provider keys for credentials (HF, W&B, Modal, Lambda, AWS, GCP) come from the dashboard sync — see [Credentials](/cli/credentials).
+
+## What's next
+
+<CardGroup cols={2}>
+  <Card title="Connect Thesis via MCP" icon="plug" href="/cli/mcp">
+    Wire Synsci CLI to your Thesis workspace so the agent can read and write your research graph.
+  </Card>
+  <Card title="Security model" icon="shield" href="/cli/security">
+    Credential boundary, output redaction, and per-user isolation.
+  </Card>
+</CardGroup>

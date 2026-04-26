@@ -1,0 +1,128 @@
+---
+title: "Connect Synsci CLI to Thesis via MCP"
+description: "Synsci CLI can act as an MCP host. Wire it to your Thesis workspace so the agent reads and writes your research graph through the same 86 MCP tools used by Cursor and Claude Code."
+sidebarTitle: "MCP integration"
+---
+
+Synsci CLI is MCP-aware. You can register external MCP servers and the agent gets typed tool access alongside its built-in tools and bundled skills. The most common pairing is **Synsci CLI + Thesis**: a terminal coding agent that can read and write a structured research graph through the same 86 MCP tools that the Thesis MCP server exposes to Cursor, Codex, and Claude Code.
+
+## Why pair the two
+
+Thesis stores research state — hypotheses, experiments, sources, decisions, artifacts — as a durable graph. Synsci CLI runs the actual coding work — writing training scripts, running evaluations, deploying. Without MCP, you'd be copy-pasting between the two. With MCP, the agent in Synsci CLI can:
+
+- Read the current research frontier from the graph before writing code.
+- Stage an experiment node with the 8-section blueprint while you're still in the terminal.
+- Attach a generated artifact (a plot, a checkpoint, a config) directly to the experiment node.
+- Search prior committed work to avoid re-running experiments that have already been done.
+- Spawn a Thesis sub-agent for compute-intensive work after you approve.
+
+The two products complement each other.
+
+## Wire up the connection
+
+<Steps>
+  <Step title="Get a Thesis API key">
+    Sign in to [thesis.syntheticsciences.ai](https://thesis.syntheticsciences.ai) and go to **Settings → API Keys**. Generate a new key prefixed with `thk_*` and copy it.
+  </Step>
+
+  <Step title="Register the Thesis MCP server">
+    Tell Synsci CLI about the Thesis MCP endpoint:
+
+    ```bash
+    synsc mcp add thesis \
+      --url https://thesis.syntheticsciences.ai/mcp-server \
+      --auth "Bearer thk_your_api_key_here"
+    ```
+
+    The CLI stores the registration in your dashboard so it's available across sessions and machines. The Bearer header is sent on every JSON-RPC call.
+  </Step>
+
+  <Step title="Verify the connection">
+    Test that the registered server responds:
+
+    ```bash
+    synsc mcp test thesis
+    ```
+
+    A healthy response lists the available tools. You should see all 86 Thesis MCP tools (`thesis_search`, `thesis_stage_node_create`, `thesis_compute_acquire`, etc.).
+  </Step>
+
+  <Step title="Use the tools in a session">
+    Start a session as usual:
+
+    ```bash
+    synsc
+    ```
+
+    The agent now has the Thesis tools alongside its built-in ones. Try a prompt that crosses the boundary:
+
+    ```
+    > Search Thesis for prior experiments on cosine LR schedules,
+    > then design a new training script that compares cosine vs. linear
+    > on a 1B model. Stage the experiment in Thesis when you're done.
+    ```
+
+    The agent calls `thesis_search` to read prior work, writes the script in your local filesystem, then calls `thesis_stage_node_create` with `kind: "empirical"` and the full 8-section blueprint as the new node's content.
+  </Step>
+</Steps>
+
+## How tool routing works
+
+When the Synsci CLI agent picks a tool, it considers:
+
+- **Built-in tools** — read, write, run shell, edit code.
+- **Bundled skills** — the 83 ML skills baked into the binary.
+- **Registered MCP servers** — any Thesis tools, plus any other MCP servers you've added.
+
+The agent picks the right one based on the prompt. You don't need to namespace or prefix; if you ask about graph state, it reaches for `thesis_*` tools, and if you ask about file edits, it reaches for the built-in editor.
+
+To restrict which MCP servers a session uses, pass `--mcp` at launch:
+
+```bash
+synsc --mcp thesis        # only the Thesis MCP server
+synsc --mcp none          # disable all MCP servers
+```
+
+## Manage registered servers
+
+| Command | Purpose |
+|---|---|
+| `synsc mcp list` | List registered MCP servers. |
+| `synsc mcp test <name>` | Test connectivity. |
+| `synsc mcp remove <name>` | Unregister a server. |
+| `synsc mcp add <name> --url ... --auth ...` | Register a new server. |
+
+## Adding other MCP servers
+
+Synsci CLI works with any MCP server that speaks JSON-RPC 2.0. Public ones you might pair with:
+
+- A documentation MCP server for your own libraries
+- A database MCP server for read-only query access
+- A notebook MCP server (e.g. Jupyter MCP)
+
+Each registration follows the same shape: `synsc mcp add <name> --url <url>` plus an `--auth` header if the server requires one.
+
+<Note>
+  Adding MCP servers expands the agent's tool surface. If you give the agent access to a destructive tool (one that mutates external state), the agent can call it without prompting you each time. Review tool capabilities before registration, and prefer the `plan` agent if you want the agent to discover tools without acting on them.
+</Note>
+
+## Going the other direction: connect Thesis to Synsci CLI
+
+The opposite pairing is also supported. If you're working in the Thesis web app or Thesis MCP, you can register Synsci CLI's `serve` mode as a tool endpoint by running:
+
+```bash
+synsc serve --port 4444
+```
+
+Then point Thesis (or any MCP host) at `http://localhost:4444` for terminal-side coding capabilities.
+
+## What's next
+
+<CardGroup cols={2}>
+  <Card title="Thesis MCP overview" icon="diagram-project" href="/mcp/quickstart">
+    The 86-tool MCP surface from the Thesis side.
+  </Card>
+  <Card title="Synsci CLI agents" icon="robot" href="/cli/agents">
+    The build/plan/@general split — choose carefully when an agent has both terminal and graph access.
+  </Card>
+</CardGroup>

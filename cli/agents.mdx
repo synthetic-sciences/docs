@@ -1,0 +1,96 @@
+---
+title: "Synsci CLI agents: build, plan, and the @general subagent"
+description: "Two top-level agents — build (read/write) and plan (read-only) — plus the @general subagent for complex searches. Switch with Tab; mention with @-syntax."
+sidebarTitle: "Agents"
+---
+
+Synsci CLI ships with two top-level agent modes and a delegated subagent. The split is deliberate: **build** is the daily-driver agent with full filesystem and shell access, **plan** is a read-only agent for analysis where you don't want anything written, and **@general** is a subagent you delegate to from inside any session for searches or tasks that would otherwise eat up your context window.
+
+## build — the default
+
+The `build` agent is what you get when you run `synsc` with no flags. It has the full toolset: read files, write files, run shell commands, edit code, run tests, run training scripts. Use it for everything you'd normally use a coding agent for.
+
+```bash
+synsc
+# starts in build mode by default
+```
+
+The status line shows `build` when this agent is active.
+
+## plan — read-only analysis
+
+The `plan` agent has the same models and skills behind it but cannot mutate anything. No file writes, no shell commands that touch state, no git operations that change refs. Use it when you want the agent to analyze code or design an approach without the risk of accidental changes.
+
+Switch to plan mode by pressing <kbd>Tab</kbd> inside a session, or start in plan mode directly:
+
+```bash
+synsc --agent plan
+```
+
+Common cases:
+
+- **Code exploration** in an unfamiliar repo where you want to understand the layout before changing anything.
+- **Architecture and design** sessions where you're talking through a problem and want clean read-only behavior.
+- **Code review** where you're asking the agent to critique a diff but not produce one.
+
+<Tip>
+  Press <kbd>Tab</kbd> any time during a session to swap agents. The session history carries over — only the active toolset changes.
+</Tip>
+
+## @general — the subagent
+
+`@general` is invoked by mentioning it in a prompt. It runs as a separate sub-agent in its own context window, returns a summary, and disappears. The parent session keeps its compact history.
+
+```
+> @general find every place we use the OpenAI client across this monorepo
+> and list the call sites with line numbers
+```
+
+Reach for `@general` when:
+
+- The search is **broad** — "find all X across the repo" — and would otherwise blow up your main context with grep results.
+- The task is **multi-step** but tangential — "compile a list of every TODO in src/, group them by file" — and the parent session shouldn't carry the intermediate work.
+- You want **parallelism** — fire multiple `@general` prompts in sequence and have them each handle a sub-question.
+
+The result returned to your main session is a summary. The actual tool calls and intermediate reasoning live in the sub-agent's context, not yours.
+
+## Which to use when
+
+| Situation | Agent |
+|---|---|
+| Daily development — write code, run scripts, edit files | `build` |
+| Reviewing or analyzing code without touching it | `plan` |
+| Broad searches that would dominate context | `@general` from `build` or `plan` |
+| Onboarding into an unfamiliar repo | `plan` first, then `build` once you have a plan |
+| Running training scripts, debugging models, deploying | `build` |
+| Designing an experiment or migration before committing | `plan` |
+
+## Switching during a session
+
+You can move between agents mid-conversation:
+
+- <kbd>Tab</kbd> swaps build ↔ plan.
+- `@general <prompt>` spawns a one-off subagent.
+
+The conversation history is preserved across switches. Only the toolset changes — so a plan-mode question that follows a build-mode action sees the same context, just with writes disabled.
+
+## Configuration
+
+The default agent is `build`. To change the default, set it in your config or pass `--agent` on launch:
+
+```bash
+synsc --agent plan
+```
+
+The dashboard at [cli.syntheticsciences.ai](https://cli.syntheticsciences.ai) lets you override per-project agent defaults if you want some checkouts to start in plan mode.
+
+## What's next
+
+<CardGroup cols={2}>
+  <Card title="Models" icon="microchip" href="/cli/models">
+    Switch between Claude Opus 4, Sonnet 4.5, GPT Codex Mini, and Gemini 2.5 Pro on either agent.
+  </Card>
+  <Card title="Skills" icon="brain" href="/cli/skills">
+    The 83 ML skills bundled with the binary — both agents can invoke them.
+  </Card>
+</CardGroup>

@@ -1,0 +1,126 @@
+---
+title: "The Synsci CLI dashboard at cli.syntheticsciences.ai"
+description: "Manage credentials, monitor sessions, view credit usage, and configure team access from the web dashboard. The CLI syncs against this dashboard at every session."
+sidebarTitle: "Dashboard"
+---
+
+The Synsci CLI dashboard at [cli.syntheticsciences.ai](https://cli.syntheticsciences.ai) is the source of truth for everything the CLI doesn't store locally — credentials, credits, sessions, team access, and audit logs. The CLI talks to the dashboard over an authenticated channel at session start and reports usage back as you work.
+
+## What the dashboard does
+
+<CardGroup cols={2}>
+  <Card title="Credentials" icon="key">
+    Paste in tokens for Hugging Face, W&B, Modal, Lambda Cloud, AWS, GCP. The CLI pulls them into session memory at launch.
+  </Card>
+  <Card title="Credits and billing" icon="credit-card">
+    See your balance, top up credits, set alerts, and view per-model and per-session spend.
+  </Card>
+  <Card title="Sessions" icon="clock-rotate-left">
+    Every CLI session shows up with model usage, cost, and metadata. Investigate a runaway agent loop or audit a teammate's run.
+  </Card>
+  <Card title="Team management" icon="users">
+    Invite teammates, assign roles, set per-user spend limits, and review access.
+  </Card>
+</CardGroup>
+
+## Connecting the CLI
+
+The dashboard issues short-lived Bearer tokens that the CLI uses to authenticate. Connect once with:
+
+```bash
+synsc connect login
+```
+
+The CLI prints a device code and opens your browser. Confirm the login, and the dashboard issues the token. The CLI stores it in memory (and only in memory) for the session.
+
+To verify the connection:
+
+```bash
+synsc connect status
+```
+
+Output includes your account email, the credentials currently synced, and your remaining credit balance.
+
+To disconnect:
+
+```bash
+synsc connect logout
+```
+
+This invalidates the local token. The dashboard credentials stay where they are; the CLI just stops being able to read them until you log in again.
+
+## Credentials panel
+
+Each provider has its own slot. Paste your token, the dashboard validates the format, and the field is then masked in the UI.
+
+| Provider | Field |
+|---|---|
+| Hugging Face | `HF_TOKEN` |
+| Weights & Biases | `WANDB_API_KEY` |
+| Modal | `MODAL_TOKEN_ID` + `MODAL_TOKEN_SECRET` |
+| Lambda Cloud | `LAMBDA_API_KEY` |
+| AWS | `AWS_ACCESS_KEY_ID` + `AWS_SECRET_ACCESS_KEY` (and optional session token) |
+| GCP | Service account JSON |
+
+Updating a credential is instant — the next session start picks up the new value. To force an immediate refresh in a running session, run `synsc connect status` again.
+
+See [Credentials](/cli/credentials) for the in-CLI behavior.
+
+## Sessions panel
+
+Every time you run `synsc`, a session record opens in the dashboard. While the session is active, the dashboard shows live model usage and cost. After the session ends, the record persists with:
+
+- Total tokens (input/output) per model
+- Credits spent
+- Start/end timestamps
+- Working directory the session was launched from
+- Any custom labels you tagged the session with
+
+Use sessions to:
+
+- **Spot loops.** A session burning 100k+ tokens against a single prompt is usually stuck.
+- **Audit teammates.** Team admins can browse sessions across the team to understand spend distribution.
+- **Reconstruct work.** A session record references the prompts that ran, the model used, and the outcome — useful for compliance or postmortems.
+
+## Billing panel
+
+The billing panel covers:
+
+- **Plan** — your subscription tier and monthly credit grant.
+- **Balance** — current credits and burn rate.
+- **Top-ups** — buy additional credits at any time.
+- **Invoices** — historical billing receipts.
+- **Alerts** — set thresholds that send a webhook or email when daily/session spend crosses a line.
+
+## Team management
+
+Team plans support multiple users sharing a credit pool with per-user limits. Admins can:
+
+- Invite users by email
+- Assign roles (admin, member, read-only)
+- Set per-user daily and monthly spend caps
+- View aggregate and per-user usage
+- Force-disconnect a user (invalidates their CLI Bearer token)
+
+Per-user credentials remain isolated even on a team plan — your AWS key isn't visible to your teammates.
+
+## Project tagging
+
+You can tag sessions with a project label so spend rolls up cleanly:
+
+```bash
+synsc --project research-fork
+```
+
+The dashboard groups sessions by project so you can answer "how much have we spent on the research-fork project this month" without exporting raw session data.
+
+## What's next
+
+<CardGroup cols={2}>
+  <Card title="Credits and usage" icon="chart-line" href="/cli/credits">
+    The mechanics of pre-call balance checks and per-call reporting.
+  </Card>
+  <Card title="Security" icon="shield" href="/cli/security">
+    How the dashboard's RLS, Bearer tokens, and device flow keep credentials and sessions isolated.
+  </Card>
+</CardGroup>
