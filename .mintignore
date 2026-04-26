@@ -1,4 +1,4 @@
-# Mintlify automatically ignores these files and directories:
+# Files and directories ignored by the docs build:
 # .git, .github, .claude, .agents, .idea, node_modules,
 # README.md, LICENSE.md, CHANGELOG.md, CONTRIBUTING.md
 

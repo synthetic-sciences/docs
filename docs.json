@@ -15,6 +15,121 @@
   "navigation": {
     "tabs": [
       {
+        "tab": "Synsci CLI",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "cli/introduction",
+              "cli/installation",
+              "cli/quickstart",
+              "cli/web"
+            ]
+          },
+          {
+            "group": "Agents",
+            "pages": [
+              "cli/agents"
+            ]
+          },
+          {
+            "group": "Operations",
+            "pages": [
+              "cli/credentials",
+              "cli/credits",
+              "cli/dashboard",
+              "cli/desktop"
+            ]
+          },
+          {
+            "group": "Integrations",
+            "pages": [
+              "cli/mcp"
+            ]
+          },
+          {
+            "group": "Reference",
+            "pages": [
+              "cli/commands",
+              "cli/security",
+              "cli/comparison"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Chemistry",
+        "groups": [
+          {
+            "group": "Chemistry",
+            "pages": [
+              "chemistry/introduction",
+              "chemistry/workflows"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Biology",
+        "groups": [
+          {
+            "group": "Biology",
+            "pages": [
+              "biology/introduction",
+              "biology/workflows"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Physics",
+        "groups": [
+          {
+            "group": "Physics",
+            "pages": [
+              "physics/introduction",
+              "physics/workflows"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Materials",
+        "groups": [
+          {
+            "group": "Materials science",
+            "pages": [
+              "materials/introduction",
+              "materials/workflows"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Machine learning",
+        "groups": [
+          {
+            "group": "Machine learning",
+            "pages": [
+              "ml/introduction",
+              "ml/workflows"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Mathematics",
+        "groups": [
+          {
+            "group": "Mathematics",
+            "pages": [
+              "math/introduction",
+              "math/workflows"
+            ]
+          }
+        ]
+      },
+      {
         "tab": "Thesis",
         "groups": [
           {
@@ -66,13 +181,6 @@
             ]
           },
           {
-            "group": "Skills",
-            "pages": [
-              "mcp/skills-overview",
-              "mcp/skill-reference"
-            ]
-          },
-          {
             "group": "MCP Tools",
             "pages": [
               "mcp/tools-overview",
@@ -80,51 +188,6 @@
               "mcp/tools-knowledge",
               "mcp/tools-compute",
               "mcp/tools-export"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "Synsci CLI",
-        "groups": [
-          {
-            "group": "Get Started",
-            "pages": [
-              "cli/introduction",
-              "cli/installation",
-              "cli/quickstart",
-              "cli/web"
-            ]
-          },
-          {
-            "group": "Research",
-            "pages": [
-              "cli/modes",
-              "cli/skills",
-              "cli/agents"
-            ]
-          },
-          {
-            "group": "Operations",
-            "pages": [
-              "cli/credentials",
-              "cli/credits",
-              "cli/dashboard",
-              "cli/desktop"
-            ]
-          },
-          {
-            "group": "Integrations",
-            "pages": [
-              "cli/mcp"
-            ]
-          },
-          {
-            "group": "Reference",
-            "pages": [
-              "cli/commands",
-              "cli/security",
-              "cli/comparison"
             ]
           }
         ]

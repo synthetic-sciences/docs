@@ -1,34 +1,32 @@
-> **Customize this file**: Tailor this template to your project by noting specific contribution types you're looking for, adding a Code of Conduct, or adjusting the writing guidelines to match your style.
-
 # Contribute to the documentation
-
-Thank you for your interest in contributing to our documentation! This guide will help you get started.
 
 ## How to contribute
 
-### Option 1: Edit directly on GitHub
+### Edit on GitHub
 
-1. Navigate to the page you want to edit
-2. Click the "Edit this file" button (the pencil icon)
-3. Make your changes and submit a pull request
+1. Open the page on GitHub.
+2. Click the pencil icon to edit in place.
+3. Submit a pull request.
 
-### Option 2: Local development
+### Local development
 
-1. Fork and clone this repository
-2. Install the Mintlify CLI: `npm i -g mint`
-3. Create a branch for your changes
-4. Make changes
-5. Navigate to the docs directory and run `mint dev`
-6. Preview your changes at `http://localhost:3000`
-7. Commit your changes and submit a pull request
-
-For more details on local development, see our [development guide](development.mdx).
+1. Fork and clone this repository.
+2. Install the docs CLI: `npm i -g mint`.
+3. Create a branch off `main`.
+4. Make changes to `.mdx` files.
+5. Run `mint dev` from the repo root and preview at `http://localhost:3000`.
+6. Commit and open a pull request against `main`.
 
 ## Writing guidelines
 
-- **Use active voice**: "Run the command" not "The command should be run"
-- **Address the reader directly**: Use "you" instead of "the user"
-- **Keep sentences concise**: Aim for one idea per sentence
-- **Lead with the goal**: Start instructions with what the user wants to accomplish
-- **Use consistent terminology**: Don't alternate between synonyms for the same concept
-- **Include examples**: Show, don't just tell
+- Active voice. "Run the command", not "the command should be run".
+- Second person. "You" rather than "the user".
+- One idea per sentence. Break up long ones.
+- Lead with the goal. Start instructions with what the reader wants to accomplish.
+- Consistent terminology. Don't alternate between synonyms for the same concept.
+- Show, don't just tell. Add examples wherever they clarify.
+- No em dashes. Use periods, commas, colons, or restructure.
+
+## Preview before merging
+
+Before opening a PR, run `mint dev` locally and click through every page you touched. The default branch deploys automatically once the PR merges.

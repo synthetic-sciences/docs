@@ -38,18 +38,18 @@ If you need to retrieve an existing key or generate a new one without running se
 
 For web-based hosts such as Claude.ai and ChatGPT.com, copy your key from Settings and paste it when the host prompts for API credentials.
 
-## Provision credentials for CLI skill variants
+## Provision credentials for shell-based workflows
 
-Thesis ships CLI-variant skills that drive research workflows through bash subcommands rather than MCP tool calls. These scripts read `THESIS_API_TOKEN` and `THESIS_MCP_URL` from `~/.config/thesis/env`. Provision that file with:
+For workflows that drive Thesis through bash subcommands rather than MCP tool calls, the scripts read `THESIS_API_TOKEN` and `THESIS_MCP_URL` from `~/.config/thesis/env`. Provision that file with:
 
 ```bash
 npx --yes @synsci/thesis setup --cli --api-key <KEY>
 ```
 
-Replace `<KEY>` with a key from **Settings → API Keys**. The CLI writes the env file once, and all CLI-variant skills source it automatically on every invocation.
+Replace `<KEY>` with a key from **Settings → API Keys**. The setup writes the env file once, and the shell scripts source it automatically on every invocation.
 
 <Note>
-  The `--cli` flag writes only the env file. It does not modify any agent host MCP config. Run it in addition to the standard setup command if you want both MCP and CLI skill variants working.
+  The `--cli` flag writes only the env file. It does not modify any agent host MCP config. Run it in addition to the standard setup command if you want both MCP and shell workflows working.
 </Note>
 
 ## Troubleshooting

@@ -8,7 +8,7 @@ Synthetic Sciences ships two products that work independently and pair naturally
 
 **[Thesis](/introduction)** is a graph-based research workspace. Hypotheses, experiments, sources, and decisions live as durable, branchable nodes. Ships an 86-tool MCP server for Cursor, Claude Code, Codex, and others.
 
-**[Synsci CLI](/cli/introduction)** is a terminal agent for scientific work. Research modes for chemistry, biology, physics, materials, machine learning, and mathematics. Bundled domain skills, native cloud sync, and included credits.
+**[Synsci CLI](/cli/introduction)** is a terminal agent for scientific work. Research modes for chemistry, biology, physics, materials, machine learning, and mathematics. Bundled domain tools, native cloud sync, and included credits.
 
 Both share a Synthetic Sciences account, and Synsci CLI can read and write Thesis state through MCP.
 
@@ -26,10 +26,12 @@ Both share a Synthetic Sciences account, and Synsci CLI can read and write Thesi
 | Track hypotheses, experiments, decisions, and dead ends across a research program | [Thesis](/introduction) |
 | Run experiments under an explicit compute approval gate | [Thesis compute](/concepts/compute) |
 | Search prior work alongside indexed papers and repos | [Thesis knowledge layer](/concepts/knowledge-layer) |
-| Run DFT, molecular dynamics, or other compute work in chemistry | [Synsci CLI chemistry mode](/cli/modes) |
-| Predict protein structures, run sequencing pipelines, do single-cell analysis | [Synsci CLI biology mode](/cli/modes) |
-| Set up CFD, lattice QCD, or quantum simulations | [Synsci CLI physics mode](/cli/modes) |
-| Train, fine-tune, evaluate, or serve ML models | [Synsci CLI ML mode](/cli/modes) |
+| Run DFT, molecular dynamics, or other compute work in chemistry | [Chemistry](/chemistry/introduction) |
+| Predict protein structures, run sequencing pipelines, do single-cell analysis | [Biology](/biology/introduction) |
+| Set up CFD, lattice QCD, or quantum simulations | [Physics](/physics/introduction) |
+| Model crystal structures, run high-throughput materials screening | [Materials](/materials/introduction) |
+| Train, fine-tune, evaluate, or serve ML models | [Machine learning](/ml/introduction) |
+| Symbolic computation, formal proofs, optimization | [Mathematics](/math/introduction) |
 | Sync HF, W&B, Modal, Lambda, AWS, GCP credentials automatically | [Synsci CLI credentials](/cli/credentials) |
 
 ## Common workflows
@@ -40,7 +42,7 @@ Both share a Synthetic Sciences account, and Synsci CLI can read and write Thesi
   </Accordion>
 
   <Accordion title="Coding-only. Synsci CLI on its own">
-    Install with `npx synsci`, then run `synsc web --mode <your-domain>` to open the browser UI. The bundled skills and credential sync mean you can start running domain workflows in minutes. No Thesis account needed.
+    Install with `npx synsci`, then run `synsc web --mode <your-domain>` to open the browser UI. The bundled domain tools and credential sync mean you can start running workflows in minutes. No Thesis account needed.
   </Accordion>
 
   <Accordion title="Both. Synsci CLI runs the work, Thesis tracks the program">
@@ -62,5 +64,5 @@ Both products share a Synthetic Sciences account. Sign in once and:
 Plans and credits are scoped per product. You can subscribe to one without the other, or both with a combined plan. Visit your account page for plan details.
 
 <Note>
-  These docs are organized into three top-level tabs: **Thesis** (web app, concepts, guides, integrations), **Thesis MCP** (the MCP server, hosts, skills, and tool reference), and **Synsci CLI** (the terminal agent). Use the tab switcher at the top to navigate between them.
+  These docs are organized into top-level tabs: **Synsci CLI** (the terminal agent), one tab per **research mode** (chemistry, biology, physics, materials, machine learning, mathematics), **Thesis** (the research workspace), and **Thesis MCP** (the MCP server reference). Use the tab switcher at the top to navigate between them.
 </Note>
