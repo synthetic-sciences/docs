@@ -1,0 +1,189 @@
+---
+title: "Knowledge and search tools: index, search, and retrieve"
+description: "Reference for 16 MCP tools that index papers, repos, docs, and datasets, run unified search, launch Oracle research jobs, and query indexed sources."
+---
+
+Thesis's knowledge layer combines two retrieval branches: a graph-as-knowledge-base that embeds committed node content, and a Nia proxy that indexes external sources such as arXiv papers, GitHub repositories, documentation sites, and HuggingFace datasets. The 16 tools in this section let you populate both branches, search across them simultaneously, read or grep file contents, and queue longer synthesis jobs through Oracle and Tracer.
+
+## Knowledge tools (9)
+
+Use the index tools to bring external sources into Thesis so they become searchable and readable through the unified search and source-reading tools.
+
+| Tool | Mutation? | Purpose |
+|---|---|---|
+| `thesis_index_paper` | Yes | Index an arXiv paper via Nia |
+| `thesis_index_repo` | Yes | Index a GitHub repository |
+| `thesis_index_docs` | Yes | Index a documentation site |
+| `thesis_index_dataset` | Yes | Index a HuggingFace dataset |
+| `thesis_search` | No | Unified search across graph content and Nia sources |
+| `thesis_read_source` | No | Read a file from an indexed source |
+| `thesis_grep_source` | No | Regex search within an indexed source |
+| `thesis_explore_source` | No | Browse the file tree of an indexed source |
+| `thesis_list_sources` | No | List all sources indexed in your workspace |
+
+### Source type mapping
+
+Each index tool corresponds to a canonical source type used throughout the Thesis data model:
+
+| Tool | Source type |
+|---|---|
+| `thesis_index_paper` | `research_paper` |
+| `thesis_index_repo` | `repository` |
+| `thesis_index_docs` | `documentation` |
+| `thesis_index_dataset` | `dataset` |
+
+### Key parameters
+
+Each index tool uses a different primary parameter:
+
+| Tool | Parameter | Description |
+|---|---|---|
+| `thesis_index_paper` | `external_ref` | URL or DOI of the paper (e.g. `https://arxiv.org/abs/2203.15556`) |
+| `thesis_index_repo` | `owner_repo` | GitHub owner/repo slug (e.g. `huggingface/trl`) |
+| `thesis_index_docs` | `url` | Root URL of the documentation site |
+| `thesis_index_dataset` | `dataset_id` | HuggingFace dataset identifier (e.g. `allenai/c4`) |
+
+<ParamField body="display_name" type="string">
+  Optional friendly name for the source, displayed in the Sources panel.
+</ParamField>
+
+<ParamField body="query" type="string" required>
+  The search query string for `thesis_search`. Fans out across both graph content and Nia sources, deduplicates results, and merges relevance scores.
+</ParamField>
+
+<ParamField body="source_id" type="string" required>
+  The indexed source identifier, required by `thesis_read_source`, `thesis_grep_source`, and `thesis_explore_source`.
+</ParamField>
+
+<ParamField body="path" type="string">
+  File path within the source for `thesis_read_source` and `thesis_explore_source`.
+</ParamField>
+
+<ParamField body="pattern" type="string">
+  Regex pattern for `thesis_grep_source`.
+</ParamField>
+
+### Example: index a paper then search for it
+
+<CodeGroup>
+
+```json Index an arXiv paper
+POST /mcp-server
+Content-Type: application/json
+Authorization: Bearer thk_your_api_key
+
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "tools/call",
+  "params": {
+    "name": "thesis_index_paper",
+    "arguments": {
+      "external_ref": "https://arxiv.org/abs/2203.15556",
+      "display_name": "Chinchilla: Training Compute-Optimal LLMs"
+    }
+  }
+}
+```
+
+```json Response
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"source\": {\"source_id\": \"src_chinchilla_2022\", \"type\": \"research_paper\", \"title\": \"Training Compute-Optimal Large Language Models\", \"status\": \"indexed\"}}"
+      }
+    ]
+  }
+}
+```
+
+```json Search across sources and graph
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "method": "tools/call",
+  "params": {
+    "name": "thesis_search",
+    "arguments": {
+      "query": "optimal compute frontier scaling laws"
+    }
+  }
+}
+```
+
+</CodeGroup>
+
+<Note>
+  Indexing is asynchronous for large sources. Check `thesis_list_sources` to confirm the `status` field has moved to `"indexed"` before using `thesis_read_source` or `thesis_grep_source`.
+</Note>
+
+## Oracle tools (4)
+
+Oracle runs structured research synthesis jobs in the background. You start a job, optionally stream its output as it runs, and retrieve results when it completes. Three job modes are available with increasing depth and cost.
+
+| Tool | Mutation? | Purpose |
+|---|---|---|
+| `thesis_oracle_start_job` | Yes | Queue a research synthesis job |
+| `thesis_oracle_job_status` | No | Get the current state and results of a job |
+| `thesis_oracle_job_stream` | No | Stream job output via SSE as it progresses |
+| `thesis_oracle_jobs_list` | No | List all Oracle jobs for your account |
+
+### Job modes
+
+<ParamField body="mode" type="string" required>
+  Controls synthesis depth:
+  - `quick` — Fast scan of top indexed sources. Suitable for orientation queries.
+  - `deep` — Broader source coverage with Exa-backed paper and web discovery. Produces a longer synthesis report.
+  - `oracle` — Full deep research pass with multi-round retrieval, synthesis, and citation extraction. Highest quality, longest runtime.
+</ParamField>
+
+<ParamField body="query" type="string" required>
+  The research question or topic to synthesize.
+</ParamField>
+
+Generated reports are saved as files and can be attached to nodes as artifacts.
+
+## Tracer tools (2)
+
+Tracer runs GitHub code search across repositories and returns structured code search briefs. Use it to find implementations, locate usage patterns, or discover related open-source work.
+
+| Tool | Mutation? | Purpose |
+|---|---|---|
+| `thesis_tracer_search` | Yes | Launch a GitHub code search job |
+| `thesis_tracer_status` | No | Retrieve the result of a completed Tracer job |
+
+<ParamField body="query" type="string" required>
+  Code search query. Supports GitHub code search syntax including `language:` and `repo:` qualifiers.
+</ParamField>
+
+<ParamField body="repos_csv" type="string" required>
+  Comma-separated list of GitHub repositories to search, in `owner/repo` format. Example: `"huggingface/trl,openai/spinningup"`.
+</ParamField>
+
+<ParamField body="mode" type="string" default='"fast"'>
+  Search mode: `fast` aggregates GitHub search hits; `slow` also reads the top match per repo for a deeper brief.
+</ParamField>
+
+<Warning>
+  Tracer requires a GitHub token connected in **Settings → API Keys**. Without a connected GitHub account, `thesis_tracer_search` will return an error.
+</Warning>
+
+## Document Agent tool (1)
+
+The Document Agent runs question-answering against a single indexed source. Use it when you want a focused answer from a specific paper, repository, or documentation site rather than a broad search across all sources.
+
+| Tool | Mutation? | Purpose |
+|---|---|---|
+| `thesis_document_query` | No | Q&A against a single indexed source |
+
+<ParamField body="source_id" type="string" required>
+  The source to query. Must already be indexed via one of the `thesis_index_*` tools.
+</ParamField>
+
+<ParamField body="question" type="string" required>
+  The natural-language question to answer using the source's content.
+</ParamField>

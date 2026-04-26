@@ -1,0 +1,81 @@
+---
+title: "Authenticate your Thesis MCP connection with API keys"
+description: "Thesis MCP calls authenticate with a Bearer API key. Learn how the setup CLI provisions your key automatically and how to manage or rotate keys manually."
+---
+
+Every request to the Thesis MCP server requires a valid API key in the `Authorization` header. The setup CLI handles this for you — it authenticates your account via OAuth, provisions a new key, and writes it directly into your host's MCP config so you never have to paste anything manually.
+
+## How the setup CLI provisions your key
+
+When you run `npx --yes @synsci/thesis setup`, the CLI:
+
+1. Opens your browser to the Thesis OAuth login page (or uses device-code flow on headless machines).
+2. After login, provisions a new Thesis API key scoped to your account.
+3. Writes the key automatically into the MCP server entry for each detected host config.
+
+Your API key uses the `thk_*` prefix and is only shown once during provisioning. The setup CLI captures and stores it for you, so no manual copy-paste is required.
+
+## Authorization header format
+
+All MCP tool calls authenticate with the key as a Bearer token:
+
+```http
+Authorization: Bearer thk_your_api_key_here
+```
+
+If you are connecting to the Thesis MCP server manually or testing with curl, include this header in every request:
+
+```bash
+curl https://thesis.syntheticsciences.ai/mcp-server \
+  --header "Authorization: Bearer thk_your_api_key_here" \
+  --header "Content-Type: application/json" \
+  --data '{"jsonrpc":"2.0","method":"tools/list","id":1}'
+```
+
+## Get a key manually
+
+If you need to retrieve an existing key or generate a new one without running setup, go to **Settings → API Keys** in the [Thesis web app](https://thesis.syntheticsciences.ai). From there you can view active keys, create new ones, and revoke any key you no longer need.
+
+For web-based hosts such as Claude.ai and ChatGPT.com, copy your key from Settings and paste it when the host prompts for API credentials.
+
+## Provision credentials for CLI skill variants
+
+Thesis ships CLI-variant skills that drive research workflows through bash subcommands rather than MCP tool calls. These scripts read `THESIS_API_TOKEN` and `THESIS_MCP_URL` from `~/.config/thesis/env`. Provision that file with:
+
+```bash
+npx --yes @synsci/thesis setup --cli --api-key <KEY>
+```
+
+Replace `<KEY>` with a key from **Settings → API Keys**. The CLI writes the env file once, and all CLI-variant skills source it automatically on every invocation.
+
+<Note>
+  The `--cli` flag writes only the env file. It does not modify any agent host MCP config. Run it in addition to the standard setup command if you want both MCP and CLI skill variants working.
+</Note>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Authentication timed out during setup">
+    The OAuth browser flow has a short expiry window. If it times out before you complete login, re-run the setup command to start a fresh authentication flow:
+
+    ```bash
+    npx --yes @synsci/thesis setup
+    ```
+  </Accordion>
+
+  <Accordion title="Port conflict prevents the local callback server from starting">
+    The CLI starts a temporary local server to receive the OAuth callback. If another process is using that port, the callback fails. Switch to device-code authentication to bypass the local server entirely:
+
+    ```bash
+    npx --yes @synsci/thesis setup --auth-mode device
+    ```
+  </Accordion>
+
+  <Accordion title="MCP calls return 401 Unauthorized">
+    A 401 response means the API key in your host config is missing, expired, or revoked. Go to **Settings → API Keys** in the Thesis web app, generate a new key, then re-run setup to write it into your host config:
+
+    ```bash
+    npx --yes @synsci/thesis setup
+    ```
+  </Accordion>
+</AccordionGroup>

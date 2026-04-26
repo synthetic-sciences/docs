@@ -1,0 +1,56 @@
+---
+title: "Thesis documentation: agent-first research workspace"
+description: "Thesis is an agent-first research workspace for researchers and AI agents. Organize hypotheses, run experiments, and search knowledge in a durable graph."
+---
+
+Thesis gives researchers and AI agents a shared operating system for scientific work. Every claim, experiment, source, and decision lives in a structured, branchable graph — not scattered across chat histories and disconnected files.
+
+<CardGroup cols={2}>
+  <Card title="Quick Start" icon="rocket" href="/quickstart">
+    Create your first research node and connect Thesis to your workflow in minutes.
+  </Card>
+  <Card title="Research Graph" icon="diagram-project" href="/concepts/research-graph">
+    Understand how Thesis structures research as a DAG of staged and committed nodes.
+  </Card>
+  <Card title="MCP & CLI Setup" icon="plug" href="/mcp/quickstart">
+    Connect Thesis to Claude Code, Cursor, Codex, or any MCP-compatible agent host.
+  </Card>
+  <Card title="MCP Tools Reference" icon="wrench" href="/mcp/tools-overview">
+    Explore all 86 MCP tools available for nodes, knowledge, compute, and export.
+  </Card>
+</CardGroup>
+
+## What you can do with Thesis
+
+<CardGroup cols={2}>
+  <Card title="Organize research" icon="folder-tree" href="/guides/organize-research">
+    Turn loose notes, papers, and repos into a structured, navigable research graph.
+  </Card>
+  <Card title="Design experiments" icon="flask" href="/guides/design-experiment">
+    Stage 8-section experiment blueprints with falsification criteria, metrics, and baselines.
+  </Card>
+  <Card title="Run sub-agents" icon="robot" href="/guides/run-sub-agents">
+    Delegate execution to sandboxed AI agents after explicit human approval.
+  </Card>
+  <Card title="Search and synthesize" icon="magnifying-glass" href="/guides/search-synthesize">
+    Find graph evidence and external sources through unified search and Oracle jobs.
+  </Card>
+</CardGroup>
+
+## Get started in three steps
+
+<Steps>
+  <Step title="Sign in to Thesis">
+    Visit [thesis.syntheticsciences.ai](https://thesis.syntheticsciences.ai) and sign in. Thesis provisions your account automatically on first login.
+  </Step>
+  <Step title="Create your first research node">
+    From the dashboard, create a root node for your research topic. Add a title, summary, and any initial content. Stage it while you work, then commit when findings are stable.
+  </Step>
+  <Step title="Connect your agent host">
+    Run `npx --yes @synsci/thesis setup` to install the Thesis MCP server into Claude Code, Cursor, Codex, OpenCode, or any other supported host. Your agent can then read and write Thesis state through 86 structured tools.
+  </Step>
+</Steps>
+
+<Note>
+  The Thesis web app works without any additional configuration. The MCP/CLI integration is optional — use it to give your AI coding agents full access to your research graph.
+</Note>
