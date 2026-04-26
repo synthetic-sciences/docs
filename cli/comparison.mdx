@@ -1,6 +1,6 @@
 ---
 title: "Synsci CLI vs. Claude Code, Cursor, and Codex"
-description: "How Synsci CLI compares to general-purpose terminal agents. Research modes, bundled scientific skills, native cloud sync, and included credits."
+description: "How Synsci CLI compares to general-purpose terminal agents. Research modes, bundled scientific tools, native cloud sync, and included credits."
 sidebarTitle: "Comparison"
 ---
 
@@ -11,7 +11,7 @@ Synsci CLI is one of several terminal AI coding agents. The core capabilities (f
 | | Synsci CLI | Claude Code | Cursor (terminal) | Codex CLI |
 |---|---|---|---|---|
 | **Research modes** | Yes (chemistry, biology, physics, materials, ML, math) | None | None | None |
-| **Bundled scientific skills** | Hundreds across all modes | None bundled | Plugin marketplace | None bundled |
+| **Bundled scientific tools** | Hundreds across all modes | None bundled | Plugin marketplace | None bundled |
 | **Cloud credentials** | Synced from dashboard (HF, W&B, Modal, Lambda, AWS, GCP) | Local env or per-tool config | Local env or per-tool config | Local env |
 | **Credit model** | Subscription includes credits | Bring your own keys | Subscription | Bring your own keys |
 | **Browser UI** (`synsc web`) | Yes (built-in, recommended) | No | No | No |
@@ -39,15 +39,15 @@ If you're already comfortable with a terminal coding agent, the patterns transfe
 - File-edit-then-confirm flows.
 - Multi-step refactors that span many files.
 - MCP integration for external tool surfaces.
-- Skill activation by trigger phrase rather than explicit invocation.
+- Tool activation by trigger phrase rather than explicit invocation.
 
 The biggest mental shift is **dashboard-first configuration**. Where other agents expect you to set env vars and config files locally, Synsci CLI assumes the dashboard is the source of truth. You paste credentials there once and the CLI pulls them in at every session start.
 
 ## Pairing them
 
-Synsci CLI doesn't compete in every workspace. A common pattern: use a general agent for non-research work (web apps, infra, scripts) and Synsci CLI for the research work where the modes and bundled skills save the most time. The two won't conflict on the same machine. They have different binaries, config paths, and credential paths.
+Synsci CLI doesn't compete in every workspace. A common pattern: use a general agent for non-research work (web apps, infra, scripts) and Synsci CLI for the research work where the modes and bundled tools save the most time. The two won't conflict on the same machine. They have different binaries, config paths, and credential paths.
 
 ## What's next
 
 - **[Quickstart](/cli/quickstart).** Install, pick a mode, send your first prompt.
-- **[Research modes](/cli/modes).** Pick the mode that matches your domain.
+- **[Chemistry](/chemistry/introduction)**, **[biology](/biology/introduction)**, **[physics](/physics/introduction)**, **[materials](/materials/introduction)**, **[ML](/ml/introduction)**, **[math](/math/introduction)**. Pick the mode that matches your domain.

@@ -34,7 +34,7 @@ This walkthrough takes you from nothing installed to a productive Synsci CLI ses
   </Step>
 
   <Step title="Pick a research mode">
-    Synsci CLI works best when you tell it what domain you're in. Pick a [research mode](/cli/modes) before starting a session:
+    Synsci CLI works best when you tell it what domain you're in. Pick a research mode before starting a session:
 
     ```bash
     synsc web --mode chemistry
@@ -45,7 +45,7 @@ This walkthrough takes you from nothing installed to a productive Synsci CLI ses
     synsc web --mode math
     ```
 
-    Setting a mode primes the agent with domain conventions, activates the right bundled skills, and routes calls to the backend best suited for that work. You don't need to think about underlying providers.
+    Setting a mode primes the agent with domain conventions, activates the right bundled tools, and routes calls to the backend best suited for that work. You don't need to think about underlying providers.
 
     <Tip>
       If you don't know which mode you want yet, run `synsc web` without `--mode` for the general-purpose agent. You can switch modes mid-session with `/mode <name>`.
@@ -101,6 +101,6 @@ This walkthrough takes you from nothing installed to a productive Synsci CLI ses
 ## What's next
 
 - **[Web UI](/cli/web).** The recommended interface, multi-tab sessions, file diffs, command palette.
-- **[Research modes](/cli/modes).** What each mode covers and how to switch.
+- **[Chemistry](/chemistry/introduction)**, **[biology](/biology/introduction)**, **[physics](/physics/introduction)**, **[materials](/materials/introduction)**, **[ML](/ml/introduction)**, **[math](/math/introduction)**. The per-mode tabs.
 - **[Agents](/cli/agents).** How `build`, `plan`, and `@general` differ.
 - **[Credentials](/cli/credentials).** How HF, W&B, Modal, Lambda, AWS, and GCP tokens reach your subprocesses.

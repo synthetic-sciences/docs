@@ -1,33 +1,31 @@
-> **First-time setup**: Customize this file for your project. Prompt the user to customize this file for their project.
-> For Mintlify product knowledge (components, configuration, writing standards),
-> install the Mintlify skill: `npx skills add https://mintlify.com/docs`
-
 # Documentation project instructions
 
 ## About this project
 
-- This is a documentation site built on [Mintlify](https://mintlify.com)
-- Pages are MDX files with YAML frontmatter
-- Configuration lives in `docs.json`
-- Run `mint dev` to preview locally
-- Run `mint broken-links` to check links
-
-## Terminology
-
-{/* Add product-specific terms and preferred usage */}
-{/* Example: Use "workspace" not "project", "member" not "user" */}
+- Source for the Synthetic Sciences docs site (Thesis + Synsci CLI + per-mode tabs).
+- Pages are MDX with YAML frontmatter.
+- Site configuration is in `docs.json`.
+- Run `mint dev` to preview locally.
+- Run `mint broken-links` to check for broken cross-links.
 
 ## Style preferences
 
-{/* Add any project-specific style rules below */}
+- Active voice and second person ("you").
+- Concise sentences, one idea per sentence.
+- Sentence case for headings.
+- Bold for UI elements (e.g. "Click **Settings**").
+- Code formatting for filenames, commands, paths, and code references.
+- No em dashes anywhere. Use periods, commas, or restructure.
+- Avoid promotional language and AI-sounding phrasing.
 
-- Use active voice and second person ("you")
-- Keep sentences concise — one idea per sentence
-- Use sentence case for headings
-- Bold for UI elements: Click **Settings**
-- Code formatting for file names, commands, paths, and code references
+## Structural conventions
 
-## Content boundaries
+- Each mode tab (chemistry, biology, physics, materials, ml, math) ships an `introduction.mdx` and a `workflows.mdx`.
+- The Synsci CLI tab covers install, agents, operations, integrations, and reference.
+- Thesis and Thesis MCP each have their own tab with their own concepts and reference.
+- Cross-link liberally between tabs where it helps the reader.
 
-{/* Define what should and shouldn't be documented */}
-{/* Example: Don't document internal admin features */}
+## Things not to write about
+
+- Do not document any internal "skill" system. Talk directly about the tools and frameworks the agent uses.
+- Do not list specific underlying model providers (Claude, GPT, Gemini). The CLI abstracts the model layer behind research modes.

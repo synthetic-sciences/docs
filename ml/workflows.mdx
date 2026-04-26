@@ -1,0 +1,99 @@
+---
+title: "Machine learning workflows"
+description: "Concrete ML recipes. QLoRA fine-tuning, GRPO post-training, vLLM serving, eval harness runs, and distributed training setup."
+sidebarTitle: "Workflows"
+---
+
+Each recipe shows what to type into the agent and what comes out the other side. Adapt them to your model and dataset.
+
+## QLoRA fine-tuning
+
+> Fine-tune llama-3-8b with QLoRA on this dataset. Use rank 16, alpha 32, learning rate 2e-4 with cosine schedule, batch size 4 with gradient accumulation 8, train for 3 epochs. Log to wandb and push the merged model to my Hugging Face account.
+
+What happens:
+
+1. The agent loads the base model in 4-bit through bitsandbytes.
+2. Configures the LoRA adapters with the requested ranks.
+3. Sets up the training loop with the cosine schedule and gradient accumulation.
+4. Runs on GPU through Modal or Lambda based on availability.
+5. Logs metrics to W&B using your synced token.
+6. Merges the adapter back into the base weights and pushes to HF Hub using your synced token.
+
+## GRPO post-training
+
+> Run GRPO post-training on llama-3-8b with this reward model and prompt dataset. Use group size 8, learning rate 1e-6, KL coefficient 0.04, and train for 500 steps. Log rewards and KL divergence to wandb.
+
+What happens:
+
+1. Loads the policy model and the reward model.
+2. Configures the GRPO trainer with the requested hyperparameters.
+3. Generates rollouts in groups of 8 per prompt.
+4. Computes per-group advantages and policy gradients.
+5. Updates the policy with the KL penalty.
+6. Streams reward and KL trajectories to W&B.
+
+## Distributed pretraining
+
+> Set up a Llama-style 1B model pretraining run on 8x H100s using FSDP. Use the dolma corpus, sequence length 4096, learning rate 3e-4 with warmup, and train for 100B tokens.
+
+What happens:
+
+1. Defines the model architecture with the requested size.
+2. Configures FSDP with full sharding and mixed precision.
+3. Sets up the data pipeline streaming dolma from HF Hub.
+4. Configures the optimizer with warmup and decay.
+5. Submits the job to the requested compute (Modal or Lambda).
+6. Streams loss curves and throughput metrics to W&B.
+
+## vLLM serving
+
+> Serve this fine-tuned model with vLLM on a 4xA100 node. Use tensor parallel 4, max sequence 8192, and enable speculative decoding with this draft model.
+
+What happens:
+
+1. Configures vLLM with the requested tensor parallelism.
+2. Loads the target model with the appropriate quantization.
+3. Configures speculative decoding with the draft model.
+4. Starts the OpenAI-compatible server.
+5. Returns the endpoint URL and a health check command.
+
+## Evaluation harness run
+
+> Evaluate this model on MMLU, ARC-Challenge, HellaSwag, and TruthfulQA using lm-eval-harness. Use 5-shot for MMLU and 0-shot for the others. Report results in a table.
+
+What happens:
+
+1. Configures lm-eval-harness with the requested tasks and shot counts.
+2. Loads the model with the appropriate dtype.
+3. Runs evaluation in parallel where possible.
+4. Aggregates results.
+5. Returns a comparison table against published baselines.
+
+## Hyperparameter sweep
+
+> Run a wandb sweep over learning rate (1e-5 to 1e-3, log scale) and batch size (32, 64, 128, 256) for this fine-tuning task. Use Bayesian search and stop after 30 trials.
+
+What happens:
+
+1. Defines the sweep configuration with the search space and method.
+2. Initializes the sweep on W&B.
+3. Spawns sweep agents on Modal, parallelizing across the available GPU budget.
+4. Tracks trials in W&B.
+5. Returns the best configuration and its validation metrics.
+
+## DPO alignment
+
+> Run DPO on this preference dataset starting from the SFT checkpoint. Use beta 0.1, learning rate 5e-7, and train for 1 epoch. Evaluate on the chosen vs rejected accuracy.
+
+What happens:
+
+1. Loads the SFT checkpoint.
+2. Configures the DPO trainer with the preference data.
+3. Trains the policy with the DPO loss.
+4. Evaluates on held-out chosen vs rejected pairs.
+5. Reports preference accuracy and KL divergence from the reference model.
+
+## What's next
+
+- **[ML introduction](/ml/introduction).** What this mode covers at a glance.
+- **[Synsci CLI agents](/cli/agents).** Build vs. plan, and when to use each in an ML session.

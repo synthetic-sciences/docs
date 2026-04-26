@@ -1,0 +1,62 @@
+---
+title: "Biology"
+description: "Genomics, structural biology, single-cell analysis, and computational biology. Activate the biology mode and the agent loads the right pipelines and tools for sequence, structure, and omics work."
+sidebarTitle: "Introduction"
+---
+
+Synsci handles computational biology workflows end to end. Activate the biology mode and the agent reasons about your prompts the way a bioinformatician or structural biologist would. It picks the right pipeline, the right reference data, and the right scale for the work.
+
+## Activate the biology mode
+
+```bash
+synsc web --mode biology
+```
+
+For a one-shot run:
+
+```bash
+synsc run --mode biology "Predict structures for these 12 protein sequences with ESMFold and rank by pLDDT"
+```
+
+To set biology as the default for your current working directory:
+
+```bash
+synsc mode set biology
+```
+
+## Who this is for
+
+- Structural biologists predicting and analyzing protein structures
+- Bioinformaticians running variant calling, RNA-seq, and ATAC-seq pipelines
+- Single-cell biologists doing clustering, trajectory inference, and integration
+- Computational genomicists working with population variation and phylogenetics
+- Drug discovery teams modeling targets and binding partners
+
+## What you can do
+
+- Predict and analyze protein structures and complexes
+- Run sequencing pipelines from raw reads to variants
+- Do single-cell and spatial transcriptomics analysis
+- Integrate multi-omics datasets
+- Build and analyze phylogenetic trees
+- Design primers, gRNAs, and experimental constructs
+
+## Frameworks the agent uses
+
+When you describe a biology task, the agent reaches for these natively. You don't need to invoke them by name.
+
+| Category | Stack |
+|---|---|
+| Protein structure | AlphaFold 3, ESMFold, RoseTTAFold, OpenFold, Boltz |
+| Sequencing | samtools, BWA, GATK, DeepVariant, bcftools |
+| RNA-seq | STAR, Salmon, DESeq2, edgeR |
+| Single-cell | Scanpy, Seurat, Squidpy, scVI, MOFA |
+| Phylogenetics | IQ-TREE, RAxML, BEAST, MAFFT |
+| Variant calling | GATK, DeepVariant, FreeBayes |
+| Visualization | PyMOL, ChimeraX, igv-notebook |
+
+## What's next
+
+- **[Biology workflows](/biology/workflows).** Concrete recipes with example prompts.
+- **[Synsci CLI quickstart](/cli/quickstart).** Install and authenticate before activating the mode.
+- **[Credentials](/cli/credentials).** Hugging Face and cloud tokens flow into pipelines that need them automatically.

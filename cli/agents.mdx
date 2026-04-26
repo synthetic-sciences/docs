@@ -7,10 +7,10 @@ sidebarTitle: "Agents"
 Synsci CLI ships with two top-level agent modes and one delegated subagent. The split is deliberate.
 
 - `build` is the daily-driver agent. Full filesystem and shell access.
-- `plan` is read-only. Same skills and context, but cannot mutate anything.
+- `plan` is read-only. Same tools and context, but cannot mutate anything.
 - `@general` is a subagent you delegate to from inside any session for searches or multi-step tasks that would otherwise eat up your context window.
 
-The agent is orthogonal to the [research mode](/cli/modes). You can be in `chemistry` mode with the `build` agent, or `ml` mode with the `plan` agent, or any other combination.
+The agent is orthogonal to the research mode. You can be in `chemistry` mode with the `build` agent, or `ml` mode with the `plan` agent, or any other combination.
 
 ## build, the default
 
@@ -25,7 +25,7 @@ The agent indicator shows `build` when this agent is active.
 
 ## plan, read-only analysis
 
-`plan` has the same skills behind it but cannot mutate anything. No file writes, no shell commands that touch state, no git operations that change refs. Use it when you want the agent to analyze code or design an approach without the risk of accidental changes.
+`plan` has the same tools behind it but cannot mutate anything. No file writes, no shell commands that touch state, no git operations that change refs. Use it when you want the agent to analyze code or design an approach without the risk of accidental changes.
 
 Switch to plan mode with the agent toggle in the [web UI](/cli/web), or press <kbd>Tab</kbd> in the TUI, or start in plan mode directly:
 
@@ -93,5 +93,5 @@ The dashboard at [cli.syntheticsciences.ai](https://cli.syntheticsciences.ai) le
 
 ## What's next
 
-- **[Research modes](/cli/modes).** Modes are orthogonal to agents. Pick one of each.
-- **[Skills](/cli/skills).** Bundled playbooks the agent loads on demand within a mode.
+- **[Chemistry](/chemistry/introduction)**, **[biology](/biology/introduction)**, **[physics](/physics/introduction)**, **[materials](/materials/introduction)**, **[ML](/ml/introduction)**, **[math](/math/introduction)**. Modes are orthogonal to agents. Pick one of each.
+- **[Web UI](/cli/web).** The recommended interface for both agents.

@@ -1,0 +1,94 @@
+---
+title: "Mathematics workflows"
+description: "Concrete math recipes. Lean 4 proofs, symbolic calculus, convex optimization, integer programming, and numerical analysis."
+sidebarTitle: "Workflows"
+---
+
+Each recipe shows what to type into the agent and what comes out the other side. Adapt them to your problem.
+
+## Formal proof in Lean 4
+
+> Formalize the proof that the square root of 2 is irrational in Lean 4. Use mathlib4 conventions and check it compiles with `lake build`.
+
+What happens:
+
+1. The agent drafts the Lean 4 proof using mathlib4 lemmas.
+2. Writes it to a file inside the project.
+3. Runs `lake build` to verify it compiles.
+4. If errors arise, iterates on the proof until it type-checks.
+5. Returns the final proof with mathlib4 citations.
+
+## Symbolic computation
+
+> Find the closed-form solution of this nonlinear ODE using SymPy: y'' + 2*y'*y = 0 with y(0)=1 and y'(0)=2. Verify the solution by substitution.
+
+What happens:
+
+1. Defines the ODE in SymPy.
+2. Calls `dsolve` with appropriate hints.
+3. Substitutes initial conditions to find the constants.
+4. Verifies by plugging the solution back into the ODE.
+5. Returns the closed form with the verification trace.
+
+## Convex optimization
+
+> Solve this CVXPY problem: minimize `||Ax - b||_2 + lambda * ||x||_1` for the matrix A and vector b in `data.npz`. Sweep lambda from 0.01 to 10 on a log scale and plot the regularization path.
+
+What happens:
+
+1. Loads A and b from the data file.
+2. Defines the LASSO problem in CVXPY.
+3. Solves at each lambda in the sweep.
+4. Tracks the resulting x and the residual norm.
+5. Plots the regularization path showing each component of x as lambda varies.
+
+## Integer programming
+
+> Solve this scheduling problem: 50 jobs, 10 machines, with the precedence and processing time constraints in `jobs.json`. Minimize makespan using JuMP with the Gurobi backend, with a 60-second time limit.
+
+What happens:
+
+1. Loads the problem from JSON.
+2. Builds the integer programming model in JuMP.
+3. Configures Gurobi with the time limit.
+4. Solves to optimality or returns the best feasible solution.
+5. Returns the schedule and the makespan.
+
+## Numerical analysis
+
+> Implement and validate a fourth-order Runge-Kutta integrator for this stiff ODE system. Compare against SciPy's `solve_ivp` with the BDF method. Plot the error vs step size.
+
+What happens:
+
+1. Implements the RK4 integrator from scratch.
+2. Runs the integration at several step sizes.
+3. Runs `solve_ivp` with `BDF` as the reference solution.
+4. Computes per-step error.
+5. Plots the convergence diagram and reports the empirical convergence order.
+
+## High-precision computation
+
+> Compute the first 10000 digits of the constant defined by this integral: `integral from 0 to 1 of (1 + x^2)^(1/3) dx`. Use mpmath with adaptive precision.
+
+What happens:
+
+1. Sets up mpmath with high precision (a few digits beyond 10000 to account for cancellation).
+2. Evaluates the integral using `quad` with adaptive subdivision.
+3. Returns the requested number of digits and the precision used internally.
+
+## Computer algebra
+
+> In SageMath, factor this polynomial over Q[i] and find the Galois group of its splitting field over Q.
+
+What happens:
+
+1. Defines the polynomial in SageMath.
+2. Factors it over Q[i] using SageMath's number field machinery.
+3. Computes the splitting field over Q.
+4. Computes the Galois group of the splitting field.
+5. Returns the factorization and the group.
+
+## What's next
+
+- **[Math introduction](/math/introduction).** What this mode covers at a glance.
+- **[Synsci CLI agents](/cli/agents).** Build vs. plan, and when to use each in a math session.

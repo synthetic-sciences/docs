@@ -3,11 +3,11 @@ title: "Agent harness: your project-aware research operator"
 description: "The Thesis agent reads your graph, searches sources, stages experiments, writes the log, and spawns sub-agents, with you in control of compute spending."
 ---
 
-The Thesis agent is not a general-purpose chat assistant. It is a research operator that understands your project's graph, log, files, and mounted skills, and uses that structured state to plan and execute research work. When you open the agent chat, you're talking to an agent that can read your full research history, search indexed sources, stage experiments as formal blueprints, and delegate execution to sandboxed sub-agents after you approve it.
+The Thesis agent is not a general-purpose chat assistant. It is a research operator that understands your project's graph, log, and files, and uses that structured state to plan and execute research work. When you open the agent chat, you're talking to an agent that can read your full research history, search indexed sources, stage experiments as formal blueprints, and delegate execution to sandboxed sub-agents after you approve it.
 
 ## What the agent can do
 
-- **Hydrate project state.** Before making strategic decisions, the agent reads your full project state, graph nodes, research log, mounted skills, project files, and active compute leases, so its responses are grounded in what's actually in your project, not just the current chat window.
+- **Hydrate project state.** Before making strategic decisions, the agent reads your full project state, graph nodes, research log, project files, and active compute leases, so its responses are grounded in what's actually in your project, not just the current chat window.
 - **Search and synthesize.** The agent can query unified search, start Oracle jobs, run Tracer code searches, and launch Deep Research jobs, then turn the results into graph nodes, log entries, or inline summaries.
 - **Stage experiments.** When the agent proposes an experiment, it creates a staged empirical node with a full 8-section blueprint, hypothesis, falsification criterion, method, expected outcomes, baseline, metrics, data config, and rigor review. The proposal appears as a card in the chat for you to review.
 - **Write the research log.** The agent writes durable log entries automatically as work progresses, recording decisions, dead ends, pivots, and results without you having to prompt it.
@@ -53,28 +53,6 @@ When you send a message in the agent chat, the following happens:
   </Step>
 </Steps>
 
-## Skills: built-in research workflows
-
-The agent ships with six built-in research skill workflows. You don't need to activate these manually, the agent selects the right skill based on what you're trying to accomplish:
-
-<AccordionGroup>
-  <Accordion title="thesis-lookahead, plan next directions">
-    The agent maps out the next N research directions from your current frontier without executing any of them. It stages experiment nodes in `drafted` status so you can review the plan before anything runs. Use this when you want to see what's possible next before committing resources.
-  </Accordion>
-  <Accordion title="thesis-to-graph, turn source material into nodes">
-    The agent reads a paper, repository, or documentation site you've indexed and extracts claims, methods, assumptions, and follow-up experiments into graph nodes with proper edges and artifact links. Use this when onboarding into a new area or converting prior notes into structured research state.
-  </Accordion>
-  <Accordion title="thesis-reproduce, validate claims under budget">
-    The agent graphifies a published claim, designs a reproduction experiment, and, after your approval, runs it under a specified budget. The result is logged against the original claim node.
-  </Accordion>
-  <Accordion title="thesis-survey, synthesize knowledge">
-    The agent searches indexed sources and your graph, runs Oracle jobs as needed, and synthesizes results into insight nodes with citations. Use this for literature reviews and to build a structured knowledge base from multiple sources.
-  </Accordion>
-  <Accordion title="thesis-auto, advance the frontier autonomously">
-    The agent picks up from your current research frontier, plans the next step, stages it, requests approval if compute is needed, and advances, continuing until the budget is spent or it reaches a stopping point. Use this when you want to delegate a stretch of autonomous work.
-  </Accordion>
-</AccordionGroup>
-
 ## What sub-agents receive
 
 When the agent spawns a sub-agent after approval, the sub-agent does not receive your chat history. Instead, it receives a structured payload compiled from durable project state:
@@ -84,9 +62,6 @@ When the agent spawns a sub-agent after approval, the sub-agent does not receive
 | `THESIS_BLUEPRINT_JSON` | The full 8-section experiment blueprint |
 | `THESIS_NODE_ID` | The ID of the experiment node to execute |
 | `THESIS_PROJECT_ID` | The project scope |
-| `THESIS_PROJECT_SKILLS_JSON` | Mounted skill definitions at spawn time |
-| `THESIS_PROJECT_SKILLS_PROMPT` | Skill instructions as a prompt |
-| `THESIS_SKILLS_DIR` | Path to the mounted skill directory in the project filesystem |
 | `THESIS_CALLBACK_URL` | Endpoint for telemetry, signals, and asset uploads |
 | `THESIS_RUNNER_TOKEN` | Auth token for the callback URL |
 
