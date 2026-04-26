@@ -1,0 +1,59 @@
+---
+title: "Synsci CLI vs. Claude Code, Cursor, and other terminal agents"
+description: "How Synsci CLI compares to Claude Code, Cursor, and Codex. Bundled ML skills, native cloud sync, multi-provider routing, and included credits."
+sidebarTitle: "Comparison"
+---
+
+Synsci CLI is one of several terminal AI coding agents available today. It is built on the open-source [opencode](https://github.com/SyntheticSciences/cli) project, so the core capabilities — file edits, shell access, models — overlap with peers like Claude Code, Cursor, and Codex CLI. What's different is the ML focus.
+
+## Quick comparison
+
+| | Synsci CLI | Claude Code | Cursor (terminal) | Codex CLI |
+|---|---|---|---|---|
+| **Provider** | Multi (Anthropic, OpenAI, Google) | Anthropic only | Multi (configurable) | OpenAI only |
+| **Bundled ML skills** | 83 (GRPO, vLLM, DeepSpeed, etc.) | None bundled | Plugin marketplace | None bundled |
+| **Cloud credentials** | Synced from dashboard (HF, W&B, Modal, Lambda, AWS, GCP) | Local env or per-tool config | Local env or per-tool config | Local env |
+| **Credit model** | Subscription includes credits across all providers | Bring-your-own Anthropic API key | Subscription | Bring-your-own OpenAI key |
+| **Open source base** | Yes ([opencode](https://github.com/SyntheticSciences/cli)) | Closed | Mostly closed | Closed |
+| **Desktop app** | Yes (Tauri, macOS/Windows/Linux) | No | Yes | No |
+| **MCP support** | Yes (host and server) | Yes (host) | Yes (host) | Limited |
+
+## When Synsci CLI is the better fit
+
+- **You're an ML engineer or researcher.** The bundled skills cover the modern training stack (GRPO, vLLM, DeepSpeed, Axolotl) and credentials sync from a dashboard rather than scattered across `~/.cache/huggingface/token`, `~/.aws/credentials`, and a `MODAL_TOKEN_*` in your shell profile.
+- **You want multi-provider.** Switching between Claude Opus 4, Sonnet 4.5, GPT Codex Mini, and Gemini 2.5 Pro mid-session is built in. No second tool, no juggling API keys.
+- **You want predictable billing.** Credits are included in the subscription with pre-call balance checks. No surprise overage from a runaway loop.
+- **You want a desktop option too.** The Tauri desktop app is first-class, not an afterthought, and shares the same dashboard account as the terminal CLI.
+
+## When another tool might fit better
+
+- **You only use Anthropic and want every Claude feature on day zero.** Claude Code ships new Anthropic capabilities first; Synsci CLI gets them with a small lag.
+- **You're deeply embedded in Cursor's IDE.** Cursor's tight editor integration is hard to replicate with a separate terminal agent.
+- **You want the absolute lowest-touch tool with no account.** Both Claude Code (with your own API key) and Codex CLI (with your own API key) require zero dashboard setup.
+
+## What carries over
+
+If you're already comfortable with Claude Code, the patterns transfer:
+
+- Slash commands inside a session (`/model`, `/clear`).
+- File-edit-then-confirm flows.
+- Multi-step refactors that span many files.
+- MCP integration for external tool surfaces.
+- Skill / playbook activation by trigger phrase rather than explicit invocation.
+
+The biggest mental shift is **dashboard-first configuration**. Where Claude Code expects you to set env vars and config files locally, Synsci CLI assumes the dashboard is the source of truth. You paste credentials there once and the CLI pulls them in at every session start.
+
+## Pairing them
+
+Synsci CLI doesn't compete with Claude Code in every workspace. A common pattern: use Claude Code for non-ML work (web apps, infra, scripts) and Synsci CLI for ML work where the bundled skills and cloud sync save the most time. The two won't conflict on the same machine — they have different binaries (`claude` vs. `synsc`), different config paths, and different credential paths.
+
+## What's next
+
+<CardGroup cols={2}>
+  <Card title="Quickstart" icon="rocket" href="/cli/quickstart">
+    Install, connect, and send your first prompt — under five minutes.
+  </Card>
+  <Card title="Skills" icon="brain" href="/cli/skills">
+    The 83 bundled ML skills that set Synsci CLI apart.
+  </Card>
+</CardGroup>

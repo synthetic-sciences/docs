@@ -3,7 +3,11 @@ title: "Connect Thesis to your AI agent host using MCP setup"
 description: "Run one command to detect your installed agent hosts, authenticate, provision an API key, and write the Thesis MCP server into every host's config."
 ---
 
-The `@synsci/thesis` setup command handles the entire connection process for you. It scans your machine for supported agent hosts, opens a browser to authenticate your Thesis account, creates a scoped API key, and writes the MCP server entry into each detected host's config file — all in a single run.
+The [`@synsci/thesis`](https://www.npmjs.com/package/@synsci/thesis) setup helper handles the entire connection process for you. It scans your machine for supported agent hosts, opens a browser to authenticate your Thesis account, creates a scoped API key, and writes the MCP server entry into each detected host's config file — all in a single run.
+
+<Note>
+  `@synsci/thesis` is a **setup helper** for the Thesis MCP server. It is not the same npm package as [`@synsci/cli`](/cli/introduction), which is the standalone Synsci CLI terminal coding agent. If you're using Synsci CLI, see [Connect Synsci CLI to Thesis](/cli/mcp) instead — the registration path is different.
+</Note>
 
 ## Run the setup command
 

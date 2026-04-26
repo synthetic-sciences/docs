@@ -1,0 +1,125 @@
+---
+title: "Synsci CLI quickstart: connect, prompt, switch models"
+description: "From `npm install` to your first agent response in under five minutes. Authenticate, send a prompt, switch agents and models, and inspect usage."
+sidebarTitle: "Quickstart"
+---
+
+This walkthrough takes you from zero to a productive Synsci CLI session in under five minutes. You'll install the binary, connect it to your dashboard so credits and credentials flow in, send your first prompt, and switch between agents and models mid-session.
+
+<Steps>
+  <Step title="Install Synsci CLI">
+    The fastest path is npm:
+
+    ```bash
+    npm install -g @synsci/cli
+    ```
+
+    See [Installation](/cli/installation) for Homebrew, curl, and desktop options.
+  </Step>
+
+  <Step title="Connect to your dashboard">
+    Synsci CLI runs against your account at [cli.syntheticsciences.ai](https://cli.syntheticsciences.ai). Authenticate once with the connect command:
+
+    ```bash
+    synsc connect login
+    ```
+
+    The CLI prints a short device code and opens your browser to confirm the login. After confirmation, the CLI receives a Bearer token and can pull your dashboard credits, sync credentials, and report usage.
+
+    Verify the connection:
+
+    ```bash
+    synsc connect status
+    ```
+
+    A healthy connection prints your account email, current credit balance, and the synced credentials it has access to.
+
+    <Tip>
+      On a headless or SSH machine, the CLI falls back to a manual code-paste flow. Open the printed URL on any device, paste the code, and the CLI will pick up the token automatically.
+    </Tip>
+  </Step>
+
+  <Step title="Start a session">
+    Run `synsc` with no arguments to drop into the TUI:
+
+    ```bash
+    synsc
+    ```
+
+    You're now in the **build** agent on the default model. Type a prompt and press Enter:
+
+    ```
+    > Read README.md and summarize what this repo does in three bullets.
+    ```
+
+    The agent reads the file, streams its response, and prompts you for the next message.
+  </Step>
+
+  <Step title="Switch agents with Tab">
+    Press <kbd>Tab</kbd> at any point to switch between the two agents:
+
+    - **build** — full filesystem and shell access, the default for development work.
+    - **plan** — read-only mode. Use it when you want analysis without the agent touching anything.
+
+    The status line shows which agent is active.
+
+    To delegate a complex search or multi-step task to a sub-agent, mention `@general` in your message:
+
+    ```
+    > @general find every place we call the OpenAI API and list them
+    ```
+  </Step>
+
+  <Step title="Switch models">
+    List available models:
+
+    ```bash
+    synsc models
+    ```
+
+    You'll see Claude Opus 4, Claude Sonnet 4.5, GPT Codex Mini, and Gemini 2.5 Pro. Switch the active model with `/model` inside a session, or set a default with the `--model` flag:
+
+    ```bash
+    synsc --model claude-sonnet-4-5
+    ```
+
+    Each model has its own strengths and price point. See [Models](/cli/models) for guidance on which to pick.
+  </Step>
+
+  <Step title="Inspect usage">
+    After running a few prompts, check what you spent:
+
+    ```bash
+    synsc stats
+    ```
+
+    `stats` shows cumulative token usage and credit cost per model and per session. Pair this with [the dashboard](https://cli.syntheticsciences.ai) for a full audit trail.
+  </Step>
+
+  <Step title="Run one-shot prompts (optional)">
+    For scripted workflows, skip the TUI and pipe a single prompt with `synsc run`:
+
+    ```bash
+    synsc run "Refactor utils/log.ts to use structured logging"
+    ```
+
+    The agent runs the prompt to completion and exits. Useful for CI hooks, git hooks, or shell pipelines.
+  </Step>
+</Steps>
+
+## What's next
+
+<CardGroup cols={2}>
+  <Card title="Agents" icon="robot" href="/cli/agents">
+    Build vs. plan, the @general subagent, and when to switch.
+  </Card>
+  <Card title="Models" icon="microchip" href="/cli/models">
+    Pick between Claude Opus 4, Sonnet 4.5, GPT Codex Mini, and Gemini 2.5 Pro.
+  </Card>
+  <Card title="Credentials" icon="key" href="/cli/credentials">
+    How HuggingFace, W&B, Modal, Lambda, AWS, and GCP tokens get into your subprocesses.
+  </Card>
+  <Card title="Commands reference" icon="terminal" href="/cli/commands">
+    Every `synsc` subcommand with flags and examples.
+  </Card>
+</CardGroup>

@@ -1,0 +1,95 @@
+---
+title: "Models in Synsci CLI: Claude, GPT, and Gemini frontier models"
+description: "Four frontier models included with your subscription: Claude Opus 4, Claude Sonnet 4.5, GPT Codex Mini, and Gemini 2.5 Pro. List, switch, and pick the right one."
+sidebarTitle: "Models"
+---
+
+Synsci CLI is multi-provider. Your subscription includes credits for four frontier models, and you can switch between them mid-session — useful when one model fails on a task or when you want to spend more compute on a hard step. No external API keys required.
+
+## Available models
+
+| Model | Provider | Best for |
+|---|---|---|
+| `claude-opus-4` | Anthropic | Hardest reasoning, large refactors, novel research code |
+| `claude-sonnet-4-5` | Anthropic | Daily-driver — fast, cheap, capable on most coding tasks |
+| `gpt-codex-mini` | OpenAI | Quick code edits and structured outputs at low cost |
+| `gemini-2.5-pro` | Google | Long-context reading (codebases, papers, big logs) |
+
+<Note>
+  Model identifiers may evolve as providers ship new versions. `synsc models` always shows the live list of what your subscription has access to right now.
+</Note>
+
+## List models
+
+```bash
+synsc models
+```
+
+Output includes the model identifier, the provider, the per-1M-token input/output cost in credits, and whether it's currently available on your plan.
+
+## Set the model
+
+The default model is `claude-sonnet-4-5`. To use a different one for a session, pass `--model` at launch:
+
+```bash
+synsc --model claude-opus-4
+```
+
+Or switch inside a running session with the `/model` command:
+
+```
+/model claude-opus-4
+```
+
+The status line updates immediately. Future messages in the session are routed to the new model. Earlier messages remain in context — they don't get reissued.
+
+<Tip>
+  You can chain model switches mid-session. A common pattern is to start on Sonnet, switch to Opus when the agent gets stuck on a hard step, then switch back to Sonnet for the cleanup. You only pay Opus rates for the messages on Opus.
+</Tip>
+
+## Picking a model
+
+A few rules of thumb:
+
+- **Default to Sonnet 4.5.** It handles most coding work well and costs the least of the Claude options. Switch up only when you have a reason.
+- **Reach for Opus 4 on hard reasoning.** Multi-file refactors, novel algorithm design, debugging a heisenbug, or anything where you've tried Sonnet and it's spinning.
+- **Reach for Gemini 2.5 Pro on long context.** Reading and understanding a large codebase, summarizing a book-length doc, or grepping through a multi-megabyte log file.
+- **Reach for GPT Codex Mini for fast structured edits.** Schema migrations, type-only refactors, and tasks where you want a high-throughput model.
+
+## How credits are charged
+
+Every model call reports back to your dashboard with input tokens, output tokens, and a credit cost. The CLI subtracts the cost from your balance immediately and blocks new requests when the balance hits zero.
+
+```bash
+synsc stats
+```
+
+Shows your spend broken down by model, per session and cumulative. See [Credits and usage](/cli/credits) for details on how the balance check works.
+
+## API keys
+
+You don't need your own API keys. Your subscription includes credits across all four providers, and routing happens through the Synsci CLI proxy — your prompts never touch a third-party Anthropic, OpenAI, or Google account.
+
+If you want to **bring your own key** for a specific provider — for example, if you have an enterprise Anthropic contract you'd rather route through — set the corresponding env var before launching:
+
+```bash
+export ANTHROPIC_API_KEY=sk-ant-...
+synsc
+```
+
+When the CLI sees a provider-specific key, it routes that provider's calls through the key directly and doesn't charge against your subscription credits. Other providers (where you didn't set a key) still go through the proxy.
+
+<Warning>
+  Your own API key is never synced to the dashboard or shared with subprocesses. The CLI reads it once at launch, attaches it to outbound provider calls, and that's it. See [Security](/cli/security) for the full credential boundary.
+</Warning>
+
+## What's next
+
+<CardGroup cols={2}>
+  <Card title="Credits and usage" icon="chart-line" href="/cli/credits">
+    How balance checks work and where to monitor spend.
+  </Card>
+  <Card title="Skills" icon="brain" href="/cli/skills">
+    The 83 ML skills any model can invoke.
+  </Card>
+</CardGroup>

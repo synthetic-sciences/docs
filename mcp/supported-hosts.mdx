@@ -17,6 +17,8 @@ Thesis detects installed agent hosts automatically by checking whether known con
 | Hermes Agent | YAML | `~/.hermes/config.yaml` |
 | OpenClaw | JSON | `~/.openclaw/openclaw.json` |
 
+[Synsci CLI](/cli/introduction) is also MCP-aware. Rather than configuring it through `@synsci/thesis setup`, register the Thesis MCP server with `synsc mcp add` — see [Connect Synsci CLI to Thesis](/cli/mcp).
+
 ## Target a specific host
 
 By default, `setup` configures every host it detects. To target only one host, pass the `--hosts` flag with the host name:

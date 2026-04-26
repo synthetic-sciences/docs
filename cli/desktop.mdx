@@ -1,0 +1,93 @@
+---
+title: "Synsci CLI desktop app: macOS, Windows, Linux"
+description: "The native Tauri desktop app for Synsci CLI. Same agent and model surface as the terminal, with a windowed UI, multi-session management, and richer file diffs."
+sidebarTitle: "Desktop app"
+---
+
+Synsci CLI ships with a native desktop app for users who prefer a windowed UI over a TUI. It runs the same underlying agent — same models, same skills, same credentials — wrapped in a desktop shell built on Tauri. macOS (Apple Silicon and Intel), Windows, and Linux are all first-class.
+
+## When to pick desktop over terminal
+
+| Situation | Recommended |
+|---|---|
+| Quick edits, scripts, CI hooks | Terminal (`synsc`) |
+| Multi-hour coding sessions with several parallel agents | Desktop |
+| Pair programming or screen sharing | Desktop (richer UI) |
+| Headless or remote machine | Terminal (no GUI available) |
+| You want both, switching freely | Both — they share the same dashboard account |
+
+The desktop app and the terminal CLI are interchangeable from the dashboard's perspective. A session you start in one shows up in the same dashboard as a session you start in the other.
+
+## Download
+
+Pull the latest release from [GitHub Releases](https://github.com/synthetic-sciences/synsci-cli/releases):
+
+| Platform | Build |
+|---|---|
+| macOS Apple Silicon | `synsc-x.y.z-aarch64.dmg` |
+| macOS Intel | `synsc-x.y.z-x86_64.dmg` |
+| Windows | `synsc-x.y.z-x86_64.msi` |
+| Linux | `synsc-x.y.z.AppImage` or `.deb` |
+
+Releases include a SHA-256 checksum so you can verify the download before installing.
+
+## First launch
+
+On first run, the desktop app prompts you to connect to your dashboard. The flow is identical to `synsc connect login`:
+
+1. The app opens [cli.syntheticsciences.ai](https://cli.syntheticsciences.ai) in your default browser.
+2. You confirm the device code shown in the app window.
+3. The dashboard issues a Bearer token; the desktop app stores it in OS keychain.
+
+Once connected, the desktop app pulls your credentials and credit balance the same way the CLI does. You can use the dashboard panel inside the app to manage credentials without leaving the workspace.
+
+## Multi-session
+
+The desktop app supports multiple agent sessions in tabs. Each tab is independent — its own working directory, its own model choice, its own context. This is useful when you're running:
+
+- A long-running training script in one tab while writing analysis in another
+- Two `@general` searches against different codebases at the same time
+- A `build`-mode session for development plus a `plan`-mode session for review
+
+The dashboard sees each tab as its own session record, so you can audit them separately.
+
+## File diffs and previews
+
+The desktop app renders file edits as proper side-by-side diffs in the UI rather than as raw text in a stream. For multi-file refactors, the diff panel makes it easier to scan changes before approving them.
+
+Inline previews render:
+
+- Markdown files (with syntax highlighting in code blocks)
+- Images attached to chat
+- JSON and YAML config files (folded structure)
+- Generated charts and plots
+
+## Keyboard shortcuts
+
+The most-used shortcuts (mac shown; substitute Ctrl on Windows/Linux):
+
+| Shortcut | Action |
+|---|---|
+| <kbd>Cmd+T</kbd> | New session tab |
+| <kbd>Cmd+W</kbd> | Close current tab |
+| <kbd>Tab</kbd> | Switch between build and plan agents |
+| <kbd>Cmd+K</kbd> | Open command palette |
+| <kbd>Cmd+,</kbd> | Open preferences |
+| <kbd>Cmd+J</kbd> | Toggle bottom drawer (logs, stats) |
+
+Full shortcut list is available from the command palette.
+
+## Auto-update
+
+The desktop app checks for updates on launch. When a new version is available, you get a prompt and the option to update in place — the app downloads, verifies, and restarts itself. You can disable auto-update in preferences if you'd rather pin to a specific version.
+
+## What's next
+
+<CardGroup cols={2}>
+  <Card title="Quickstart" icon="rocket" href="/cli/quickstart">
+    The agent and model basics work the same way in the desktop app.
+  </Card>
+  <Card title="Dashboard" icon="window" href="/cli/dashboard">
+    The web dashboard you'll bounce between for credentials and billing.
+  </Card>
+</CardGroup>

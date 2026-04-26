@@ -1,56 +1,78 @@
 ---
-title: "Thesis documentation: agent-first research workspace"
-description: "Thesis is an agent-first research workspace for researchers and AI agents. Organize hypotheses, run experiments, and search knowledge in a durable graph."
+title: "Synthetic Sciences documentation"
+description: "Thesis is a graph-based research workspace. Synsci CLI is a terminal AI coding agent for ML engineers. Use one or both — they share an account and integrate over MCP."
+sidebarTitle: "Overview"
 ---
 
-Thesis gives researchers and AI agents a shared operating system for scientific work. Every claim, experiment, source, and decision lives in a structured, branchable graph — not scattered across chat histories and disconnected files.
+Synthetic Sciences ships two products that work independently and pair naturally. **Thesis** is a graph-based research workspace where hypotheses, experiments, sources, and decisions live as durable, branchable nodes. **Synsci CLI** is a terminal AI coding agent built for ML work, with 83 bundled skills and native cloud sync. They use the same Synthetic Sciences account, and Synsci CLI can read and write Thesis state through MCP.
 
 <CardGroup cols={2}>
-  <Card title="Quick Start" icon="rocket" href="/quickstart">
-    Create your first research node and connect Thesis to your workflow in minutes.
+  <Card title="Thesis — research workspace" icon="diagram-project" href="/introduction">
+    A DAG of staged and committed research nodes, an append-only research log, indexed knowledge sources, an agent harness, and approval-gated compute. Ships an 86-tool MCP server for Cursor, Claude Code, Codex, and others.
   </Card>
-  <Card title="Research Graph" icon="diagram-project" href="/concepts/research-graph">
-    Understand how Thesis structures research as a DAG of staged and committed nodes.
-  </Card>
-  <Card title="MCP & CLI Setup" icon="plug" href="/mcp/quickstart">
-    Connect Thesis to Claude Code, Cursor, Codex, or any MCP-compatible agent host.
-  </Card>
-  <Card title="MCP Tools Reference" icon="wrench" href="/mcp/tools-overview">
-    Explore all 86 MCP tools available for nodes, knowledge, compute, and export.
+  <Card title="Synsci CLI — terminal coding agent" icon="terminal" href="/cli/introduction">
+    `synsc` runs in your terminal with Claude Opus 4, Sonnet 4.5, GPT Codex Mini, and Gemini 2.5 Pro. 83 ML skills bundled in. HF, W&B, Modal, Lambda, AWS, GCP credentials sync from your dashboard.
   </Card>
 </CardGroup>
 
-## What you can do with Thesis
+## Pick a starting point
 
 <CardGroup cols={2}>
-  <Card title="Organize research" icon="folder-tree" href="/guides/organize-research">
-    Turn loose notes, papers, and repos into a structured, navigable research graph.
+  <Card title="Set up Thesis" icon="rocket" href="/quickstart">
+    Sign in, create your first research node, index a source, and connect an agent host.
   </Card>
-  <Card title="Design experiments" icon="flask" href="/guides/design-experiment">
-    Stage 8-section experiment blueprints with falsification criteria, metrics, and baselines.
+  <Card title="Install Synsci CLI" icon="download" href="/cli/installation">
+    `npm install -g @synsci/cli`, then `synsc connect login`. You're in.
   </Card>
-  <Card title="Run sub-agents" icon="robot" href="/guides/run-sub-agents">
-    Delegate execution to sandboxed AI agents after explicit human approval.
+  <Card title="Connect Thesis to Cursor / Claude Code" icon="plug" href="/mcp/quickstart">
+    `npx --yes @synsci/thesis setup` writes the MCP config for every supported host.
   </Card>
-  <Card title="Search and synthesize" icon="magnifying-glass" href="/guides/search-synthesize">
-    Find graph evidence and external sources through unified search and Oracle jobs.
+  <Card title="Pair Thesis + Synsci CLI" icon="link" href="/cli/mcp">
+    Wire Synsci CLI to your Thesis workspace as an MCP host so the agent reads and writes your research graph.
   </Card>
 </CardGroup>
 
-## Get started in three steps
+## Which product solves what
 
-<Steps>
-  <Step title="Sign in to Thesis">
-    Visit [thesis.syntheticsciences.ai](https://thesis.syntheticsciences.ai) and sign in. Thesis provisions your account automatically on first login.
-  </Step>
-  <Step title="Create your first research node">
-    From the dashboard, create a root node for your research topic. Add a title, summary, and any initial content. Stage it while you work, then commit when findings are stable.
-  </Step>
-  <Step title="Connect your agent host">
-    Run `npx --yes @synsci/thesis setup` to install the Thesis MCP server into Claude Code, Cursor, Codex, OpenCode, or any other supported host. Your agent can then read and write Thesis state through 86 structured tools.
-  </Step>
-</Steps>
+| Job | Reach for |
+|---|---|
+| Track hypotheses, experiments, decisions, and dead ends across a research program | [Thesis](/introduction) |
+| Run experiments under an explicit compute approval gate | [Thesis compute](/concepts/compute) |
+| Search prior work alongside indexed papers and repos | [Thesis knowledge layer](/concepts/knowledge-layer) |
+| Write and run training scripts in your terminal | [Synsci CLI](/cli/introduction) |
+| Switch between Claude, GPT, and Gemini mid-session | [Synsci CLI models](/cli/models) |
+| Use bundled ML skills (GRPO, vLLM, DeepSpeed, Axolotl) | [Synsci CLI skills](/cli/skills) |
+| Sync HF, W&B, Modal, Lambda, AWS, GCP credentials automatically | [Synsci CLI credentials](/cli/credentials) |
+
+## Common workflows
+
+<AccordionGroup>
+  <Accordion title="Research-only — Thesis on its own">
+    Start at [Thesis quickstart](/quickstart). Create a root node, index a paper or two, talk to the agent, stage an experiment when you're ready. The web app at [thesis.syntheticsciences.ai](https://thesis.syntheticsciences.ai) is enough — you don't need any CLI.
+  </Accordion>
+
+  <Accordion title="Coding-only — Synsci CLI on its own">
+    Install with `npm install -g @synsci/cli`, run `synsc connect login`, then `synsc`. The bundled skills and credential sync mean you can start running training scripts and managing cloud resources from the terminal in minutes — no Thesis account needed.
+  </Accordion>
+
+  <Accordion title="Both — Synsci CLI authoring code, Thesis tracking the program">
+    Set up both products. Connect them with `synsc mcp add thesis --url https://thesis.syntheticsciences.ai/mcp-server` so the terminal agent can read and write your research graph. The agent stages experiments in Thesis while it writes the actual training code in your repo. See [Connect Synsci CLI to Thesis](/cli/mcp).
+  </Accordion>
+
+  <Accordion title="Cursor or Claude Code + Thesis (no Synsci CLI)">
+    Use your existing IDE agent host. Run `npx --yes @synsci/thesis setup` to wire Thesis into the host's MCP config. Your agent gets the 86 Thesis tools alongside its built-ins. Synsci CLI isn't required.
+  </Accordion>
+</AccordionGroup>
+
+## Account and billing
+
+Both products share a Synthetic Sciences account. Sign in once and:
+
+- Thesis web app and MCP server use your account for project access.
+- Synsci CLI dashboard at [cli.syntheticsciences.ai](https://cli.syntheticsciences.ai) issues Bearer tokens, holds synced credentials, and tracks credit usage.
+
+Plans and credits are scoped per product. You can subscribe to one without the other, or both with a combined plan. Visit your account page for plan details.
 
 <Note>
-  The Thesis web app works without any additional configuration. The MCP/CLI integration is optional — use it to give your AI coding agents full access to your research graph.
+  These docs cover both products in three top-level tabs: **Thesis** (web app + concepts + guides + integrations), **Thesis MCP** (the MCP server, hosts, skills, and tool reference), and **Synsci CLI** (the terminal coding agent). Use the tab switcher at the top to navigate between them.
 </Note>

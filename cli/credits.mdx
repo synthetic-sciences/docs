@@ -1,0 +1,96 @@
+---
+title: "Credits and usage tracking in Synsci CLI"
+description: "Pre-call balance checks, per-call cost reporting, and a dashboard view of cumulative spend. Credits cover all four bundled frontier models."
+sidebarTitle: "Credits"
+---
+
+Your Synsci CLI subscription includes credits that cover model usage across all four supported providers — Anthropic, OpenAI, and Google — through a single proxy. Every call reports its cost back to your dashboard, the balance is checked before each request, and the CLI blocks new prompts when credits hit zero.
+
+## How credits work
+
+Each model call consumes credits proportional to the input and output tokens. The cost is computed per provider's posted rate and converted into Synsci credits at a fixed ratio that's the same as buying directly from each provider.
+
+You don't pay separately for each provider — your subscription credits work across all four models. Switching from Sonnet to Opus mid-session simply spends from the same balance at a higher rate per token.
+
+## Pre-call balance check
+
+Before sending a model request, the CLI calls the dashboard to confirm you have enough balance to complete the call. This protects against:
+
+- **Surprise overruns** when a long context conversation suddenly demands a large completion.
+- **Run-on agent loops** where the model keeps going past the budget you intended.
+- **Shared accounts** where another session is spending your credits at the same time.
+
+If the balance check fails, the CLI returns an error and refuses to send the request. The session stays alive — you can buy more credits, switch to a cheaper model, or end the session.
+
+## Per-call usage reporting
+
+After every model response, the CLI sends a usage record to the dashboard with:
+
+- Session ID and project (when applicable)
+- Model identifier
+- Input tokens and output tokens
+- Computed credit cost
+
+The dashboard updates the running balance and the spend feed in real time.
+
+## Inspect spend from the CLI
+
+```bash
+synsc stats
+```
+
+`stats` aggregates usage across the current session and all prior sessions. It can break down by:
+
+- **Model** — what's costing what across providers
+- **Session** — per-session totals so you can spot a runaway loop
+- **Time window** — last hour, last day, last week
+
+Use the `--json` flag to pipe `stats` into your own dashboards or scripts.
+
+```bash
+synsc stats --json
+```
+
+## Inspect spend from the dashboard
+
+The full audit trail lives at [cli.syntheticsciences.ai](https://cli.syntheticsciences.ai):
+
+- **Balance** — current credits and burn rate
+- **Sessions** — every session you've started, with model usage and cost
+- **Top spenders** — which projects or models consumed the most this billing cycle
+- **Alerts** — set thresholds that ping you when daily or session spend crosses a line
+
+## What happens when credits run out
+
+When your balance hits zero:
+
+1. The pre-call balance check fails.
+2. The CLI prints a clear error: *"Insufficient credits to complete this request."*
+3. Your session stays open, but model calls are paused until you top up.
+
+You don't get partial responses or unexpected charges. The balance check is the floor.
+
+To restore service, top up credits in the dashboard, then run `synsc connect status` (or restart the session) so the CLI picks up the new balance.
+
+## Bring-your-own-key bypass
+
+If you set a provider-specific env var like `ANTHROPIC_API_KEY` before launching, calls through that provider go directly to the provider's API and don't charge your Synsci credits. They also don't show up in `synsc stats` — you'll see them on your own provider's billing dashboard. See [Models](/cli/models) for details.
+
+## Plans and limits
+
+Plans and per-month credit allowances are configured on the dashboard. Synsci offers individual, team, and enterprise tiers with monthly credit grants and the option to add more credits ad-hoc. Visit your dashboard's billing tab for the current rates.
+
+<Note>
+  Credits don't expire mid-cycle, but unused credits from one billing period don't roll over by default. If you regularly underspend, downgrade your plan to match actual usage rather than letting credits lapse.
+</Note>
+
+## What's next
+
+<CardGroup cols={2}>
+  <Card title="Models" icon="microchip" href="/cli/models">
+    Pick the cheapest model that does the job to stretch credits.
+  </Card>
+  <Card title="Dashboard" icon="window" href="/cli/dashboard">
+    The full operational view — sessions, credentials, alerts, and team management.
+  </Card>
+</CardGroup>
