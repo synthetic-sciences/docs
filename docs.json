@@ -1,7 +1,7 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "synsci",
+  "name": "Synthetic Sciences",
   "description": "Synthetic Sciences documentation. Thesis is a graph-based research workspace. Synsci CLI is a terminal agent for scientific work.",
   "colors": {
     "primary": "#06b6d4",
@@ -34,16 +34,11 @@
     }
   },
   "navbar": {
-    "links": [
-      {
-        "label": "Dashboard",
-        "href": "https://cli.syntheticsciences.ai"
-      },
-      {
-        "label": "Thesis",
-        "href": "https://thesis.syntheticsciences.ai"
-      }
-    ]
+    "primary": {
+      "type": "button",
+      "label": "Dashboard",
+      "href": "https://app.syntheticsciences.ai"
+    }
   },
   "navigation": {
     "tabs": [
@@ -51,7 +46,7 @@
         "tab": "Thesis",
         "groups": [
           {
-            "group": "Get Started",
+            "group": "Start",
             "pages": [
               "introduction",
               "quickstart",
@@ -59,13 +54,19 @@
             ]
           },
           {
-            "group": "Core Concepts",
+            "group": "Concepts",
             "pages": [
               "concepts/research-graph",
               "concepts/research-log",
               "concepts/knowledge-layer",
               "concepts/agent-harness",
               "concepts/compute"
+            ]
+          },
+          {
+            "group": "Context",
+            "pages": [
+              "context/delphi"
             ]
           },
           {
@@ -76,13 +77,6 @@
               "guides/run-sub-agents",
               "guides/search-synthesize",
               "guides/export"
-            ]
-          },
-          {
-            "group": "Integrations",
-            "pages": [
-              "integrations/overview",
-              "integrations/compute-providers"
             ]
           }
         ]
@@ -99,7 +93,7 @@
             ]
           },
           {
-            "group": "MCP Tools",
+            "group": "Tools",
             "pages": [
               "mcp/tools-overview",
               "mcp/tools-nodes",
@@ -114,7 +108,7 @@
         "tab": "Synsci CLI",
         "groups": [
           {
-            "group": "Get Started",
+            "group": "Start",
             "pages": [
               "cli/introduction",
               "cli/installation",
@@ -148,7 +142,7 @@
             ]
           },
           {
-            "group": "Integrations",
+            "group": "MCP",
             "pages": [
               "cli/mcp"
             ]
