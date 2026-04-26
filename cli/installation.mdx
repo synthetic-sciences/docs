@@ -1,104 +1,104 @@
 ---
-title: "Install Synsci CLI: npm, Homebrew, curl, or desktop"
-description: "Three install paths to get the `synsc` binary on your PATH: npm (cross-platform), Homebrew (macOS), and curl (Linux/macOS). Plus the Tauri desktop app for full UI."
+title: "Install Synsci CLI in one command"
+description: "`npx synsci` runs the full install: it downloads the binary, walks you through dashboard authentication, and pre-fetches your credentials. Single-line setup."
 sidebarTitle: "Installation"
 ---
 
-Synsci CLI ships as a single binary called `synsc`. You have three install paths for the terminal version, plus a separate desktop app if you prefer a windowed UI. Pick whichever fits your environment.
-
-## npm (recommended)
-
-The npm install works on macOS, Linux, and Windows. It pulls the right platform binary automatically.
+The fastest path to a working Synsci CLI is the one-line installer:
 
 ```bash
-npm install -g @synsci/cli
+npx synsci
 ```
 
-This installs `synsc` to your global npm bin directory. Verify it's on your PATH:
-
-```bash
-synsc --version
-```
+This runs the full install in one step. It downloads the platform binary, drops `synsc` on your PATH, walks you through dashboard authentication, and pre-fetches your synced credentials so the first session is ready to go. No follow-up commands required.
 
 <Tip>
-  The npm package is namespaced as [`@synsci/cli`](https://www.npmjs.com/package/@synsci/cli) — note the `@synsci/` scope. The binary it installs is `synsc` (no `i`), not `synsci`.
+  After `npx synsci` finishes, run `synsc web` to open the recommended browser UI — see the [Web UI page](/cli/web). The TUI and desktop app are both still available if you prefer them.
 </Tip>
 
-## Homebrew (macOS)
+## What `npx synsci` does
 
-If you're on macOS and prefer Homebrew, the tap publishes the same binary:
+<Steps>
+  <Step title="Download the binary">
+    The installer detects your OS and architecture and pulls the matching `synsc` binary from the release CDN. It places the binary in your platform's standard user-bin location and adds the directory to your shell PATH if it's not already there.
+  </Step>
+  <Step title="Authenticate to your dashboard">
+    The installer launches the device-flow OAuth login against [cli.syntheticsciences.ai](https://cli.syntheticsciences.ai). You confirm the device code in your browser and the installer receives a Bearer token.
+  </Step>
+  <Step title="Sync credentials and credits">
+    With the Bearer token, the installer fetches your credit balance and the list of synced credentials (HF, W&B, Modal, Lambda, AWS, GCP). The token is stored in OS keychain so future sessions don't need to log in again.
+  </Step>
+  <Step title="Verify and exit">
+    A short health check confirms `synsc --version` runs, the dashboard is reachable, and credentials are present. Then the installer exits cleanly.
+  </Step>
+</Steps>
 
-```bash
-brew install SyntheticSciences/tap/synsc
-```
+You can re-run `npx synsci` any time to refresh the install or repair a broken one.
 
-Homebrew handles upgrades through `brew upgrade synsc`. Apple Silicon and Intel are both supported.
+## Manual install paths
 
-## curl install (Linux/macOS)
+If you'd rather not use the all-in-one installer, three direct paths drop the same binary on your PATH. After any of them, run `synsc connect login` once to authenticate.
 
-The hosted install script downloads the platform binary directly:
+<Tabs>
+  <Tab title="npm">
+    ```bash
+    npm install -g @synsci/cli
+    synsc connect login
+    ```
 
-```bash
-curl -fsSL https://syntheticsciences.ai/install | bash
-```
+    Cross-platform. Picks the right platform binary at install time. Updates land via `npm update -g @synsci/cli` or `synsc upgrade`.
+  </Tab>
+  <Tab title="Homebrew (macOS)">
+    ```bash
+    brew install SyntheticSciences/tap/synsc
+    synsc connect login
+    ```
 
-This drops `synsc` into `~/.local/bin` (or your platform's equivalent) and prints the path so you can add it to your shell profile if needed.
+    Apple Silicon and Intel both supported. Updates via `brew upgrade synsc`.
+  </Tab>
+  <Tab title="curl install">
+    ```bash
+    curl -fsSL https://syntheticsciences.ai/install | bash
+    synsc connect login
+    ```
 
-<Warning>
-  Always inspect a curl-piped install script before running it on production systems. The script is short — `curl -fsSL https://syntheticsciences.ai/install | less` shows what it would do before you execute it.
-</Warning>
+    Drops the binary in `~/.local/bin` (or your platform equivalent) and prints any PATH changes you need to make.
+
+    <Warning>
+      Always inspect a curl-piped install script before running it on production systems. `curl -fsSL https://syntheticsciences.ai/install | less` shows the full script.
+    </Warning>
+  </Tab>
+</Tabs>
 
 ## Desktop app
 
-A native desktop app built on Tauri is available for macOS (Apple Silicon and Intel), Windows, and Linux. The desktop app wraps the same agent in a windowed UI with multi-session management.
-
-Download the latest release from [GitHub Releases](https://github.com/synthetic-sciences/synsci-cli/releases).
-
-| Platform | Build |
-|---|---|
-| macOS Apple Silicon | `synsc-x.y.z-aarch64.dmg` |
-| macOS Intel | `synsc-x.y.z-x86_64.dmg` |
-| Windows | `synsc-x.y.z-x86_64.msi` |
-| Linux | `synsc-x.y.z.AppImage` or `.deb` |
-
-See [Desktop app](/cli/desktop) for setup details.
+A separate native app for macOS, Windows, and Linux is available if you'd rather have a full windowed UI than `synsc web`. Download from the [GitHub releases page](https://github.com/synthetic-sciences/synsci-cli/releases). See [Desktop app](/cli/desktop) for details.
 
 ## Verify the install
 
-Once `synsc` is on your PATH, run a quick health check:
-
 ```bash
 synsc --version
-synsc --help
+synsc connect status
 ```
 
-The help output should list subcommands including `connect`, `auth`, `models`, `run`, `session`, and `stats`.
+Healthy output prints the binary version, your account email, the synced credentials available, and your current credit balance.
 
 ## Upgrade and uninstall
 
-To upgrade to the latest version:
-
 ```bash
-synsc upgrade
+synsc upgrade        # upgrade to the latest version
+synsc uninstall      # remove the binary and clear local config
 ```
 
-The `upgrade` command detects how you installed (npm, Homebrew, or direct binary) and runs the matching update flow.
-
-To uninstall:
-
-```bash
-synsc uninstall
-```
-
-This removes the binary and clears local config. It does not touch your dashboard account or sync history.
+`synsc uninstall` does not affect your dashboard account, credits, or session history — only the local install.
 
 ## What's next
 
 <CardGroup cols={2}>
   <Card title="Quickstart" icon="rocket" href="/cli/quickstart">
-    Connect to your dashboard and send your first prompt.
+    Connect, send your first prompt, and switch agents and models — under five minutes.
   </Card>
-  <Card title="Connect to your dashboard" icon="link" href="/cli/dashboard">
-    Authenticate with `synsc connect login` so credentials and credits sync.
+  <Card title="Web UI" icon="window" href="/cli/web">
+    `synsc web` — the recommended way to use Synsci CLI day-to-day.
   </Card>
 </CardGroup>

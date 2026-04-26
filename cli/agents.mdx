@@ -1,6 +1,6 @@
 ---
 title: "Synsci CLI agents: build, plan, and the @general subagent"
-description: "Two top-level agents — build (read/write) and plan (read-only) — plus the @general subagent for complex searches. Switch with Tab; mention with @-syntax."
+description: "Two top-level agents — build (read/write) and plan (read-only) — plus the @general subagent for complex searches. Switch via the UI agent toggle or Tab in the TUI."
 sidebarTitle: "Agents"
 ---
 
@@ -8,23 +8,24 @@ Synsci CLI ships with two top-level agent modes and a delegated subagent. The sp
 
 ## build — the default
 
-The `build` agent is what you get when you run `synsc` with no flags. It has the full toolset: read files, write files, run shell commands, edit code, run tests, run training scripts. Use it for everything you'd normally use a coding agent for.
+The `build` agent is what you get when you start a session in any UI mode (web, TUI, or desktop) without specifying an agent. It has the full toolset: read files, write files, run shell commands, edit code, run tests, run training scripts. Use it for everything you'd normally use a coding agent for.
 
 ```bash
-synsc
-# starts in build mode by default
+synsc web        # recommended — opens the browser UI
+synsc            # alternative — TUI in the terminal
 ```
 
-The status line shows `build` when this agent is active.
+The agent indicator shows `build` when this agent is active.
 
 ## plan — read-only analysis
 
 The `plan` agent has the same models and skills behind it but cannot mutate anything. No file writes, no shell commands that touch state, no git operations that change refs. Use it when you want the agent to analyze code or design an approach without the risk of accidental changes.
 
-Switch to plan mode by pressing <kbd>Tab</kbd> inside a session, or start in plan mode directly:
+Switch to plan mode with the agent toggle in the [web UI](/cli/web) (or <kbd>Tab</kbd> in the TUI), or start in plan mode directly:
 
 ```bash
-synsc --agent plan
+synsc web --agent plan
+synsc --agent plan      # TUI variant
 ```
 
 Common cases:
@@ -34,7 +35,7 @@ Common cases:
 - **Code review** where you're asking the agent to critique a diff but not produce one.
 
 <Tip>
-  Press <kbd>Tab</kbd> any time during a session to swap agents. The session history carries over — only the active toolset changes.
+  Click the agent toggle in the web UI or press <kbd>Tab</kbd> in the TUI any time to swap agents. The session history carries over — only the active toolset changes.
 </Tip>
 
 ## @general — the subagent
@@ -69,7 +70,7 @@ The result returned to your main session is a summary. The actual tool calls and
 
 You can move between agents mid-conversation:
 
-- <kbd>Tab</kbd> swaps build ↔ plan.
+- Click the agent toggle in the [web UI](/cli/web), or press <kbd>Tab</kbd> in the TUI, to swap build ↔ plan.
 - `@general <prompt>` spawns a one-off subagent.
 
 The conversation history is preserved across switches. Only the toolset changes — so a plan-mode question that follows a build-mode action sees the same context, just with writes disabled.
@@ -79,7 +80,7 @@ The conversation history is preserved across switches. Only the toolset changes 
 The default agent is `build`. To change the default, set it in your config or pass `--agent` on launch:
 
 ```bash
-synsc --agent plan
+synsc web --agent plan
 ```
 
 The dashboard at [cli.syntheticsciences.ai](https://cli.syntheticsciences.ai) lets you override per-project agent defaults if you want some checkouts to start in plan mode.

@@ -1,22 +1,27 @@
 ---
 title: "Synsci CLI desktop app: macOS, Windows, Linux"
-description: "The native Tauri desktop app for Synsci CLI. Same agent and model surface as the terminal, with a windowed UI, multi-session management, and richer file diffs."
+description: "Native desktop app for Synsci CLI. Same agent surface as the web UI and TUI, wrapped as a standalone application. macOS, Windows, and Linux."
 sidebarTitle: "Desktop app"
 ---
 
-Synsci CLI ships with a native desktop app for users who prefer a windowed UI over a TUI. It runs the same underlying agent — same models, same skills, same credentials — wrapped in a desktop shell built on Tauri. macOS (Apple Silicon and Intel), Windows, and Linux are all first-class.
+The desktop app is the standalone alternative to [`synsc web`](/cli/web). Same agent, same models, same skills, same credentials — just packaged as a native application rather than a browser-served UI. Pick it if you'd rather have the agent in a dedicated window than a browser tab.
 
-## When to pick desktop over terminal
+<Note>
+  For most users, `synsc web` is the recommended interface. Reach for the desktop app when you specifically want a standalone application — for instance, when keeping the agent in its own window separate from your browser is important to your workflow.
+</Note>
+
+## When to pick desktop over web or terminal
 
 | Situation | Recommended |
 |---|---|
-| Quick edits, scripts, CI hooks | Terminal (`synsc`) |
-| Multi-hour coding sessions with several parallel agents | Desktop |
-| Pair programming or screen sharing | Desktop (richer UI) |
+| Daily development with multi-tab sessions | [Web UI (`synsc web`)](/cli/web) |
+| Standalone app outside the browser | **Desktop** |
+| Quick edits, scripts, CI hooks | Terminal (`synsc run`) |
+| Pair programming or screen sharing | Web UI |
 | Headless or remote machine | Terminal (no GUI available) |
-| You want both, switching freely | Both — they share the same dashboard account |
+| You want all three, switching freely | All three — same dashboard account |
 
-The desktop app and the terminal CLI are interchangeable from the dashboard's perspective. A session you start in one shows up in the same dashboard as a session you start in the other.
+The desktop app, the web UI, and the terminal CLI are interchangeable from the dashboard's perspective. A session you start in one shows up in the same dashboard as a session you start in the others.
 
 ## Download
 
@@ -39,7 +44,7 @@ On first run, the desktop app prompts you to connect to your dashboard. The flow
 2. You confirm the device code shown in the app window.
 3. The dashboard issues a Bearer token; the desktop app stores it in OS keychain.
 
-Once connected, the desktop app pulls your credentials and credit balance the same way the CLI does. You can use the dashboard panel inside the app to manage credentials without leaving the workspace.
+Once connected, the desktop app pulls your credentials and credit balance the same way the rest of Synsci CLI does. You can use the dashboard panel inside the app to manage credentials without leaving the workspace.
 
 ## Multi-session
 
@@ -84,10 +89,10 @@ The desktop app checks for updates on launch. When a new version is available, y
 ## What's next
 
 <CardGroup cols={2}>
-  <Card title="Quickstart" icon="rocket" href="/cli/quickstart">
-    The agent and model basics work the same way in the desktop app.
+  <Card title="Web UI" icon="window" href="/cli/web">
+    The recommended interface — `synsc web` runs the same surface as a browser tab.
   </Card>
-  <Card title="Dashboard" icon="window" href="/cli/dashboard">
+  <Card title="Dashboard" icon="chart-line" href="/cli/dashboard">
     The web dashboard you'll bounce between for credentials and billing.
   </Card>
 </CardGroup>
