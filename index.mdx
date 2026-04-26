@@ -1,67 +1,78 @@
 ---
-title: "Synthetic Sciences documentation"
-description: "Thesis is a graph-based research workspace. Synsci CLI is a terminal agent for scientific work, with research modes for general research, physics, chemistry, biology, and the model flywheel for post-training."
+title: "Synthetic Sciences"
+description: "Thesis is a graph-based research workspace. Synsci CLI is a terminal agent for scientific work, with research modes for physics, chemistry, biology, general research, and the model flywheel."
 sidebarTitle: "Overview"
+mode: "wide"
 ---
 
-Synthetic Sciences ships two products that work independently and pair naturally.
+A graph-based research workspace and a terminal agent for scientific work. Two products that ship independently and pair through MCP.
 
-**[Thesis](/introduction)** is a graph-based research workspace. Hypotheses, experiments, sources, and decisions live as durable, branchable nodes. Ships an 86-tool MCP server for Cursor, Claude Code, Codex, and others.
+## Get going in one command
 
-**[Synsci CLI](/cli/introduction)** is a terminal agent for scientific work. Research modes for general research, physics, chemistry, biology, and the model flywheel for building specialized LLMs from production data. Bundled domain tools, native cloud sync, and included credits.
+Install the CLI:
 
-Both share a Synthetic Sciences account, and Synsci CLI can read and write Thesis state through MCP.
+```bash
+npx synsci
+```
 
-## Pick a starting point
+Or open the research workspace at [thesis.syntheticsciences.ai](https://thesis.syntheticsciences.ai). Both share a Synthetic Sciences account.
 
-- **[Set up Thesis](/quickstart).** Sign in, create your first research node, index a source, and connect an agent host.
-- **[Install Synsci CLI](/cli/installation).** Run `npx synsci` once. The all-in-one installer drops the binary, authenticates you, and pre-fetches credentials. Then `synsc web`.
-- **[Connect Thesis to Cursor / Claude Code](/mcp/quickstart).** `npx --yes @synsci/thesis setup` writes the MCP config for every supported host.
-- **[Pair Thesis + Synsci CLI](/cli/mcp).** Wire Synsci CLI to Thesis as an MCP host so the agent reads and writes your research graph.
+## Thesis
 
-## Which product solves what
+A graph-based research workspace. Hypotheses, experiments, sources, and decisions live as durable, branchable nodes. Ships an 86-tool MCP server for Cursor, Claude Code, Codex, and other agent hosts.
 
-| Job | Reach for |
+- **[Introduction](/introduction).** What Thesis is for and how it works.
+- **[Quickstart](/quickstart).** Sign in, create your first node, index a source, talk to the agent.
+- **[Web app tour](/web-app).** Every UI area explained.
+
+## Thesis MCP
+
+Connect Thesis to the agent host you already use. The setup helper writes the MCP config for every detected host in one command.
+
+- **[MCP quickstart](/mcp/quickstart).** `npx --yes @synsci/thesis setup`.
+- **[Supported hosts](/mcp/supported-hosts).** Claude Code, Cursor, Codex, OpenCode, and more.
+- **[MCP tools reference](/mcp/tools-overview).** All 86 tools by category.
+
+## Synsci CLI
+
+A terminal agent for scientific work. The binary is `synsc`. Pick a research mode and the agent loads the right domain conventions, tools, and backends for the work.
+
+- **[Introduction](/cli/introduction).** What `synsc` is and what each research mode covers.
+- **[Installation](/cli/installation).** `npx synsci` does the entire setup.
+- **[Quickstart](/cli/quickstart).** Connect, pick a mode, send your first prompt.
+
+### Research modes
+
+| Mode | For |
 |---|---|
-| Track hypotheses, experiments, decisions, and dead ends across a research program | [Thesis](/introduction) |
-| Run experiments under an explicit compute approval gate | [Thesis compute](/concepts/compute) |
-| Search prior work alongside indexed papers and repos | [Thesis knowledge layer](/concepts/knowledge-layer) |
-| Cross-disciplinary literature review, hypothesis generation, data analysis | [Research mode](/cli/research/research) |
-| Simulation, PDE solving, dynamical systems, symbolic regression | [Physics](/cli/research/physics) |
-| Drug discovery, molecular design, ADMET, docking, structure prediction | [Chemistry](/cli/research/chemistry) |
-| Bioinformatics, sequencing pipelines, single-cell analysis, structure prediction | [Biology](/cli/research/biology) |
-| Build a specialized LLM from your production data | [Flywheel](/cli/research/flywheel) |
-| Sync HF, W&B, Modal, Lambda, AWS, GCP credentials automatically | [Synsci CLI credentials](/cli/credentials) |
+| [Research](/cli/research/research) | Cross-disciplinary work, literature review, hypothesis generation, GPU compute orchestration |
+| [Physics](/cli/research/physics) | Simulation, PDE solving, dynamical systems, symbolic regression |
+| [Chemistry](/cli/research/chemistry) | Drug discovery, molecular design, ADMET, docking, structure prediction |
+| [Biology](/cli/research/biology) | Bioinformatics, sequencing pipelines, single-cell analysis, structure prediction |
+| [Flywheel](/cli/research/flywheel) | Build a specialized LLM from your production data |
 
 ## Common workflows
 
 <AccordionGroup>
-  <Accordion title="Research-only. Thesis on its own">
-    Start at [Thesis quickstart](/quickstart). Create a root node, index a paper or two, talk to the agent, stage an experiment when you're ready. The web app at [thesis.syntheticsciences.ai](https://thesis.syntheticsciences.ai) is enough. You don't need any CLI.
+  <Accordion title="Research-only. Thesis on its own.">
+    Start at the [Thesis quickstart](/quickstart). Create a root node, index a paper or two, talk to the agent, stage an experiment when you're ready. The web app at [thesis.syntheticsciences.ai](https://thesis.syntheticsciences.ai) is enough. You don't need any CLI.
   </Accordion>
 
-  <Accordion title="Coding-only. Synsci CLI on its own">
-    Install with `npx synsci`, then run `synsc web --mode <your-domain>` to open the browser UI. The bundled domain tools and credential sync mean you can start running workflows in minutes. No Thesis account needed.
+  <Accordion title="Coding-only. Synsci CLI on its own.">
+    Install with `npx synsci`, then run `synsc web --mode <your-domain>`. The bundled domain tools and credential sync mean you can start running scientific workflows in minutes. No Thesis account needed.
   </Accordion>
 
-  <Accordion title="Both. Synsci CLI runs the work, Thesis tracks the program">
-    Set up both products. Connect them with `synsc mcp add thesis --url https://thesis.syntheticsciences.ai/mcp-server` so the agent can read and write your research graph. The agent stages experiments in Thesis while it runs the actual work in your repo. See [Connect Synsci CLI to Thesis](/cli/mcp).
+  <Accordion title="Both. Synsci CLI runs the work, Thesis tracks the program.">
+    Set up both products. Connect them with `synsc mcp add thesis --url https://thesis.syntheticsciences.ai/mcp-server`. The agent stages experiments in Thesis while it runs the actual work in your repo. See [Connect Synsci CLI to Thesis](/cli/mcp).
   </Accordion>
 
-  <Accordion title="Cursor or Claude Code + Thesis (no Synsci CLI)">
-    Use your existing IDE agent host. Run `npx --yes @synsci/thesis setup` to wire Thesis into the host's MCP config. Your agent gets the 86 Thesis tools alongside its built-ins. Synsci CLI isn't required.
+  <Accordion title="Cursor or Claude Code with Thesis.">
+    Use your existing IDE agent host. Run `npx --yes @synsci/thesis setup` to wire Thesis into the host's MCP config. Your agent gets the 86 Thesis tools alongside its built-ins. Synsci CLI is optional.
   </Accordion>
 </AccordionGroup>
 
 ## Account and billing
 
-Both products share a Synthetic Sciences account. Sign in once and:
+Both products share a Synthetic Sciences account. Thesis web app and MCP server use your account for project access. Synsci CLI dashboard at [cli.syntheticsciences.ai](https://cli.syntheticsciences.ai) issues Bearer tokens, holds synced credentials, and tracks credit usage.
 
-- Thesis web app and MCP server use your account for project access.
-- Synsci CLI dashboard at [cli.syntheticsciences.ai](https://cli.syntheticsciences.ai) issues Bearer tokens, holds synced credentials, and tracks credit usage.
-
-Plans and credits are scoped per product. You can subscribe to one without the other, or both with a combined plan. Visit your account page for plan details.
-
-<Note>
-  These docs are organized into three top-level tabs: **Synsci CLI** (the terminal agent, including a Research sidebar with one page per research mode), **Thesis** (the research workspace), and **Thesis MCP** (the MCP server reference). Use the tab switcher at the top to navigate between them.
-</Note>
+Plans and credits are scoped per product. Subscribe to either or both. Visit your account page for plan details.
