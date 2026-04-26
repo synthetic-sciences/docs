@@ -12,7 +12,7 @@ npx --yes @synsci/thesis setup --install-skill
 ```
 
 <AccordionGroup>
-  <Accordion title="thesis / thesis-cli — general usage and platform support">
+  <Accordion title="thesis / thesis-cli, general usage and platform support">
     **MCP skill:** `thesis` &nbsp;|&nbsp; **CLI skill:** `thesis-cli`
 
     ### Purpose
@@ -29,7 +29,7 @@ npx --yes @synsci/thesis setup --install-skill
     ### Key behaviors
 
     - Classifies each request as research guidance, platform support, or mixed before acting.
-    - Loads the minimum relevant reference file — one primary file, at most one supporting file — rather than reading everything upfront.
+    - Loads the minimum relevant reference file, one primary file, at most one supporting file, rather than reading everything upfront.
     - For research requests, asks 1–2 clarifying questions to nail objective, assumptions, and decision criteria before suggesting execution steps.
     - Uses live Thesis MCP tools to verify tool contracts when the host has MCP available.
     - Routes to specialized skills (`thesis-auto`, `thesis-reproduce`, `thesis-lookahead`, `thesis-to-graph`, `thesis-survey`) when the request calls for concrete graph work.
@@ -45,18 +45,18 @@ npx --yes @synsci/thesis setup --install-skill
     ```
   </Accordion>
 
-  <Accordion title="thesis-auto / thesis-auto-cli — autonomous frontier advancement">
+  <Accordion title="thesis-auto / thesis-auto-cli, autonomous frontier advancement">
     **MCP skill:** `thesis-auto` &nbsp;|&nbsp; **CLI skill:** `thesis-auto-cli`
 
     ### Purpose
 
-    `thesis-auto` advances a research frontier autonomously under an explicit budget. Think of it as `thesis-lookahead` plus continuous execution and replanning: the agent persists a run contract in the graph, keeps the plan `n` hops ahead, executes branches, and replans after each resolution — all within a hard budget ceiling you set before it starts.
+    `thesis-auto` advances a research frontier autonomously under an explicit budget. Think of it as `thesis-lookahead` plus continuous execution and replanning: the agent persists a run contract in the graph, keeps the plan `n` hops ahead, executes branches, and replans after each resolution, all within a hard budget ceiling you set before it starts.
 
     ### When to use
 
     - You want the agent to keep advancing a frontier without step-by-step user direction
     - You have a measurable objective, a budget ceiling, and an explicit terminal condition
-    - You need graph-local continuation — the agent should be able to resume from node state in a fresh chat without chat history
+    - You need graph-local continuation, the agent should be able to resume from node state in a fresh chat without chat history
 
     ### Key behaviors
 
@@ -74,12 +74,12 @@ npx --yes @synsci/thesis setup --install-skill
     ```
   </Accordion>
 
-  <Accordion title="thesis-lookahead / thesis-lookahead-cli — plan the next frontier">
+  <Accordion title="thesis-lookahead / thesis-lookahead-cli, plan the next frontier">
     **MCP skill:** `thesis-lookahead` &nbsp;|&nbsp; **CLI skill:** `thesis-lookahead-cli`
 
     ### Purpose
 
-    `thesis-lookahead` stages next-step frontier nodes from existing graph state without executing them. It is planning only — no compute approval, no execution, no spend. Use it when you want to see the most promising next directions before committing to any of them.
+    `thesis-lookahead` stages next-step frontier nodes from existing graph state without executing them. It is planning only, no compute approval, no execution, no spend. Use it when you want to see the most promising next directions before committing to any of them.
 
     ### When to use
 
@@ -89,8 +89,8 @@ npx --yes @synsci/thesis setup --install-skill
 
     ### Key behaviors
 
-    - **Single-path expansion:** at each hop, the agent evaluates up to `k` candidate directions, applies the selection criterion, and advances exactly one winner. The staged graph shape is a chain of `n` unresolved step nodes — not `k` parallel branches.
-    - **Records considered options:** each step node stores the `k` options evaluated, the selection criterion used, and the chosen continuation — so the reasoning is auditable from graph state alone.
+    - **Single-path expansion:** at each hop, the agent evaluates up to `k` candidate directions, applies the selection criterion, and advances exactly one winner. The staged graph shape is a chain of `n` unresolved step nodes, not `k` parallel branches.
+    - **Records considered options:** each step node stores the `k` options evaluated, the selection criterion used, and the chosen continuation, so the reasoning is auditable from graph state alone.
     - **Persists a planning contract:** a dedicated `insight` control node stores `objective`, `decision criterion`, `start nodes`, `lookahead depth n`, `step option width k`, and `terminal condition`. Later passes read this node first.
     - **No execution or spend:** the skill explicitly does not call `thesis_request_compute_grant_approval`, `thesis_compute_acquire`, or `thesis_launch_execution`. Execution is left to `thesis-auto` or `thesis-reproduce`.
     - **Defaults:** `n=1` (one hop ahead), `k=1` (one candidate evaluated per hop) unless you specify otherwise.
@@ -102,12 +102,12 @@ npx --yes @synsci/thesis setup --install-skill
     ```
   </Accordion>
 
-  <Accordion title="thesis-reproduce / thesis-reproduce-cli — graphify and validate claims">
+  <Accordion title="thesis-reproduce / thesis-reproduce-cli, graphify and validate claims">
     **MCP skill:** `thesis-reproduce` &nbsp;|&nbsp; **CLI skill:** `thesis-reproduce-cli`
 
     ### Purpose
 
-    `thesis-reproduce` combines source-to-graph authoring with budgeted empirical validation. It is conceptually `thesis-to-graph` plus explicit validation branches plus compute — graphify the claim-bearing source first, split it into validation branches, then execute within a hard maximum budget you set.
+    `thesis-reproduce` combines source-to-graph authoring with budgeted empirical validation. It is conceptually `thesis-to-graph` plus explicit validation branches plus compute, graphify the claim-bearing source first, split it into validation branches, then execute within a hard maximum budget you set.
 
     ### When to use
 
@@ -120,7 +120,7 @@ npx --yes @synsci/thesis setup --install-skill
     - **Requires a hard max budget before any empirical execution:** the agent asks once if it is missing. Graph construction and branch planning may proceed without it, but execution does not start until the budget is explicit.
     - **Runs a design gate before compute:** confirms objective, decision criterion, evidence plan, branch strategy, and budget readiness using the experiment design protocol.
     - **Indexes named sources:** if the source (paper, repo, docs site) is not yet indexed, calls `thesis_index_paper`, `thesis_index_repo`, or `thesis_index_docs` before proposing validation branches.
-    - **Prioritizes cheap, high-uncertainty-reduction branches first:** baseline checks, mechanism checks, ablations, efficiency checks, robustness checks, failure analysis — in that order of cost versus decision value.
+    - **Prioritizes cheap, high-uncertainty-reduction branches first:** baseline checks, mechanism checks, ablations, efficiency checks, robustness checks, failure analysis, in that order of cost versus decision value.
     - **Persists a validation contract:** a dedicated `insight` control node stores `objective`, `decision criterion`, `source or claim nodes under test`, `budget ceiling and unit`, and `stopping criterion`. Later passes read this node first.
     - **Stops at the budget ceiling:** releases all managed compute when the core claim is resolved or the hard max budget is reached.
 
@@ -131,12 +131,12 @@ npx --yes @synsci/thesis setup --install-skill
     ```
   </Accordion>
 
-  <Accordion title="thesis-survey / thesis-survey-cli — discover and synthesize knowledge">
+  <Accordion title="thesis-survey / thesis-survey-cli, discover and synthesize knowledge">
     **MCP skill:** `thesis-survey` &nbsp;|&nbsp; **CLI skill:** `thesis-survey-cli`
 
     ### Purpose
 
-    `thesis-survey` discovers relevant external sources, cross-references prior work inside the graph, and synthesizes what is known, contested, and missing on a research question. The output is a committed `insight` node with citations — not a chat reply. Use it for literature review, research-question grounding, and identifying gaps before designing experiments.
+    `thesis-survey` discovers relevant external sources, cross-references prior work inside the graph, and synthesizes what is known, contested, and missing on a research question. The output is a committed `insight` node with citations, not a chat reply. Use it for literature review, research-question grounding, and identifying gaps before designing experiments.
 
     ### When to use
 
@@ -160,12 +160,12 @@ npx --yes @synsci/thesis setup --install-skill
     ```
   </Accordion>
 
-  <Accordion title="thesis-to-graph / thesis-to-graph-cli — port source material into nodes">
+  <Accordion title="thesis-to-graph / thesis-to-graph-cli, port source material into nodes">
     **MCP skill:** `thesis-to-graph` &nbsp;|&nbsp; **CLI skill:** `thesis-to-graph-cli`
 
     ### Purpose
 
-    `thesis-to-graph` converts unstructured source material — papers, READMEs, markdown wikis, research notes, blog posts — into Thesis nodes, artifacts, and durable graph edges. It is authoring only: no execution, no compute approval, no spend. Use it when the goal is to get material into the graph so agents and the web UI can navigate and search it.
+    `thesis-to-graph` converts unstructured source material, papers, READMEs, markdown wikis, research notes, blog posts, into Thesis nodes, artifacts, and durable graph edges. It is authoring only: no execution, no compute approval, no spend. Use it when the goal is to get material into the graph so agents and the web UI can navigate and search it.
 
     ### When to use
 

@@ -3,7 +3,7 @@ title: "MCP tools overview: 86 tools available at /mcp-server"
 description: "Thesis exposes 86 structured tools over JSON-RPC 2.0 at /mcp-server. Learn the calling convention, idempotency model, and tool category map."
 ---
 
-Thesis exposes 86 tools through a single JSON-RPC 2.0 endpoint at `/mcp-server`. Every tool is available to any MCP-compatible agent host — Claude Code, Cursor, Codex, OpenCode, or your own client — using a Bearer token for authentication. Tools are grouped into 16 functional categories covering the full research lifecycle, from creating and branching nodes to leasing GPU compute, exporting subgraphs, and auditing activity.
+Thesis exposes 86 tools through a single JSON-RPC 2.0 endpoint at `/mcp-server`. Every tool is available to any MCP-compatible agent host. Claude Code, Cursor, Codex, OpenCode, or your own client, using a Bearer token for authentication. Tools are grouped into 16 functional categories covering the full research lifecycle, from creating and branching nodes to leasing GPU compute, exporting subgraphs, and auditing activity.
 
 ## Calling convention
 
@@ -79,7 +79,7 @@ The `result.content` array always contains a single `text` element whose `text` 
 Mutation tools in Thesis are automatically idempotent. When you call a mutation tool, the MCP server computes a SHA-256 key from the canonical JSON serialization of your parameters. If you send the exact same parameters again within 7 days, the server replays the cached response without re-executing the operation. This protects against duplicate writes caused by network retries or agent restarts.
 
 <Note>
-  Idempotency is keyed on the full parameter set. Changing any argument — even whitespace in a string field — produces a new key and triggers a fresh execution.
+  Idempotency is keyed on the full parameter set. Changing any argument, even whitespace in a string field, produces a new key and triggers a fresh execution.
 </Note>
 
 ## Tool categories
@@ -105,17 +105,8 @@ The 86 tools are grouped into 16 categories. Mutation tools (those that write or
 | [Updates](/mcp/tools-export) | 4 | List and manage in-app notifications |
 | [Audit](/mcp/tools-export) | 1 | Retrieve audit events for a node |
 
-<CardGroup cols={2}>
-  <Card title="Node and graph tools" icon="diagram-project" href="/mcp/tools-nodes">
-    Create, branch, commit, merge, tag, share, and upload artifacts to nodes.
-  </Card>
-  <Card title="Knowledge and search tools" icon="magnifying-glass" href="/mcp/tools-knowledge">
-    Index sources, run unified search, launch Oracle jobs, and query documents.
-  </Card>
-  <Card title="Compute and workflow tools" icon="server" href="/mcp/tools-compute">
-    Acquire GPU leases, run workflows, manage budgets, and launch executions.
-  </Card>
-  <Card title="Export, import, and audit tools" icon="file-export" href="/mcp/tools-export">
-    Export subgraphs, generate PDF/markdown summaries, and review audit trails.
-  </Card>
-</CardGroup>
+- **[Node and graph tools](/mcp/tools-nodes).** Create, branch, commit, merge, tag, share, and upload artifacts to nodes.
+- **[Knowledge and search tools](/mcp/tools-knowledge).** Index sources, run unified search, launch Oracle jobs, and query documents.
+- **[Compute and workflow tools](/mcp/tools-compute).** Acquire GPU leases, run workflows, manage budgets, and launch executions.
+- **[Export, import, and audit tools](/mcp/tools-export).** Export subgraphs, generate PDF/markdown summaries, and review audit trails.
+

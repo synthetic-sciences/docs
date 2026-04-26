@@ -3,7 +3,7 @@ title: "Run a sandboxed sub-agent on an approved experiment"
 description: "Walk through the compute approval flow: mint an approval token, spawn a sandboxed sub-agent, and monitor telemetry as it reports results back to your graph."
 ---
 
-After you approve an experiment proposal, Thesis delegates execution to a sandboxed sub-agent that runs independently of your chat session. The sub-agent receives a compiled payload from durable Thesis state — not your chat history — and reports telemetry back as it works. This guide covers every step from approval to result.
+After you approve an experiment proposal, Thesis delegates execution to a sandboxed sub-agent that runs independently of your chat session. The sub-agent receives a compiled payload from durable Thesis state, not your chat history, and reports telemetry back as it works. This guide covers every step from approval to result.
 
 ## The approval flow
 
@@ -14,7 +14,7 @@ After you approve an experiment proposal, Thesis delegates execution to a sandbo
     1. The backend writes `compute_approval.json` to the node and logs a `proposal_approved` entry in the research log.
     2. The frontend injects a synthesized hidden message into the chat stream, passing the approval token to the agent.
 
-    No compute is acquired yet — the token is simply minted and ready to be consumed.
+    No compute is acquired yet, the token is simply minted and ready to be consumed.
 
     <Note>
       If the agent needs to request approval programmatically rather than via the UI card, it calls `thesis_request_compute_grant_approval` to initiate the approval session and prompt you for confirmation.
@@ -34,7 +34,7 @@ After you approve an experiment proposal, Thesis delegates execution to a sandbo
   </Step>
 
   <Step title="The sub-agent executes">
-    The sub-agent runs in an isolated sandbox. It receives the following compiled payload — sourced entirely from durable Thesis state, not from chat history:
+    The sub-agent runs in an isolated sandbox. It receives the following compiled payload, sourced entirely from durable Thesis state, not from chat history:
 
     | Variable | What it contains |
     |----------|-----------------|
@@ -67,7 +67,7 @@ After you approve an experiment proposal, Thesis delegates execution to a sandbo
     | `error_trace` | An exception or failure |
     | `done` | Sub-agent finished |
 
-    Milestones, generated files, and results are surfaced back in the agent chat as `asset_card` events — you can see plots, reports, and datasets without leaving the conversation.
+    Milestones, generated files, and results are surfaced back in the agent chat as `asset_card` events, you can see plots, reports, and datasets without leaving the conversation.
   </Step>
 
   <Step title="Release compute when done">
@@ -112,4 +112,4 @@ Thesis is intentionally conservative with compute:
 
 - The approval token is short-lived and single-use. Prompt compliance alone cannot start a run.
 - Sub-agent callbacks use runner tokens, not your API key, so a compromised sub-agent cannot access your account.
-- The main agent cannot spend compute on its own — every run requires an explicit approval action from you.
+- The main agent cannot spend compute on its own, every run requires an explicit approval action from you.

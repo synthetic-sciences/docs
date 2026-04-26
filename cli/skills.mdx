@@ -1,77 +1,83 @@
 ---
-title: "Synsci CLI skills: 83 bundled ML workflows"
-description: "Skills are bundled instruction sets the agent loads on demand. Synsci CLI ships with 83 ML skills covering training, inference, fine-tuning, and serving."
+title: "Synsci CLI skills"
+description: "Skills are bundled playbooks the agent loads on demand. Each research mode activates the relevant skills for that domain. From DFT in chemistry to GRPO in machine learning."
 sidebarTitle: "Skills"
 ---
 
-Synsci CLI ships with 83 machine-learning skills bundled into the binary. Each skill is a self-contained instruction set the agent loads on demand — when your prompt matches a skill's trigger, the relevant playbook joins the context, the agent follows it, and unloads when done. No external install step, no PATH wiring.
+Skills are the CLI's domain knowledge. Each skill is a self-contained playbook plus optional helper scripts that teach the agent how to do one thing well. The active [research mode](/cli/modes) determines which skills surface first. The rest stay loadable on demand if your prompt drifts into them.
 
-## What a skill is
+## What a skill covers
 
-A skill is a markdown playbook plus optional helper scripts that teach the agent how to do one thing well. For ML work, skills cover:
+A skill is short and focused: how to start a job, what flags to pass, common pitfalls, where outputs land, and how to read failure modes. Skills span every supported research mode.
 
-- **Training frameworks** — PyTorch DDP, DeepSpeed, FSDP, Axolotl, Megatron
-- **RLHF and post-training** — GRPO, PPO, DPO, RLOO, KTO
-- **Inference and serving** — vLLM, TensorRT-LLM, SGLang, llama.cpp
-- **Evaluation** — lm-eval-harness, BIG-bench, HELM
-- **Fine-tuning** — LoRA, QLoRA, ReFT, full-parameter SFT
-- **Distributed and infra** — Ray, SkyPilot, Slurm, K8s job templates
-- **Model and data hubs** — Hugging Face datasets and models, datasets streaming
-- **Experiment tracking** — Weights & Biases, MLflow
+### Chemistry skills
 
-Each skill is short and focused: how to start a job, what flags to pass, common pitfalls, where outputs land, and how to read the failure modes.
+DFT and ab initio (PySCF, ORCA, NWChem, Psi4), molecular dynamics (GROMACS, OpenMM, LAMMPS, AMBER), cheminformatics (RDKit, Open Babel), drug discovery (AutoDock Vina, GNINA, DiffDock), and quantum chemistry workflows.
+
+### Biology skills
+
+Protein structure prediction (AlphaFold 3, ESMFold, RoseTTAFold), sequencing pipelines (samtools, BWA, GATK, DeepVariant), single-cell and spatial transcriptomics (Scanpy, Seurat), multi-omics integration, and phylogenetics.
+
+### Physics skills
+
+Quantum simulation (Qiskit, Cirq, PennyLane), CFD (OpenFOAM, FEniCS, Nek5000), N-body and astrophysics (REBOUND, AMUSE), lattice QCD, and plasma physics.
+
+### Materials skills
+
+DFT for materials (VASP, Quantum ESPRESSO, GPAW, ABINIT), crystal structure prediction, high-throughput discovery (pymatgen, atomate, jarvis-tools), CALPHAD, and ML interatomic potentials (NequIP, MACE, Allegro).
+
+### Machine learning skills
+
+Training (PyTorch DDP, FSDP, DeepSpeed, Megatron, Axolotl), RLHF (GRPO, PPO, DPO, RLOO, KTO), inference (vLLM, TensorRT-LLM, SGLang, llama.cpp), evaluation (lm-eval-harness, BIG-bench, HELM), and fine-tuning (LoRA, QLoRA, ReFT, full SFT).
+
+### Mathematics skills
+
+Symbolic computation (SymPy, SageMath), theorem proving (Lean 4, Coq, Isabelle), numerical analysis, and convex/integer optimization (CVXPY, JuMP).
 
 <Note>
-  The full list is exposed in the CLI itself. Run `synsc` to start a session, then ask: "List the bundled skills you have access to." The agent enumerates them from its context.
+  The full list is exposed in the CLI itself. Run `synsc` to start a session, then ask: "List the bundled skills you have access to in this mode." The agent enumerates what's currently active.
 </Note>
 
 ## How skills load
 
-Skills are not always-on. The agent loads a skill into context only when your prompt is on-topic for that skill. This keeps the model's context lean and lets the binary ship 83 skills without making every session pay for all of them upfront.
+Skills are not always-on. The agent loads a skill into context only when your prompt is on-topic. This keeps the model context lean even though the binary ships hundreds of skills across all the modes.
 
 A typical flow:
 
-1. You ask: *"Set up a GRPO training run on the smollm-1.7B base with the dolma corpus."*
-2. The agent matches the prompt against the bundled skills, finds the GRPO playbook, and loads it.
-3. The skill tells the agent how to scaffold the config, what trainer flags matter, where to point at the dataset, and what to log.
-4. The agent executes — writing files, kicking off the run, streaming logs.
+1. You're in `chemistry` mode and ask: "Optimize this MOF structure with PBE-D3, then compute the band gap."
+2. The agent matches the prompt against the chemistry skills, finds the DFT playbook for VASP/Quantum ESPRESSO, and loads it.
+3. The skill tells the agent how to scaffold the input file, what convergence criteria matter, where to point at the structure, and what to log.
+4. The agent executes. Writing files, kicking off the run, streaming logs.
 5. Once the task is done or you change topic, the skill unloads.
 
 You don't manage the lifecycle. The agent handles it.
 
 ## Trigger phrases
 
-You don't need to invoke skills by name. Just describe the task in normal language and the agent picks the right skill:
+You don't need to invoke skills by name. Just describe the task in normal language and the agent picks the right skill from the active mode.
 
-| If you ask… | The agent loads… |
-|---|---|
-| "Fine-tune llama-3-8b with QLoRA on this dataset" | LoRA + QLoRA + transformers training skill |
-| "Spin up vLLM with tensor parallel 2 for this model" | vLLM serving skill |
-| "Run GRPO with a reward model and log to wandb" | GRPO + W&B skill |
-| "Submit this script to a 4xH100 node on Modal" | Modal job skill |
-| "Evaluate this model against MMLU" | lm-eval-harness skill |
+| Mode | If you ask, | The agent loads, |
+|---|---|---|
+| chemistry | "Run DFT optimization on this MOF with PBE-D3" | VASP / Quantum ESPRESSO DFT skill |
+| biology | "Predict structures for these protein sequences" | AlphaFold / ESMFold skill |
+| physics | "Set up an incompressible Navier-Stokes solve on this mesh" | OpenFOAM / FEniCS skill |
+| materials | "Relax this perovskite supercell with MACE" | MACE + phonopy skill |
+| ml | "Fine-tune llama-3-8b with QLoRA on this dataset" | LoRA / QLoRA / transformers skill |
+| math | "Formalize this proof in Lean 4 and check it compiles" | Lean 4 skill |
 
 ## Skills and credentials together
 
-Skills know about the credentials Synsci CLI syncs from your dashboard. When the GRPO skill needs to log to Weights & Biases, it uses the W&B token already in your environment — no manual setup. When the Modal skill spins up a sandbox, it uses your Modal token. When `from datasets import load_dataset` needs Hugging Face auth, your HF token is there.
-
-See [Credentials](/cli/credentials) for which tokens sync and how they reach subprocesses.
+Skills know about the credentials [synced from your dashboard](/cli/credentials). When the GRPO skill needs to log to Weights & Biases, it uses the W&B token already in your environment. When the Modal skill spins up a sandbox, it uses your Modal token. When `from datasets import load_dataset` needs Hugging Face auth, your HF token is there.
 
 ## When a bundled skill isn't enough
 
 If you need a workflow that isn't covered by a bundled skill:
 
-- **Describe it in detail** in your prompt. The model is capable enough to scaffold most ML jobs from a careful description.
-- **Add it to the skills repo.** The Synsci skills library is open and accepts contributions. The maintained library lives at [github.com/SyntheticSciences/AI-research-SKILLs](https://github.com/SyntheticSciences/AI-research-SKILLs).
-- **Use a custom skill in your project.** Drop a `.synsc/skills/<name>.md` file in your repo and the agent will load it alongside the bundled skills for sessions started in that directory.
+- Describe it in detail in your prompt. The agent is capable enough to scaffold most jobs from a careful description.
+- Add it to the skills repo. The Synsci skills library is open and accepts contributions. The maintained library lives at [github.com/SyntheticSciences/AI-research-SKILLs](https://github.com/SyntheticSciences/AI-research-SKILLs).
+- Use a custom skill in your project. Drop a `.synsc/skills/<name>.md` file in your repo and the agent will load it alongside the bundled skills for sessions started in that directory.
 
 ## What's next
 
-<CardGroup cols={2}>
-  <Card title="Credentials" icon="key" href="/cli/credentials">
-    Which tokens sync from the dashboard and how they reach skill subprocesses.
-  </Card>
-  <Card title="Models" icon="microchip" href="/cli/models">
-    Pair the right model with the right skill — Opus for complex multi-step jobs, Sonnet for routine ones.
-  </Card>
-</CardGroup>
+- **[Research modes](/cli/modes).** Skills are scoped to modes. Pick the right mode first.
+- **[Credentials](/cli/credentials).** How tokens reach skill subprocesses.

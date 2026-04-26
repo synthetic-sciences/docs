@@ -4,7 +4,7 @@ description: "How Synsci CLI keeps credentials off disk, filters subprocess envi
 sidebarTitle: "Security"
 ---
 
-Synsci CLI moves a lot of high-value credentials around — Hugging Face tokens, AWS keys, Modal secrets, plus model API access through the proxy — so the security boundary is worth understanding in detail. The model is: credentials live in the dashboard, get pulled into CLI memory at session start, are filtered into specific subprocess envs only, and are redacted from any output the CLI displays.
+Synsci CLI moves a lot of high-value credentials around. Hugging Face tokens, AWS keys, Modal secrets, plus model API access through the proxy, so the security boundary is worth understanding in detail. The model is: credentials live in the dashboard, get pulled into CLI memory at session start, are filtered into specific subprocess envs only, and are redacted from any output the CLI displays.
 
 ## Credential lifecycle
 
@@ -13,10 +13,10 @@ Synsci CLI moves a lot of high-value credentials around — Hugging Face tokens,
     Credentials live in your account at [cli.syntheticsciences.ai](https://cli.syntheticsciences.ai), encrypted at rest. The CLI never writes them to disk. There is no `~/.synsc/credentials` file, no entry in `~/.aws/credentials`, no `HF_TOKEN` in your shell profile. The dashboard is the only persistent layer.
   </Step>
   <Step title="Sync: in-memory at session start">
-    Each `synsc` launch fetches credentials over an authenticated TLS channel and holds them in process memory. When the process exits, the credentials are gone — there's no long-lived daemon retaining them.
+    Each `synsc` launch fetches credentials over an authenticated TLS channel and holds them in process memory. When the process exits, the credentials are gone, there's no long-lived daemon retaining them.
   </Step>
   <Step title="Subprocess injection: filtered env">
-    When the agent runs a shell command, the CLI builds a custom environment for that subprocess. Provider keys that aren't relevant to the command are stripped — see the filtering policy below.
+    When the agent runs a shell command, the CLI builds a custom environment for that subprocess. Provider keys that aren't relevant to the command are stripped, see the filtering policy below.
   </Step>
   <Step title="Output redaction: replaced before display">
     Any subprocess output that contains a known credential value is replaced with `[REDACTED]` before reaching your terminal scrollback or being saved in session logs.
@@ -31,12 +31,12 @@ Not every subprocess needs every credential. The CLI filters the env it passes b
 |---|---|
 | Python training script | HF, W&B (if used), and any cloud creds (AWS/GCP) the script imports |
 | `git` | None of the synced provider keys; `git` doesn't need them |
-| `curl` to a third-party API | None — curl gets a clean env unless the prompt explicitly authorized otherwise |
+| `curl` to a third-party API | None, curl gets a clean env unless the prompt explicitly authorized otherwise |
 | `modal` CLI | Modal token only |
 | `lambda-cloud` CLI | Lambda key only |
 | `aws` CLI | AWS keys only |
 
-The filter is conservative by default. If you ask the agent to run an unfamiliar command, fewer credentials reach it than reach a known framework command. This protects against an unexpected program exfiltrating secrets — even if the agent is talked into running it, the env is empty.
+The filter is conservative by default. If you ask the agent to run an unfamiliar command, fewer credentials reach it than reach a known framework command. This protects against an unexpected program exfiltrating secrets, even if the agent is talked into running it, the env is empty.
 
 You can override filtering for a specific command by being explicit in your prompt: *"Run `printenv` with HF_TOKEN exposed so I can verify the value."* The agent treats this as an authorization and unmasks for that single call.
 
@@ -71,7 +71,7 @@ The CLI uses a device-code OAuth flow to authenticate against the dashboard. The
 
 Why device flow:
 
-- **No localhost callback server.** The CLI doesn't open a port for the OAuth callback — there's nothing to attack on the local machine.
+- **No localhost callback server.** The CLI doesn't open a port for the OAuth callback, there's nothing to attack on the local machine.
 - **Works headless.** SSH and remote-tunnel sessions can complete login by visiting the URL on any device.
 - **Codes expire fast.** A 15-minute window means a stolen device code is useless after the timeout.
 
@@ -83,7 +83,7 @@ Even on shared infrastructure, your credentials and sessions are isolated:
 
 - **Supabase Row-Level Security** scopes credential rows to your user ID at the database level. Even an admin without explicit permissions cannot read your row.
 - **Bearer-token auth** means each session presents a token bound to your user ID. The dashboard rejects any request not matching the issuing user.
-- **Process memory** is per-CLI-process. Two CLI sessions on the same machine each pull their own credentials from the dashboard — they don't share state.
+- **Process memory** is per-CLI-process. Two CLI sessions on the same machine each pull their own credentials from the dashboard, they don't share state.
 
 If you're on a shared workstation, run `synsc connect logout` when you step away. The Bearer token becomes unusable immediately.
 
@@ -93,7 +93,7 @@ The CLI talks to:
 
 - The Synsci dashboard at `cli.syntheticsciences.ai` for credential sync and usage reporting.
 - The Synsci model proxy for Anthropic, OpenAI, and Google routing.
-- Whatever the agent decides to call — git remotes, cloud APIs, package registries, etc.
+- Whatever the agent decides to call, git remotes, cloud APIs, package registries, etc.
 
 The first two are mandatory and use TLS. The third is whatever your prompt produces. If you're in a sensitive environment, run the CLI behind your usual outbound firewall and policy controls.
 
@@ -103,11 +103,6 @@ If you find a security issue in Synsci CLI, please email security@syntheticscien
 
 ## What's next
 
-<CardGroup cols={2}>
-  <Card title="Credentials" icon="key" href="/cli/credentials">
-    The user-facing view of how tokens enter and leave subprocesses.
-  </Card>
-  <Card title="Dashboard" icon="window" href="/cli/dashboard">
-    The persistent layer where credentials and sessions live.
-  </Card>
-</CardGroup>
+- **[Credentials](/cli/credentials).** The user-facing view of how tokens enter and leave subprocesses.
+- **[Dashboard](/cli/dashboard).** The persistent layer where credentials and sessions live.
+

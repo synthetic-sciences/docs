@@ -32,7 +32,7 @@ When the agent stages an empirical node, it fills eight free-text sections:
 | `data_config_section` | Dataset paths, sampling strategy, random seeds |
 | `rigor_review_section` | A PASS or FAIL verdict against research standards, with reasoning |
 
-The rigor review is the agent's self-critique pass. A FAIL there does not block the proposal — but it surfaces concerns for you to evaluate before approving.
+The rigor review is the agent's self-critique pass. A FAIL there does not block the proposal, but it surfaces concerns for you to evaluate before approving.
 
 <Steps>
   <Step title="Ask the agent to stage an empirical node">
@@ -44,7 +44,7 @@ The rigor review is the agent's self-critique pass. A FAIL there does not block 
     {
       "name": "thesis_stage_node_create",
       "arguments": {
-        "title": "Cosine vs. linear LR decay — 1B GRPO convergence",
+        "title": "Cosine vs. linear LR decay, 1B GRPO convergence",
         "summary": "Test whether cosine decay reaches 90% of peak reward 20% faster than linear decay under identical GRPO hyperparameters.",
         "kind": "empirical",
         "parent_ids": ["<root-node-id>"]
@@ -55,7 +55,7 @@ The rigor review is the agent's self-critique pass. A FAIL there does not block 
     The agent then populates the full blueprint, writes it as `artifacts/blueprint.json`, and sets the node status to `awaiting_approval`.
 
     <Note>
-      The main agent does not run arbitrary code. Staging an empirical node only creates the blueprint — no compute is acquired at this step.
+      The main agent does not run arbitrary code. Staging an empirical node only creates the blueprint, no compute is acquired at this step.
     </Note>
   </Step>
 
@@ -64,9 +64,9 @@ The rigor review is the agent's self-critique pass. A FAIL there does not block 
 
     On the card, review each section of the blueprint. Pay particular attention to:
 
-    - **Falsification criterion** — is it specific enough to produce a clear result?
-    - **Metrics** — are primary metrics measurable without ambiguity?
-    - **Rigor review** — if the agent marked FAIL, read its reasoning before approving.
+    - **Falsification criterion**, is it specific enough to produce a clear result?
+    - **Metrics**, are primary metrics measurable without ambiguity?
+    - **Rigor review**, if the agent marked FAIL, read its reasoning before approving.
 
     The card also shows the proposed compute configuration: GPU SKU, provider, timeout, and budget.
   </Step>
@@ -80,7 +80,7 @@ The rigor review is the agent's self-critique pass. A FAIL there does not block 
 
     **If you reject:**
 
-    The rejection is logged as a **dead end** in the research log — a permanent record that this direction was considered and declined, with a timestamp. The node remains in the graph so future work can trace the reasoning, but no compute is spent. You can ask the agent to revise the blueprint and re-propose.
+    The rejection is logged as a **dead end** in the research log, a permanent record that this direction was considered and declined, with a timestamp. The node remains in the graph so future work can trace the reasoning, but no compute is spent. You can ask the agent to revise the blueprint and re-propose.
 
     <Warning>
       Approval is irreversible in the short term. Once the approval token is consumed and a compute lease is acquired, the sub-agent begins executing. Use **Dismiss** if you want to revise the blueprint first.
@@ -92,7 +92,7 @@ The rigor review is the agent's self-critique pass. A FAIL there does not block 
 
 When you approve a proposal, Thesis writes two artifacts to the node:
 
-- `compute_approval.json` — the approval receipt, including the token, SKU, provider, budget, and timeout.
+- `compute_approval.json`, the approval receipt, including the token, SKU, provider, budget, and timeout.
 - A `proposal_approved` entry in the research log, timestamped and tied to your user ID.
 
-The approval token is the only thing that allows `spawn_experiment_agent` to proceed. A prompt alone cannot start compute — the token must be present and valid.
+The approval token is the only thing that allows `spawn_experiment_agent` to proceed. A prompt alone cannot start compute, the token must be present and valid.

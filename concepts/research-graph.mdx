@@ -1,31 +1,24 @@
 ---
 title: "Research graph: how Thesis organizes research work"
-description: "A directed graph of staged and committed nodes that makes your research durable, branchable, and inspectable — the main canvas for all Thesis projects."
+description: "A directed graph of staged and committed nodes that makes your research durable, branchable, and inspectable, the main canvas for all Thesis projects."
 ---
 
-The research graph is the heart of Thesis. Instead of storing your work in chat histories or flat note files, Thesis represents every hypothesis, experiment, insight, and source summary as a node in a directed graph. Nodes connect through parent–child edges, so you can trace exactly how one idea led to another — and branch off in new directions without overwriting what came before.
+The research graph is the heart of Thesis. Instead of storing your work in chat histories or flat note files, Thesis represents every hypothesis, experiment, insight, and source summary as a node in a directed graph. Nodes connect through parent–child edges, so you can trace exactly how one idea led to another, and branch off in new directions without overwriting what came before.
 
 ## Nodes: the building blocks
 
 Every piece of research in Thesis lives in a node. A node has a title, a summary (the core claim or plan), optional long-form content, and a kind that describes what type of research unit it represents.
 
 <Note>
-  Nodes are the atomic unit of research in Thesis. Everything — hypotheses, experiments, insights, source summaries — is a node.
+  Nodes are the atomic unit of research in Thesis. Everything, hypotheses, experiments, insights, source summaries, is a node.
 </Note>
 
 ### Node kinds
 
-<CardGroup cols={3}>
-  <Card title="Untyped" icon="file">
-    A general-purpose node. Use it for notes, source summaries, follow-up directions, or anything that doesn't fit neatly into a specific category yet.
-  </Card>
-  <Card title="Empirical" icon="flask">
-    An experiment node. Empirical nodes carry an 8-section blueprint with a hypothesis, falsification criterion, method, expected outcomes, baseline, metrics, data config, and rigor review. They also have a status: `drafted`, `awaiting_approval`, `in_progress`, `completed`, or `failed`.
-  </Card>
-  <Card title="Insight" icon="lightbulb">
-    A synthesized finding. Use insight nodes to record conclusions drawn from experiments or sources — things you've determined to be true and want to preserve as durable knowledge.
-  </Card>
-</CardGroup>
+- **Untyped.** A general-purpose node. Use it for notes, source summaries, follow-up directions, or anything that doesn't fit neatly into a specific category yet.
+- **Empirical.** An experiment node. Empirical nodes carry an 8-section blueprint with a hypothesis, falsification criterion, method, expected outcomes, baseline, metrics, data config, and rigor review. They also have a status: `drafted`, `awaiting_approval`, `in_progress`, `completed`, or `failed`.
+- **Insight.** A synthesized finding. Use insight nodes to record conclusions drawn from experiments or sources, things you've determined to be true and want to preserve as durable knowledge.
+
 
 ### Staged vs. committed
 
@@ -34,7 +27,7 @@ Every node exists in one of two lifecycle states:
 | State | Editable | Purpose |
 |---|---|---|
 | **Staged** | Yes | Working draft. You can update the title, content, kind, and summary freely. |
-| **Committed** | No | Durable history. A committed node is frozen — it can never be edited, only branched from. |
+| **Committed** | No | Durable history. A committed node is frozen, it can never be edited, only branched from. |
 
 This distinction is deliberate. When you commit a node, you're saying: "this finding is stable enough to build on." Future work branches from committed nodes instead of rewriting them, which gives you a reliable audit trail.
 
@@ -51,7 +44,7 @@ Nodes are connected by parent–child edges. A child node descends from one or m
 - multiple source summaries merging into a single insight
 - an experiment result spawning the next frontier of investigation
 
-You can add or remove parent edges on staged nodes at any time. Once a node is committed, its position in the graph is fixed — but you can still attach new children to it.
+You can add or remove parent edges on staged nodes at any time. Once a node is committed, its position in the graph is fixed, but you can still attach new children to it.
 
 ## Branching and merging
 
@@ -63,7 +56,7 @@ You can add or remove parent edges on staged nodes at any time. Once a node is c
     Edit, annotate, and iterate on the staged node. Run searches, attach artifacts, let the agent write log entries. Nothing is locked yet.
   </Step>
   <Step title="Commit when findings are stable">
-    Once you're confident in a result or finding, commit the node. It becomes durable history — a fixed point in your research timeline.
+    Once you're confident in a result or finding, commit the node. It becomes durable history, a fixed point in your research timeline.
   </Step>
   <Step title="Merge multiple nodes">
     If several parallel experiments or source summaries converge on the same conclusion, merge them into a single insight node. The merge preserves the ancestry of all contributing nodes.
@@ -96,7 +89,7 @@ Thesis's graph gives you something more durable:
 
 <AccordionGroup>
   <Accordion title="Traceability">
-    Every node traces back to its ancestors. You can always answer: "where did this idea come from?" — by walking the parent edges to the original hypothesis or source.
+    Every node traces back to its ancestors. You can always answer: "where did this idea come from?", by walking the parent edges to the original hypothesis or source.
   </Accordion>
   <Accordion title="Reversibility without loss">
     Because committed nodes are frozen, branching never destroys what you've already established. Dead ends are recorded, not erased.
@@ -105,6 +98,6 @@ Thesis's graph gives you something more durable:
     The graph is structured data, not prose. The Thesis agent can read the full project graph, understand what's been tried, and plan the next step without relying on chat history.
   </Accordion>
   <Accordion title="Shareable and exportable">
-    Subgraphs can be shared with collaborators or exported as JSON, markdown, or PDF — making handoffs and reproducibility packages straightforward.
+    Subgraphs can be shared with collaborators or exported as JSON, markdown, or PDF, making handoffs and reproducibility packages straightforward.
   </Accordion>
 </AccordionGroup>

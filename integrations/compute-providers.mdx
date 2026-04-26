@@ -1,20 +1,15 @@
 ---
 title: "Connect GPU compute providers: Modal and Lambda Cloud"
-description: "Lease GPU instances and run sandboxed sub-agents through Modal and Lambda Cloud — with a built-in approval gate before any compute is acquired."
+description: "Lease GPU instances and run sandboxed sub-agents through Modal and Lambda Cloud, with a built-in approval gate before any compute is acquired."
 ---
 
-Thesis connects to two GPU compute providers — Modal and Lambda Cloud — so you can run compute-intensive research tasks without managing infrastructure yourself. Every compute action goes through an explicit approval gate: the agent proposes the work, you approve it in the UI, and only then does Thesis acquire hardware. You connect both providers from **Settings → API Keys** in the Thesis web app.
+Thesis connects to two GPU compute providers. Modal and Lambda Cloud, so you can run compute-intensive research tasks without managing infrastructure yourself. Every compute action goes through an explicit approval gate: the agent proposes the work, you approve it in the UI, and only then does Thesis acquire hardware. You connect both providers from **Settings → API Keys** in the Thesis web app.
 
 ## Providers at a glance
 
-<CardGroup cols={2}>
-  <Card title="Modal" icon="server">
-    **Managed sandbox runner.** Modal provides isolated sandbox environments where Thesis sub-agents execute. When the agent spawns a sub-agent after your approval, Modal handles the container, GPU attachment, and network isolation automatically.
-  </Card>
-  <Card title="Lambda Cloud" icon="bolt">
-    **GPU instance leasing.** Lambda Cloud gives you on-demand access to A10G, A100, and H100 GPU machines. Thesis acquires, monitors, and releases instances through the Lambda Cloud API on your behalf.
-  </Card>
-</CardGroup>
+- **Modal.** **Managed sandbox runner.** Modal provides isolated sandbox environments where Thesis sub-agents execute. When the agent spawns a sub-agent after your approval, Modal handles the container, GPU attachment, and network isolation automatically.
+- **Lambda Cloud.** **GPU instance leasing.** Lambda Cloud gives you on-demand access to A10G, A100, and H100 GPU machines. Thesis acquires, monitors, and releases instances through the Lambda Cloud API on your behalf.
+
 
 ## Connecting a provider
 
@@ -50,7 +45,7 @@ Thesis never acquires compute without your explicit approval. The flow works as 
     The agent stages an experiment node with an 8-section blueprint covering the hypothesis, method, metrics, and compute requirements (provider, SKU, budget, and timeout). The proposal appears as a card in the Thesis UI.
   </Step>
   <Step title="You review and approve">
-    You review the proposal in the UI. If you approve, Thesis mints an approval token and creates a compute grant. If you reject, the rejection is logged as a dead end in your research log — no compute is acquired.
+    You review the proposal in the UI. If you approve, Thesis mints an approval token and creates a compute grant. If you reject, the rejection is logged as a dead end in your research log, no compute is acquired.
   </Step>
   <Step title="Thesis acquires the lease">
     With a valid approval token, Thesis contacts the compute provider, acquires a lease, and starts the sub-agent runner. The sub-agent receives its task payload, not your chat history.
@@ -86,7 +81,7 @@ The campaign dashboard shows:
 - A list of runs completed under the campaign, each with provider, SKU, duration, and credits spent.
 - Current status of any active leases associated with the campaign.
 
-You can pause or close a campaign at any time. Closing a campaign does not terminate active leases — it prevents new leases from being opened under that budget.
+You can pause or close a campaign at any time. Closing a campaign does not terminate active leases, it prevents new leases from being opened under that budget.
 
 ## Compute leases
 
@@ -127,4 +122,4 @@ If neither Modal nor Lambda Cloud is connected:
 - No hardware is acquired or billed.
 - Thesis logs the provider-not-configured state so you can diagnose it in the research log.
 
-You do not need both providers. Connect only the one that fits your workflow — or connect both and let the agent select based on the experiment requirements.
+You do not need both providers. Connect only the one that fits your workflow, or connect both and let the agent select based on the experiment requirements.

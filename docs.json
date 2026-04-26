@@ -12,12 +12,6 @@
     "dark": "/logo/synsc-logo.png"
   },
   "favicon": "/logo/synsc-logo.png",
-  "navbar": {
-    "primary": {
-      "type": "github",
-      "href": "https://github.com/synthetic-sciences/thesis"
-    }
-  },
   "navigation": {
     "tabs": [
       {
@@ -103,11 +97,11 @@
             ]
           },
           {
-            "group": "Agents and Models",
+            "group": "Research",
             "pages": [
-              "cli/agents",
-              "cli/models",
-              "cli/skills"
+              "cli/modes",
+              "cli/skills",
+              "cli/agents"
             ]
           },
           {
