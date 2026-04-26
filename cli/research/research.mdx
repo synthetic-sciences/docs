@@ -1,0 +1,92 @@
+---
+title: "Research"
+description: "The general scientific research mode. Literature review, data analysis, GPU compute, and synthesis across hundreds of bundled scientific tools. Use it for any work that doesn't fit into a specialized mode."
+sidebarTitle: "Research"
+---
+
+The `research` mode is the general scientific research agent. It can read literature, analyze data, drive GPU compute, and synthesize across hundreds of bundled scientific tools. Reach for it when your work spans disciplines or doesn't fit cleanly into one of the specialized modes (physics, chemistry, biology, flywheel).
+
+## Activate the mode
+
+```bash
+synsc web --mode research
+```
+
+For a one-shot run:
+
+```bash
+synsc run --mode research "Review the recent literature on retrieval-augmented generation and propose an experiment to test it on this dataset"
+```
+
+To set research as the default for your current working directory:
+
+```bash
+synsc mode set research
+```
+
+## Who this is for
+
+- Researchers working across disciplines or on novel topics that don't fit a specialized mode
+- Postdocs and grad students drafting literature reviews, hypotheses, and experiment designs
+- Engineers running data analysis and GPU compute pipelines outside a specific scientific domain
+- Anyone who wants the full breadth of the agent's tooling without locking into one field
+
+## What you can do
+
+- **Literature review** with PRISMA-style search, screening, and synthesis
+- **Hypothesis generation** from observed data and prior work
+- **Experiment design** with explicit decision gates and methodology checks
+- **Data analysis** in Python, R, or Julia, including statistical and ML pipelines
+- **GPU compute orchestration** through Modal, Tinker, TensorPool, Prime Intellect, and similar platforms
+- **Synthesis and writing** across paper drafts, technical reports, and grant proposals
+
+## Frameworks the agent uses
+
+The research mode pulls from a broad toolset. The agent picks the right tool for what you describe.
+
+| Category | Stack |
+|---|---|
+| Literature search | OpenAlex, Semantic Scholar, arXiv, bioRxiv, Crossref |
+| Data analysis | NumPy, SciPy, pandas, statsmodels, scikit-learn |
+| Visualization | Matplotlib, seaborn, Plotly, Altair |
+| GPU and compute | Modal, Tinker, TensorPool, Prime Intellect |
+| Experiment tracking | Weights & Biases, MLflow |
+| Writing and citations | LaTeX, BibTeX, Pandoc, Quarto |
+
+## Workflows
+
+### Literature review
+
+> Run a PRISMA-style literature review on the use of retrieval-augmented generation for biomedical question answering. Cover the last three years and produce a synthesis with critical appraisal.
+
+The agent searches OpenAlex, Semantic Scholar, and arXiv, screens by relevance and quality, extracts key findings, and produces a structured synthesis with citations and a critical appraisal of the evidence base.
+
+### Hypothesis generation
+
+> I have this dataset of customer support tickets and resolution outcomes. Generate three testable hypotheses about what predicts fast resolution and rank them by feasibility.
+
+The agent loads the data, runs exploratory analysis, generates hypotheses grounded in the patterns it finds, and ranks each by sample-size requirements, computational cost, and expected effect size.
+
+### Cross-domain synthesis
+
+> Connect the literature on diffusion models in image generation to the methods used for protein structure prediction. What transfers, what doesn't, and where is the open work?
+
+The agent reads both literatures, identifies shared methods and divergences, and produces a synthesis that maps concepts between fields with explicit citations.
+
+### Experiment design with methodology gates
+
+> Design a study to evaluate whether prompt engineering improves performance on this benchmark, given a budget of $5K and 2 weeks.
+
+The agent drafts the design, runs methodology checks (preregistration, power analysis, confound control), surfaces tradeoffs, presents cost and timeline estimates, and waits for your approval before any compute spend.
+
+### Data analysis pipeline
+
+> Run a survival analysis on this clinical dataset using Cox proportional hazards. Test the proportional hazards assumption, report hazard ratios with confidence intervals, and produce Kaplan-Meier curves stratified by treatment group.
+
+The agent loads the dataset, fits the Cox model, tests the PH assumption with Schoenfeld residuals, generates the figures, and reports the statistics in a publication-ready table.
+
+### Grant proposal scaffolding
+
+> Help me draft an NSF proposal on combining causal inference and reinforcement learning for healthcare decision support. I need the specific aims, background, and preliminary data sections.
+
+The agent uses domain knowledge to scaffold each section, pulls in relevant citations, and iterates with you on the framing and aims.

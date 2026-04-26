@@ -34,15 +34,14 @@ This walkthrough takes you from nothing installed to a productive Synsci CLI ses
   </Step>
 
   <Step title="Pick a research mode">
-    Synsci CLI works best when you tell it what domain you're in. Pick a research mode before starting a session:
+    Synsci CLI works best when you tell it what kind of work you're doing. Pick a research mode before starting a session:
 
     ```bash
-    synsc web --mode chemistry
-    synsc web --mode biology
-    synsc web --mode physics
-    synsc web --mode materials
-    synsc web --mode ml
-    synsc web --mode math
+    synsc web --mode research     # general scientific research
+    synsc web --mode physics      # simulation, PDEs, dynamical systems
+    synsc web --mode chemistry    # drug discovery, molecular design, docking
+    synsc web --mode biology      # bioinformatics, structure prediction, omics
+    synsc web --mode flywheel     # build a specialized LLM from production data
     ```
 
     Setting a mode primes the agent with domain conventions, activates the right bundled tools, and routes calls to the backend best suited for that work. You don't need to think about underlying providers.
@@ -101,6 +100,6 @@ This walkthrough takes you from nothing installed to a productive Synsci CLI ses
 ## What's next
 
 - **[Web UI](/cli/web).** The recommended interface, multi-tab sessions, file diffs, command palette.
-- **[Chemistry](/chemistry/introduction)**, **[biology](/biology/introduction)**, **[physics](/physics/introduction)**, **[materials](/materials/introduction)**, **[ML](/ml/introduction)**, **[math](/math/introduction)**. The per-mode tabs.
+- **[Research](/cli/research/research)**, **[physics](/cli/research/physics)**, **[chemistry](/cli/research/chemistry)**, **[biology](/cli/research/biology)**, **[flywheel](/cli/research/flywheel)**. The available research modes.
 - **[Agents](/cli/agents).** How `build`, `plan`, and `@general` differ.
 - **[Credentials](/cli/credentials).** How HF, W&B, Modal, Lambda, AWS, and GCP tokens reach your subprocesses.

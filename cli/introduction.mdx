@@ -1,10 +1,10 @@
 ---
 title: "What is Synsci CLI?"
-description: "Synsci CLI is a terminal coding agent for scientific work. Research modes for chemistry, biology, physics, materials, machine learning, and mathematics, with cloud credentials and credits handled automatically."
+description: "Synsci CLI is a terminal coding agent for scientific work. Research modes for general research, physics, chemistry, biology, and the model flywheel for post-training, with cloud credentials and credits handled automatically."
 sidebarTitle: "Introduction"
 ---
 
-Synsci CLI is a terminal coding agent built for scientific work. The binary is `synsc`. It runs alongside your shell and gives you a single agent that already knows how to do science. Set the research mode (chemistry, biology, physics, materials, machine learning, or mathematics) and the agent loads domain-aware tools, cloud credentials, and the right backend automatically.
+Synsci CLI is a terminal coding agent built for scientific work. The binary is `synsc`. It runs alongside your shell and gives you a single agent that already knows how to do science. Pick a research mode (general research, physics, chemistry, biology, or flywheel for post-training) and the agent loads domain-aware tools, cloud credentials, and the right backend automatically.
 
 To install, run `npx synsci`. The npm package is [`@synsci/cli`](https://www.npmjs.com/package/@synsci/cli). The dashboard lives at [cli.syntheticsciences.ai](https://cli.syntheticsciences.ai).
 
@@ -14,7 +14,7 @@ To install, run `npx synsci`. The npm package is [`@synsci/cli`](https://www.npm
 
 ## What you get
 
-- **Research modes** for [chemistry](/chemistry/introduction), [biology](/biology/introduction), [physics](/physics/introduction), [materials](/materials/introduction), [machine learning](/ml/introduction), and [mathematics](/math/introduction). Each mode primes the agent with domain conventions and routes calls to the right backend.
+- **Research modes** for [general research](/cli/research/research), [physics](/cli/research/physics), [chemistry](/cli/research/chemistry), [biology](/cli/research/biology), and the [model flywheel](/cli/research/flywheel) for building specialized LLMs from production data. Each mode primes the agent with domain conventions and routes calls to the right backend.
 - **Bundled domain tools** for each mode. From DFT and molecular dynamics in chemistry to GRPO and vLLM in ML. The agent loads them automatically when your prompt calls for them.
 - **[Credential sync](/cli/credentials)** for Hugging Face, Weights & Biases, Modal, Lambda, AWS, and GCP. Tokens come from your dashboard and reach subprocesses without ever touching disk.
 - **[Included credits](/cli/credits)** that cover the agent's work. Pre-call balance checks block runaway loops before they bill.
@@ -41,4 +41,4 @@ Switch with the agent toggle in the [web UI](/cli/web) header, or press <kbd>Tab
 - **[Install Synsci CLI](/cli/installation).** `npx synsci` does the entire setup.
 - **[Quickstart](/cli/quickstart).** Connect, pick a mode, send your first prompt.
 - **[Web UI](/cli/web).** The recommended day-to-day interface.
-- **[Chemistry](/chemistry/introduction)**, **[biology](/biology/introduction)**, **[physics](/physics/introduction)**, **[materials](/materials/introduction)**, **[ML](/ml/introduction)**, **[math](/math/introduction)**. Domain-specific introductions and workflows.
+- **[Research](/cli/research/research)**, **[physics](/cli/research/physics)**, **[chemistry](/cli/research/chemistry)**, **[biology](/cli/research/biology)**, **[flywheel](/cli/research/flywheel)**. Domain-specific introductions and workflows.

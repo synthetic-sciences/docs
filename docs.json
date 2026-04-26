@@ -33,6 +33,16 @@
             ]
           },
           {
+            "group": "Research",
+            "pages": [
+              "cli/research/research",
+              "cli/research/physics",
+              "cli/research/chemistry",
+              "cli/research/biology",
+              "cli/research/flywheel"
+            ]
+          },
+          {
             "group": "Operations",
             "pages": [
               "cli/credentials",
@@ -53,78 +63,6 @@
               "cli/commands",
               "cli/security",
               "cli/comparison"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "Chemistry",
-        "groups": [
-          {
-            "group": "Chemistry",
-            "pages": [
-              "chemistry/introduction",
-              "chemistry/workflows"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "Biology",
-        "groups": [
-          {
-            "group": "Biology",
-            "pages": [
-              "biology/introduction",
-              "biology/workflows"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "Physics",
-        "groups": [
-          {
-            "group": "Physics",
-            "pages": [
-              "physics/introduction",
-              "physics/workflows"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "Materials",
-        "groups": [
-          {
-            "group": "Materials science",
-            "pages": [
-              "materials/introduction",
-              "materials/workflows"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "Machine learning",
-        "groups": [
-          {
-            "group": "Machine learning",
-            "pages": [
-              "ml/introduction",
-              "ml/workflows"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "Mathematics",
-        "groups": [
-          {
-            "group": "Mathematics",
-            "pages": [
-              "math/introduction",
-              "math/workflows"
             ]
           }
         ]
