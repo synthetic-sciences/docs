@@ -1,0 +1,16 @@
+{
+  "name": "synsci-docs",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Synthetic Sciences documentation",
+  "license": "MIT",
+  "scripts": {
+    "dev": "mint dev",
+    "build": "mint export --output export.zip && rm -rf out && mkdir -p out && unzip -q -o export.zip -d out",
+    "broken-links": "mint broken-links",
+    "validate": "mint validate"
+  },
+  "devDependencies": {
+    "mint": "^4.2.0"
+  }
+}

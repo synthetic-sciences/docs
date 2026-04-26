@@ -1,6 +1,7 @@
 ---
 title: "Compute: approval-gated GPU leases for Thesis sub-agents"
 description: "Thesis requires your approval before spending compute. Approve a proposal to mint an approval token and spawn a sandboxed sub-agent under a defined budget."
+sidebarTitle: "Compute"
 ---
 
 Thesis never spends compute without your say-so. When the agent designs an experiment that requires GPU execution, it stages a proposal and waits. You review the blueprint, the hardware SKU, the budget, and the timeout, then decide whether to approve or dismiss. Only after you click **Run** does anything actually execute. This approval gate is not a soft suggestion; it is enforced by the backend through a cryptographic approval token that the system requires before acquiring any lease.
