@@ -1,0 +1,77 @@
+---
+title: "Biology"
+description: "Genomics, structural biology, single-cell analysis, and computational biology. Activate the biology mode and the agent loads the right pipelines and tools for sequence, structure, and omics work."
+sidebarTitle: "Biology"
+---
+
+Synsci handles computational biology workflows end to end. Activate the biology mode and the agent reasons about your prompts the way a bioinformatician or structural biologist would. It picks the right pipeline, the right reference data, and the right scale for the work.
+
+## Activate the mode
+
+```bash
+synsc web --mode biology
+```
+
+For a one-shot run:
+
+```bash
+synsc run --mode biology "Predict structures for these 12 protein sequences with ESMFold and rank by pLDDT"
+```
+
+## Who this is for
+
+- Structural biologists predicting and analyzing protein structures
+- Bioinformaticians running variant calling, RNA-seq, and ATAC-seq pipelines
+- Single-cell biologists doing clustering, trajectory inference, and integration
+- Computational genomicists working with population variation and phylogenetics
+- Drug discovery teams modeling targets and binding partners
+
+## Frameworks the agent uses
+
+| Category | Stack |
+|---|---|
+| Protein structure | AlphaFold 3, ESMFold, RoseTTAFold, OpenFold, Boltz |
+| Sequencing | samtools, BWA, GATK, DeepVariant, bcftools |
+| RNA-seq | STAR, Salmon, DESeq2, edgeR |
+| Single-cell | Scanpy, Seurat, Squidpy, scVI, MOFA |
+| Phylogenetics | IQ-TREE, RAxML, BEAST, MAFFT |
+| Variant calling | GATK, DeepVariant, FreeBayes |
+| Visualization | PyMOL, ChimeraX, igv-notebook |
+
+## Workflows
+
+### Protein structure prediction
+
+> Predict structures for the 12 sequences in `targets.fasta` with ESMFold. Rank by pLDDT, write the top three as PDBs, and align them against `template.pdb` to compare folds.
+
+The agent loads the sequences, runs ESMFold (parallelizing on GPU through Modal), computes pLDDT, writes the top three to PDB, and runs structural alignment against the template with RMSD and TM-score.
+
+### Variant calling pipeline
+
+> Run a germline variant calling pipeline on these 50 paired-end FASTQ samples. Use BWA-MEM for alignment, GATK HaplotypeCaller for calling, and produce a joint-called VCF with VEP annotations.
+
+The agent runs FastQC, aligns with BWA-MEM, marks duplicates, runs base quality recalibration, calls variants per sample, joint-genotypes across the cohort, and annotates with VEP.
+
+### Single-cell clustering and trajectory
+
+> Run a Scanpy analysis on this 10X dataset. Filter cells with fewer than 200 genes, normalize, find HVGs, run PCA, build neighbors, cluster with Leiden at resolution 1.0, and run a PAGA trajectory inference.
+
+The agent loads the matrix into AnnData, filters and normalizes, identifies highly variable genes, runs PCA, builds the neighbor graph, runs Leiden clustering, and generates the PAGA graph plus UMAP and marker heatmap.
+
+### Multi-omics integration
+
+> Integrate this RNA-seq, ATAC-seq, and methylation dataset across 200 samples using MOFA+. Identify the top 5 latent factors and the genes/peaks/CpGs that drive each one.
+
+The agent loads each layer, aligns sample IDs, configures MOFA+ with appropriate likelihoods, trains, and reports variance explained per factor per layer plus the top features driving each factor.
+
+### Phylogenetic inference
+
+> Build a maximum likelihood phylogenetic tree for these 200 SARS-CoV-2 spike sequences using IQ-TREE. Use the best-fit substitution model and 1000 bootstrap replicates.
+
+The agent aligns with MAFFT, runs ModelFinder for model selection, runs IQ-TREE with 1000 ultrafast bootstraps, and returns the tree in Newick with bootstrap supports.
+
+### Differential expression with DESeq2
+
+> Run differential expression on this RNA-seq count matrix comparing treated vs control. Use DESeq2 with apeglm shrinkage. Filter for padj < 0.05 and absolute log2FC > 1.
+
+The agent loads the count matrix and metadata, builds the DESeq2 dataset with the design formula, runs Wald tests, applies apeglm shrinkage, and writes the significant gene list with shrunken effect sizes.

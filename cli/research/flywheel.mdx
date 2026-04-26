@@ -1,0 +1,108 @@
+---
+title: "Flywheel"
+description: "Build specialized LLMs from your production data. Flywheel walks you through assess, design, data, train, evaluate, deploy, iterate. Goal: cut your inference costs 50 to 500x while improving quality on your target task."
+sidebarTitle: "Flywheel"
+---
+
+The flywheel mode walks you through building specialized LLMs from your production data. The goal is to escape the dependency on rented frontier intelligence and own a smaller, faster, cheaper model that performs better than the generalist on your specific task.
+
+A specialized 8B model fine-tuned on your domain routinely matches or beats a general-purpose 70B+ model on constrained tasks, at 50 to 500x lower cost per request. The hard part is the loop: shipping the product, capturing the data, training the specialized model, deploying it, and iterating. Flywheel automates that loop.
+
+## Activate the mode
+
+```bash
+synsc web --mode flywheel
+```
+
+Inside a session, mention the orchestrator:
+
+```
+@flywheel
+```
+
+The agent explores your codebase, assesses your LLM usage, and walks you through each stage with explicit cost estimates and approval gates.
+
+## Who this is for
+
+- AI-native teams that depend on Anthropic, OpenAI, or Google APIs in production
+- Companies running enough volume that COGS is a real line item (rule of thumb: $1K+ per month in API spend on a constrained task)
+- Founders who want to build a moat from their production data
+- ML engineers tired of debugging silent model updates and surprise pricing changes
+
+## The seven stages
+
+Flywheel is not a one-time training run. It is a continuously compounding loop with seven stages.
+
+### 1. Assess
+
+The agent autonomously explores your codebase to understand your product, your LLM usage, and your data assets. It scans README files, entry points, API calls, system prompts, database schemas, feedback tables, and infrastructure configs. Then it presents a concise assessment of what it found. It only asks about things it cannot determine from code, like monthly API spend and quality requirements. The output is a clear go/no-go decision on whether a flywheel is worth pursuing.
+
+### 2. Design
+
+The agent picks a base model, sized to your task. It checks supported models on Tinker first since Tinker is the cheapest training platform, then evaluates model families like Qwen, DeepSeek, Gemma, Llama, Mistral, GLM, and Liquid AI for your domain. It estimates total training investment with cost models that account for distillation, fine-tuning, and evaluation.
+
+### 3. Data
+
+Three paths, ranked by quality of the resulting model.
+
+- **Production data** is the moat. Format existing API logs, user corrections, and accept/reject signals into training JSONL. Your competitors can fund the same compute and hire the same ML team, but they cannot conjure your dataset.
+- **Frontier distillation** runs a frontier model on your production inputs to generate labels. Uses Anthropic and OpenAI batch APIs at 50% discount. The frontier credits included in your subscription serve double duty here.
+- **Synthetic bootstrapping** generates training data from scratch when fewer than 1,000 real examples exist.
+
+### 4. Train
+
+Two phases, both on cloud GPUs.
+
+**Supervised fine-tuning** picks the right platform automatically.
+
+| Situation | Platform |
+|---|---|
+| Supported Tinker model + LoRA | Tinker (cheapest, managed) |
+| Full-parameter or custom architecture | Modal + Unsloth |
+| Simple TRL fine-tune | HuggingFace Jobs |
+| Multi-node cluster | TensorPool |
+
+**RL post-training** (when you need to go beyond frontier quality):
+
+| Situation | Platform |
+|---|---|
+| Verifiable reward functions | Prime Intellect Lab (hosted GRPO) |
+| Custom rewards | Modal + TRL/Unsloth GRPO |
+| Large-scale PPO/RLOO | TensorPool + OpenRLHF |
+
+All experiments are tracked with Weights & Biases. Every run gets a cost estimate before it spends.
+
+### 5. Evaluate
+
+The specialized model has to match or beat frontier on your target task. Flywheel runs three evaluation layers: programmatic metrics (accuracy, latency, cost), LLM-as-judge against the frontier baseline, and human spot-checks where it matters. The agent reports the head-to-head delta and surfaces failure modes that need a data fix or a training-config change.
+
+### 6. Deploy
+
+Deploy the specialized model behind a router that falls back to frontier on edge cases. Flywheel sets up the routing layer, configures the serving backend (vLLM, TensorRT-LLM, or hosted inference), and wires telemetry so you see traffic share, cost per request, and latency in real time.
+
+### 7. Iterate
+
+Production traffic generates new training data. New training data trains a better model. A better model handles more traffic, generates more training data, and cuts your frontier fallback rate further. Flywheel schedules the retraining loop and presents the cost/benefit of each iteration before you approve.
+
+## Cloud platforms it integrates with
+
+| Platform | What it's used for |
+|---|---|
+| Tinker | Cheapest LoRA training on supported base models |
+| Modal | Full-parameter SFT, GRPO, custom training, sandboxed inference |
+| TensorPool | Multi-node clusters and large-scale RL |
+| Prime Intellect | Hosted GRPO with verifiable rewards |
+| HuggingFace | Datasets, hub, jobs |
+| Weights & Biases | Experiment tracking and sweeps |
+| LangSmith | Production telemetry and dataset capture |
+
+## What you do not have to think about
+
+- Choosing a training platform. Flywheel picks based on your task and budget.
+- Data formatting. Flywheel handles JSONL conversion, deduplication, and quality validation.
+- Cost surprises. Every run gets an estimate before it spends, and balance checks block runaway loops.
+- Routing logic. The deploy stage wires fallback to frontier automatically.
+
+## When the flywheel is worth it
+
+Rule of thumb: a flywheel pays back when you spend roughly $1,000 per month or more on frontier APIs against a constrained task. Below that, the engineering cost of running the loop outweighs the savings. Above that, the savings compound: a 50x cost reduction on $10K per month is $9.8K per month, more than enough to justify the flywheel infrastructure investment.
