@@ -8,7 +8,7 @@ Synsci CLI is MCP-aware. You can register external MCP servers and the agent get
 
 ## Why pair the two
 
-Thesis stores research state — hypotheses, experiments, sources, decisions, artifacts — as a durable graph. Synsci CLI runs the actual coding work — writing training scripts, running evaluations, deploying. Without MCP, you'd be copy-pasting between the two. With MCP, the agent in Synsci CLI can:
+Thesis stores research state, hypotheses, experiments, sources, decisions, artifacts, as a durable graph. Synsci CLI runs the actual coding work, writing training scripts, running evaluations, deploying. Without MCP, you'd be copy-pasting between the two. With MCP, the agent in Synsci CLI can:
 
 - Read the current research frontier from the graph before writing code.
 - Stage an experiment node with the 8-section blueprint while you're still in the terminal.
@@ -70,9 +70,9 @@ The two products complement each other.
 
 When the Synsci CLI agent picks a tool, it considers:
 
-- **Built-in tools** — read, write, run shell, edit code.
-- **Bundled skills** — the 83 ML skills baked into the binary.
-- **Registered MCP servers** — any Thesis tools, plus any other MCP servers you've added.
+- **Built-in tools**, read, write, run shell, edit code.
+- **Bundled skills**, the 83 ML skills baked into the binary.
+- **Registered MCP servers**, any Thesis tools, plus any other MCP servers you've added.
 
 The agent picks the right one based on the prompt. You don't need to namespace or prefix; if you ask about graph state, it reaches for `thesis_*` tools, and if you ask about file edits, it reaches for the built-in editor.
 
@@ -118,11 +118,6 @@ Then point Thesis (or any MCP host) at `http://localhost:4444` for terminal-side
 
 ## What's next
 
-<CardGroup cols={2}>
-  <Card title="Thesis MCP overview" icon="diagram-project" href="/mcp/quickstart">
-    The 86-tool MCP surface from the Thesis side.
-  </Card>
-  <Card title="Synsci CLI agents" icon="robot" href="/cli/agents">
-    The build/plan/@general split — choose carefully when an agent has both terminal and graph access.
-  </Card>
-</CardGroup>
+- **[Thesis MCP overview](/mcp/quickstart).** The 86-tool MCP surface from the Thesis side.
+- **[Synsci CLI agents](/cli/agents).** The build/plan/@general split, choose carefully when an agent has both terminal and graph access.
+

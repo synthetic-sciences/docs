@@ -1,9 +1,9 @@
 ---
 title: "Thesis skills: reusable workflows for your agent hosts"
-description: "Thesis skills guide your agent host through Thesis workflows — survey knowledge, graphify sources, validate claims, or run autonomous frontier advancement."
+description: "Thesis skills guide your agent host through Thesis workflows, survey knowledge, graphify sources, validate claims, or run autonomous frontier advancement."
 ---
 
-Thesis skills are prebuilt instruction sets you install alongside the Thesis MCP server. Each skill tells your agent host exactly how to drive Thesis for a specific research task — when to create nodes, how to persist a run contract, which tools to call, and when to stop. Rather than writing these workflows yourself, you install a skill and invoke it by name inside your agent host.
+Thesis skills are prebuilt instruction sets you install alongside the Thesis MCP server. Each skill tells your agent host exactly how to drive Thesis for a specific research task, when to create nodes, how to persist a run contract, which tools to call, and when to stop. Rather than writing these workflows yourself, you install a skill and invoke it by name inside your agent host.
 
 ## Two variants per skill
 
@@ -11,7 +11,7 @@ Every skill ships in two flavors. Choose the one that fits how your agent host w
 
 <Tabs>
   <Tab title="MCP variant">
-    The MCP variant exposes Thesis through the 86 structured tool schemas registered at `/mcp-server`. Your agent host calls `thesis_*` tools directly — node creation, artifact uploads, compute approval, search, and more.
+    The MCP variant exposes Thesis through the 86 structured tool schemas registered at `/mcp-server`. Your agent host calls `thesis_*` tools directly, node creation, artifact uploads, compute approval, search, and more.
 
     **Best for:** hosts that exploit structured tool calls natively (Cursor, OpenCode, Pi, Hermes Agent, OpenClaw).
 
@@ -58,26 +58,13 @@ Every skill ships in two flavors. Choose the one that fits how your agent host w
 
 ## The six skill families
 
-<CardGroup cols={2}>
-  <Card title="thesis / thesis-cli" icon="book-open">
-    General Thesis usage, experiment design, setup support, and troubleshooting across supported hosts. The entry-point skill for platform questions and cross-cutting guidance.
-  </Card>
-  <Card title="thesis-auto / thesis-auto-cli" icon="robot">
-    Advance a research frontier autonomously under an explicit budget. Persists a run contract in the graph, keeps the plan `n` hops ahead, and replans after each resolution.
-  </Card>
-  <Card title="thesis-lookahead / thesis-lookahead-cli" icon="binoculars">
-    Stage the next-step frontier plan from existing graph state without executing it. Pure planning: no compute approval, no execution, no spend.
-  </Card>
-  <Card title="thesis-reproduce / thesis-reproduce-cli" icon="flask">
-    Graphify claim-bearing material and validate it empirically within a hard maximum budget. Combines source-to-graph authoring with budgeted validation branches.
-  </Card>
-  <Card title="thesis-survey / thesis-survey-cli" icon="magnifying-glass">
-    Discover, search, and synthesize relevant knowledge from indexed sources and the Thesis graph into committed insight nodes with citations.
-  </Card>
-  <Card title="thesis-to-graph / thesis-to-graph-cli" icon="diagram-project">
-    Port source material — papers, READMEs, wikis, research notes — into Thesis nodes and artifacts without execution or compute spend.
-  </Card>
-</CardGroup>
+- **thesis / thesis-cli.** General Thesis usage, experiment design, setup support, and troubleshooting across supported hosts. The entry-point skill for platform questions and cross-cutting guidance.
+- **thesis-auto / thesis-auto-cli.** Advance a research frontier autonomously under an explicit budget. Persists a run contract in the graph, keeps the plan `n` hops ahead, and replans after each resolution.
+- **thesis-lookahead / thesis-lookahead-cli.** Stage the next-step frontier plan from existing graph state without executing it. Pure planning: no compute approval, no execution, no spend.
+- **thesis-reproduce / thesis-reproduce-cli.** Graphify claim-bearing material and validate it empirically within a hard maximum budget. Combines source-to-graph authoring with budgeted validation branches.
+- **thesis-survey / thesis-survey-cli.** Discover, search, and synthesize relevant knowledge from indexed sources and the Thesis graph into committed insight nodes with citations.
+- **thesis-to-graph / thesis-to-graph-cli.** Port source material, papers, READMEs, wikis, research notes, into Thesis nodes and artifacts without execution or compute spend.
+
 
 ## Installing skills
 
@@ -97,4 +84,4 @@ The installer detects your agent hosts, injects the Thesis MCP config, copies th
 
 Skills are installed into your agent host's skill or slash-command directory. When you invoke a skill by name inside your host, the host loads the corresponding `SKILL.md` and reference files into context. The skill then guides your agent through the Thesis workflow for that task.
 
-The `-cli` variant skills include bundled bash scripts (copied at install time into the skill directory) so the skill is fully self-contained — no separate PATH entries required.
+The `-cli` variant skills include bundled bash scripts (copied at install time into the skill directory) so the skill is fully self-contained, no separate PATH entries required.

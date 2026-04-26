@@ -7,7 +7,7 @@ sidebarTitle: "Introduction"
 Thesis is a graph-based research workspace from Synthetic Sciences. Instead of letting critical decisions disappear into chat logs, Thesis stores them in explicit, auditable structures: a graph of research nodes, an append-only research log, indexed knowledge sources, tracked artifacts, and a compute approval boundary that keeps humans in control of what runs and what spends.
 
 <Note>
-  Looking for the **terminal coding agent**? That's [Synsci CLI](/cli/introduction) — a separate product. Thesis is the research workspace; Synsci CLI is the agent you run in your shell. They pair via MCP if you use both.
+  Looking for the **terminal coding agent**? That's [Synsci CLI](/cli/introduction), a separate product. Thesis is the research workspace; Synsci CLI is the agent you run in your shell. They pair via MCP if you use both.
 </Note>
 
 ## Who Thesis is for
@@ -23,20 +23,11 @@ Thesis is built for people running research programs where losing context is exp
 
 Thesis combines five capabilities that normally live in separate tools.
 
-<CardGroup cols={2}>
-  <Card title="Research graph" icon="diagram-project" href="/concepts/research-graph">
-    A DAG of staged and committed nodes — hypotheses, experiments, insights, branches, and merges. Committed nodes form durable research history; new work branches from them instead of overwriting them.
-  </Card>
-  <Card title="Agent harness" icon="robot" href="/concepts/agent-harness">
-    A Thesis-native ReAct agent that hydrates from graph state, searches prior work, stages experiments, writes the research log, and spawns approved sub-agents. It does not rely on chat history as its source of truth.
-  </Card>
-  <Card title="Knowledge layer" icon="books" href="/concepts/knowledge-layer">
-    Unified search across your Thesis graph and external sources indexed through Nia: papers, repositories, documentation, and datasets — all from one interface.
-  </Card>
-  <Card title="Artifact and filesystem layer" icon="folder-open" href="/guides/organize-research">
-    Node artifacts, project volume files, research reports, sub-agent working directories, asset cards, uploads, previews, and export/import. Evidence stays attached to the nodes that produced it.
-  </Card>
-</CardGroup>
+- **[Research graph](/concepts/research-graph).** A DAG of staged and committed nodes, hypotheses, experiments, insights, branches, and merges. Committed nodes form durable research history; new work branches from them instead of overwriting them.
+- **[Agent harness](/concepts/agent-harness).** A Thesis-native ReAct agent that hydrates from graph state, searches prior work, stages experiments, writes the research log, and spawns approved sub-agents. It does not rely on chat history as its source of truth.
+- **[Knowledge layer](/concepts/knowledge-layer).** Unified search across your Thesis graph and external sources indexed through Nia: papers, repositories, documentation, and datasets, all from one interface.
+- **[Artifact and filesystem layer](/guides/organize-research).** Node artifacts, project volume files, research reports, sub-agent working directories, asset cards, uploads, previews, and export/import. Evidence stays attached to the nodes that produced it.
+
 
 ## MCP and CLI surface
 
@@ -46,26 +37,21 @@ The fifth piece connects Thesis to the agents you already use. The Thesis MCP se
 npx --yes @synsci/thesis setup
 ```
 
-Supported hosts include Claude Code, Codex, Cursor, OpenCode, Pi, Hermes Agent, OpenClaw, and [Synsci CLI](/cli/mcp). Once connected, your agent host can read and write Thesis graph state, search knowledge, run Oracle research jobs, manage compute leases, and export subgraphs — all through the same typed tools available in the web app.
+Supported hosts include Claude Code, Codex, Cursor, OpenCode, Pi, Hermes Agent, OpenClaw, and [Synsci CLI](/cli/mcp). Once connected, your agent host can read and write Thesis graph state, search knowledge, run Oracle research jobs, manage compute leases, and export subgraphs, all through the same typed tools available in the web app.
 
 <Tip>
   The `@synsci/thesis` helper is **not** the same as `@synsci/cli`. `@synsci/thesis` writes Thesis MCP configuration into agent hosts; `@synsci/cli` is the [Synsci CLI](/cli/introduction) terminal agent itself.
 </Tip>
 
-<CardGroup cols={2}>
-  <Card title="MCP quickstart" icon="plug" href="/mcp/quickstart">
-    Connect Thesis to your agent host in minutes.
-  </Card>
-  <Card title="Organize research" icon="folder-tree" href="/guides/organize-research">
-    Turn notes, papers, and repos into a structured research graph.
-  </Card>
-</CardGroup>
+- **[MCP quickstart](/mcp/quickstart).** Connect Thesis to your agent host in minutes.
+- **[Organize research](/guides/organize-research).** Turn notes, papers, and repos into a structured research graph.
+
 
 ## What makes Thesis different
 
-Research state in Thesis is inspectable the same way source code is inspectable. Every graph mutation happens through a typed, auditable tool — not a hidden PM agent guessing your intent from conversation. Compute-spending sub-agents require explicit approval before they start. Committed nodes cannot be silently rewritten. The research log is append-only.
+Research state in Thesis is inspectable the same way source code is inspectable. Every graph mutation happens through a typed, auditable tool, not a hidden PM agent guessing your intent from conversation. Compute-spending sub-agents require explicit approval before they start. Committed nodes cannot be silently rewritten. The research log is append-only.
 
-The goal is simple: make research work you can find, branch, reproduce, and hand off — months after the original work happened.
+The goal is simple: make research work you can find, branch, reproduce, and hand off, months after the original work happened.
 
 <Note>
   You can start using the Thesis web app without any additional setup. The MCP and CLI integration is optional, and adds the ability for external agent hosts to read and write your research graph.

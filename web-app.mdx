@@ -59,7 +59,7 @@ The Thesis web app is the primary interface for building and navigating your res
 
     **Commit checklist**
 
-    When you are ready to freeze a node as durable history, the commit checklist walks you through what will be locked. Once committed, a node's content cannot be silently edited — new work branches from it instead.
+    When you are ready to freeze a node as durable history, the commit checklist walks you through what will be locked. Once committed, a node's content cannot be silently edited, new work branches from it instead.
 
     **Artifacts**
 
@@ -71,7 +71,7 @@ The Thesis web app is the primary interface for building and navigating your res
   </Tab>
 
   <Tab title="Agent panel">
-    The Agent page (`/agent`) is where you interact with the Thesis research agent. Unlike a generic chatbot, the agent hydrates from your actual project state — graph nodes, research log entries, mounted skills, filesystem stats, and assets — before responding.
+    The Agent page (`/agent`) is where you interact with the Thesis research agent. Unlike a generic chatbot, the agent hydrates from your actual project state, graph nodes, research log entries, mounted skills, filesystem stats, and assets, before responding.
 
     The panel has three tabs:
 
@@ -85,14 +85,14 @@ The Thesis web app is the primary interface for building and navigating your res
 
     **Files tab**
 
-    Shows the project filesystem — artifacts, research reports, and sub-agent working directories. Files generated during agent runs land here and can be opened, previewed, or attached to nodes.
+    Shows the project filesystem, artifacts, research reports, and sub-agent working directories. Files generated during agent runs land here and can be opened, previewed, or attached to nodes.
 
     **Proposal cards**
 
     When the agent proposes a compute-spending action (such as spawning an experiment sub-agent), a proposal card appears in the chat. Review the 8-section blueprint and choose **Approve** or **Reject**. Approvals are logged; rejections are recorded as dead ends.
 
     <Warning>
-      Approving a proposal authorizes the agent to acquire a compute lease and start a sandboxed sub-agent. Sub-agents receive a compiled task payload — not your chat history — and operate within the approved budget and timeout.
+      Approving a proposal authorizes the agent to acquire a compute lease and start a sandboxed sub-agent. Sub-agents receive a compiled task payload, not your chat history, and operate within the approved budget and timeout.
     </Warning>
   </Tab>
 
@@ -112,7 +112,7 @@ The Thesis web app is the primary interface for building and navigating your res
     The Search page (`/search`) fans out across both your Thesis graph and all indexed external sources. It deduplicates results, merges relevance scores, and returns a consistent result shape. Use it to find prior evidence before designing a new experiment.
 
     <Tip>
-      The Research modal (Cmd+Shift+K) provides the same unified search capability from anywhere in the app, plus Oracle synthesis jobs and Tracer code search — without navigating away from your current view.
+      The Research modal (Cmd+Shift+K) provides the same unified search capability from anywhere in the app, plus Oracle synthesis jobs and Tracer code search, without navigating away from your current view.
     </Tip>
   </Tab>
 
@@ -123,11 +123,11 @@ The Thesis web app is the primary interface for building and navigating your res
 
     Add and manage your API keys for external services that power Thesis features:
 
-    - **Anthropic** — powers the web agent ReAct loop and deep-research synthesis.
-    - **OpenAI** — provides graph embeddings for knowledge retrieval.
-    - **Nia** — enables external source indexing, search, and exploration.
-    - **Exa** — backs Deep Research jobs with paper and web discovery.
-    - **GitHub** — enables Tracer code search and repository file access.
+    - **Anthropic**, powers the web agent ReAct loop and deep-research synthesis.
+    - **OpenAI**, provides graph embeddings for knowledge retrieval.
+    - **Nia**, enables external source indexing, search, and exploration.
+    - **Exa**, backs Deep Research jobs with paper and web discovery.
+    - **GitHub**, enables Tracer code search and repository file access.
 
     Keys you add here are scoped to your account and are not shared with other users.
 
@@ -145,7 +145,7 @@ The Thesis web app is the primary interface for building and navigating your res
 
     **Skills**
 
-    The Skills page (`/skills`) lists the Thesis skills available to your agent. Skills are reusable instruction sets for specific research workflows — such as turning source material into graph nodes or planning the next frontier. You can view installed skills and their descriptions here; install or update them from the CLI.
+    The Skills page (`/skills`) lists the Thesis skills available to your agent. Skills are reusable instruction sets for specific research workflows, such as turning source material into graph nodes or planning the next frontier. You can view installed skills and their descriptions here; install or update them from the CLI.
   </Tab>
 </Tabs>
 

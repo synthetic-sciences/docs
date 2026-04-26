@@ -1,64 +1,44 @@
 ---
-title: "What is Synsci CLI? Terminal coding agent for ML engineers"
-description: "Synsci CLI (`synsc`) is a terminal AI coding agent built for machine-learning workflows. Bundled ML skills, native cloud integrations, and included model credits."
+title: "What is Synsci CLI?"
+description: "Synsci CLI is a terminal coding agent for scientific work. Research modes for chemistry, biology, physics, materials, machine learning, and mathematics, with cloud credentials and credits handled automatically."
 sidebarTitle: "Introduction"
 ---
 
-Synsci CLI is a terminal-native AI coding agent purpose-built for machine learning. It runs alongside your shell, drives Claude, GPT, and Gemini frontier models against your codebase, and ships with the credentials and skills an ML engineer actually needs — Hugging Face, Weights & Biases, Modal, Lambda, AWS, and GCP all syncing automatically, plus 83 bundled ML skills covering GRPO, vLLM, DeepSpeed, Axolotl, and the rest of the modern training stack.
+Synsci CLI is a terminal coding agent built for scientific work. The binary is `synsc`. It runs alongside your shell and gives you a single agent that already knows how to do science. Set the research mode (chemistry, biology, physics, materials, machine learning, or mathematics) and the agent loads domain-aware skills, cloud credentials, and the right backend automatically.
 
-The binary is `synsc`. The npm package is [`@synsci/cli`](https://www.npmjs.com/package/@synsci/cli). The dashboard lives at [cli.syntheticsciences.ai](https://cli.syntheticsciences.ai). To install everything in one shot, run `npx synsci`.
+To install, run `npx synsci`. The npm package is [`@synsci/cli`](https://www.npmjs.com/package/@synsci/cli). The dashboard lives at [cli.syntheticsciences.ai](https://cli.syntheticsciences.ai).
 
 <Note>
-  Synsci CLI is a separate product from [Thesis](/introduction). Thesis is the research workspace (graphs, experiments, MCP server). Synsci CLI is a coding agent that runs in your terminal. They're complementary — many users run both.
+  Synsci CLI is a separate product from [Thesis](/introduction). Thesis is the research workspace (graphs, experiments, MCP server). Synsci CLI is the agent you run in your shell. They pair via MCP if you use both.
 </Note>
 
-## What's included
+## What you get
 
-<CardGroup cols={2}>
-  <Card title="83 bundled ML skills" icon="brain" href="/cli/skills">
-    GRPO, vLLM, DeepSpeed, Axolotl, and 79 more — bundled in the binary so they're available offline. Skills load on demand, no install step required.
-  </Card>
-  <Card title="Four frontier models" icon="microchip" href="/cli/models">
-    Claude Opus 4, Claude Sonnet 4.5, GPT Codex Mini, and Gemini 2.5 Pro. Switch between them mid-session. Your subscription includes credits for all four.
-  </Card>
-  <Card title="Credential sync" icon="key" href="/cli/credentials">
-    Hugging Face, Weights & Biases, Modal, Lambda, AWS, and GCP tokens are pulled from your dashboard and injected into shell subprocesses on demand. Nothing is written to disk.
-  </Card>
-  <Card title="Usage tracking" icon="chart-line" href="/cli/credits">
-    Every model call reports cost back to your dashboard. Pre-call balance checks block new requests when credits are depleted, so you don't get surprise bills.
-  </Card>
-</CardGroup>
+- **[Research modes](/cli/modes)** for chemistry, biology, physics, materials, ML, and math. Setting a mode primes the agent with domain conventions and activates the right bundled skills.
+- **[Bundled skills](/cli/skills)** for each domain. Hundreds of self-contained playbooks, from DFT and molecular dynamics in chemistry to GRPO and vLLM in ML.
+- **[Credential sync](/cli/credentials)** for Hugging Face, Weights & Biases, Modal, Lambda, AWS, and GCP. Tokens come from your dashboard and reach subprocesses without ever touching disk.
+- **[Included credits](/cli/credits)** that cover the agent's work. Pre-call balance checks block runaway loops before they bill.
 
 ## Two agents, one toggle
 
 Two top-level agents are available in every UI:
 
-- **build** — the default. Full filesystem and shell access for development work.
-- **plan** — read-only. Use it for analysis, code exploration, and design work where you don't want the agent touching files.
+- `build` is the default. Full filesystem and shell access for the actual research work.
+- `plan` is read-only. Use it for analysis, code exploration, and design where you don't want anything written.
 
-Switch with the agent toggle in the [web UI](/cli/web) header, or press <kbd>Tab</kbd> in the TUI. Mention `@general` in any message to delegate a complex search or multi-step task to a sub-agent that runs in its own context.
+Switch with the agent toggle in the [web UI](/cli/web) header, or press <kbd>Tab</kbd> in the TUI. Mention `@general` in any message to delegate a search or multi-step task to a sub-agent that runs in its own context.
 
 ## Where it fits
 
 | You want to | Reach for |
 |---|---|
-| Write code, run training scripts, or debug a model in your terminal | Synsci CLI |
-| Track hypotheses, experiments, and decisions across a research program | [Thesis](/introduction) |
-| Use both — the agent writes code, Thesis stores what was tried and why | Run both side by side |
+| Run DFT, MD, or other compute work in a research domain | Synsci CLI with the right [research mode](/cli/modes) |
+| Track hypotheses, experiments, and decisions over time | [Thesis](/introduction) |
+| Use both, with the agent writing code and Thesis storing what was tried | Run both, paired through [MCP](/cli/mcp) |
 
 ## What's next
 
-<CardGroup cols={2}>
-  <Card title="Install Synsci CLI" icon="download" href="/cli/installation">
-    npm, Homebrew, curl, or desktop. Pick one and get the `synsc` binary on your PATH.
-  </Card>
-  <Card title="Quickstart" icon="rocket" href="/cli/quickstart">
-    Connect to your dashboard, send your first prompt, switch models, and inspect usage — in five minutes.
-  </Card>
-  <Card title="Agents and models" icon="robot" href="/cli/agents">
-    How `build`, `plan`, and `@general` differ, and when to switch frontier models mid-session.
-  </Card>
-  <Card title="Commands reference" icon="terminal" href="/cli/commands">
-    Every `synsc` subcommand: `connect`, `auth`, `models`, `run`, `session`, `stats`, `mcp`, `upgrade`.
-  </Card>
-</CardGroup>
+- **[Install Synsci CLI](/cli/installation).** `npx synsci` does the entire setup.
+- **[Quickstart](/cli/quickstart).** Connect, pick a mode, send your first prompt.
+- **[Research modes](/cli/modes).** What each mode covers and how to switch.
+- **[Web UI](/cli/web).** The recommended day-to-day interface.

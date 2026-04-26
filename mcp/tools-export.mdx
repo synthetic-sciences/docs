@@ -70,11 +70,11 @@ Authorization: Bearer thk_your_api_key
 
 The exported JSON contains:
 
-- `version` — schema version for forward compatibility
-- `exported_at` — ISO 8601 timestamp of the export
-- `nodes` — array of node objects with all content fields, `kind`, `lifecycle`, and `parent_ids`
-- `edges` — explicit parent/child edge list for the subgraph
-- `artifacts` — artifact metadata when `include_artifacts` is `true`
+- `version`, schema version for forward compatibility
+- `exported_at`. ISO 8601 timestamp of the export
+- `nodes`, array of node objects with all content fields, `kind`, `lifecycle`, and `parent_ids`
+- `edges`, explicit parent/child edge list for the subgraph
+- `artifacts`, artifact metadata when `include_artifacts` is `true`
 
 ### PDF and Markdown summaries
 
@@ -88,7 +88,7 @@ The exported JSON contains:
 
 ## Updates tools (4)
 
-Thesis surfaces in-app notifications when significant events occur — new collaborator activity, completed Oracle jobs, or approval decisions. The Updates tools let agents read and manage this feed.
+Thesis surfaces in-app notifications when significant events occur, new collaborator activity, completed Oracle jobs, or approval decisions. The Updates tools let agents read and manage this feed.
 
 | Tool | Mutation? | Purpose |
 |---|---|---|
@@ -103,7 +103,7 @@ Thesis surfaces in-app notifications when significant events occur — new colla
 
 ## Audit tool (1)
 
-The audit log records all significant events for a node in an append-only, tamper-evident sequence. Use it to reconstruct the full decision history for a node — who made changes, when, and what was modified.
+The audit log records all significant events for a node in an append-only, tamper-evident sequence. Use it to reconstruct the full decision history for a node, who made changes, when, and what was modified.
 
 | Tool | Mutation? | Purpose |
 |---|---|---|

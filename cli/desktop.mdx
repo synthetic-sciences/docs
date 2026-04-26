@@ -4,10 +4,10 @@ description: "Native desktop app for Synsci CLI. Same agent surface as the web U
 sidebarTitle: "Desktop app"
 ---
 
-The desktop app is the standalone alternative to [`synsc web`](/cli/web). Same agent, same models, same skills, same credentials — just packaged as a native application rather than a browser-served UI. Pick it if you'd rather have the agent in a dedicated window than a browser tab.
+The desktop app is the standalone alternative to [`synsc web`](/cli/web). Same agent, same models, same skills, same credentials, just packaged as a native application rather than a browser-served UI. Pick it if you'd rather have the agent in a dedicated window than a browser tab.
 
 <Note>
-  For most users, `synsc web` is the recommended interface. Reach for the desktop app when you specifically want a standalone application — for instance, when keeping the agent in its own window separate from your browser is important to your workflow.
+  For most users, `synsc web` is the recommended interface. Reach for the desktop app when you specifically want a standalone application, for instance, when keeping the agent in its own window separate from your browser is important to your workflow.
 </Note>
 
 ## When to pick desktop over web or terminal
@@ -19,7 +19,7 @@ The desktop app is the standalone alternative to [`synsc web`](/cli/web). Same a
 | Quick edits, scripts, CI hooks | Terminal (`synsc run`) |
 | Pair programming or screen sharing | Web UI |
 | Headless or remote machine | Terminal (no GUI available) |
-| You want all three, switching freely | All three — same dashboard account |
+| You want all three, switching freely | All three, same dashboard account |
 
 The desktop app, the web UI, and the terminal CLI are interchangeable from the dashboard's perspective. A session you start in one shows up in the same dashboard as a session you start in the others.
 
@@ -48,7 +48,7 @@ Once connected, the desktop app pulls your credentials and credit balance the sa
 
 ## Multi-session
 
-The desktop app supports multiple agent sessions in tabs. Each tab is independent — its own working directory, its own model choice, its own context. This is useful when you're running:
+The desktop app supports multiple agent sessions in tabs. Each tab is independent, its own working directory, its own model choice, its own context. This is useful when you're running:
 
 - A long-running training script in one tab while writing analysis in another
 - Two `@general` searches against different codebases at the same time
@@ -84,15 +84,10 @@ Full shortcut list is available from the command palette.
 
 ## Auto-update
 
-The desktop app checks for updates on launch. When a new version is available, you get a prompt and the option to update in place — the app downloads, verifies, and restarts itself. You can disable auto-update in preferences if you'd rather pin to a specific version.
+The desktop app checks for updates on launch. When a new version is available, you get a prompt and the option to update in place, the app downloads, verifies, and restarts itself. You can disable auto-update in preferences if you'd rather pin to a specific version.
 
 ## What's next
 
-<CardGroup cols={2}>
-  <Card title="Web UI" icon="window" href="/cli/web">
-    The recommended interface — `synsc web` runs the same surface as a browser tab.
-  </Card>
-  <Card title="Dashboard" icon="chart-line" href="/cli/dashboard">
-    The web dashboard you'll bounce between for credentials and billing.
-  </Card>
-</CardGroup>
+- **[Web UI](/cli/web).** The recommended interface, `synsc web` runs the same surface as a browser tab.
+- **[Dashboard](/cli/dashboard).** The web dashboard you'll bounce between for credentials and billing.
+

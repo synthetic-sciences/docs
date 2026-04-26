@@ -22,7 +22,7 @@ Thesis stores every hypothesis, experiment, source summary, and insight as a nod
     }
     ```
 
-    The node starts in a **staged** state, meaning you can edit it freely. Commit it once the title and framing are stable — committed nodes become immutable history.
+    The node starts in a **staged** state, meaning you can edit it freely. Commit it once the title and framing are stable, committed nodes become immutable history.
 
     <Note>
       `kind: "untyped"` is the right choice for a root or planning node. Use `kind: "empirical"` when you're staging a testable experiment, and `kind: "insight"` for synthesis nodes that summarize conclusions.
@@ -32,8 +32,8 @@ Thesis stores every hypothesis, experiment, source summary, and insight as a nod
   <Step title="Add a summary and content">
     After creating the node, open it in the UI or update it via `thesis_stage_node_update`. A good root node has:
 
-    - **Summary** — a single sentence stating the core claim or research question.
-    - **Content** — background context, open questions, prior work pointers, or protocol notes.
+    - **Summary**, a single sentence stating the core claim or research question.
+    - **Content**, background context, open questions, prior work pointers, or protocol notes.
 
     The summary is used by search and Oracle jobs to anchor retrieval. Keep it precise.
   </Step>
@@ -79,7 +79,7 @@ Thesis stores every hypothesis, experiment, source summary, and insight as a nod
     Indexed sources appear in the Knowledge panel and are returned by `thesis_search` alongside your graph content.
 
     <Tip>
-      For rapid ingestion of many sources at once, install and invoke the **`thesis-to-graph`** skill. It extracts claims, methods, assumptions, and follow-up experiments from source material and turns them into linked nodes automatically — useful when onboarding into a new field or converting prior notes into structured graph state.
+      For rapid ingestion of many sources at once, install and invoke the **`thesis-to-graph`** skill. It extracts claims, methods, assumptions, and follow-up experiments from source material and turns them into linked nodes automatically, useful when onboarding into a new field or converting prior notes into structured graph state.
     </Tip>
   </Step>
 
@@ -102,7 +102,7 @@ Thesis stores every hypothesis, experiment, source summary, and insight as a nod
   </Step>
 
   <Step title="Tag nodes for navigation">
-    Tags let you group nodes across branches — useful for marking nodes by status, method family, or review stage.
+    Tags let you group nodes across branches, useful for marking nodes by status, method family, or review stage.
 
     Create a tag (scoped to a root node):
 

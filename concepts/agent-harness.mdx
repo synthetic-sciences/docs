@@ -1,39 +1,26 @@
 ---
 title: "Agent harness: your project-aware research operator"
-description: "The Thesis agent reads your graph, searches sources, stages experiments, writes the log, and spawns sub-agents — with you in control of compute spending."
+description: "The Thesis agent reads your graph, searches sources, stages experiments, writes the log, and spawns sub-agents, with you in control of compute spending."
 ---
 
-The Thesis agent is not a general-purpose chat assistant. It is a research operator that understands your project's graph, log, files, and mounted skills — and uses that structured state to plan and execute research work. When you open the agent chat, you're talking to an agent that can read your full research history, search indexed sources, stage experiments as formal blueprints, and delegate execution to sandboxed sub-agents after you approve it.
+The Thesis agent is not a general-purpose chat assistant. It is a research operator that understands your project's graph, log, files, and mounted skills, and uses that structured state to plan and execute research work. When you open the agent chat, you're talking to an agent that can read your full research history, search indexed sources, stage experiments as formal blueprints, and delegate execution to sandboxed sub-agents after you approve it.
 
 ## What the agent can do
 
-<CardGroup cols={2}>
-  <Card title="Hydrate project state" icon="database">
-    Before making strategic decisions, the agent reads your full project state — graph nodes, research log, mounted skills, project files, and active compute leases — so its responses are grounded in what's actually in your project, not just the current chat window.
-  </Card>
-  <Card title="Search and synthesize" icon="magnifying-glass">
-    The agent can query unified search, start Oracle jobs, run Tracer code searches, and launch Deep Research jobs — then turn the results into graph nodes, log entries, or inline summaries.
-  </Card>
-  <Card title="Stage experiments" icon="flask">
-    When the agent proposes an experiment, it creates a staged empirical node with a full 8-section blueprint — hypothesis, falsification criterion, method, expected outcomes, baseline, metrics, data config, and rigor review. The proposal appears as a card in the chat for you to review.
-  </Card>
-  <Card title="Write the research log" icon="pen">
-    The agent writes durable log entries automatically as work progresses — recording decisions, dead ends, pivots, and results without you having to prompt it.
-  </Card>
-  <Card title="Inspect files and artifacts" icon="folder-open">
-    The agent can list directories, read files, write files, and search repositories within your project volume — giving it access to code, datasets, plots, and generated reports.
-  </Card>
-  <Card title="Spawn sub-agents" icon="robot">
-    After you approve a compute proposal, the agent can spawn a sandboxed sub-agent to execute an experiment. The sub-agent receives a structured payload, not chat history, and reports back through the telemetry system.
-  </Card>
-</CardGroup>
+- **Hydrate project state.** Before making strategic decisions, the agent reads your full project state, graph nodes, research log, mounted skills, project files, and active compute leases, so its responses are grounded in what's actually in your project, not just the current chat window.
+- **Search and synthesize.** The agent can query unified search, start Oracle jobs, run Tracer code searches, and launch Deep Research jobs, then turn the results into graph nodes, log entries, or inline summaries.
+- **Stage experiments.** When the agent proposes an experiment, it creates a staged empirical node with a full 8-section blueprint, hypothesis, falsification criterion, method, expected outcomes, baseline, metrics, data config, and rigor review. The proposal appears as a card in the chat for you to review.
+- **Write the research log.** The agent writes durable log entries automatically as work progresses, recording decisions, dead ends, pivots, and results without you having to prompt it.
+- **Inspect files and artifacts.** The agent can list directories, read files, write files, and search repositories within your project volume, giving it access to code, datasets, plots, and generated reports.
+- **Spawn sub-agents.** After you approve a compute proposal, the agent can spawn a sandboxed sub-agent to execute an experiment. The sub-agent receives a structured payload, not chat history, and reports back through the telemetry system.
+
 
 ## Important boundaries
 
 The agent is intentionally constrained in specific ways:
 
 <Warning>
-  **The agent does not run arbitrary code directly.** Compute execution happens through approved sub-agents in sandboxed environments — not in the main agent loop. The main agent designs, proposes, and delegates; it does not execute.
+  **The agent does not run arbitrary code directly.** Compute execution happens through approved sub-agents in sandboxed environments, not in the main agent loop. The main agent designs, proposes, and delegates; it does not execute.
 </Warning>
 
 <Warning>
@@ -41,7 +28,7 @@ The agent is intentionally constrained in specific ways:
 </Warning>
 
 <Note>
-  Spending compute — starting a GPU lease or spawning a sub-agent — always requires explicit approval from you. The agent cannot acquire compute on its own, regardless of what it's been instructed to do.
+  Spending compute, starting a GPU lease or spawning a sub-agent, always requires explicit approval from you. The agent cannot acquire compute on its own, regardless of what it's been instructed to do.
 </Note>
 
 ## The ReAct loop from your perspective
@@ -53,10 +40,10 @@ When you send a message in the agent chat, the following happens:
     The chat UI sends your message to the Thesis backend, which starts a server-sent event (SSE) stream back to your browser.
   </Step>
   <Step title="The agent thinks and calls tools">
-    The agent reasons about your message, then calls tools — searching the knowledge base, reading graph nodes, querying the log, or staging a new node. You see text tokens streaming in real time, and tool calls appear as labeled events in the chat.
+    The agent reasons about your message, then calls tools, searching the knowledge base, reading graph nodes, querying the log, or staging a new node. You see text tokens streaming in real time, and tool calls appear as labeled events in the chat.
   </Step>
   <Step title="Tool results update project state">
-    Each tool call returns a result. If the tool mutates state — creating a node, writing a log entry, starting an Oracle job — the change is durable immediately. The Thesis graph and log are updated in the backend, not held in memory.
+    Each tool call returns a result. If the tool mutates state, creating a node, writing a log entry, starting an Oracle job, the change is durable immediately. The Thesis graph and log are updated in the backend, not held in memory.
   </Step>
   <Step title="The agent continues until done">
     The agent may run multiple rounds of thinking and tool calls before finishing. Each round re-evaluates whether the task is complete. The loop ends when the agent decides it has finished, or after a maximum of 10 rounds.
@@ -68,23 +55,23 @@ When you send a message in the agent chat, the following happens:
 
 ## Skills: built-in research workflows
 
-The agent ships with six built-in research skill workflows. You don't need to activate these manually — the agent selects the right skill based on what you're trying to accomplish:
+The agent ships with six built-in research skill workflows. You don't need to activate these manually, the agent selects the right skill based on what you're trying to accomplish:
 
 <AccordionGroup>
-  <Accordion title="thesis-lookahead — plan next directions">
+  <Accordion title="thesis-lookahead, plan next directions">
     The agent maps out the next N research directions from your current frontier without executing any of them. It stages experiment nodes in `drafted` status so you can review the plan before anything runs. Use this when you want to see what's possible next before committing resources.
   </Accordion>
-  <Accordion title="thesis-to-graph — turn source material into nodes">
+  <Accordion title="thesis-to-graph, turn source material into nodes">
     The agent reads a paper, repository, or documentation site you've indexed and extracts claims, methods, assumptions, and follow-up experiments into graph nodes with proper edges and artifact links. Use this when onboarding into a new area or converting prior notes into structured research state.
   </Accordion>
-  <Accordion title="thesis-reproduce — validate claims under budget">
-    The agent graphifies a published claim, designs a reproduction experiment, and — after your approval — runs it under a specified budget. The result is logged against the original claim node.
+  <Accordion title="thesis-reproduce, validate claims under budget">
+    The agent graphifies a published claim, designs a reproduction experiment, and, after your approval, runs it under a specified budget. The result is logged against the original claim node.
   </Accordion>
-  <Accordion title="thesis-survey — synthesize knowledge">
+  <Accordion title="thesis-survey, synthesize knowledge">
     The agent searches indexed sources and your graph, runs Oracle jobs as needed, and synthesizes results into insight nodes with citations. Use this for literature reviews and to build a structured knowledge base from multiple sources.
   </Accordion>
-  <Accordion title="thesis-auto — advance the frontier autonomously">
-    The agent picks up from your current research frontier, plans the next step, stages it, requests approval if compute is needed, and advances — continuing until the budget is spent or it reaches a stopping point. Use this when you want to delegate a stretch of autonomous work.
+  <Accordion title="thesis-auto, advance the frontier autonomously">
+    The agent picks up from your current research frontier, plans the next step, stages it, requests approval if compute is needed, and advances, continuing until the budget is spent or it reaches a stopping point. Use this when you want to delegate a stretch of autonomous work.
   </Accordion>
 </AccordionGroup>
 

@@ -1,22 +1,17 @@
 ---
 title: "Knowledge layer: unified search across all sources"
-description: "Search your committed graph and external sources — papers, repos, docs, and datasets — through a single query, with deduplication and merged scoring."
+description: "Search your committed graph and external sources, papers, repos, docs, and datasets, through a single query, with deduplication and merged scoring."
 ---
 
-When you search in Thesis, you're not searching just one place. The knowledge layer fans out across two branches simultaneously: your own committed research graph and a curated set of external sources — academic papers, GitHub repositories, documentation sites, and datasets. Results from both branches are deduplicated, scored, and merged before they reach you, so you get a single ranked list instead of two separate piles to reconcile.
+When you search in Thesis, you're not searching just one place. The knowledge layer fans out across two branches simultaneously: your own committed research graph and a curated set of external sources, academic papers, GitHub repositories, documentation sites, and datasets. Results from both branches are deduplicated, scored, and merged before they reach you, so you get a single ranked list instead of two separate piles to reconcile.
 
 ## Two branches, one query
 
-<CardGroup cols={2}>
-  <Card title="Graph as knowledge base" icon="diagram-project">
-    Your committed research nodes are embedded and indexed automatically. When you search, Thesis retrieves chunks from your own prior work — hypotheses you've stated, insights you've recorded, summaries you've written — ranked by semantic similarity to your query.
-  </Card>
-  <Card title="External sources via Nia" icon="globe">
-    Papers indexed from arXiv, repositories from GitHub, documentation sites, and datasets from HuggingFace are all searchable through the Nia proxy. You can index a source explicitly, or search across sources already available in the global Nia index.
-  </Card>
-</CardGroup>
+- **Graph as knowledge base.** Your committed research nodes are embedded and indexed automatically. When you search, Thesis retrieves chunks from your own prior work, hypotheses you've stated, insights you've recorded, summaries you've written, ranked by semantic similarity to your query.
+- **External sources via Nia.** Papers indexed from arXiv, repositories from GitHub, documentation sites, and datasets from HuggingFace are all searchable through the Nia proxy. You can index a source explicitly, or search across sources already available in the global Nia index.
 
-The router fans out to both branches in parallel, applies per-user access control to graph results, deduplicates results by content hash, re-ranks by cosine similarity and relevance score, and returns a consistent result shape — regardless of whether a hit came from your graph or an external source.
+
+The router fans out to both branches in parallel, applies per-user access control to graph results, deduplicates results by content hash, re-ranks by cosine similarity and relevance score, and returns a consistent result shape, regardless of whether a hit came from your graph or an external source.
 
 <Note>
   Access control applies to graph results: you only see chunks from nodes you own or that have been shared with you. External source results follow Nia's tenancy model, scoped to your organization's API key.
@@ -51,14 +46,14 @@ Beyond basic search, Thesis offers three research tools for deeper synthesis:
   <Accordion title="Oracle jobs">
     Oracle jobs answer a research question by querying indexed sources and synthesizing a response with citations. You choose the depth:
 
-    - **Quick** — fast synthesis from top search hits, suitable for a first-pass answer.
-    - **Deep** — broader retrieval with more source coverage, takes longer.
-    - **Oracle** — maximum depth synthesis, designed for comprehensive literature questions.
+    - **Quick**, fast synthesis from top search hits, suitable for a first-pass answer.
+    - **Deep**, broader retrieval with more source coverage, takes longer.
+    - **Oracle**, maximum depth synthesis, designed for comprehensive literature questions.
 
     Start a job with `thesis_oracle_start_job`. Results land as a structured response with citations and can be attached to a node as an artifact.
   </Accordion>
   <Accordion title="Tracer">
-    Tracer runs a GitHub code search across one or more repositories and returns a structured brief: which files, functions, or patterns match your query, and how they relate. Use Tracer when your question is about implementation — how a method is used in practice, where a concept appears in a codebase, or what dependencies a library relies on. Start with `thesis_tracer_search`.
+    Tracer runs a GitHub code search across one or more repositories and returns a structured brief: which files, functions, or patterns match your query, and how they relate. Use Tracer when your question is about implementation, how a method is used in practice, where a concept appears in a codebase, or what dependencies a library relies on. Start with `thesis_tracer_search`.
   </Accordion>
   <Accordion title="Deep Research">
     Deep Research is a separate pipeline backed by Exa. It queries Exa for relevant papers and web sources, fetches their full contents, and asks the Thesis agent to synthesize a cited markdown report. The report is saved as a file in your project volume and can be surfaced in the chat or attached to a node. Use Deep Research when you need broad web and paper discovery on a topic rather than point queries against indexed sources.
@@ -71,9 +66,9 @@ Beyond basic search, Thesis offers three research tools for deeper synthesis:
 
 ## How the graph becomes searchable
 
-Thesis indexes your committed nodes automatically in the background. When you commit a node, the indexer picks it up within seconds, embeds the content using a 1536-dimension embedding model, and stores the chunks in the vector index. From that point forward, your own findings are retrievable through unified search — the agent can find relevant prior work in your graph just by searching, without needing to read every node manually.
+Thesis indexes your committed nodes automatically in the background. When you commit a node, the indexer picks it up within seconds, embeds the content using a 1536-dimension embedding model, and stores the chunks in the vector index. From that point forward, your own findings are retrievable through unified search, the agent can find relevant prior work in your graph just by searching, without needing to read every node manually.
 
-Staged nodes are not indexed. Only committed nodes enter the knowledge base. This keeps the retrievable layer stable and authoritative — it reflects what you've confirmed, not what's still in progress.
+Staged nodes are not indexed. Only committed nodes enter the knowledge base. This keeps the retrievable layer stable and authoritative, it reflects what you've confirmed, not what's still in progress.
 
 ## What you can do after finding a source
 
@@ -81,18 +76,18 @@ Once you've found relevant sources through search, you have several options:
 
 <Steps>
   <Step title="Read a source file">
-    Use `thesis_read_source` to read a specific file or section from an indexed source — useful for reading the method section of a paper or a specific module in a repository.
+    Use `thesis_read_source` to read a specific file or section from an indexed source, useful for reading the method section of a paper or a specific module in a repository.
   </Step>
   <Step title="Grep for patterns">
     Use `thesis_grep_source` to run a regex search within a source. Useful for finding specific function names, argument patterns, or terminology in large codebases or documents.
   </Step>
   <Step title="Browse the source tree">
-    Use `thesis_explore_source` to navigate the file structure of an indexed source — helpful when you want to understand how a repository or documentation site is organized before reading specific files.
+    Use `thesis_explore_source` to navigate the file structure of an indexed source, helpful when you want to understand how a repository or documentation site is organized before reading specific files.
   </Step>
   <Step title="Ask a targeted question">
     Use `thesis_document_query` to ask a natural-language question against a single indexed source. This is document-scoped Q&A: the answer is grounded in that specific source, not the broader index.
   </Step>
   <Step title="Attach findings to nodes">
-    Ask the agent to turn search results or Oracle reports into graph nodes — extracting claims, methods, and assumptions into structured insight or empirical nodes that become part of your durable research record.
+    Ask the agent to turn search results or Oracle reports into graph nodes, extracting claims, methods, and assumptions into structured insight or empirical nodes that become part of your durable research record.
   </Step>
 </Steps>
