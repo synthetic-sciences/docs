@@ -3,70 +3,38 @@
   "theme": "mint",
   "name": "synsci",
   "colors": {
-    "primary": "#525252",
-    "light": "#a3a3a3",
-    "dark": "#171717"
+    "primary": "#0891b2",
+    "light": "#67e8f9",
+    "dark": "#155e75"
   },
   "logo": {
     "light": "/logo/synsc-logo.png",
     "dark": "/logo/synsc-logo.png"
   },
   "favicon": "/logo/synsc-logo.png",
+  "appearance": {
+    "default": "light"
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Dashboard",
+        "href": "https://cli.syntheticsciences.ai"
+      },
+      {
+        "label": "Thesis",
+        "href": "https://thesis.syntheticsciences.ai"
+      }
+    ]
+  },
+  "footer": {
+    "socials": {
+      "github": "https://github.com/synthetic-sciences",
+      "x": "https://x.com/synsciresearch"
+    }
+  },
   "navigation": {
     "tabs": [
-      {
-        "tab": "Synsci CLI",
-        "groups": [
-          {
-            "group": "Get Started",
-            "pages": [
-              "cli/introduction",
-              "cli/installation",
-              "cli/quickstart",
-              "cli/web"
-            ]
-          },
-          {
-            "group": "Agents",
-            "pages": [
-              "cli/agents"
-            ]
-          },
-          {
-            "group": "Research",
-            "pages": [
-              "cli/research/research",
-              "cli/research/physics",
-              "cli/research/chemistry",
-              "cli/research/biology",
-              "cli/research/flywheel"
-            ]
-          },
-          {
-            "group": "Operations",
-            "pages": [
-              "cli/credentials",
-              "cli/credits",
-              "cli/dashboard",
-              "cli/desktop"
-            ]
-          },
-          {
-            "group": "Integrations",
-            "pages": [
-              "cli/mcp"
-            ]
-          },
-          {
-            "group": "Reference",
-            "pages": [
-              "cli/commands",
-              "cli/security",
-              "cli/comparison"
-            ]
-          }
-        ]
-      },
       {
         "tab": "Thesis",
         "groups": [
@@ -126,6 +94,59 @@
               "mcp/tools-knowledge",
               "mcp/tools-compute",
               "mcp/tools-export"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Synsci CLI",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "cli/introduction",
+              "cli/installation",
+              "cli/quickstart",
+              "cli/web"
+            ]
+          },
+          {
+            "group": "Agents",
+            "pages": [
+              "cli/agents"
+            ]
+          },
+          {
+            "group": "Research modes",
+            "pages": [
+              "cli/research/research",
+              "cli/research/physics",
+              "cli/research/chemistry",
+              "cli/research/biology",
+              "cli/research/flywheel"
+            ]
+          },
+          {
+            "group": "Operations",
+            "pages": [
+              "cli/credentials",
+              "cli/credits",
+              "cli/dashboard",
+              "cli/desktop"
+            ]
+          },
+          {
+            "group": "Integrations",
+            "pages": [
+              "cli/mcp"
+            ]
+          },
+          {
+            "group": "Reference",
+            "pages": [
+              "cli/commands",
+              "cli/security",
+              "cli/comparison"
             ]
           }
         ]
