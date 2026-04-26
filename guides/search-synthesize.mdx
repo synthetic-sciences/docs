@@ -1,0 +1,137 @@
+---
+title: "Search and synthesize knowledge across your research"
+description: "Use unified search, Oracle jobs, Tracer, and Deep Research to find evidence across your graph and external sources, then attach reports to nodes as artifacts."
+---
+
+Thesis gives you four ways to retrieve and synthesize knowledge: unified search across your graph and indexed sources, Oracle research jobs for longer synthesis tasks, Tracer for GitHub-oriented code search, and Deep Research for Exa-backed paper and web discovery. All four are accessible from the Knowledge panel in the web app and as MCP tools. This guide shows you how to use each one.
+
+## The Knowledge panel
+
+Open the Knowledge panel from any node view by clicking the search icon in the node sidebar. It has four tabs:
+
+| Tab | What it does |
+|-----|-------------|
+| **Ask** | Unified search — queries your graph and all indexed sources together |
+| **Oracle** | Long-running research synthesis jobs with three depth modes |
+| **Tracer** | GitHub code search across indexed repositories |
+| **Document** | Q&A against a single indexed source |
+
+<Steps>
+  <Step title="Run a unified search">
+    Unified search fans out across two knowledge branches simultaneously:
+
+    - **Graph-as-KB** — committed Thesis nodes and their content, embedded into searchable chunks.
+    - **Nia proxy** — external papers, repositories, docs, and datasets you've indexed.
+
+    Results are deduplicated, scores merged, and returned in a consistent shape regardless of source.
+
+    Call `thesis_search` directly:
+
+    ```json
+    {
+      "name": "thesis_search",
+      "arguments": {
+        "query": "learning rate warmup effect on GRPO reward stability",
+        "node_id": "<optional-node-id-to-scope-search>"
+      }
+    }
+    ```
+
+    The result includes ranked hits with source IDs, titles, excerpt snippets, and relevance scores. Each hit links back to either a graph node or an indexed source so you can read the full content.
+
+    In the Knowledge panel, type your query in the **Ask** tab and press Enter. Results appear inline with source attribution.
+  </Step>
+
+  <Step title="Start an Oracle job for deeper synthesis">
+    Oracle jobs run a research pipeline against your knowledge base and return a synthesized report. Choose the depth that matches your task:
+
+    | Mode | Best for |
+    |------|----------|
+    | `quick` | Fast summaries of a narrow question |
+    | `deep` | Multi-source synthesis with more iterations |
+    | `oracle` | Maximum depth — slower, most thorough |
+
+    Start a job:
+
+    ```json
+    {
+      "name": "thesis_oracle_start_job",
+      "arguments": {
+        "query": "Compare cosine and linear LR schedules for GRPO training across recent papers",
+        "mode": "deep",
+        "node_id": "<node-id-to-attach-results>"
+      }
+    }
+    ```
+
+    Check the job status with `thesis_oracle_job_status`, or stream live updates with `thesis_oracle_job_stream`. In the **Oracle** tab, you can see job history and results without leaving the node view.
+
+    <Tip>
+      Generated Oracle reports land as files and assets on the associated node. You can attach them to other nodes or include them as evidence when writing up a synthesis insight node.
+    </Tip>
+  </Step>
+
+  <Step title="Search code with Tracer">
+    Tracer runs GitHub code search across your indexed repositories and returns a structured brief — useful when you want to find how a concept is implemented across codebases.
+
+    ```json
+    {
+      "name": "thesis_tracer_search",
+      "arguments": {
+        "query": "cosine annealing scheduler GRPO",
+        "repos_csv": "huggingface/trl,openai/spinningup"
+      }
+    }
+    ```
+
+    Retrieve the result when it's ready:
+
+    ```json
+    {
+      "name": "thesis_tracer_status",
+      "arguments": {
+        "job_id": "<tracer-job-id>"
+      }
+    }
+    ```
+
+    In the **Tracer** tab, enter a query and the repos you want to search. The brief surfaces matching file paths, line-level excerpts, and a synthesized summary of how the concept appears across the codebase.
+
+    <Note>
+      Tracer requires a GitHub token connected in **Settings → API Keys**. If Tracer returns no results for a repo you've indexed, verify that the connected GitHub account has access to that repository.
+    </Note>
+  </Step>
+
+  <Step title="Run Deep Research for paper and web discovery">
+    Deep Research combines Exa-powered search with full-text source fetching and Anthropic synthesis. It's a deterministic pipeline — not another ReAct loop — so results are consistent and reproducible.
+
+    Use it when you want to discover external papers and web sources on a topic and receive a synthesized report without indexing sources manually first.
+
+    From the agent chat, ask: *"Run a deep research job on cosine LR schedules in reinforcement learning from human feedback."* The agent calls `deep_research_start` internally, which:
+
+    1. Runs Exa search to discover relevant papers and web sources.
+    2. Fetches full-text content via Exa.
+    3. Synthesizes a report using Anthropic.
+    4. Writes the report to `research_context/deep-research-<slug>.md` in the project filesystem.
+
+    The report lands as a registered asset and appears as an `asset_card` in chat. You can attach it to any node in your graph.
+
+    <Note>
+      Deep Research requires both Exa and Anthropic to be connected in **Settings → API Keys**. If either is missing, the job returns an error before fetching any sources.
+    </Note>
+  </Step>
+
+  <Step title="Attach reports to nodes">
+    Any report generated by Oracle, Tracer, or Deep Research can be attached to a node as an artifact. In the node editor, open the **Artifacts** panel and link the file. This creates a durable connection between the evidence and the claim or experiment it supports — so future searches and sub-agents can trace where a finding came from.
+  </Step>
+</Steps>
+
+## Choosing the right tool
+
+| Tool | Speed | Depth | Best when |
+|------|-------|-------|-----------|
+| `thesis_search` | Fast | Shallow | You know roughly what you're looking for |
+| `thesis_oracle_start_job` (quick) | Medium | Medium | You want a synthesis in under a minute |
+| `thesis_oracle_start_job` (deep / oracle) | Slow | Deep | You want a thorough literature synthesis |
+| `thesis_tracer_search` | Medium | Code-focused | You need to find implementation patterns across repos |
+| Deep Research | Slow | External | You want to discover new papers and web sources |

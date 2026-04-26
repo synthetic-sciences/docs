@@ -1,0 +1,112 @@
+{
+  "projectType": "saas",
+  "projectName": "Thesis",
+  "projectDescription": "Thesis is an agent-first research workspace that gives researchers and AI agents a shared, durable operating system for scientific work — a graph of hypotheses and results, an append-only research log, indexed knowledge sources, artifacts, skills, and approved compute.",
+  "theme": "luma",
+  "primaryColor": "#7c8484",
+  "lightColor": "#0a0a0b",
+  "darkColor": "#d2d2d3",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              "quickstart",
+              "web-app"
+            ]
+          },
+          {
+            "group": "Core Concepts",
+            "pages": [
+              "concepts/research-graph",
+              "concepts/research-log",
+              "concepts/knowledge-layer",
+              "concepts/agent-harness",
+              "concepts/compute"
+            ]
+          },
+          {
+            "group": "Guides",
+            "pages": [
+              "guides/organize-research",
+              "guides/design-experiment",
+              "guides/run-sub-agents",
+              "guides/search-synthesize",
+              "guides/export"
+            ]
+          },
+          {
+            "group": "Integrations",
+            "pages": [
+              "integrations/overview",
+              "integrations/compute-providers"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "MCP & CLI",
+        "groups": [
+          {
+            "group": "Setup",
+            "pages": [
+              "mcp/quickstart",
+              "mcp/supported-hosts",
+              "mcp/authentication"
+            ]
+          },
+          {
+            "group": "Skills",
+            "pages": [
+              "mcp/skills-overview",
+              "mcp/skill-reference"
+            ]
+          },
+          {
+            "group": "MCP Tools",
+            "pages": [
+              "mcp/tools-overview",
+              "mcp/tools-nodes",
+              "mcp/tools-knowledge",
+              "mcp/tools-compute",
+              "mcp/tools-export"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "Research graph — a DAG of staged and committed nodes for hypotheses, experiments, and insights",
+    "Append-only research log for decisions, pivots, approvals, and telemetry",
+    "Unified knowledge search across the Thesis graph and external sources (papers, repos, docs, datasets)",
+    "Built-in agent harness with 27 project-aware tools and a ReAct loop",
+    "Human-approved compute — sub-agent runs require explicit approval before spending budget",
+    "86 MCP tools accessible from Claude Code, Cursor, Codex, OpenCode, and other MCP hosts",
+    "CLI npm package (@synsci/thesis) for one-command MCP setup and skill installation",
+    "Six skill families covering autonomous research, graph ingestion, survey, reproduce, and lookahead",
+    "Artifact and filesystem layer for evidence, files, reports, and export packages",
+    "Subgraph export to JSON, markdown, and PDF for handoff and reproducibility"
+  ],
+  "publicApiSurface": [
+    "POST /mcp-server — JSON-RPC 2.0 endpoint for all 86 MCP tools",
+    "GET /api/agent/chat — SSE stream for agent chat sessions",
+    "thesis_stage_node_create — create a new staged research node",
+    "thesis_commit_node — commit a node to durable history",
+    "thesis_branch_node — create a child node from a parent",
+    "thesis_merge_nodes — merge multiple nodes",
+    "thesis_search — unified search across graph and external sources",
+    "thesis_index_paper / thesis_index_repo / thesis_index_docs / thesis_index_dataset — index external sources",
+    "thesis_oracle_start_job — queue a research synthesis job",
+    "thesis_compute_acquire / thesis_compute_release — manage GPU compute leases",
+    "thesis_request_compute_grant_approval — request human approval for compute spending",
+    "thesis_export_subgraph — export a subgraph as JSON",
+    "thesis_export_summary / thesis_export_summary_pdf — export markdown or PDF summaries",
+    "npx @synsci/thesis setup — CLI command to install MCP config and skills",
+    "npx @synsci/thesis uninstall — CLI command to remove MCP config"
+  ]
+}

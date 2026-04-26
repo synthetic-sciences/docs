@@ -1,0 +1,91 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "luma",
+  "name": "Thesis",
+  "colors": {
+    "primary": "#7c8484",
+    "light": "#0a0a0b",
+    "dark": "#d2d2d3"
+  },
+  "favicon": "https://media.brand.dev/a085c648-aded-4435-b71b-fccf04be330c.svg",
+  "navbar": {
+    "primary": {
+      "type": "github",
+      "href": "https://github.com/synthetic-sciences/thesis"
+    }
+  },
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              "quickstart",
+              "web-app"
+            ]
+          },
+          {
+            "group": "Core Concepts",
+            "pages": [
+              "concepts/research-graph",
+              "concepts/research-log",
+              "concepts/knowledge-layer",
+              "concepts/agent-harness",
+              "concepts/compute"
+            ]
+          },
+          {
+            "group": "Guides",
+            "pages": [
+              "guides/organize-research",
+              "guides/design-experiment",
+              "guides/run-sub-agents",
+              "guides/search-synthesize",
+              "guides/export"
+            ]
+          },
+          {
+            "group": "Integrations",
+            "pages": [
+              "integrations/overview",
+              "integrations/compute-providers"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "MCP & CLI",
+        "groups": [
+          {
+            "group": "Setup",
+            "pages": [
+              "mcp/quickstart",
+              "mcp/supported-hosts",
+              "mcp/authentication"
+            ]
+          },
+          {
+            "group": "Skills",
+            "pages": [
+              "mcp/skills-overview",
+              "mcp/skill-reference"
+            ]
+          },
+          {
+            "group": "MCP Tools",
+            "pages": [
+              "mcp/tools-overview",
+              "mcp/tools-nodes",
+              "mcp/tools-knowledge",
+              "mcp/tools-compute",
+              "mcp/tools-export"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

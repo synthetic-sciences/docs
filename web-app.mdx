@@ -1,0 +1,161 @@
+---
+title: "Navigating the Thesis web app: UI areas and shortcuts"
+description: "A practical tour of every major area in the Thesis web app: the dashboard, graph canvas, node editor, agent panel, sources, and settings."
+sidebarTitle: "Web app"
+---
+
+The Thesis web app is the primary interface for building and navigating your research graph, chatting with the agent, managing knowledge sources, and controlling compute. This page walks through each major area so you know what to expect and where to find things.
+
+<Tabs>
+  <Tab title="Dashboard">
+    The Dashboard (`/dashboard`) is your research home. It shows all the graphs you own or have access to, and gives you two main ways to navigate your work.
+
+    **Graph list**
+
+    Each entry in the graph list represents a root-level research graph. You can see the graph title, a summary, and quick stats (node count, last activity). Click any graph to open it on the canvas.
+
+    **Spotlight search**
+
+    Press **Cmd+K** (or **Ctrl+K** on Windows/Linux) from the Dashboard to open the spotlight search. It searches across your graph titles, node content, and recent activity so you can jump directly to a node or graph without manually navigating.
+
+    **New graph**
+
+    Use the **New graph** button or the floating action button to create a root node for a new research topic. You name the root node, and the canvas opens with it staged and ready to expand.
+
+    <Tip>
+      The Explore page (`/explore`) is a public-facing view of shared and public graphs. Use it to discover research published by other Thesis users.
+    </Tip>
+  </Tab>
+
+  <Tab title="Graph canvas">
+    The graph canvas is the visual heart of Thesis. It renders your research as an interactive directed acyclic graph (DAG) using React Flow.
+
+    **Nodes**
+
+    Each node card on the canvas represents a research unit: a hypothesis, experiment, insight, source summary, synthesis, or follow-up direction. Node cards show the title, type badge, and staged/committed status at a glance.
+
+    - **Staged nodes** are editable and shown with a distinct visual treatment. They represent work in progress.
+    - **Committed nodes** are frozen and form your durable research history. New branches start from committed nodes.
+
+    **Edges**
+
+    Edges encode parent/child relationships. A single hypothesis can branch into several experiments; several source summaries can merge into one insight. The canvas makes these relationships visible and navigable.
+
+    **Navigation**
+
+    Pan by clicking and dragging the canvas background. Zoom with the scroll wheel or pinch gesture. Click a node card to open it in the node editor. Use the minimap (bottom-right) to orient yourself in large graphs.
+
+    **Research modal shortcut**
+
+    Press **Cmd+Shift+K** (or **Ctrl+Shift+K**) from anywhere in the app to open the Research modal without leaving the canvas. The modal gives you direct access to Ask, Oracle, Tracer, and Document search.
+  </Tab>
+
+  <Tab title="Node editor">
+    Clicking a node opens the node editor at `/nodes/:nodeId`. This is where you read and write the full content of a single research unit.
+
+    **Content fields**
+
+    The editor includes the node title, type selector (hypothesis, experiment, insight, synthesis, and more), summary, and a main content area. All fields are editable while the node is staged.
+
+    **Commit checklist**
+
+    When you are ready to freeze a node as durable history, the commit checklist walks you through what will be locked. Once committed, a node's content cannot be silently edited — new work branches from it instead.
+
+    **Artifacts**
+
+    Files, generated reports, and evidence attached to the node appear in the artifacts section. You can upload files directly or surface artifacts produced by sub-agent runs.
+
+    **Node sidebar**
+
+    The sidebar shows the node's position in the graph (parent nodes, child nodes), its research log entries, and any tags or sharing settings. Use it to navigate the surrounding graph without returning to the canvas.
+  </Tab>
+
+  <Tab title="Agent panel">
+    The Agent page (`/agent`) is where you interact with the Thesis research agent. Unlike a generic chatbot, the agent hydrates from your actual project state — graph nodes, research log entries, mounted skills, filesystem stats, and assets — before responding.
+
+    The panel has three tabs:
+
+    **Canvas tab**
+
+    Shows the graph canvas alongside the chat interface, so you can see graph state and agent responses side by side. The agent can reference nodes directly in its responses, and you can click through to any mentioned node.
+
+    **Agents tab**
+
+    Displays running and recent sub-agent instances along with their telemetry: milestones reached, files generated, compute budget consumed, and final status. Use this tab to monitor approved compute jobs without leaving the agent panel.
+
+    **Files tab**
+
+    Shows the project filesystem — artifacts, research reports, and sub-agent working directories. Files generated during agent runs land here and can be opened, previewed, or attached to nodes.
+
+    **Proposal cards**
+
+    When the agent proposes a compute-spending action (such as spawning an experiment sub-agent), a proposal card appears in the chat. Review the 8-section blueprint and choose **Approve** or **Reject**. Approvals are logged; rejections are recorded as dead ends.
+
+    <Warning>
+      Approving a proposal authorizes the agent to acquire a compute lease and start a sandboxed sub-agent. Sub-agents receive a compiled task payload — not your chat history — and operate within the approved budget and timeout.
+    </Warning>
+  </Tab>
+
+  <Tab title="Sources">
+    The Sources page (`/sources`) is your knowledge index. It lists every external source you have added to Thesis for indexing and retrieval.
+
+    **Adding a source**
+
+    Click **Add source** and paste the URL of a paper, repository, documentation site, or dataset. Thesis sends the URL to the knowledge layer for indexing. Once indexed, the source is searchable by the agent, Oracle jobs, Tracer, and the unified search interface.
+
+    **Source detail**
+
+    Click any source to open its detail page (`/sources/:sourceId`). You can read the indexed content, grep for specific terms within the source, and see which nodes have referenced it. The grep panel is useful for confirming that a specific claim or method appears in a particular source before attaching it as evidence.
+
+    **Unified search**
+
+    The Search page (`/search`) fans out across both your Thesis graph and all indexed external sources. It deduplicates results, merges relevance scores, and returns a consistent result shape. Use it to find prior evidence before designing a new experiment.
+
+    <Tip>
+      The Research modal (Cmd+Shift+K) provides the same unified search capability from anywhere in the app, plus Oracle synthesis jobs and Tracer code search — without navigating away from your current view.
+    </Tip>
+  </Tab>
+
+  <Tab title="Settings">
+    The Settings page (`/settings`) organizes account and workspace configuration into three panels.
+
+    **API keys**
+
+    Add and manage your API keys for external services that power Thesis features:
+
+    - **Anthropic** — powers the web agent ReAct loop and deep-research synthesis.
+    - **OpenAI** — provides graph embeddings for knowledge retrieval.
+    - **Nia** — enables external source indexing, search, and exploration.
+    - **Exa** — backs Deep Research jobs with paper and web discovery.
+    - **GitHub** — enables Tracer code search and repository file access.
+
+    Keys you add here are scoped to your account and are not shared with other users.
+
+    **Compute leases**
+
+    The compute leases panel shows active and past leases for approved sub-agent runs. Each lease records the provider (Modal or Lambda Cloud), SKU, budget, timeout, and current status. You can review what compute has been acquired and cancel active leases if needed.
+
+    **Preferences**
+
+    Adjust display preferences, theme (light or dark), and other workspace settings. Changes take effect immediately and are persisted to your account.
+
+    **Billing**
+
+    The Billing page (`/billing`) shows your current plan, credit balance, and usage history. Manage your subscription and purchase credits from this page.
+
+    **Skills**
+
+    The Skills page (`/skills`) lists the Thesis skills available to your agent. Skills are reusable instruction sets for specific research workflows — such as turning source material into graph nodes or planning the next frontier. You can view installed skills and their descriptions here; install or update them from the CLI.
+  </Tab>
+</Tabs>
+
+## Keyboard shortcuts
+
+| Shortcut | Action |
+|---|---|
+| **Cmd+K** | Open spotlight search (Dashboard) |
+| **Cmd+Shift+K** | Open Research modal (any page) |
+
+<Note>
+  On Windows and Linux, substitute **Ctrl** for **Cmd** in all keyboard shortcuts.
+</Note>

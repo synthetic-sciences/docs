@@ -1,0 +1,174 @@
+---
+title: "Node and graph tools: create, branch, commit, and share"
+description: "Reference for all 29 node-related MCP tools covering node lifecycle, graph topology, sharing modes, tag assignments, and artifact uploads."
+---
+
+Thesis models research as a directed acyclic graph of nodes. Each node is a research unit — a hypothesis, empirical experiment, insight, or source summary — that moves through a staged-to-committed lifecycle. The 15 core node tools let you create and update staged nodes, commit them into durable history, branch and merge across the graph, and traverse the topology. The Sharing, Tags, and Artifacts tool groups extend nodes with access control, labeling, and file attachments.
+
+## Node tools (15)
+
+| Tool | Mutation? | Purpose |
+|---|---|---|
+| `thesis_stage_node_create` | Yes | Create a new staged node |
+| `thesis_stage_node_update` | Yes | Update staged node fields with optimistic concurrency control |
+| `thesis_commit_node` | Yes | Commit a node, making it immutable |
+| `thesis_branch_node` | Yes | Create a child node from an existing parent |
+| `thesis_merge_nodes` | Yes | Merge multiple source nodes into a single target |
+| `thesis_add_parent` | Yes | Add a parent edge between two nodes |
+| `thesis_remove_parent` | Yes | Remove a parent edge |
+| `thesis_delete_node` | Yes | Delete a single node |
+| `thesis_bulk_delete_nodes` | Yes | Delete multiple nodes in one call |
+| `thesis_list_nodes` | No | List nodes with filters and pagination |
+| `thesis_get_node` | No | Fetch a single node (core, topology, or full projection) |
+| `thesis_get_node_tree` | No | Retrieve the full ancestor and descendant tree |
+| `thesis_get_node_ancestry` | No | Trace upward from a node to all root ancestors |
+| `thesis_summarize_node_tree` | No | Get tree statistics broken down by kind and lifecycle |
+| `thesis_resolve_node_slug` | No | Resolve a human-readable slug to a `node_id` |
+
+### Node kinds
+
+`thesis_stage_node_create` and `thesis_stage_node_update` accept a `kind` field:
+
+| Kind | Alias | Description |
+|---|---|---|
+| `untyped` | — | Freeform note or placeholder |
+| `empirical` | `experiment` | Structured experiment with an 8-section blueprint |
+| `insight` | — | Synthesized finding or claim |
+
+### Key parameters
+
+<ParamField body="title" type="string" required>
+  Short label for the node. Displayed in graph and list views.
+</ParamField>
+
+<ParamField body="summary" type="string">
+  One-sentence claim, hypothesis, or plan. Shown in node cards.
+</ParamField>
+
+<ParamField body="content" type="string">
+  Extended notes, protocol description, or source synthesis in Markdown.
+</ParamField>
+
+<ParamField body="kind" type="string" default='"untyped"'>
+  Node type: `untyped`, `empirical` (or `experiment`), or `insight`.
+</ParamField>
+
+<ParamField body="parent_ids" type="string[]">
+  UUIDs of parent nodes. Establishes edges in the research graph.
+</ParamField>
+
+<ParamField body="expected_revision" type="number">
+  Required by `thesis_stage_node_update` for optimistic concurrency control. Pass the current revision number; the server rejects stale writes.
+</ParamField>
+
+### Example: create a node, then branch from it
+
+<CodeGroup>
+
+```json Create a root node
+POST /mcp-server
+Content-Type: application/json
+Authorization: Bearer thk_your_api_key
+
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "tools/call",
+  "params": {
+    "name": "thesis_stage_node_create",
+    "arguments": {
+      "title": "Transformer scaling laws survey",
+      "summary": "Survey of empirical scaling law findings across architecture families",
+      "kind": "insight"
+    }
+  }
+}
+```
+
+```json Response
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"node\": {\"node_id\": \"e5f6a7b8-0000-0000-0000-000000000042\", \"revision\": 0, \"kind\": \"insight\", \"lifecycle\": \"staged\", \"parent_ids\": []}}"
+      }
+    ]
+  }
+}
+```
+
+```json Branch from the survey node
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "method": "tools/call",
+  "params": {
+    "name": "thesis_branch_node",
+    "arguments": {
+      "node_id": "e5f6a7b8-0000-0000-0000-000000000042",
+      "expected_revision": 0,
+      "title": "Replication: Chinchilla optimal compute frontier"
+    }
+  }
+}
+```
+
+</CodeGroup>
+
+<Note>
+  Once you call `thesis_commit_node`, the node becomes immutable. Use `thesis_branch_node` to create a child node for further work rather than editing the committed node.
+</Note>
+
+## Sharing tools (3)
+
+Sharing controls who can view or edit a node. You can set sharing on a single node or update many nodes in one batch call.
+
+| Tool | Mutation? | Purpose |
+|---|---|---|
+| `thesis_get_node_sharing` | No | Retrieve current sharing mode and collaborator list |
+| `thesis_set_sharing_for_node` | Yes | Set sharing mode and collaborators for a single node |
+| `thesis_set_sharing_for_nodes` | Yes | Batch-update sharing for multiple nodes |
+
+Sharing modes are `private`, `unlisted`, and `public`.
+
+## Tags tools (4)
+
+Tags are colored labels you create per workspace and assign to any number of nodes. Use them to mark research status, topic area, or priority.
+
+| Tool | Mutation? | Purpose |
+|---|---|---|
+| `thesis_create_node_tag` | Yes | Create a new tag with a name and color |
+| `thesis_update_node_tag` | Yes | Rename or recolor an existing tag |
+| `thesis_delete_node_tag` | Yes | Delete a tag and remove it from all nodes |
+| `thesis_set_node_tag_assignments` | Yes | Set the complete list of tag assignments for a node |
+
+## Artifacts tools (7)
+
+Artifacts are files attached to nodes — data files, notebooks, charts, or any binary asset. The upload flow is a two-step signed-URL process: prepare to get upload URLs, then finalize after the files are uploaded to storage.
+
+| Tool | Mutation? | Purpose |
+|---|---|---|
+| `thesis_list_artifacts` | No | List all artifacts for a node |
+| `thesis_get_artifact` | No | Retrieve artifact metadata |
+| `thesis_get_artifact_preview` | No | Get a truncated content preview for text files |
+| `thesis_prepare_artifact_uploads` | Yes | Request signed upload URLs for one or more files |
+| `thesis_finalize_artifact_uploads` | Yes | Confirm uploads and register artifacts on the node |
+| `thesis_set_artifact_note` | Yes | Add or update a text note on an artifact |
+| `thesis_delete_artifact` | Yes | Permanently delete an artifact |
+
+### Upload flow
+
+<Steps>
+  <Step title="Prepare">
+    Call `thesis_prepare_artifact_uploads` with file names and MIME types. The response includes signed upload URLs valid for a short window.
+  </Step>
+  <Step title="Upload">
+    PUT each file directly to its signed URL using any HTTP client. No Thesis authentication is required for these requests.
+  </Step>
+  <Step title="Finalize">
+    Call `thesis_finalize_artifact_uploads` with the upload batch ID. Thesis registers the artifacts on the node and makes them available through `thesis_list_artifacts`.
+  </Step>
+</Steps>

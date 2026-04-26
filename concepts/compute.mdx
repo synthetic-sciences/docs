@@ -1,0 +1,100 @@
+---
+title: "Compute: approval-gated GPU leases for Thesis sub-agents"
+description: "Thesis requires your approval before spending compute. Approve a proposal to mint an approval token and spawn a sandboxed sub-agent under a defined budget."
+---
+
+Thesis never spends compute without your say-so. When the agent designs an experiment that requires GPU execution, it stages a proposal and waits. You review the blueprint, the hardware SKU, the budget, and the timeout — then decide whether to approve or dismiss. Only after you click **Run** does anything actually execute. This approval gate is not a soft suggestion; it is enforced by the backend through a cryptographic approval token that the system requires before acquiring any lease.
+
+## The approval gate
+
+The approval gate is the core safety mechanism for compute in Thesis:
+
+<Steps>
+  <Step title="Agent proposes an experiment">
+    When the agent determines that an experiment requires compute, it stages an empirical node with a full 8-section blueprint and emits a proposal card in the chat UI. The proposal includes the experiment blueprint, the hardware SKU, the estimated budget, and the timeout.
+  </Step>
+  <Step title="You review the proposal">
+    The proposal card shows you the hypothesis, method, expected outcomes, metrics, and compute configuration. You can read the full blueprint before deciding.
+  </Step>
+  <Step title="You approve or dismiss">
+    Click **Run** to approve, or **Dismiss** to reject. A dismissal is logged as a dead end in the research log — the reasoning is preserved even though the compute doesn't run.
+  </Step>
+  <Step title="Approval token is minted">
+    When you click **Run**, the backend writes a `compute_approval.json` artifact to the experiment node and logs an `approval_event` entry. A short-lived approval token is generated. Without this token, `spawn_experiment_agent` will not proceed.
+  </Step>
+  <Step title="Sub-agent is spawned">
+    The agent calls `spawn_experiment_agent` with the approval token. The backend validates the token, creates a compute grant, acquires a provider lease, mints a runner token, and starts the sandboxed sub-agent.
+  </Step>
+</Steps>
+
+<Warning>
+  The approval token is required by the system — the agent cannot bypass it through prompt instructions or repeated requests. If no valid token exists, no compute is acquired.
+</Warning>
+
+## Compute grants and leases
+
+When compute is approved, Thesis creates two records:
+
+- **Compute grant** — the authorization to spend up to a specified budget on a specific experiment. Grants are tied to the approval session and cannot be reused.
+- **GPU lease** — the actual hardware reservation from the compute provider. The lease tracks the provider, SKU, status, and connection details. Leases are released when the sub-agent finishes or times out.
+
+You can view active leases and their status from the **Agents** tab in the agent UI, or by querying `thesis_compute_status` through the MCP tools.
+
+## Available GPU SKUs
+
+<CardGroup cols={3}>
+  <Card title="gpu-a10g" icon="microchip">
+    NVIDIA A10G. Suitable for most inference and medium-scale training workloads. Good balance of cost and capability for experiments that don't require the largest memory footprint.
+  </Card>
+  <Card title="gpu-a100-40gb" icon="microchip">
+    NVIDIA A100 (40 GB HBM2). High-memory GPU for larger models, fine-tuning runs, and experiments with large batch sizes or long context.
+  </Card>
+  <Card title="gpu-h100" icon="microchip">
+    NVIDIA H100. Highest-performance option, designed for demanding training workloads, large model inference, and time-sensitive experiments.
+  </Card>
+</CardGroup>
+
+Use `thesis_compute_list_options` from the MCP tools to get the current list of available SKUs with pricing details.
+
+## Compute providers
+
+Thesis currently supports two compute providers:
+
+<Tabs>
+  <Tab title="Modal">
+    Modal provides serverless GPU containers. Experiments run in isolated Modal sandboxes with fast cold-start times. Modal is the default provider for most experiments. Connect Modal from **Settings → API Keys** using your Modal token ID and token secret.
+  </Tab>
+  <Tab title="Lambda Cloud">
+    Lambda Cloud provides on-demand GPU instances. Suitable for longer-running experiments where persistent instance state is needed. Connect Lambda Cloud from **Settings → API Keys** using your Lambda Cloud API key.
+  </Tab>
+</Tabs>
+
+<Note>
+  The compute provider and SKU are specified in the proposal card before you approve. If you want a different provider or SKU than what the agent suggested, dismiss the proposal and ask the agent to revise it.
+</Note>
+
+## Campaigns and budgets
+
+If you're running a series of related experiments, you can organize them under a **campaign** and set a campaign-level budget. Campaigns give you a way to:
+
+- track total spend across multiple experiment runs
+- set a hard ceiling on how much a research direction can cost
+- review aggregate metrics for a line of investigation
+
+Create a campaign budget with `thesis_create_campaign_budget`. The agent can check the remaining budget at any point with `thesis_check_budget` and will stop proposing new compute when the campaign budget is exhausted.
+
+<Tip>
+  Set a campaign budget before starting an autonomous research run with `thesis-auto`. This ensures the agent advances the frontier up to a defined cost limit and stops automatically, rather than running until you intervene.
+</Tip>
+
+## Approval sessions
+
+An approval session is the live window during which a compute grant is valid. Sessions have a heartbeat mechanism — the running sub-agent extends the session periodically to signal that it's still active. If the heartbeat stops, the session can be expired and the lease released.
+
+You can view active approval sessions with `thesis_list_approval_sessions` and manually expire a session with `thesis_expire_approval_session` if you need to terminate a run early.
+
+## What happens to results
+
+When a sub-agent finishes, it uploads its results — plots, datasets, reports, logs — through the callback URL using its runner token. These assets are registered to the experiment node and appear in the **Files** tab and as artifact attachments on the node. A `agent_telemetry_milestones` entry in the research log marks the completion event.
+
+From there, you can review the results, commit the experiment node, and branch off new experiments based on what you found.
