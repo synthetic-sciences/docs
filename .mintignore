@@ -2,6 +2,18 @@
 # .git, .github, .claude, .agents, .idea, node_modules,
 # README.md, LICENSE.md, CHANGELOG.md, CONTRIBUTING.md
 
+# Build output
+out/
+export.zip
+.next
+.vercel
+
 # Draft content
 drafts/
 *.draft.mdx
+
+# Local tooling
+scripts/
+package.json
+package-lock.json
+vercel.json
