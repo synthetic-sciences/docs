@@ -1,0 +1,98 @@
+---
+title: "Write"
+description: "The scientific and technical writing mode. Produces LaTeX papers, grant proposals, and literature reviews with verified citations and figures. Default output is LaTeX with BibTeX."
+sidebarTitle: "Write"
+---
+
+The `write` mode turns the agent into a scientific and technical writing assistant. It produces publication-ready documents (research papers, grant proposals, literature reviews, clinical reports) backed by verified citations and rich visual content. The default output is LaTeX with BibTeX, ready to compile.
+
+<iframe
+  className="w-full aspect-video rounded-xl"
+  src="https://www.youtube.com/embed/VkMjfqeCNEI?rel=0&modestbranding=1"
+  title="Write mode walkthrough"
+  frameBorder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  allowFullScreen
+></iframe>
+
+## Activate the mode
+
+```bash
+synsc web --mode write
+```
+
+For a one-shot run:
+
+```bash
+synsc run --mode write "Draft a literature review on retrieval-augmented generation for biomedical QA, last three years"
+```
+
+To set write as the default for your current working directory:
+
+```bash
+synsc mode set write
+```
+
+## Who this is for
+
+- Researchers drafting papers, grants, and reports who want verified citations
+- Postdocs and grad students writing literature reviews and survey papers
+- PIs preparing NSF, NIH, ERC, or DOE grant proposals
+- Clinical and translational scientists producing clinical reports
+- Anyone who wants to ship a LaTeX document without hunting for references manually
+
+## What you get
+
+- Real, verified citations only. No placeholders, no fabricated references. Every citation is found and verified before it ships into your document.
+- LaTeX with BibTeX as the default. Compiles with the standard `pdflatex → bibtex → pdflatex × 2` pipeline.
+- Figures and schematics rendered as TikZ or generated images and embedded inline.
+- Multi-pass workflow that drafts a section, runs literature lookup against it, fixes citations, and iterates until every claim has a real source behind it.
+- Venue templates for ICLR, NeurIPS, Nature, Science, IEEE, ACM, and others when you tell it the venue.
+
+## Document types covered
+
+| Document type | What you'll get |
+|---|---|
+| ML / AI paper | Full venue template, ablations table, appendix scaffolding |
+| Literature review | PRISMA-style search, structured synthesis, citation graph |
+| Grant proposal | Specific aims, background, preliminary data, broader impacts |
+| Clinical report | Methods, results, discussion with regulatory-aware framing |
+| Conference poster | LaTeX poster template, figure layout, abstract |
+| Presentation | Beamer or scientific slides with consistent visual identity |
+
+## Workflows
+
+### Literature review draft
+
+> Draft a literature review on retrieval-augmented generation for biomedical question answering covering the last three years. Use PRISMA, find at least 30 papers, and produce a synthesis section organized by methodology family.
+
+The agent searches OpenAlex, Semantic Scholar, arXiv, and PubMed, screens by relevance and quality, organizes the corpus into methodology clusters, and drafts the review with verified citations and a PRISMA flow diagram.
+
+### Grant proposal
+
+> Help me draft an NSF proposal on combining causal inference and reinforcement learning for healthcare decision support. I need specific aims, background, preliminary data, and broader impacts.
+
+The agent scaffolds each section using NSF formatting conventions, pulls in citations relevant to your prior work and the target program, and iterates with you on the framing.
+
+### ML paper draft from results
+
+> I have these training logs and ablation results in `results/`. Draft an ICLR-format paper around them with introduction, related work, method, experiments, and discussion.
+
+The agent reads the logs, infers the method from the training config, runs literature lookup for related work, and drafts each section in ICLR style with proper bibtex.
+
+### Citation verification on existing draft
+
+> Check every citation in `paper.tex` against OpenAlex and Semantic Scholar. Flag anything that can't be verified or has wrong metadata.
+
+The agent walks the bibliography, queries each entry against academic indexes, fixes DOI/volume/pages where possible, and lists unverifiable references for you to review.
+
+### Figure generation
+
+> Build a TikZ schematic for the architecture in figure 1 and a stacked bar chart for the ablation table in figure 3.
+
+The agent generates clean TikZ for the architecture and matplotlib + tikzplotlib for the chart, tied to the data in your repo.
+
+## What's next
+
+- **[Research mode](/cli/research/research).** General scientific research with literature lookup and data analysis.
+- **[Agents](/cli/agents).** Build vs plan toggle works the same way in write mode.

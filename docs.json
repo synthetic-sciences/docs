@@ -129,6 +129,7 @@
               "cli/research/physics",
               "cli/research/chemistry",
               "cli/research/biology",
+              "cli/research/write",
               "cli/research/flywheel"
             ]
           },
