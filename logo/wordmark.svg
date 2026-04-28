@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 52" fill="none" role="img" aria-label="Synthetic Sciences">
-  <g transform="translate(26 26)" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-    <ellipse cx="0" cy="0" rx="17" ry="7"/>
-    <ellipse cx="0" cy="0" rx="17" ry="7" transform="rotate(60)"/>
-    <ellipse cx="0" cy="0" rx="17" ry="7" transform="rotate(120)"/>
-    <path d="M -3.4 -4.6 L 5.2 0 L -3.4 4.6 Z" fill="#ffffff" stroke="none"/>
-  </g>
-  <text x="62" y="34" font-family="'Space Grotesk', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="24" font-weight="600" fill="#ffffff" letter-spacing="-0.01em">Synthetic Sciences</text>
-</svg>
