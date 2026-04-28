@@ -12,7 +12,7 @@
     "light": "/logo/wordmark.png",
     "dark": "/logo/wordmark.png"
   },
-  "favicon": "/logo/synsc-logo-v1.png",
+  "favicon": "/logo/synsc-mark.png",
   "appearance": {
     "default": "dark",
     "strict": true
