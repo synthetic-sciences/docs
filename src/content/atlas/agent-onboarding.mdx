@@ -1,0 +1,47 @@
+---
+title: "Agent onboarding"
+description: "A single prompt for setting up Atlas inside a coding agent."
+icon: "bot"
+---
+
+Use this prompt when you want a coding agent to install and verify Atlas for you. The agent should not install a separate skills package; Atlas skills ship inside the CLI package. Agents should use Atlas CLI/direct REST, not a public Atlas MCP server.
+
+```text
+You are an agent onboarding me to Atlas by Synthetic Sciences. Please install the Atlas CLI with `npm i -g @synsci/atlas@latest`, then run `atlas login` and ask me to complete the browser approval step when it opens.
+
+After login finishes, run `atlas --version`, `atlas doctor --format=json`, `atlas whoami --format=json`, and `atlas help --format=json`. Confirm the bundled skills are present inside the CLI package: atlas, atlas-auto, atlas-lookahead, atlas-prove, atlas-reproduce, atlas-search, atlas-to-graph, and atlas-tree.
+
+Do not configure separate skill downloads. The skills are bundled inside the Atlas CLI package. Do not print the full API key into shared logs unless I explicitly ask you to reveal it; summarize the key prefix, local config location or environment variable, CLI version, doctor result, authenticated account, and skill count when setup is complete.
+```
+
+## What the agent should do
+
+1. Install `@synsci/atlas@latest`.
+2. Run `atlas login` and wait for you to approve the browser flow.
+3. Run `atlas doctor --format=json`.
+4. Run `atlas whoami --format=json`.
+5. Confirm the bundled skills are present.
+6. Report the setup summary without exposing the full API key.
+
+## Expected verification
+
+The agent should report:
+
+- Atlas CLI version.
+- `atlas doctor --format=json` result.
+- `atlas whoami --format=json` result.
+- Skill count and names.
+- API key prefix only, unless you explicitly request the full secret.
+
+## Bundled skills
+
+The CLI package includes:
+
+- `atlas`
+- `atlas-auto`
+- `atlas-lookahead`
+- `atlas-prove`
+- `atlas-reproduce`
+- `atlas-search`
+- `atlas-to-graph`
+- `atlas-tree`

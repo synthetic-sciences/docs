@@ -1,0 +1,43 @@
+---
+title: "Atlas REST routes"
+description: "Representative `/api/v1` routes."
+icon: "route"
+---
+
+## Auth
+
+| Method | Path |
+| --- | --- |
+| `GET` | `/status` |
+| `POST` | `/auth/cli/browser/start` |
+| `POST` | `/auth/cli/browser/redeem` |
+| `GET` | `/auth/status` |
+| `GET` | `/users/me` |
+| `PATCH` | `/users/me` |
+
+## Graph
+
+| Method | Path |
+| --- | --- |
+| `GET` | `/graph` |
+| `GET` | `/nodes` |
+| `POST` | `/nodes/commit-new` |
+| `POST` | `/nodes/{node_id}/commit` |
+| `GET` | `/nodes/{node_id}/tree` |
+| `GET` | `/nodes/{node_id}/summary` |
+
+## Library and research
+
+| Method | Path |
+| --- | --- |
+| `GET` | `/sources` |
+| `POST` | `/sources` |
+| `GET` | `/sources/{source_id}` |
+| `POST` | `/sources/{source_id}/sync` |
+| `GET` | `/sources/{source_id}/tree` |
+| `POST` | `/sources/{source_id}/grep` |
+| `POST` | `/search` |
+| `POST` | `/documents/ask` |
+| `POST` | `/documents/jobs` |
+| `POST` | `/research/oracle` |
+| `GET` | `/usage/summary` |

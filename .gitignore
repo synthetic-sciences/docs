@@ -3,9 +3,11 @@ node_modules/
 
 # Build output
 out/
+dist/
 export.zip
 .vercel
 .next
+.vite
 
 # Local env
 .env

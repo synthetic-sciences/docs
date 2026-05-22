@@ -1,0 +1,51 @@
+---
+title: "Exports and imports"
+description: "Move map state between files, reports, and accounts."
+icon: "download"
+---
+
+Export commands make map state portable.
+
+Use exports for three different jobs: machine backups, human review, and migration between Atlas accounts or environments.
+
+## Commands
+
+| Command | Use |
+| --- | --- |
+| `history:export` | Export map history as JSONL. |
+| `map:export` | Export a map subset. |
+| `map:summary:export` | Render a Markdown summary. |
+| `map:summary:stream` | Stream summary generation. |
+| `map:summary:pdf` | Export a map summary PDF. |
+| `map:summary:render-pdf` | Render a PDF from summary input. |
+| `map:import` | Import a compatible exported graph payload. |
+
+## Machine-readable exports
+
+```bash
+atlas map:export --node-ids nd_... --include-descendants true --format=json
+atlas history:export --format=json
+```
+
+Use `map:import` to load a compatible exported map:
+
+```bash
+atlas map:import --payload @subgraph.json --format=json
+```
+
+## Human-readable summaries
+
+```bash
+atlas map:summary:export --node-ids nd_... --out summary.md
+atlas map:summary:stream --node-ids nd_...
+atlas map:summary:pdf --node-ids nd_... --out summary.pdf
+atlas map:summary:render-pdf --node-ids nd_... --out summary.pdf
+```
+
+Use Markdown summaries for review and PDFs for external sharing.
+
+`map:summary:stream` is useful for agents that want partial output while a longer summary is being generated.
+
+## Import safety
+
+Imports should be treated as map mutations. In automation, inspect the payload first and keep the export file as evidence on the controlling node.

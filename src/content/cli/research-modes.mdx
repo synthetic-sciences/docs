@@ -1,0 +1,85 @@
+---
+title: "Research modes"
+description: "Each Synci mode primes the agent with the conventions, libraries, and backends for one domain."
+---
+
+A research mode scopes the agent to one slice of scientific work. Switching modes is what makes Synci useful as a single CLI across very different research workflows.
+
+<CardGroup cols={2}>
+  <Card title="Research" href="#research">
+    Cross-disciplinary work, literature review, hypothesis generation, GPU orchestration.
+  </Card>
+  <Card title="Physics" href="#physics">
+    Simulation, PDE solving, dynamical systems, symbolic regression.
+  </Card>
+  <Card title="Chemistry" href="#chemistry">
+    Drug discovery, molecular design, ADMET, docking, structure prediction.
+  </Card>
+  <Card title="Biology" href="#biology">
+    Bioinformatics, sequencing pipelines, single-cell analysis, structure prediction.
+  </Card>
+  <Card title="Write" href="#write">
+    LaTeX papers, grant proposals, literature reviews with verified citations.
+  </Card>
+  <Card title="Flywheel" href="#flywheel">
+    Build a specialized LLM from your production data.
+  </Card>
+</CardGroup>
+
+## Research
+
+The general-purpose research mode. Use it when your work touches more than one field or when you don't know yet which mode you need. The agent indexes papers, runs literature reviews, designs experiments, and orchestrates GPU compute.
+
+```bash
+synci web --mode research
+synci run --mode research "Compare top-3 vs top-5 recall on the latest reranker benchmark"
+```
+
+## Physics
+
+Simulation, partial differential equations, dynamical systems, and symbolic regression. Bundles tools for PDE solving, time-step diagnostics, and physics-informed networks.
+
+```bash
+synci web --mode physics
+```
+
+## Chemistry
+
+Drug discovery, molecular design, ADMET prediction, docking, and structure prediction. Bundles DFT, molecular dynamics, and docking pipelines.
+
+```bash
+synci web --mode chemistry
+synci run --mode chemistry "Set up a DFT optimization for this CIF file"
+```
+
+## Biology
+
+Bioinformatics workflows: sequencing pipelines, single-cell analysis, AlphaFold and ESMFold structure prediction.
+
+```bash
+synci web --mode biology
+```
+
+## Write
+
+Scientific writing: LaTeX papers, grant proposals, literature reviews with verified citations. The agent fetches the cited works through the dashboard's knowledge layer and never makes up references.
+
+```bash
+synci web --mode write
+```
+
+## Flywheel
+
+Build a specialized LLM from your production data. Bundles GRPO, vLLM serving, and the eval harness, with credit-aware checkpointing so a long training run cannot silently exceed budget.
+
+```bash
+synci web --mode flywheel
+```
+
+## Switching mid-session
+
+You don't have to commit to a mode at session start. Inside any session, type `/mode <name>` to switch. The agent re-hydrates the tools and conventions for the new mode without losing your in-session context.
+
+<Warning>
+  Mode switches do not transfer compute leases. If the prior mode held a Modal sandbox or Lambda instance, release it before switching to avoid double-billing.
+</Warning>

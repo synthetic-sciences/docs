@@ -1,0 +1,35 @@
+---
+title: "API introduction"
+description: "Atlas HTTP APIs used by the CLI."
+icon: "code"
+---
+
+The Atlas CLI talks to direct HTTP routes under:
+
+```text
+https://app.syntheticsciences.ai/api/v1
+```
+
+Use bearer-token auth:
+
+```bash
+curl -H "Authorization: Bearer $ATLAS_API_KEY" \
+  https://app.syntheticsciences.ai/api/v1/status
+```
+
+For day-to-day automation, prefer the CLI. It handles browser login, retries, idempotency keys, output formatting, uploads, and local profiles.
+
+There is no public Atlas MCP server. Existing SynSci compatibility endpoints with legacy route names are auth/device helpers, not a public Atlas transport.
+
+## API families
+
+- auth and config
+- nodes and maps
+- evidence and files
+- library and search
+- library runs
+- research runs
+- exports and imports
+- integrations
+- keys
+- usage summary
