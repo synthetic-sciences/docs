@@ -1,6 +1,6 @@
 ---
 name: atlas
-description: Operate Atlas by Synthetic Sciences from the CLI. Use for map research workflows, library indexing, Nia-backed search, Oracle, async deep research, evidence, exports, keys, and bundled agent skills.
+description: Operate Atlas by Synthetic Sciences from the CLI. Use for map research workflows, library indexing, Delphi-backed search, Oracle, async deep research, evidence, exports, keys, and bundled agent skills.
 license: MIT
 compatibility: Requires Node.js 18+ and the @synsci/atlas CLI.
 metadata:
