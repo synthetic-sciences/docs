@@ -2,11 +2,11 @@
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
   "name": "Synthetic Sciences",
-  "description": "Synthetic Sciences documentation. Atlas is a graph-based research workspace. Synci CLI is a terminal agent for scientific work.",
+  "description": "Atlas is a graph-based research workspace. Synci CLI is a terminal agent for scientific work, with research modes for physics, chemistry, biology, general research, and the model flywheel.",
   "colors": {
-    "primary": "#06b6d4",
-    "light": "#67e8f9",
-    "dark": "#0e7490"
+    "primary": "#0f172a",
+    "light": "#475569",
+    "dark": "#0f172a"
   },
   "logo": {
     "light": "/logo/wordmark.png",
@@ -14,24 +14,33 @@
   },
   "favicon": "/logo/synsc-mark.png",
   "appearance": {
-    "default": "dark",
+    "default": "light",
     "strict": true
   },
   "fonts": {
     "heading": {
-      "family": "Space Grotesk",
-      "weight": 600
+      "family": "Computer Modern",
+      "weight": 700,
+      "format": "woff2",
+      "source": "https://docs.syntheticsciences.ai/fonts/cmc/cmunobx.woff2"
     },
     "body": {
-      "family": "Space Grotesk",
-      "weight": 400
+      "family": "Computer Modern",
+      "weight": 400,
+      "format": "woff2",
+      "source": "https://docs.syntheticsciences.ai/fonts/cmc/cmunorm.woff2"
     }
   },
   "background": {
-    "decoration": "gradient",
+    "decoration": "grid",
     "color": {
+      "light": "#fafbfc",
       "dark": "#0a0a0b"
     }
+  },
+  "styling": {
+    "eyebrows": "section",
+    "codeblocks": "system"
   },
   "navbar": {
     "primary": {
