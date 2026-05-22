@@ -1,215 +1,176 @@
 ---
-title: "Commands reference"
-description: "Every synci subcommand: connect, codex, mode, agent, run, session, stats, github, pr, export, import, upgrade, web, serve, acp."
+title: "Commands"
+description: "Complete reference for every synsci subcommand: sessions, run, generate, connect, auth, models, billing, skill, mcp, acp, serve, web, tui, session, github, pr, export, import, stats, upgrade, uninstall, completion."
+icon: "terminal"
 ---
 
-This page lists every subcommand that ships with `synci`, what it does, and the most useful flags. The bare `synci` (no arguments) drops you into the TUI in the build agent and the `general` research mode.
-
-## Connection
-
-### `synci connect`
-
-Manage the Bearer token connection between your CLI and the dashboard at [cli.syntheticsciences.ai](https://cli.syntheticsciences.ai).
-
-| Subcommand | Purpose |
-|---|---|
-| `synci connect login` | Run the device-flow OAuth login. Opens your browser and stores the resulting Bearer token in OS keychain. |
-| `synci connect status` | Show your account email, synced credentials, active mode, and credit balance. |
-| `synci connect logout` | Invalidate the local Bearer token. |
-
-### `synci codex`
-
-Sign in to OpenAI Codex from the CLI. After the browser flow completes, the resulting Codex token is held in the OS keychain alongside your Synci Bearer token, and is injected into Codex-aware subprocesses (`codex`, `codex exec`, etc.) on demand.
-
-| Subcommand | Purpose |
-|---|---|
-| `synci codex login` | Open the Codex sign-in flow in your browser and store the returned token. |
-| `synci codex status` | Show the active Codex account, token expiry, and which workspaces are reachable. |
-| `synci codex logout` | Revoke and remove the local Codex token. |
+This page mirrors the shipped command registry. For the live machine-readable surface, run:
 
 ```bash
-synci codex login
-synci codex login --workspace my-org
-synci codex status
+synsci --help
+synsci connect --help
+synsci skill --help
 ```
 
-Flags:
+The bare `synsci` (no arguments) opens the TUI agent in your working directory with the default profile and the default model. Every other top-level command is grouped below by area.
 
-- `--workspace <slug>` to bind the token to a specific Codex workspace (default: your personal workspace).
-- `--no-browser` to print a device-code URL instead of opening a browser; useful on headless boxes.
+## Global flags
+
+| Flag | Use |
+| --- | --- |
+| `-v, --version` | Print the installed CLI version. |
+| `-h, --help` | Print help for the command or subcommand. |
+| `--print-logs` | Stream agent diagnostics to stderr while the command runs. |
+| `--log-level <DEBUG\|INFO\|WARN\|ERROR>` | Override the log threshold for this invocation. |
 
 ## Sessions
 
-### `synci web` (recommended)
+| Command | Use |
+| --- | --- |
+| `synsci` | Start the TUI agent. Default model, default profile, current working directory. |
+| `synsci run [message..]` | Run a one-shot prompt. Streams the response, then exits. |
+| `synsci generate` | Generate code or files via the agent without entering the TUI. |
+| `synsci session` | Inspect and manage past sessions stored locally and on the dashboard. |
+| `synsci tui attach` | Attach to a running agent process (e.g. one started via `synsci serve`). |
+| `synsci tui thread` | Open a specific thread inside an attached agent. |
 
-Boot a local server and open the browser UI. The recommended day-to-day interface.
+`run` flags worth knowing:
 
-```bash
-synci web
-synci web --mode chemistry
-synci web --port 5555
-synci web --agent plan
-synci web --host 0.0.0.0    # expose to LAN, use carefully
-```
-
-Flags:
-
-- `--mode <name>` for the research mode (research, physics, chemistry, biology, write, flywheel).
-- `--agent <build|plan>` for the agent (default: `build`).
-- `--port <n>` to bind on `127.0.0.1` (default: `4444`).
-- `--host <addr>` to override the bind interface (default: `127.0.0.1`).
-- `--no-open` to skip auto-opening the browser.
-
-### `synci` (no args, TUI mode)
-
-Start a TUI session. Useful when you want everything in the terminal.
+| Flag | Use |
+| --- | --- |
+| `-c, --continue` | Continue the most recent session for this directory. |
+| `-s, --session <id>` | Resume a specific session by id. |
+| `-m, --model <provider/model>` | Override the default model for this run. |
+| `--agent <name>` | Use a specific agent profile (built-in or one you created). |
+| `--format <default\|json>` | Switch to JSON output for scripting. |
+| `-f, --file <path>` | Send a file as part of the prompt. |
+| `--title <text>` | Set the session title. |
+| `--attach <url>` | Attach a remote artifact (URL) to the prompt. |
 
 ```bash
-synci
-synci --mode biology
-synci --agent plan
-synci --project research-fork
+synsci run "Refactor utils/log.ts to use structured logging"
+synsci run -c "Now add tests"
+synsci run --model openai-codex/gpt-5-codex "Plan a migration off the old auth middleware"
+synsci run --format json "Summarize the architecture of src/" > summary.json
 ```
 
-### `synci run`
+## Connect
 
-One-shot run. Sends the prompt, lets the agent work to completion, and exits.
+| Command | Use |
+| --- | --- |
+| `synsci connect login` | Device-flow OAuth against the Synthetic Sciences dashboard. |
+| `synsci connect status` | Active email, token age, default model, synced services, credit balance. |
+| `synsci connect logout` | Revoke the local Bearer token. |
+| `synsci connect sync` | Re-pull synced credentials from the dashboard. |
+| `synsci connect devices` | List devices that hold an active Bearer token for your account. |
+
+See [Connect](/connect) for the full flow.
+
+## Providers and routing
+
+| Command | Use |
+| --- | --- |
+| `synsci auth` | Interactive provider sign-in: BYOK API keys (Anthropic, OpenAI, Google, Together, Groq, Fireworks, OpenRouter) and OAuth (OpenAI Codex). |
+| `synsci models` | List configured providers and the models they expose. |
+| `synsci billing show` | Account credit balance and recent usage on the managed route. |
+| `synsci billing topup` | Open the dashboard to top up account credit. |
 
 ```bash
-synci run --mode ml "Refactor utils/log.ts to use structured logging"
-synci run --mode chemistry "Set up a DFT optimization for this CIF file"
-synci run --agent plan "Summarize the architecture of src/"
+synsci auth
+synsci models
+synsci billing show
 ```
 
-Useful for git hooks, CI, and shell pipelines.
+See [Codex](/codex) for the OpenAI Codex sign-in-with-ChatGPT path and [Credentials](/credentials) for the full provider list.
 
-### `synci session`
+## Agent profiles
 
-Inspect and manage past sessions stored on the dashboard.
+| Command | Use |
+| --- | --- |
+| `synsci agent create` | Scaffold a new sub-agent (system prompt + tool set + routing policy). |
 
-| Subcommand | Purpose |
-|---|---|
-| `synci session list` | List recent sessions. |
-| `synci session show <id>` | Print the prompts and assistant messages for a session. |
-| `synci session resume <id>` | Continue a prior session in the TUI. |
+`agent create` flags:
 
-## Research modes
+| Flag | Use |
+| --- | --- |
+| `--path <dir>` | Where to write the agent definition. |
+| `--description <text>` | Description shown in `synsci models` and the agent picker. |
+| `--mode <all\|primary\|subagent>` | How the agent can be invoked. |
+| `--tools <tool[,tool...]>` | Restrict the tool set. |
+| `--model <provider/model>` | Default model for this agent. |
 
-### `synci mode`
+## Skills
 
-Manage research modes. See [research modes](/research-modes) for what each mode covers.
+| Command | Use |
+| --- | --- |
+| `synsci skill list` | Show installed skills. |
+| `synsci skill show <name>` | Print a skill's metadata and entrypoints. |
+| `synsci skill add <url-or-name>` | Install a skill from a URL or by name. |
+| `synsci skill remove <name>` | Uninstall a skill. |
+| `synsci skill set-entries <name>` | Update a skill's entrypoint mapping. |
 
-| Subcommand | Purpose |
-|---|---|
-| `synci mode list` | List available research modes on this install. |
-| `synci mode show` | Show the active mode for the current directory. |
-| `synci mode set <name>` | Set the default mode for the current working directory. |
+See [Research skills](/research-modes).
 
-## Stats
+## Servers and protocols
 
-### `synci stats`
-
-Show credit usage by session, mode, and time window.
+| Command | Use |
+| --- | --- |
+| `synsci serve` | Run the CLI as an HTTP API server. |
+| `synsci web` | Boot the local server and open the browser UI on `http://localhost:4444`. |
+| `synsci acp` | Speak the Agent Client Protocol over stdio for host integrations. |
+| `synsci mcp` | Manage MCP server connections. |
 
 ```bash
-synci stats              # cumulative
-synci stats --since 7d   # last 7 days
-synci stats --json       # machine-readable
+synsci serve --port 4444
+synsci web
+synsci web --port 5555
 ```
 
-## Agent management
+`serve` requires `SYNSCI_SERVER_PASSWORD` to enable HTTP Basic Auth before you expose the port beyond `127.0.0.1`. See [Security](/security).
 
-### `synci agent`
+## GitHub and PRs
 
-Manage agent profiles. Defaults, per-project overrides, and custom profiles.
+| Command | Use |
+| --- | --- |
+| `synsci github` | GitHub helpers that compose with `gh` and the agent. |
+| `synsci pr` | PR-focused workflows: open, update, review. |
 
-| Subcommand | Purpose |
-|---|---|
-| `synci agent list` | Show available agent profiles. |
-| `synci agent set-default <name>` | Set your default agent. |
-| `synci agent show <name>` | Print the full configuration for an agent. |
+## Portability
 
-## GitHub and PR helpers
+| Command | Use |
+| --- | --- |
+| `synsci export` | Export a session as a JSON document. |
+| `synsci import` | Import a session JSON. |
 
-### `synci github`
+## Diagnostics and lifecycle
 
-GitHub helpers that compose with `gh` and the Synci agent.
-
-| Subcommand | Purpose |
-|---|---|
-| `synci github review <pr>` | Open a PR and ask the agent to review it. |
-| `synci github resolve <issue>` | Open an issue and ask the agent to plan a fix. |
-
-### `synci pr`
-
-PR-focused workflows.
-
-| Subcommand | Purpose |
-|---|---|
-| `synci pr open` | Create a PR from the current branch with an agent-generated body. |
-| `synci pr update <pr>` | Update a PR description after new commits. |
-
-## Sessions: export and import
-
-### `synci export`
-
-Export a session as a JSON document for sharing or archiving.
+| Command | Use |
+| --- | --- |
+| `synsci stats` | Local usage stats. |
+| `synsci debug` | Print structured diagnostics for support tickets. |
+| `synsci upgrade` | Update to the latest published version. Detects npm, Homebrew, or curl-bash install. |
+| `synsci uninstall` | Remove the binary and clear local config. |
+| `synsci completion` | Shell completion script for `bash`, `zsh`, or `fish`. |
 
 ```bash
-synci export <session-id> --out session.json
+synsci upgrade
+synsci upgrade --version 1.1.122
+synsci completion zsh > ~/.zsh/completions/_synsci
 ```
-
-### `synci import`
-
-Import a session JSON back into your account.
-
-```bash
-synci import session.json
-```
-
-## Distribution and lifecycle
-
-### `synci upgrade`
-
-Upgrade to the latest published version. Detects how you installed (npm, Homebrew, or direct binary) and runs the matching update flow.
-
-```bash
-synci upgrade
-synci upgrade --version 1.2.0   # pin to a specific version
-```
-
-### `synci uninstall`
-
-Remove the CLI and clear local config.
-
-```bash
-synci uninstall
-```
-
-The dashboard account, credentials, and session history are unaffected.
-
-## Server modes
-
-### `synci serve`
-
-Run the CLI as a long-lived backend server, exposing an HTTP API. Useful when you want a remote agent endpoint that other tools can call.
-
-```bash
-synci serve --port 4444
-```
-
-### `synci acp`
-
-Speak the Agent Communication Protocol over stdio. Pair with hosts that want to talk to the agent as a subprocess rather than over HTTP.
-
-```bash
-synci acp
-```
-
-Provider keys for credentials (HF, W&B, Modal, Lambda, AWS, GCP) come from the dashboard sync. See [Credentials](/credentials).
 
 ## What's next
 
-- **[Connect](/connect).** Device-flow login.
-- **[Codex](/codex).** Sign in to OpenAI Codex from the CLI.
-- **[Security model](/security).** Credential boundary, output redaction, and per-user isolation.
+<CardGroup cols={2}>
+  <Card title="Connect" icon="key-round" href="/connect">
+    Device-code OAuth, token storage, and `connect status` health checks.
+  </Card>
+  <Card title="Credentials" icon="key-round" href="/credentials">
+    Provider keys and synced cloud/ML credentials.
+  </Card>
+  <Card title="Research skills" icon="book-open" href="/research-modes">
+    The ML skill library: training, evaluation, inference, mech interp.
+  </Card>
+  <Card title="Security" icon="shield-check" href="/security">
+    Credential boundary, env hygiene, the sandbox boundary.
+  </Card>
+</CardGroup>

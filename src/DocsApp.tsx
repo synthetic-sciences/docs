@@ -103,9 +103,19 @@ type MintlifyCard = {
 
 type ProductKey = "atlas" | "cli";
 
-const PRODUCT_LABELS: Record<ProductKey, string> = {
-  atlas: "Atlas @synsci/atlas@0.5.11",
-  cli: "CLI @synci@0.5.11",
+const PRODUCT_TOGGLE_LABELS: Record<ProductKey, string> = {
+  atlas: "Atlas",
+  cli: "Synci CLI",
+};
+
+const PRODUCT_PACKAGE_LABELS: Record<ProductKey, string> = {
+  atlas: "@synsci/atlas@0.5.11",
+  cli: "synsci@1.1.125",
+};
+
+const PRODUCT_NPM_HREFS: Record<ProductKey, string> = {
+  atlas: "https://www.npmjs.com/package/@synsci/atlas",
+  cli: "https://www.npmjs.com/package/synsci",
 };
 
 const PRODUCT_DOC_NAMES: Record<ProductKey, string> = {
@@ -266,6 +276,18 @@ function parseMdxAttrs(attrs: string): Record<string, string | boolean> {
   return parsed;
 }
 
+function dedent(source: string): string {
+  const lines = source.replace(/\t/g, "  ").split("\n");
+  let min = Infinity;
+  for (const line of lines) {
+    if (line.trim() === "") continue;
+    const leading = line.match(/^( *)/);
+    if (leading) min = Math.min(min, leading[1].length);
+  }
+  if (!Number.isFinite(min) || min === 0) return source;
+  return lines.map((line) => (line.length >= min ? line.slice(min) : line)).join("\n");
+}
+
 function parseCards(source: string): MintlifyCard[] {
   return Array.from(source.matchAll(/<Card\b([^>]*)>\s*([\s\S]*?)\s*<\/Card>/g)).map((match) => {
     const attrs = parseMdxAttrs(match[1] ?? "");
@@ -274,7 +296,7 @@ function parseCards(source: string): MintlifyCard[] {
       href: String(attrs.href ?? "#"),
       icon: attrs.icon ? String(attrs.icon) : undefined,
       horizontal: Boolean(attrs.horizontal),
-      body: match[2]?.trim() ?? "",
+      body: dedent(match[2] ?? "").trim(),
     };
   });
 }
@@ -403,7 +425,7 @@ function MintlifySteps({ source }: { source: string }) {
     const attrs = parseMdxAttrs(match[1] ?? "");
     return {
       title: String(attrs.title ?? "Step"),
-      body: match[2]?.trim() ?? "",
+      body: dedent(match[2] ?? "").trim(),
     };
   });
   if (steps.length === 0) return null;
@@ -425,7 +447,7 @@ function MintlifySteps({ source }: { source: string }) {
 function MintlifyCallout({ children }: { children: string }) {
   return (
     <blockquote className="docs-callout docs-callout-warning">
-      <MarkdownChunk>{children.trim()}</MarkdownChunk>
+      <MarkdownChunk>{dedent(children).trim()}</MarkdownChunk>
     </blockquote>
   );
 }
@@ -577,7 +599,7 @@ export function DocumentationPage() {
             className={product === "atlas" ? "active" : undefined}
             onClick={() => setProduct("atlas")}
           >
-            {PRODUCT_LABELS.atlas}
+            {PRODUCT_TOGGLE_LABELS.atlas}
           </button>
           <button
             type="button"
@@ -586,8 +608,17 @@ export function DocumentationPage() {
             className={product === "cli" ? "active" : undefined}
             onClick={() => setProduct("cli")}
           >
-            {PRODUCT_LABELS.cli}
+            {PRODUCT_TOGGLE_LABELS.cli}
           </button>
+          <a
+            className="docs-version-pill"
+            href={PRODUCT_NPM_HREFS[product]}
+            target="_blank"
+            rel="noreferrer"
+            title="open package on npm"
+          >
+            {PRODUCT_PACKAGE_LABELS[product]}
+          </a>
         </div>
         <div className="docs-search" role="search">
           <Search size={14} strokeWidth={1.8} />
@@ -666,7 +697,11 @@ export function DocumentationPage() {
         <aside className="docs-sidebar" aria-label="documentation navigation">
           <div className="docs-sidebar-title">
             <span>{docsSourceName}</span>
-            <small>{PRODUCT_LABELS[product]}</small>
+            <small>
+              <a href={PRODUCT_NPM_HREFS[product]} target="_blank" rel="noreferrer">
+                {PRODUCT_PACKAGE_LABELS[product]}
+              </a>
+            </small>
           </div>
           <nav className="docs-section-tabs" aria-label="documentation sections">
             {navTabs.map((tab) => {
@@ -1061,6 +1096,40 @@ const docsCss = `
     background: var(--color-bg);
     color: var(--color-text);
     box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+  }
+
+  .docs-version-pill {
+    margin-left: 6px;
+    padding: 0 9px;
+    height: 22px;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg);
+    color: var(--color-text-muted);
+    font-family: ${mono};
+    font-size: 10.5px;
+    letter-spacing: 0.01em;
+    text-decoration: none;
+    transition: color 120ms ease, border-color 120ms ease, background 120ms ease;
+  }
+
+  .docs-version-pill:hover {
+    color: var(--color-text);
+    border-color: var(--color-text-faint);
+  }
+
+  .docs-sidebar-title small a {
+    color: var(--color-text-faint);
+    font-family: ${mono};
+    text-decoration: none;
+    border-bottom: 1px dashed var(--color-border);
+  }
+
+  .docs-sidebar-title small a:hover {
+    color: var(--color-text);
+    border-bottom-color: var(--color-text-faint);
   }
 
   .docs-theme-toggle {

@@ -1,56 +1,71 @@
 ---
 title: "Connect"
-description: "Device-flow login that mints a Bearer token, stores it in your OS keychain, and pairs the CLI with your Synthetic Sciences account."
+description: "Device-code OAuth between the CLI and the Synthetic Sciences dashboard, plus the connect subcommands that manage the resulting token."
+icon: "key-round"
 ---
 
-`synci connect` manages the Bearer token connection between your CLI and the dashboard at [cli.syntheticsciences.ai](https://cli.syntheticsciences.ai).
+`synsci connect` is the bridge between the local CLI and your dashboard account. It uses a device-code OAuth flow so the CLI never has to handle your password and can run on machines that do not have a browser.
 
-| Subcommand | Purpose |
-|---|---|
-| `synci connect login` | Run the device-flow OAuth login. Opens your browser and stores the resulting Bearer token in the OS keychain. |
-| `synci connect status` | Show your account email, synced credentials, active mode, and credit balance. |
-| `synci connect logout` | Invalidate the local Bearer token. |
+The resulting credential is a `thk_<uuid>.<secret>` Bearer token with a one-year TTL. It is stored under `$XDG_CONFIG_HOME/synsc` (defaults to `~/.config/synsc`), scoped to the device that approved it, and revocable from the dashboard.
 
-## How login works
+## The device flow
 
-<Steps>
-  <Step title="Start the flow">
-    ```bash
-    synci connect login
-    ```
+When you run `synsci connect login`, the CLI:
 
-    The CLI prints a device code and opens your browser to the dashboard sign-in. If the browser doesn't open, copy the URL the CLI prints and paste it into any browser.
-  </Step>
+1. Calls the Synci backend for a device code and matching user code.
+2. Prints the verification URL and the user code, then attempts to open your browser.
+3. Polls the backend for completion, retrying on the cadence the server sets.
+4. On approval, stores the Bearer token locally and runs `connect sync` to pull synced credentials.
 
-  <Step title="Approve the device">
-    Sign in to the dashboard if you aren't already, confirm the device code matches what the CLI printed, and click approve.
-  </Step>
-
-  <Step title="Token lands in the keychain">
-    The dashboard hands the CLI a Bearer token. The CLI writes it to the OS keychain under the `synci` service.
-
-    - macOS: Keychain Access, service `synci`
-    - Linux: Secret Service / libsecret, service `synci`
-    - Windows: Credential Manager, target `synci`
-  </Step>
-</Steps>
-
-## Checking status
+The verification URL defaults to [app.syntheticsciences.ai/cli](https://app.syntheticsciences.ai/cli). Override with `SYNSC_AUTH_URL` if you are pointing at a staging or self-hosted dashboard.
 
 ```bash
-synci connect status
+synsci connect login
+# Open: https://app.syntheticsciences.ai/cli
+# Code: SQXR-7HVL
 ```
 
-Output includes the active account email, the active research mode for the current directory, and the remaining credit balance. Re-run `synci connect login` to swap to a different account.
+If the browser does not open (headless box, SSH session, no display), copy the URL into a browser on a machine you trust, sign in, and enter the user code.
 
-<Warning>
-  Bearer tokens expire on their own schedule. Re-running login is only necessary when `status` reports the token is invalid or you intentionally log out.
-</Warning>
+## Subcommands
 
-## Logging out
+| Command | Use |
+| --- | --- |
+| `synsci connect login` | Run the device-flow login and store the Bearer token. |
+| `synsci connect status` | Show the active email, token age, synced services, default model, and credit balance. |
+| `synsci connect logout` | Invalidate the local token. The token is also revoked server-side. |
+| `synsci connect sync` | Re-pull synced credentials from the dashboard without a new login. |
+| `synsci connect devices` | List devices that hold an active Bearer token for your account. |
 
-```bash
-synci connect logout
-```
+`connect status` is the right first stop when something feels off. It surfaces stale credentials, missing models, and routing issues in one place.
 
-Removes the local Bearer token. Credentials in the dashboard are unaffected; the next `login` pulls them back in.
+## Environment overrides
+
+| Variable | Default | Purpose |
+| --- | --- | --- |
+| `SYNSC_AUTH_URL` | `https://app.syntheticsciences.ai/cli` | Verification URL the device flow opens in your browser. |
+| `SYNSC_API_BASE` | `https://thesis-synsc.fly.dev` | Synci backend base URL. The CLI calls this for sync, billing, and device approval. |
+| `XDG_CONFIG_HOME` | `~/.config` | Parent directory of `synsc/` where the Bearer token and synced credentials live. |
+
+Set these in your shell rc when you want a non-default backend, a separate config path for a second account, or to point the CLI at a staging environment.
+
+## Multiple accounts
+
+Each device approval is independent, so you can keep one account on your laptop and a different one on a remote dev box without them stepping on each other. On a single machine, switch by changing `XDG_CONFIG_HOME` before running `synsci connect login` for the second account; the resulting `~/.config/synsc/` tree is fully scoped.
+
+## What's next
+
+<CardGroup cols={2}>
+  <Card title="Codex sign-in" icon="key-round" href="/codex">
+    Sign in to OpenAI Codex through your ChatGPT account so the agent can route GPT-5 Codex calls.
+  </Card>
+  <Card title="Credentials sync" icon="key-round" href="/credentials">
+    Wire HF, W&B, Modal, Lambda, RunPod, and other provider keys through the dashboard.
+  </Card>
+  <Card title="Commands" icon="terminal" href="/commands">
+    Full command reference.
+  </Card>
+  <Card title="Security" icon="shield-check" href="/security">
+    What the Bearer token can and can't do, and how credentials are scoped.
+  </Card>
+</CardGroup>

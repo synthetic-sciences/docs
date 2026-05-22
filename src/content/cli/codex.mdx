@@ -1,57 +1,71 @@
 ---
-title: "synci codex"
-description: "Sign in to OpenAI Codex from the terminal so the agent can invoke codex and codex exec on demand."
+title: "Codex sign-in"
+description: "Sign in to OpenAI Codex through your ChatGPT account so the agent can route GPT-5 Codex calls without a separate API key."
+icon: "key-round"
 ---
 
-`synci codex` manages the OpenAI Codex token alongside your Synci Bearer token. After the browser flow completes, the Codex token sits in the OS keychain next to your Synci Bearer token, and is injected into Codex-aware subprocesses (`codex`, `codex exec`, etc.) on demand.
+Synci integrates with OpenAI Codex through the same sign-in-with-ChatGPT flow you use on chatgpt.com. After the OAuth handshake completes, your Codex session is stored alongside the other provider credentials and routed automatically when you select an `openai-codex` model.
 
-| Subcommand | Purpose |
-|---|---|
-| `synci codex login` | Open the Codex sign-in flow in your browser and store the returned token. |
-| `synci codex status` | Show the active Codex account, token expiry, and which workspaces are reachable. |
-| `synci codex logout` | Revoke and remove the local Codex token. |
+This is the path to use when you already pay for ChatGPT or Codex and would rather not generate a separate OpenAI API key.
 
-## Logging in
+## How it works
 
-<Steps>
-  <Step title="Start the flow">
-    ```bash
-    synci codex login
-    ```
+The CLI runs an OAuth Authorization-Code flow with PKCE against [auth.openai.com](https://auth.openai.com). The browser callback is captured by a short-lived local listener on port `1455`, the tokens are exchanged for a session, and the session is registered with the Synthetic Sciences backend so the agent can refresh it through your dashboard account. Once registered, the provider appears in `synsci models` as **"Signed in with Codex"**.
 
-    The CLI opens a browser tab pointing at the Codex sign-in screen. Approve the requested scopes (workspaces you want the CLI to be able to use).
-  </Step>
+The system prompt the agent uses for this provider opens with: "You are a coding agent powered by OpenAI GPT-5 Codex models, running inside Synthetic Sciences CLI." You can mix Codex with any other configured provider in the same session; the agent picks per call based on routing rules.
 
-  <Step title="Pin a specific workspace (optional)">
-    ```bash
-    synci codex login --workspace my-org
-    ```
-
-    Binds the token to that workspace slug. Without `--workspace`, the token is bound to your personal workspace.
-  </Step>
-
-  <Step title="Headless boxes">
-    ```bash
-    synci codex login --no-browser
-    ```
-
-    Prints a device-code URL instead of trying to open a browser. Open the URL on any device that has a browser, sign in, and the CLI picks up the token automatically.
-  </Step>
-</Steps>
-
-## Checking the status
+## Sign in
 
 ```bash
-synci codex status
+synsci auth
+# pick "OpenAI Codex" from the provider menu
 ```
 
-Reports the active Codex account, token expiry, and the workspaces the token can reach. The agent picks the right workspace based on the active mode and your dashboard defaults.
+The CLI opens your browser to the OpenAI sign-in page. After you approve the requested scopes, the browser is redirected back to `http://localhost:1455/...`, the local listener captures the code, and the CLI prints the registered account. If a browser does not open automatically, the CLI prints the verification URL so you can paste it manually on a device that has a browser.
 
-## Flags
+Confirm the result with:
 
-- `--workspace <slug>` to bind the token to a specific Codex workspace.
-- `--no-browser` to print a device-code URL instead of opening a browser.
+```bash
+synsci models
+```
 
-<Warning>
-  Codex tokens are scoped per workspace. Re-run `synci codex login --workspace <slug>` to add another workspace; tokens for different workspaces coexist in the keychain.
-</Warning>
+You should see `openai-codex` listed with **"Signed in with Codex"** and the email tied to your ChatGPT account.
+
+## Use Codex in a session
+
+Once signed in, route to Codex by selecting an `openai-codex` model:
+
+```bash
+synsci run --model openai-codex/gpt-5-codex "Refactor utils/log.ts to use structured logging"
+```
+
+You can also set Codex as the default model in your dashboard, which makes a bare `synsci` and `synsci run` route to it without an explicit `--model` flag.
+
+## Sign out
+
+Removing the Codex session is done through the same provider menu:
+
+```bash
+synsci auth
+# pick "OpenAI Codex" → sign out
+```
+
+This revokes the local session and removes the registration on the dashboard side. You can re-run `synsci auth` any time to sign back in.
+
+## Headless boxes
+
+The local callback listener needs port `1455` to be free on the machine you are signing in from, which can be a problem on a headless SSH box. The standard pattern is to sign in once on a machine that has a browser (the same `~/.config/synsc` directory will hold the session) and then move or re-create the config on the headless box, or to use a different provider (an `OPENAI_API_KEY` BYOK route or the managed Synthetic Sciences route) on headless machines.
+
+## What's next
+
+<CardGroup cols={2}>
+  <Card title="Credentials sync" icon="key-round" href="/credentials">
+    BYOK keys for Anthropic, OpenAI, OpenRouter, Together, and other providers, plus synced cloud/ML credentials.
+  </Card>
+  <Card title="Commands" icon="terminal" href="/commands">
+    `auth`, `models`, `billing`, and the rest of the provider surface.
+  </Card>
+  <Card title="Security" icon="shield-check" href="/security">
+    Token storage, scopes, and what the dashboard sees about your Codex session.
+  </Card>
+</CardGroup>
