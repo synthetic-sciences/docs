@@ -4,7 +4,7 @@ description: "Walk through the compute approval flow: mint an approval token, sp
 sidebarTitle: "Sub-agents"
 ---
 
-After you approve an experiment proposal, Thesis delegates execution to a sandboxed sub-agent that runs independently of your chat session. The sub-agent receives a compiled payload from durable Thesis state, not your chat history, and reports telemetry back as it works. This guide covers every step from approval to result.
+After you approve an experiment proposal, Atlas delegates execution to a sandboxed sub-agent that runs independently of your chat session. The sub-agent receives a compiled payload from durable Atlas state, not your chat history, and reports telemetry back as it works. This guide covers every step from approval to result.
 
 ## The approval flow
 
@@ -18,7 +18,7 @@ After you approve an experiment proposal, Thesis delegates execution to a sandbo
     No compute is acquired yet, the token is simply minted and ready to be consumed.
 
     <Note>
-      If the agent needs to request approval programmatically rather than via the UI card, it calls `thesis_request_compute_grant_approval` to initiate the approval session and prompt you for confirmation.
+      If the agent needs to request approval programmatically rather than via the UI card, it calls `request_compute_grant_approval` to initiate the approval session and prompt you for confirmation.
     </Note>
   </Step>
 
@@ -26,7 +26,7 @@ After you approve an experiment proposal, Thesis delegates execution to a sandbo
     The main agent receives the approval token in the injected message and emits a `spawn_experiment_agent` tool call. The backend validates the token, then executes this sequence:
 
     1. Creates an approval session and compute grant tied to the token.
-    2. Calls `thesis_compute_acquire` to lease a GPU from the selected provider.
+    2. Calls `compute_acquire` to lease a GPU from the selected provider.
     3. Mints a runner token scoped to the sub-agent's callback URL.
     4. Updates the node status to `in_progress`.
     5. Starts the sandbox runner on the provider when supported.
@@ -35,7 +35,7 @@ After you approve an experiment proposal, Thesis delegates execution to a sandbo
   </Step>
 
   <Step title="The sub-agent executes">
-    The sub-agent runs in an isolated sandbox. It receives the following compiled payload, sourced entirely from durable Thesis state, not from chat history:
+    The sub-agent runs in an isolated sandbox. It receives the following compiled payload, sourced entirely from durable Atlas state, not from chat history:
 
     | Variable | What it contains |
     |----------|-----------------|
@@ -73,7 +73,7 @@ After you approve an experiment proposal, Thesis delegates execution to a sandbo
 
     ```json
     {
-      "name": "thesis_compute_release",
+      "name": "compute_release",
       "arguments": {
         "lease_id": "<lease-id>"
       }
@@ -84,7 +84,7 @@ After you approve an experiment proposal, Thesis delegates execution to a sandbo
 
     ```json
     {
-      "name": "thesis_compute_release_all",
+      "name": "compute_release_all",
       "arguments": {}
     }
     ```
@@ -95,18 +95,18 @@ After you approve an experiment proposal, Thesis delegates execution to a sandbo
 
 ## Compute providers
 
-Thesis supports two compute backends:
+Atlas supports two compute backends:
 
 | Provider | Best for | Notes |
 |----------|----------|-------|
 | **Modal** | Sandboxed sub-agent runs | Default runner; starts automatically on approval. Connect in **Settings → API Keys**. |
 | **Lambda Cloud** | GPU instances for longer training runs | Set `provider: "LAMBDA"` in the proposal. Connect your Lambda Cloud account in **Settings → API Keys**. |
 
-Browse available GPU SKUs with `thesis_compute_list_options` before approving a proposal if you want to select a specific instance type.
+Browse available GPU SKUs with `compute_list_options` before approving a proposal if you want to select a specific instance type.
 
 ## Safety boundaries
 
-Thesis is intentionally conservative with compute:
+Atlas is intentionally conservative with compute:
 
 - The approval token is short-lived and single-use. Prompt compliance alone cannot start a run.
 - Sub-agent callbacks use runner tokens, not your API key, so a compromised sub-agent cannot access your account.

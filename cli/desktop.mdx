@@ -1,22 +1,22 @@
 ---
-title: "Synsci CLI desktop app: macOS, Windows, Linux"
-description: "Native desktop app for Synsci CLI. Same agent surface as the web UI and TUI, wrapped as a standalone application. macOS, Windows, and Linux."
+title: "Synci CLI desktop app: macOS, Windows, Linux"
+description: "Native desktop app for Synci CLI. Same agent surface as the web UI and TUI, wrapped as a standalone application. macOS, Windows, and Linux."
 sidebarTitle: "Desktop app"
 ---
 
-The desktop app is the standalone alternative to [`synsc web`](/cli/web). Same agent, same modes, same tools, same credentials, just packaged as a native application rather than a browser-served UI. Pick it if you'd rather have the agent in a dedicated window than a browser tab.
+The desktop app is the standalone alternative to [`synci web`](/cli/web). Same agent, same modes, same tools, same credentials, just packaged as a native application rather than a browser-served UI. Pick it if you'd rather have the agent in a dedicated window than a browser tab.
 
 <Note>
-  For most users, `synsc web` is the recommended interface. Reach for the desktop app when you specifically want a standalone application, for instance, when keeping the agent in its own window separate from your browser is important to your workflow.
+  For most users, `synci web` is the recommended interface. Reach for the desktop app when you specifically want a standalone application, for instance, when keeping the agent in its own window separate from your browser is important to your workflow.
 </Note>
 
 ## When to pick desktop over web or terminal
 
 | Situation | Recommended |
 |---|---|
-| Daily development with multi-tab sessions | [Web UI (`synsc web`)](/cli/web) |
+| Daily development with multi-tab sessions | [Web UI (`synci web`)](/cli/web) |
 | Standalone app outside the browser | **Desktop** |
-| Quick edits, scripts, CI hooks | Terminal (`synsc run`) |
+| Quick edits, scripts, CI hooks | Terminal (`synci run`) |
 | Pair programming or screen sharing | Web UI |
 | Headless or remote machine | Terminal (no GUI available) |
 | You want all three, switching freely | All three, same dashboard account |
@@ -29,22 +29,22 @@ Pull the latest release from [GitHub Releases](https://github.com/synthetic-scie
 
 | Platform | Build |
 |---|---|
-| macOS Apple Silicon | `synsc-x.y.z-aarch64.dmg` |
-| macOS Intel | `synsc-x.y.z-x86_64.dmg` |
-| Windows | `synsc-x.y.z-x86_64.msi` |
-| Linux | `synsc-x.y.z.AppImage` or `.deb` |
+| macOS Apple Silicon | `synci-x.y.z-aarch64.dmg` |
+| macOS Intel | `synci-x.y.z-x86_64.dmg` |
+| Windows | `synci-x.y.z-x86_64.msi` |
+| Linux | `synci-x.y.z.AppImage` or `.deb` |
 
 Releases include a SHA-256 checksum so you can verify the download before installing.
 
 ## First launch
 
-On first run, the desktop app prompts you to connect to your dashboard. The flow is identical to `synsc connect login`:
+On first run, the desktop app prompts you to connect to your dashboard. The flow is identical to `synci connect login`:
 
 1. The app opens [cli.syntheticsciences.ai](https://cli.syntheticsciences.ai) in your default browser.
 2. You confirm the device code shown in the app window.
 3. The dashboard issues a Bearer token; the desktop app stores it in OS keychain.
 
-Once connected, the desktop app pulls your credentials and credit balance the same way the rest of Synsci CLI does. You can use the dashboard panel inside the app to manage credentials without leaving the workspace.
+Once connected, the desktop app pulls your credentials and credit balance the same way the rest of Synci CLI does. You can use the dashboard panel inside the app to manage credentials without leaving the workspace.
 
 ## Multi-session
 
@@ -88,6 +88,6 @@ The desktop app checks for updates on launch. When a new version is available, y
 
 ## What's next
 
-- **[Web UI](/cli/web).** The recommended interface, `synsc web` runs the same surface as a browser tab.
+- **[Web UI](/cli/web).** The recommended interface, `synci web` runs the same surface as a browser tab.
 - **[Dashboard](/cli/dashboard).** The web dashboard you'll bounce between for credentials and billing.
 

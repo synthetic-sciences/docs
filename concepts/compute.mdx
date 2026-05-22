@@ -1,14 +1,14 @@
 ---
-title: "Compute: approval-gated GPU leases for Thesis sub-agents"
-description: "Thesis requires your approval before spending compute. Approve a proposal to mint an approval token and spawn a sandboxed sub-agent under a defined budget."
+title: "Compute: approval-gated GPU leases for Atlas sub-agents"
+description: "Atlas requires your approval before spending compute. Approve a proposal to mint an approval token and spawn a sandboxed sub-agent under a defined budget."
 sidebarTitle: "Compute"
 ---
 
-Thesis never spends compute without your say-so. When the agent designs an experiment that requires GPU execution, it stages a proposal and waits. You review the blueprint, the hardware SKU, the budget, and the timeout, then decide whether to approve or dismiss. Only after you click **Run** does anything actually execute. This approval gate is not a soft suggestion; it is enforced by the backend through a cryptographic approval token that the system requires before acquiring any lease.
+Atlas never spends compute without your say-so. When the agent designs an experiment that requires GPU execution, it stages a proposal and waits. You review the blueprint, the hardware SKU, the budget, and the timeout, then decide whether to approve or dismiss. Only after you click **Run** does anything actually execute. This approval gate is not a soft suggestion; it is enforced by the backend through a cryptographic approval token that the system requires before acquiring any lease.
 
 ## The approval gate
 
-The approval gate is the core safety mechanism for compute in Thesis:
+The approval gate is the core safety mechanism for compute in Atlas:
 
 <Steps>
   <Step title="Agent proposes an experiment">
@@ -34,12 +34,12 @@ The approval gate is the core safety mechanism for compute in Thesis:
 
 ## Compute grants and leases
 
-When compute is approved, Thesis creates two records:
+When compute is approved, Atlas creates two records:
 
 - **Compute grant**, the authorization to spend up to a specified budget on a specific experiment. Grants are tied to the approval session and cannot be reused.
 - **GPU lease**, the actual hardware reservation from the compute provider. The lease tracks the provider, SKU, status, and connection details. Leases are released when the sub-agent finishes or times out.
 
-You can view active leases and their status from the **Agents** tab in the agent UI, or by querying `thesis_compute_status` through the MCP tools.
+You can view active leases and their status from the **Agents** tab in the agent UI, or by querying `compute_status` through the agent tools.
 
 ## Available GPU SKUs
 
@@ -48,11 +48,11 @@ You can view active leases and their status from the **Agents** tab in the agent
 - **gpu-h100.** NVIDIA H100. Highest-performance option, designed for demanding training workloads, large model inference, and time-sensitive experiments.
 
 
-Use `thesis_compute_list_options` from the MCP tools to get the current list of available SKUs with pricing details.
+Use `compute_list_options` from the agent tools to get the current list of available SKUs with pricing details.
 
 ## Compute providers
 
-Thesis currently supports two compute providers:
+Atlas currently supports two compute providers:
 
 <Tabs>
   <Tab title="Modal">
@@ -75,17 +75,17 @@ If you're running a series of related experiments, you can organize them under a
 - set a hard ceiling on how much a research direction can cost
 - review aggregate metrics for a line of investigation
 
-Create a campaign budget with `thesis_create_campaign_budget`. The agent can check the remaining budget at any point with `thesis_check_budget` and will stop proposing new compute when the campaign budget is exhausted.
+Create a campaign budget with `create_campaign_budget`. The agent can check the remaining budget at any point with `check_budget` and will stop proposing new compute when the campaign budget is exhausted.
 
 <Tip>
-  Set a campaign budget before starting an autonomous research run with `thesis-auto`. This ensures the agent advances the frontier up to a defined cost limit and stops automatically, rather than running until you intervene.
+  Set a campaign budget before starting an autonomous research run with `atlas-auto`. This ensures the agent advances the frontier up to a defined cost limit and stops automatically, rather than running until you intervene.
 </Tip>
 
 ## Approval sessions
 
 An approval session is the live window during which a compute grant is valid. Sessions have a heartbeat mechanism, the running sub-agent extends the session periodically to signal that it's still active. If the heartbeat stops, the session can be expired and the lease released.
 
-You can view active approval sessions with `thesis_list_approval_sessions` and manually expire a session with `thesis_expire_approval_session` if you need to terminate a run early.
+You can view active approval sessions with `list_approval_sessions` and manually expire a session with `expire_approval_session` if you need to terminate a run early.
 
 ## What happens to results
 

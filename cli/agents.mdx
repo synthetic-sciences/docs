@@ -1,10 +1,10 @@
 ---
-title: "Synsci CLI agents: build, plan, and @general"
+title: "Synci CLI agents: build, plan, and @general"
 description: "Two top-level agents: build for read/write work, plan for read-only analysis. The @general subagent delegates large searches without crowding the parent context."
 sidebarTitle: "Agents"
 ---
 
-Synsci CLI ships with two top-level agent modes and one delegated subagent. The split is deliberate.
+Synci CLI ships with two top-level agent modes and one delegated subagent. The split is deliberate.
 
 - `build` is the daily-driver agent. Full filesystem and shell access.
 - `plan` is read-only. Same tools and context, but cannot mutate anything.
@@ -17,8 +17,8 @@ The agent is orthogonal to the research mode. You can be in `chemistry` mode wit
 `build` is what you get when you start a session in any UI without specifying an agent. It has the full toolset: read files, write files, run shell commands, edit code, run tests, run training scripts, drive cloud SDKs. Use it for everything you'd normally use a coding agent for.
 
 ```bash
-synsc web                    # recommended browser UI
-synsc                        # alternative TUI
+synci web                    # recommended browser UI
+synci                        # alternative TUI
 ```
 
 The agent indicator shows `build` when this agent is active.
@@ -30,8 +30,8 @@ The agent indicator shows `build` when this agent is active.
 Switch to plan mode with the agent toggle in the [web UI](/cli/web), or press <kbd>Tab</kbd> in the TUI, or start in plan mode directly:
 
 ```bash
-synsc web --agent plan
-synsc --agent plan           # TUI variant
+synci web --agent plan
+synci --agent plan           # TUI variant
 ```
 
 Common cases:
@@ -86,7 +86,7 @@ The conversation history is preserved across switches. Only the toolset changes,
 The default agent is `build`. To change the default, set it in your config or pass `--agent` on launch:
 
 ```bash
-synsc web --agent plan
+synci web --agent plan
 ```
 
 The dashboard at [cli.syntheticsciences.ai](https://cli.syntheticsciences.ai) lets you override per-project agent defaults if you want some checkouts to start in plan mode.

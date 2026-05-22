@@ -1,10 +1,10 @@
 ---
 title: "Agent harness: your project-aware research operator"
-description: "The Thesis agent reads your graph, searches sources, stages experiments, writes the log, and spawns sub-agents, with you in control of compute spending."
+description: "The Atlas agent reads your graph, searches sources, stages experiments, writes the log, and spawns sub-agents, with you in control of compute spending."
 sidebarTitle: "Agent"
 ---
 
-The Thesis agent is not a general-purpose chat assistant. It is a research operator that understands your project's graph, log, and files, and uses that structured state to plan and execute research work. When you open the agent chat, you're talking to an agent that can read your full research history, search indexed sources, stage experiments as formal blueprints, and delegate execution to sandboxed sub-agents after you approve it.
+The Atlas agent is not a general-purpose chat assistant. It is a research operator that understands your project's graph, log, and files, and uses that structured state to plan and execute research work. When you open the agent chat, you're talking to an agent that can read your full research history, search indexed sources, stage experiments as formal blueprints, and delegate execution to sandboxed sub-agents after you approve it.
 
 ## What the agent can do
 
@@ -38,13 +38,13 @@ When you send a message in the agent chat, the following happens:
 
 <Steps>
   <Step title="Your message is sent to the agent">
-    The chat UI sends your message to the Thesis backend, which starts a server-sent event (SSE) stream back to your browser.
+    The chat UI sends your message to the Atlas backend, which starts a server-sent event (SSE) stream back to your browser.
   </Step>
   <Step title="The agent thinks and calls tools">
     The agent reasons about your message, then calls tools, searching the knowledge base, reading graph nodes, querying the log, or staging a new node. You see text tokens streaming in real time, and tool calls appear as labeled events in the chat.
   </Step>
   <Step title="Tool results update project state">
-    Each tool call returns a result. If the tool mutates state, creating a node, writing a log entry, starting an Oracle job, the change is durable immediately. The Thesis graph and log are updated in the backend, not held in memory.
+    Each tool call returns a result. If the tool mutates state, creating a node, writing a log entry, starting an Oracle job, the change is durable immediately. The Atlas graph and log are updated in the backend, not held in memory.
   </Step>
   <Step title="The agent continues until done">
     The agent may run multiple rounds of thinking and tool calls before finishing. Each round re-evaluates whether the task is complete. The loop ends when the agent decides it has finished, or after a maximum of 10 rounds.

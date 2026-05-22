@@ -1,19 +1,19 @@
 ---
-title: "Synsci CLI security: credential boundary, redaction, device auth"
-description: "How Synsci CLI keeps credentials off disk, filters subprocess environments, redacts terminal output, and isolates per-user sessions through Supabase RLS."
+title: "Synci CLI security: credential boundary, redaction, device auth"
+description: "How Synci CLI keeps credentials off disk, filters subprocess environments, redacts terminal output, and isolates per-user sessions through Supabase RLS."
 sidebarTitle: "Security"
 ---
 
-Synsci CLI moves a lot of high-value credentials around. Hugging Face tokens, AWS keys, Modal secrets, plus model API access through the proxy, so the security boundary is worth understanding in detail. The model is: credentials live in the dashboard, get pulled into CLI memory at session start, are filtered into specific subprocess envs only, and are redacted from any output the CLI displays.
+Synci CLI moves a lot of high-value credentials around. Hugging Face tokens, AWS keys, Modal secrets, plus model API access through the proxy, so the security boundary is worth understanding in detail. The model is: credentials live in the dashboard, get pulled into CLI memory at session start, are filtered into specific subprocess envs only, and are redacted from any output the CLI displays.
 
 ## Credential lifecycle
 
 <Steps>
   <Step title="Persistence: dashboard only">
-    Credentials live in your account at [cli.syntheticsciences.ai](https://cli.syntheticsciences.ai), encrypted at rest. The CLI never writes them to disk. There is no `~/.synsc/credentials` file, no entry in `~/.aws/credentials`, no `HF_TOKEN` in your shell profile. The dashboard is the only persistent layer.
+    Credentials live in your account at [cli.syntheticsciences.ai](https://cli.syntheticsciences.ai), encrypted at rest. The CLI never writes them to disk. There is no `~/.synci/credentials` file, no entry in `~/.aws/credentials`, no `HF_TOKEN` in your shell profile. The dashboard is the only persistent layer.
   </Step>
   <Step title="Sync: in-memory at session start">
-    Each `synsc` launch fetches credentials over an authenticated TLS channel and holds them in process memory. When the process exits, the credentials are gone, there's no long-lived daemon retaining them.
+    Each `synci` launch fetches credentials over an authenticated TLS channel and holds them in process memory. When the process exits, the credentials are gone, there's no long-lived daemon retaining them.
   </Step>
   <Step title="Subprocess injection: filtered env">
     When the agent runs a shell command, the CLI builds a custom environment for that subprocess. Provider keys that aren't relevant to the command are stripped, see the filtering policy below.
@@ -75,7 +75,7 @@ Why device flow:
 - **Works headless.** SSH and remote-tunnel sessions can complete login by visiting the URL on any device.
 - **Codes expire fast.** A 15-minute window means a stolen device code is useless after the timeout.
 
-To rotate the Bearer token, run `synsc connect logout` and `synsc connect login` again.
+To rotate the Bearer token, run `synci connect logout` and `synci connect login` again.
 
 ## Per-user isolation
 
@@ -85,7 +85,7 @@ Even on shared infrastructure, your credentials and sessions are isolated:
 - **Bearer-token auth** means each session presents a token bound to your user ID. The dashboard rejects any request not matching the issuing user.
 - **Process memory** is per-CLI-process. Two CLI sessions on the same machine each pull their own credentials from the dashboard, they don't share state.
 
-If you're on a shared workstation, run `synsc connect logout` when you step away. The Bearer token becomes unusable immediately.
+If you're on a shared workstation, run `synci connect logout` when you step away. The Bearer token becomes unusable immediately.
 
 ## Network surface
 
@@ -99,7 +99,7 @@ The first two are mandatory and use TLS. The third is whatever your prompt produ
 
 ## Reporting issues
 
-If you find a security issue in Synsci CLI, please email security@syntheticsciences.ai with a description and reproduction steps. Critical issues are acknowledged within 24 hours.
+If you find a security issue in Synci CLI, please email security@syntheticsciences.ai with a description and reproduction steps. Critical issues are acknowledged within 24 hours.
 
 ## What's next
 

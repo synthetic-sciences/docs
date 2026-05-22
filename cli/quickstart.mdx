@@ -1,10 +1,10 @@
 ---
-title: "Synsci CLI quickstart"
+title: "Synci CLI quickstart"
 description: "From `npx synsci` to a working session in under five minutes. Install, authenticate, pick a research mode, and open the web UI."
 sidebarTitle: "Quickstart"
 ---
 
-This walkthrough takes you from nothing installed to a productive Synsci CLI session in under five minutes. You'll run a single-command install, authenticate to your dashboard, pick a research mode, and open the web UI.
+This walkthrough takes you from nothing installed to a productive Synci CLI session in under five minutes. You'll run a single-command install, authenticate to your dashboard, pick a research mode, and open the web UI.
 
 <Steps>
   <Step title="Install in one command">
@@ -14,7 +14,7 @@ This walkthrough takes you from nothing installed to a productive Synsci CLI ses
     npx synsci
     ```
 
-    This downloads the binary, walks you through dashboard authentication, and pre-fetches your synced credentials. When it finishes, `synsc` is on your PATH and ready.
+    This downloads the binary, walks you through dashboard authentication, and pre-fetches your synced credentials. When it finishes, `synci` is on your PATH and ready.
 
     See [Installation](/cli/installation) for npm, Homebrew, or curl alternatives.
   </Step>
@@ -23,7 +23,7 @@ This walkthrough takes you from nothing installed to a productive Synsci CLI ses
     Confirm authentication:
 
     ```bash
-    synsc connect status
+    synci connect status
     ```
 
     Healthy output prints your account email, current credit balance, and the synced credentials available. Hugging Face, Weights & Biases, Modal, Lambda, AWS, and GCP all show up if you have them set in the dashboard.
@@ -34,25 +34,25 @@ This walkthrough takes you from nothing installed to a productive Synsci CLI ses
   </Step>
 
   <Step title="Pick a research mode">
-    Synsci CLI works best when you tell it what kind of work you're doing. Pick a research mode before starting a session:
+    Synci CLI works best when you tell it what kind of work you're doing. Pick a research mode before starting a session:
 
     ```bash
-    synsc web --mode research     # general scientific research
-    synsc web --mode physics      # simulation, PDEs, dynamical systems
-    synsc web --mode chemistry    # drug discovery, molecular design, docking
-    synsc web --mode biology      # bioinformatics, structure prediction, omics
-    synsc web --mode flywheel     # build a specialized LLM from production data
+    synci web --mode research     # general scientific research
+    synci web --mode physics      # simulation, PDEs, dynamical systems
+    synci web --mode chemistry    # drug discovery, molecular design, docking
+    synci web --mode biology      # bioinformatics, structure prediction, omics
+    synci web --mode flywheel     # build a specialized LLM from production data
     ```
 
     Setting a mode primes the agent with domain conventions, activates the right bundled tools, and routes calls to the backend best suited for that work. You don't need to think about underlying providers.
 
     <Tip>
-      If you don't know which mode you want yet, run `synsc web` without `--mode` for the general-purpose agent. You can switch modes mid-session with `/mode <name>`.
+      If you don't know which mode you want yet, run `synci web` without `--mode` for the general-purpose agent. You can switch modes mid-session with `/mode <name>`.
     </Tip>
   </Step>
 
   <Step title="Send your first prompt">
-    `synsc web` opens the browser UI on `http://localhost:4444`. Type a prompt and press Enter:
+    `synci web` opens the browser UI on `http://localhost:4444`. Type a prompt and press Enter:
 
     ```
     Read README.md and summarize what this repo does in three bullets.
@@ -80,17 +80,17 @@ This walkthrough takes you from nothing installed to a productive Synsci CLI ses
     After running a few prompts, check what you spent:
 
     ```bash
-    synsc stats
+    synci stats
     ```
 
     `stats` aggregates credit usage per session and across time windows. The full audit trail lives on the [dashboard](https://cli.syntheticsciences.ai).
   </Step>
 
   <Step title="Run one-shot prompts (optional)">
-    For scripted workflows, skip the UI and pipe a single prompt with `synsc run`:
+    For scripted workflows, skip the UI and pipe a single prompt with `synci run`:
 
     ```bash
-    synsc run --mode ml "Refactor utils/log.ts to use structured logging"
+    synci run --mode ml "Refactor utils/log.ts to use structured logging"
     ```
 
     The agent runs the prompt to completion and exits. Useful for git hooks, CI, and shell pipelines.

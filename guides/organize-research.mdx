@@ -1,20 +1,20 @@
 ---
-title: "Organize a research program using the Thesis graph"
+title: "Organize a research program using the Atlas graph"
 description: "Structure a growing research area as a durable, branchable graph with indexed sources, tagged nodes, and configurable sharing instead of disconnected notes."
 sidebarTitle: "Organize"
 ---
 
-Thesis stores every hypothesis, experiment, source summary, and insight as a node in a graph. Nodes branch from each other rather than overwriting history, so your research program grows as a navigable map instead of a pile of chat logs. This guide walks you through setting up that structure from scratch.
+Atlas stores every hypothesis, experiment, source summary, and insight as a node in a graph. Nodes branch from each other rather than overwriting history, so your research program grows as a navigable map instead of a pile of chat logs. This guide walks you through setting up that structure from scratch.
 
 <Steps>
   <Step title="Create a root node">
     A root node anchors your research program. It has no parent and gives your project a stable identity in the graph.
 
-    Ask the agent, or call the MCP tool directly:
+    Ask the agent, or call the tool directly:
 
     ```json
     {
-      "name": "thesis_stage_node_create",
+      "name": "stage_node_create",
       "arguments": {
         "title": "Effect of learning rate schedules on GRPO convergence",
         "summary": "Root node for a research program investigating how LR schedules affect GRPO training stability.",
@@ -31,7 +31,7 @@ Thesis stores every hypothesis, experiment, source summary, and insight as a nod
   </Step>
 
   <Step title="Add a summary and content">
-    After creating the node, open it in the UI or update it via `thesis_stage_node_update`. A good root node has:
+    After creating the node, open it in the UI or update it via `stage_node_update`. A good root node has:
 
     - **Summary**, a single sentence stating the core claim or research question.
     - **Content**, background context, open questions, prior work pointers, or protocol notes.
@@ -40,13 +40,13 @@ Thesis stores every hypothesis, experiment, source summary, and insight as a nod
   </Step>
 
   <Step title="Index your sources">
-    Thesis can index external papers, repositories, and documentation sites and make them searchable alongside your graph content.
+    Atlas can index external papers, repositories, and documentation sites and make them searchable alongside your graph content.
 
     **Index an arXiv paper:**
 
     ```json
     {
-      "name": "thesis_index_paper",
+      "name": "index_paper",
       "arguments": {
         "external_ref": "https://arxiv.org/abs/2402.03300",
         "display_name": "DeepSeekMath paper"
@@ -58,7 +58,7 @@ Thesis stores every hypothesis, experiment, source summary, and insight as a nod
 
     ```json
     {
-      "name": "thesis_index_repo",
+      "name": "index_repo",
       "arguments": {
         "owner_repo": "huggingface/trl"
       }
@@ -69,7 +69,7 @@ Thesis stores every hypothesis, experiment, source summary, and insight as a nod
 
     ```json
     {
-      "name": "thesis_index_docs",
+      "name": "index_docs",
       "arguments": {
         "url": "https://huggingface.co/docs/trl",
         "display_name": "TRL documentation"
@@ -77,7 +77,7 @@ Thesis stores every hypothesis, experiment, source summary, and insight as a nod
     }
     ```
 
-    Indexed sources appear in the Knowledge panel and are returned by `thesis_search` alongside your graph content.
+    Indexed sources appear in the Knowledge panel and are returned by `search` alongside your graph content.
 
     <Tip>
       For rapid ingestion of many sources at once, ask the agent to extract claims, methods, assumptions, and follow-up experiments from source material and turn them into linked nodes. Useful when onboarding into a new field or converting prior notes into structured graph state.
@@ -85,11 +85,11 @@ Thesis stores every hypothesis, experiment, source summary, and insight as a nod
   </Step>
 
   <Step title="Branch into sub-experiments">
-    Once your root node is committed, create child nodes to represent individual experiments, source summaries, or sub-hypotheses. Use `thesis_branch_node` to create a child that inherits the parent's graph context:
+    Once your root node is committed, create child nodes to represent individual experiments, source summaries, or sub-hypotheses. Use `branch_node` to create a child that inherits the parent's graph context:
 
     ```json
     {
-      "name": "thesis_stage_node_create",
+      "name": "stage_node_create",
       "arguments": {
         "title": "Cosine vs. linear decay on 1B GRPO run",
         "summary": "Compare convergence speed and final reward under cosine vs. linear LR decay.",
@@ -99,7 +99,7 @@ Thesis stores every hypothesis, experiment, source summary, and insight as a nod
     }
     ```
 
-    Edges encode parent/child relationships across your whole program, so Thesis can display ancestor trees, trace where an idea came from, and suggest next-step frontiers based on what's been completed.
+    Edges encode parent/child relationships across your whole program, so Atlas can display ancestor trees, trace where an idea came from, and suggest next-step frontiers based on what's been completed.
   </Step>
 
   <Step title="Tag nodes for navigation">
@@ -109,7 +109,7 @@ Thesis stores every hypothesis, experiment, source summary, and insight as a nod
 
     ```json
     {
-      "name": "thesis_create_node_tag",
+      "name": "create_node_tag",
       "arguments": {
         "root_node_id": "<root-node-id>",
         "expected_revision": 0,
@@ -120,7 +120,7 @@ Thesis stores every hypothesis, experiment, source summary, and insight as a nod
     }
     ```
 
-    Then assign it to one or more nodes with `thesis_set_node_tag_assignments`. Tags appear in the graph canvas and can be used to filter the node list.
+    Then assign it to one or more nodes with `set_node_tag_assignments`. Tags appear in the graph canvas and can be used to filter the node list.
   </Step>
 
   <Step title="Set sharing for your nodes">
@@ -132,11 +132,11 @@ Thesis stores every hypothesis, experiment, source summary, and insight as a nod
     | `unlisted` | Anyone with the direct link |
     | `public` | Anyone |
 
-    Set sharing via `thesis_set_sharing_for_node`:
+    Set sharing via `set_sharing_for_node`:
 
     ```json
     {
-      "name": "thesis_set_sharing_for_node",
+      "name": "set_sharing_for_node",
       "arguments": {
         "node_id": "<node-id>",
         "sharing_mode": "unlisted"
@@ -144,7 +144,7 @@ Thesis stores every hypothesis, experiment, source summary, and insight as a nod
     }
     ```
 
-    Use `thesis_set_sharing_for_nodes` to update sharing on a batch of nodes at once.
+    Use `set_sharing_for_nodes` to update sharing on a batch of nodes at once.
   </Step>
 </Steps>
 

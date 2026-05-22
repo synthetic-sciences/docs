@@ -38,11 +38,11 @@ delphi uninstall    # remove containers and data volume
 
 The dashboard runs at [localhost:3000](http://localhost:3000). The API runs at [localhost:8742](http://localhost:8742).
 
-## How Delphi fits with Thesis
+## How Delphi fits with Atlas
 
-Thesis stores your research as a graph of hypotheses, experiments, sources, and decisions. Delphi is the layer underneath: it indexes the code, papers, and datasets you point it at, and exposes that index over MCP so any compatible agent can search it.
+Atlas stores your research as a graph of hypotheses, experiments, sources, and decisions. Delphi is the layer underneath: it indexes the code, papers, and datasets you point it at, and exposes that index over MCP so any compatible agent can search it.
 
-Use them together when your research draws on a body of code or literature larger than what a single chat context can hold. Thesis tracks your reasoning. Delphi gives the agent the context to reason with.
+Use them together when your research draws on a body of code or literature larger than what a single chat context can hold. Atlas tracks your reasoning. Delphi gives the agent the context to reason with.
 
 ## Manual install
 
@@ -66,7 +66,7 @@ Once you have an API key (from the dashboard at `/api-keys` or via `npx @synsci/
   "mcpServers": {
     "synsci-delphi": {
       "command": "uvx",
-      "args": ["synsc-context-proxy"],
+      "args": ["synci-context-proxy"],
       "env": {
         "SYNSC_API_KEY": "your-api-key",
         "SYNSC_API_URL": "http://localhost:8742"
@@ -81,4 +81,4 @@ Once you have an API key (from the dashboard at `/api-keys` or via `npx @synsci/
 | Cursor | `~/.cursor/mcp.json` |
 | Windsurf | `~/.codeium/windsurf/mcp_config.json` |
 | Claude Desktop | `~/Library/Application Support/Claude/claude_desktop_config.json` |
-| Claude Code | `claude mcp add --scope user synsci-delphi -- uvx synsc-context-proxy` |
+| Claude Code | `claude mcp add --scope user synsci-delphi -- uvx synci-context-proxy` |
