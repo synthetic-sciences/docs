@@ -1,70 +1,85 @@
 ---
-title: "Synci CLI quickstart"
-description: "Connect, pick a mode, and send your first prompt in under five minutes."
+title: "Quickstart"
+description: "Install Synci, run the device-flow login, and send your first prompt in under five minutes."
+icon: "rocket"
 ---
 
-This walks you from a fresh install to a working session with credentials, a research mode, and your first prompt.
+This walks you from a fresh shell to a working session with a signed-in account, a model provider, and your first prompt. It assumes Node `18+` is installed.
 
 <Steps>
-  <Step title="Connect">
+  <Step title="Install the CLI">
     ```bash
-    synci connect login
-    synci connect status
+    npm i -g synsci
+    synsci --version
     ```
 
-    `login` opens the browser, completes device-flow auth, and stores the Bearer token in the OS keychain. `status` confirms the active account, mode, and credit balance.
+    See [Installation](/installation) for Homebrew and curl-bash alternatives.
   </Step>
 
-  <Step title="Pick a mode">
-    Modes scope the agent to a domain. You can also switch mid-session with `/mode <name>`.
-
+  <Step title="Sign in to your account">
     ```bash
-    synci web --mode research     # general scientific research
-    synci web --mode physics      # simulation, PDEs, dynamical systems
-    synci web --mode chemistry    # drug discovery, molecular design, docking
-    synci web --mode biology      # bioinformatics, structure prediction, omics
-    synci web --mode flywheel     # build a specialized LLM from production data
+    synsci connect login
+    synsci connect status
     ```
 
-    <Warning>
-      If you don't know which mode you want yet, run `synci web` without `--mode` for the general-purpose agent.
-    </Warning>
+    `connect login` runs a device-code OAuth flow: it prints a verification URL and a one-time code, opens your browser to [app.syntheticsciences.ai/cli](https://app.syntheticsciences.ai/cli), and polls until you approve the device. The resulting `thk_*` Bearer token is stored under `~/.config/synsc`. `connect status` confirms the active email, synced services, and credit balance.
+  </Step>
+
+  <Step title="Add a model provider">
+    The agent needs at least one model route. The simplest options:
+
+    ```bash
+    synsci auth          # interactive provider picker (BYOK or OAuth)
+    synsci models        # list everything that's configured
+    ```
+
+    You can sign in to OpenAI Codex (Sign-in-with-ChatGPT), paste an Anthropic or OpenAI API key, or rely on the managed Synthetic Sciences route if you have credit. See [Codex](/codex) for the GPT-5 Codex flow and [Credentials](/credentials) for dashboard-managed keys.
   </Step>
 
   <Step title="Send your first prompt">
-    `synci web` opens the local browser UI on `http://localhost:4444`. Type a prompt and press Enter. The agent loads the right domain tools for the active mode and starts working.
-
-    For scripted workflows, skip the UI and pipe a single prompt with `synci run`:
+    The bare command drops you into the TUI agent:
 
     ```bash
-    synci run --mode chemistry "Set up a DFT optimization for this CIF file"
+    synsci
     ```
-  </Step>
 
-  <Step title="Sign into Codex (optional)">
-    If your workflow uses OpenAI Codex, link your account once so the agent can invoke `codex` and `codex exec` on demand:
+    For a one-shot prompt that exits when the agent is done, use `run`:
 
     ```bash
-    synci codex login
+    synsci run "Refactor utils/log.ts to use structured logging"
     ```
 
-    The token sits next to the Synci Bearer token in your keychain. See [`synci codex`](/codex) for the full flow.
+    For a local browser UI on `http://localhost:4444`:
+
+    ```bash
+    synsci web
+    ```
+
+    <Warning>
+      The agent has the same filesystem and shell access you do. Run it in a project directory you trust, or run inside Docker if you want isolation.
+    </Warning>
   </Step>
 </Steps>
+
+## What success looks like
+
+`synsci connect status` should show your email, an active Bearer token, at least one provider under "models", and a non-zero credit balance if you intend to use the managed route. A bare `synsci` should open a TUI; `synsci run "echo hello"` should print a short reply and exit.
+
+If login succeeds but commands fail, check `synsci connect status` before changing config. It is the fastest way to separate a local config issue from a provider routing issue.
 
 ## What's next
 
 <CardGroup cols={2}>
-  <Card title="Commands reference" href="/commands">
-    Every subcommand the binary ships with, grouped by area.
+  <Card title="Commands reference" icon="terminal" href="/commands">
+    Every subcommand the CLI ships, grouped by area.
   </Card>
-  <Card title="Research modes" href="/research-modes">
-    What each mode covers and which tools it bundles.
+  <Card title="Connect" icon="key-round" href="/connect">
+    Device-code OAuth, token storage, device list, and sync.
   </Card>
-  <Card title="Credentials sync" href="/credentials">
-    Wire HF, W&B, Modal, Lambda, AWS, and GCP through the dashboard.
+  <Card title="Credentials sync" icon="key-round" href="/credentials">
+    Wire HF, W&B, Modal, Lambda, and other provider keys through the dashboard.
   </Card>
-  <Card title="Security" href="/security">
-    Credential boundary, output redaction, per-user isolation.
+  <Card title="Security" icon="shield-check" href="/security">
+    Credential boundary, output redaction, and the sandbox boundary.
   </Card>
 </CardGroup>

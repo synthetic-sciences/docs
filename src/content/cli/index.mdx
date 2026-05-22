@@ -1,43 +1,103 @@
 ---
 title: "Synci CLI"
-description: "A terminal agent for scientific work. Pick a research mode and the agent loads the right domain conventions, tools, and backends for the job."
+description: "An AI coding agent for ML engineering and research, packaged as a terminal-first CLI with a local web UI, model routing, bundled research skills, and a synced dashboard."
+icon: "terminal"
 ---
 
-Synci CLI is the terminal agent in the Synthetic Sciences stack. The binary is `synci`. It pairs with the Atlas web app through a shared Synthetic Sciences account, but you can run it on its own too.
+Synci is a terminal coding agent purpose-built for ML engineering and scientific research workflows. The published binary is `synsci`. It pairs with the Synthetic Sciences dashboard through a shared account, but most of the agent runs locally on your machine.
 
-<CardGroup cols={2}>
-  <Card title="Install" href="/installation">
-    `npx synci` handles install, auth, and credential sync.
+The CLI bundles a terminal agent, an optional local web UI, model routing across hosted and BYOK providers, a credentials sync that pulls keys for HF, W&B, Modal, Lambda, RunPod, and friends, and a library of research skills you can pull into any session. The dashboard at [app.syntheticsciences.ai/cli](https://app.syntheticsciences.ai/cli) handles billing, key management, and device approval.
+
+<Columns cols={2}>
+  <Card
+    title="Install"
+    icon="package-check"
+    href="/installation"
+  >
+    npm, Homebrew, or the curl-bash installer. Pick one and run `synsci --version` to verify.
   </Card>
-  <Card title="Quickstart" href="/quickstart">
-    Connect, pick a mode, send your first prompt.
+  <Card
+    title="Quickstart"
+    icon="rocket"
+    href="/quickstart"
+  >
+    Install, run the device-flow login, send your first prompt in under five minutes.
   </Card>
-  <Card title="Connect" href="/connect">
-    Device-flow login and Bearer token management.
+  <Card
+    title="Commands"
+    icon="terminal"
+    href="/commands"
+  >
+    Every subcommand the CLI ships with, grouped by area.
   </Card>
-  <Card title="Codex" href="/codex">
-    Sign in to OpenAI Codex from the terminal.
+  <Card
+    title="Connect"
+    icon="key-round"
+    href="/connect"
+  >
+    Device-code OAuth, token storage, and `connect status` health checks.
   </Card>
-</CardGroup>
+</Columns>
 
-## What you get
+## How Synci works
 
-- **Research modes** for general research, physics, chemistry, biology, scientific writing, and the model flywheel. Each mode primes the agent with the right domain conventions and routes calls to the matching backend.
-- **Credential sync** for Hugging Face, Weights & Biases, Modal, Lambda Cloud, AWS, and GCP. Tokens flow from the dashboard into subprocesses without ever touching disk.
-- **Included credits** that cover the agent's work, with pre-call balance checks that block runaway loops before they bill.
-- **Web UI and TUI**. Run `synci web` for a local browser interface or run `synci` bare for the terminal.
+Synci's job is to be the agent loop you actually run on your laptop: keystrokes, files, processes, model calls, and credentials. The dashboard's job is to be the account: provisioned keys, billing, sync, and the device-approval endpoint that bootstraps the local install.
 
-## Two agents
+The product vocabulary is small:
 
-- `build` is the default. Full filesystem and shell access for development work.
-- `plan` is read-only. Same context and tools, but cannot mutate anything.
+- A **session** is a single agent conversation with its own message history, tool calls, and working directory. Sessions are local first and optionally synced.
+- A **provider** is a model backend that the agent can route through: Anthropic, OpenAI, OpenAI Codex (sign-in-with-ChatGPT), Google, OpenRouter, Together, Fireworks, Groq, and the managed Synthetic Sciences route.
+- An **agent profile** is a system prompt plus a tool set plus a routing policy. The built-in `synsci` profile is the default; you can create sub-agents with `synsci agent create`.
+- A **skill** is a portable instruction bundle that primes the agent for a domain. The CLI ships an ML-focused skill library covering training, tokenization, fine-tuning, evaluation, RAG, agents, distributed compute, and more.
+- A **synced credential** is a third-party API key or token issued by you in the dashboard and pulled into the local CLI process at runtime, never written to disk under your project tree.
 
-Switch with the agent toggle in the web UI header, or press <kbd>Tab</kbd> in the TUI. Mention `@general` in any message to delegate a complex search or multi-step task to a sub-agent that runs in its own context.
+The usual loop is: install the binary, run `synsci connect login` once, optionally sign into any external providers you use, then run `synsci` to start a session, `synsci run "..."` for one-shot work, or `synsci web` for a local browser UI.
 
-## Where it fits
+## How a command works
 
-| You want to | Reach for |
-|---|---|
-| Run scientific compute in your terminal | Synci CLI with the right [research mode](/research-modes) |
-| Track hypotheses, experiments, and decisions over time | Atlas |
-| Use both side-by-side | Run both products against the same Synthetic Sciences account |
+Every CLI invocation routes through a small set of local concerns: argument parsing, model and provider selection, credential sourcing, tool gating, and output formatting. Anything that needs network goes to either the model provider you picked or to the Synthetic Sciences backend at `https://thesis-synsc.fly.dev` for account, billing, sync, and device-approval calls.
+
+The loop is:
+
+```text
+agent or human
+  -> synsci command
+  -> local config in ~/.config/synsc
+  -> provider route (Anthropic/OpenAI/Codex/...) or Synci backend
+  -> tool calls (bash, files, MCP, skills, ...) executed locally
+  -> JSON, stream, file, table, or pretty output
+```
+
+`connect`, `auth`, `models`, `billing`, `mcp`, `skill`, and `agent` all read or write local CLI config; they call the Synci backend when they need to. Everything else maps to a model call plus local tool work.
+
+## Minimum working loop
+
+```bash
+npm i -g synsci
+synsci connect login
+synsci connect status
+
+synsci "Refactor utils/log.ts to use structured logging"
+```
+
+After that, use `synsci run` for one-shot prompts, `synsci web` for the local browser UI, `synsci skill add` to load a research skill, and `synsci models` to see what providers are configured.
+
+## What Synci includes
+
+| Area | Read this | Commands |
+| --- | --- | --- |
+| Setup | [Installation](/installation), [Quickstart](/quickstart) | `--version`, `upgrade`, `uninstall` |
+| Account | [Connect](/connect) | `connect login`, `connect status`, `connect sync`, `connect devices`, `connect logout` |
+| Sessions | [Commands](/commands) | bare `synsci`, `run`, `session`, `generate`, `tui attach`, `tui thread` |
+| Models and providers | [Commands](/commands) | `models`, `auth`, `billing` |
+| OpenAI Codex sign-in | [Codex](/codex) | provider auth via `synsci auth` |
+| Credentials sync | [Credentials](/credentials) | dashboard-managed BYOK and synced keys |
+| Skills library | [Research skills](/research-modes) | `skill add`, `skill list`, `skill show`, `skill remove` |
+| Servers and protocols | [Commands](/commands) | `serve`, `web`, `acp`, `mcp` |
+| Reference | [Commands](/commands), [Security](/security) | every shipped command and the security model |
+
+The current package is `synsci@1.1.125` (a thin launcher that resolves `@synsci/cli@1.1.122` under the hood). It requires Node `18+`. Source lives at [github.com/synthetic-sciences/synsci-cli](https://github.com/synthetic-sciences/synsci-cli).
+
+## Boundary
+
+Synci is not a sandbox. The permission and approval system is a UX guardrail to keep you in the loop on destructive tool calls; it is not isolation. If you need isolation, run Synci inside Docker or a VM. Synced credentials are redacted from terminal output and stripped from subprocess environments by default, but the agent has the same filesystem and shell access you do.

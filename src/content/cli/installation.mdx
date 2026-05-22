@@ -1,46 +1,95 @@
 ---
-title: "Install Synci CLI"
-description: "One npx command sets up the binary, the dashboard connection, and the keychain credentials."
+title: "Installation"
+description: "Three supported install paths: npm, Homebrew, and the curl-bash installer. Pick one and run synsci --version to verify."
+icon: "package-check"
 ---
 
-The CLI ships as the `@synci/cli` package on npm. The recommended path is `npx synci`, which handles everything end to end.
+Synci ships through three install paths. They produce slightly different filesystem layouts but a compatible binary surface. Pick the one that fits how the rest of your environment is managed.
 
-<Steps>
-  <Step title="Run the installer">
-    From any directory, run:
+## npm
 
-    ```bash
-    npx synci
-    ```
+The launcher package on npm is [`synsci`](https://www.npmjs.com/package/synsci). It resolves to the heavier `@synsci/cli` package on first run and pins to it for subsequent invocations.
 
-    The first run does three things in sequence: installs the `synci` binary into your PATH, opens the device-flow login in your browser, and writes the resulting Bearer token to your OS keychain.
-  </Step>
+```bash
+npm i -g synsci
+synsci --version
+```
 
-  <Step title="Verify the install">
-    ```bash
-    synci --version
-    synci doctor
-    ```
+Requirements: Node `18+`. The npm install puts the `synsci` binary on your PATH through your global Node bin directory.
 
-    `doctor` checks the binary, the keychain entry, dashboard reachability, and the bundled research modes.
-  </Step>
+If you would rather skip the launcher and install the implementation package directly:
 
-  <Step title="Connect your dashboard credentials">
-    Open [cli.syntheticsciences.ai](https://cli.syntheticsciences.ai) and paste the cloud and ML credentials you want available to the agent (Hugging Face, W&B, Modal, Lambda, AWS, GCP). They sync on the next `synci` session start; no further config is needed locally.
-  </Step>
-</Steps>
+```bash
+npm i -g @synsci/cli
+synsci --version
+```
 
-## Other install paths
+Both expose the same `synsci` entry point.
+
+## Homebrew
+
+```bash
+brew install SyntheticSciences/tap/synsc
+synsc --version
+```
+
+Homebrew installs the native binary as `synsc` (no trailing `i`). The commands and flags are identical to the npm install; only the entry point name differs.
+
+## curl-bash installer
+
+The fastest path on a fresh machine:
+
+```bash
+curl -fsSL https://syntheticsciences.ai/install | bash
+synsc --version
+```
+
+The installer detects your OS and CPU architecture, downloads the matching release binary, places it at `~/.synsc/bin/synsc`, and adds that directory to your shell rc so subsequent shells pick it up automatically.
+
+Supported targets: macOS `arm64` and `x64`, Linux `arm64` and `x64` (including `baseline` builds for non-AVX2 CPUs and `musl` builds for Alpine), and Windows `x64`.
+
+Useful installer flags:
+
+| Flag | Use |
+| --- | --- |
+| `-v, --version <version>` | Pin to a specific release instead of `latest`. |
+| `-b, --binary <path>` | Install the binary to a different path. |
+| `--no-modify-path` | Skip shell-rc editing. You will need to put the binary on PATH manually. |
+
+## Verify the runtime
+
+After any install path, confirm the binary resolves and the version reads back cleanly:
+
+```bash
+synsci --version
+synsci --help
+```
+
+If `synsci` is not on PATH after install, open a new shell, or `source` the rc file that the installer edited. The npm install relies on your Node global bin directory; the curl-bash install relies on `~/.synsc/bin`.
+
+## Upgrade
+
+```bash
+synsci upgrade
+```
+
+`upgrade` detects how you installed (npm, Homebrew, or curl-bash binary) and runs the matching update flow. Pin a version with `synsci upgrade --version 1.1.122` to roll back or stay on a tested release.
+
+## Uninstall
+
+```bash
+synsci uninstall
+```
+
+This removes the binary and clears local config under `~/.config/synsc`. Your dashboard account, billing balance, and synced credentials are unaffected; reinstall any time with the same login.
+
+## What's next
 
 <CardGroup cols={2}>
-  <Card title="Homebrew (macOS)" href="https://cli.syntheticsciences.ai/install">
-    `brew install synthetic-sciences/tap/synci`
+  <Card title="Quickstart" icon="rocket" href="/quickstart">
+    Install, sign in, send your first prompt.
   </Card>
-  <Card title="Direct binary" href="https://cli.syntheticsciences.ai/install">
-    Download the platform binary from the dashboard download page.
+  <Card title="Connect" icon="key-round" href="/connect">
+    Run the device-flow login that wires the CLI to your dashboard account.
   </Card>
 </CardGroup>
-
-<Warning>
-  The CLI talks to the Synthetic Sciences dashboard for credentials, credits, and session storage. Pin `--offline` if you want a session that does not phone home; it disables credential sync and credit tracking.
-</Warning>
