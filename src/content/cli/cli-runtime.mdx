@@ -13,7 +13,7 @@ The CLI runtime is the layer below every command: how arguments are parsed, wher
 | `-v, --version` | Print the installed CLI version. |
 | `-h, --help` | Print help for the command or subcommand. |
 | `--print-logs` | Stream agent diagnostics to stderr while the command runs. |
-| `--log-level <DEBUG\|INFO\|WARN\|ERROR>` | Override the log threshold for this invocation. |
+| `--log-level <DEBUG|INFO|WARN|ERROR>` | Override the log threshold for this invocation. |
 
 Per-command flags that show up on every session entrypoint (`synsci`, `synsci run`, `synsci web`):
 
@@ -21,7 +21,7 @@ Per-command flags that show up on every session entrypoint (`synsci`, `synsci ru
 | --- | --- |
 | `--model <provider/model>` | Override the default model. |
 | `--agent <name>` | Use a specific agent profile. |
-| `--format <default\|json>` | Switch to JSON output for scripting (`run` only). |
+| `--format <default|json>` | Switch to JSON output for scripting (`run` only). |
 
 ## Environment overrides
 
@@ -106,7 +106,7 @@ The npm and Homebrew install paths produce slightly different entry points:
 | --- | --- |
 | `npm i -g synsci` or `npm i -g @synsci/cli` | `synsci` |
 | `brew install SyntheticSciences/tap/synsc` | `synsc` |
-| `curl -fsSL https://syntheticsciences.ai/install \| bash` | `synsc` |
+| `curl -fsSL https://syntheticsciences.ai/install | bash` | `synsc` |
 
 The commands and flags are identical between them; only the entry-point name differs. Pick one and stay consistent within a team.
 
