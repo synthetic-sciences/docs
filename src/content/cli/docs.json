@@ -15,18 +15,28 @@
             ]
           },
           {
-            "group": "Connection",
+            "group": "Connect",
             "pages": [
               "connect",
               "codex",
               "credentials"
             ]
-          },
+          }
+        ]
+      },
+      {
+        "tab": "Reference",
+        "groups": [
           {
-            "group": "Reference",
+            "group": "CLI reference",
             "pages": [
               "commands",
-              "research-modes",
+              "research-modes"
+            ]
+          },
+          {
+            "group": "Operations",
+            "pages": [
               "security"
             ]
           }
