@@ -1,0 +1,79 @@
+---
+title: "Web UI"
+description: "synsci web boots a local server and opens a browser UI for longer conversations, multi-thread work, and reviewing tool calls visually."
+icon: "terminal"
+---
+
+`synsci web` is the same agent as the TUI, exposed through a local browser interface. The TUI is faster for tight loops; the web UI is better for longer conversations, working in multiple threads at once, and reviewing diffs and tool calls visually without dropping out of the conversation.
+
+The server is local: it binds to `127.0.0.1` by default, holds the agent in its own process, and serves the UI from the same port. Closing the browser does not kill the agent — reattach any time.
+
+## Start the server
+
+```bash
+synsci web
+```
+
+Defaults: bind on `127.0.0.1:4444`, open the system browser to that address, run with the default agent and the default model. Useful flags:
+
+| Flag | Use |
+| --- | --- |
+| `--port <n>` | Bind on a different port on `127.0.0.1`. |
+| `--host <addr>` | Override the bind interface. Use carefully; `--host 0.0.0.0` exposes the agent to your LAN. |
+| `--no-open` | Skip auto-opening the browser. |
+| `--agent <name>` | Use a specific agent profile. |
+| `--model <provider/model>` | Override the default model for this session. |
+
+```bash
+synsci web --port 5555
+synsci web --agent reviewer
+synsci web --no-open       # start the server in the background, open later
+```
+
+## macOS Full Disk Access
+
+On macOS, the first `synsci web` invocation probes for Full Disk Access (FDA) so the agent can read files outside the sandboxed Application Support tree (your home directory, project sources, dotfiles). If the probe fails, the UI shows a banner with instructions to grant FDA in System Settings → Privacy & Security; restart the server after granting.
+
+Without FDA the agent can still operate, but it is limited to files under explicitly listed roots and may not be able to read configs in `~`.
+
+## What the UI gives you
+
+- **Threads.** Each conversation lives in its own thread. Switch between threads without losing context; the agent keeps state per-thread.
+- **Tool call viewer.** Every tool call (file read, diff, shell command) renders inline with the result. Click through to see the full diff or transcript.
+- **Skill picker.** Toggle research skills on or off mid-conversation; activation is additive.
+- **Agent and model switcher.** Change the active agent or model per thread.
+- **Attach pane.** Drag files or paste URLs to attach them to the next prompt.
+
+## Reusing a running server
+
+If the server is already running, a second `synsci web` invocation reuses it instead of starting a new one. To attach a TUI to the same server from another terminal:
+
+```bash
+synsci tui attach           # attach to the default local server
+synsci tui thread <id>      # attach and open a specific thread
+```
+
+This is the simplest way to drive a long-running agent from a different terminal: leave the server up, attach when you want a UI, detach when you do not.
+
+## Exposing the server to other devices
+
+`--host 0.0.0.0` makes the server reachable on your LAN. Do this only on networks you control. For anything wider than a LAN, use `synsci serve` (HTTP API mode with auth) instead of `synsci web`; see [Server mode](/server-mode).
+
+If you do bind to `0.0.0.0`, also set `SYNSCI_SERVER_PASSWORD` and put a reverse proxy with TLS in front. The web UI is intended for `127.0.0.1` use.
+
+## What's next
+
+<CardGroup cols={2}>
+  <Card title="Sessions" icon="terminal" href="/sessions">
+    Threads, resume, attach, and export from the web UI.
+  </Card>
+  <Card title="Server mode" icon="terminal" href="/server-mode">
+    Headless HTTP API for remote agents and CI.
+  </Card>
+  <Card title="Sub-agents" icon="package-check" href="/sub-agents">
+    Drive the web UI with a custom agent profile.
+  </Card>
+  <Card title="Security" icon="shield-check" href="/security">
+    What `--host 0.0.0.0` exposes, and how to set basic auth.
+  </Card>
+</CardGroup>

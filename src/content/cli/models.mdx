@@ -1,0 +1,95 @@
+---
+title: "Models"
+description: "Provider routing across Anthropic, OpenAI, OpenAI Codex (Sign-in-with-ChatGPT), Google, OpenRouter, Together, Groq, Fireworks, and the managed Synthetic Sciences route. BYOK and managed paths in one config."
+icon: "package-check"
+---
+
+A **model** is a single inference endpoint the agent can route through. A **provider** is a vendor that exposes one or more models. Synci routes through providers locally — each call goes from your machine either directly to the provider (BYOK) or through the managed Synthetic Sciences route. There is no Synci-specific model gateway in the middle when you BYOK.
+
+## Supported providers
+
+| Provider | Auth | Notes |
+| --- | --- | --- |
+| Anthropic | BYOK (API key) | Claude family. Configured via `synsci auth`. |
+| OpenAI | BYOK (API key) | GPT family. Configured via `synsci auth`. |
+| OpenAI Codex | OAuth (sign-in with ChatGPT) | GPT-5 Codex. See [Codex](/codex) for the OAuth/PKCE flow. |
+| Google | BYOK (API key) | Gemini family. |
+| OpenRouter | BYOK (API key) | Aggregator for many open and closed models. |
+| Together | BYOK (API key) | Hosted open-weights models. |
+| Groq | BYOK (API key) | Fast inference for open-weights models. |
+| Fireworks | BYOK (API key) | Hosted open-weights models. |
+| Synthetic Sciences | Managed (account credit) | The default route when you have account credit. No external key required. |
+
+`synsci models` lists what is currently configured. Each provider may expose multiple model ids; the agent picks based on routing rules (default model, per-call override, sub-agent override) in that order of precedence.
+
+## Configure a provider
+
+```bash
+synsci auth
+```
+
+`auth` opens an interactive picker. Pick the provider, complete its flow (paste a key, or run an OAuth handshake for Codex), and the provider becomes available immediately. The credential is stored under `~/.config/synsc/credentials.json`, encrypted at rest.
+
+To remove a provider:
+
+```bash
+synsci auth
+# pick the provider, then "sign out"
+```
+
+This revokes the local credential. If the provider is OAuth-backed (Codex), the session is also revoked server-side.
+
+## Pick a model per call
+
+```bash
+synsci run --model anthropic/claude-opus-4-7 "Review this diff for race conditions"
+synsci run --model openai-codex/gpt-5-codex "Plan a migration off the old auth middleware"
+synsci run --model openrouter/meta-llama/llama-3.1-70b-instruct "..."
+```
+
+`--model <provider>/<model-id>` overrides the default for one call. The model id is whatever the provider uses upstream — `synsci models` prints the full set per provider.
+
+## Set a default model
+
+The default model is set in your dashboard at [app.syntheticsciences.ai/cli](https://app.syntheticsciences.ai/cli). Changes propagate to the CLI on the next `synsci connect sync`. You can also override per directory by setting a sub-agent default; see [Sub-agents](/sub-agents).
+
+## BYOK vs the managed route
+
+| Path | What runs where | Billing |
+| --- | --- | --- |
+| BYOK | Your machine calls the provider directly. Synci never sees the prompt or the response. | Whatever your provider account charges you. |
+| Managed | Your machine calls the Synthetic Sciences backend, which calls the provider. | Account credit. See `synsci billing show`. |
+
+The managed route is the simplest starting point — one bill, no API key juggling. BYOK is the right choice when you already have a provider account, want exact provider invoices, or have a reason to avoid the round-trip to the Synci backend.
+
+You can mix routes in the same install: BYOK for one provider, managed for the default. The agent picks based on which provider the active model belongs to.
+
+## Billing
+
+```bash
+synsci billing show
+synsci billing topup
+```
+
+`billing show` prints current credit balance and recent usage on the managed route. `billing topup` opens the dashboard to add credit. BYOK calls do not appear here; check your provider's own dashboard for those.
+
+## Stripping shared keys from subprocesses
+
+Synci strips `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`, `GOOGLE_GENERATIVE_AI_API_KEY`, and `GEMINI_API_KEY` from any subprocess the agent spawns, even if they exist in your shell. The agent talks to model providers itself; subprocesses do not need these keys, and stripping them prevents accidental exfiltration through a tool call. See [Security](/security) for the full env policy.
+
+## What's next
+
+<CardGroup cols={2}>
+  <Card title="Codex sign-in" icon="key-round" href="/codex">
+    The OAuth flow for OpenAI Codex (Sign-in-with-ChatGPT).
+  </Card>
+  <Card title="Credentials" icon="key-round" href="/credentials">
+    Synced cloud and ML credentials beyond model providers.
+  </Card>
+  <Card title="Sub-agents" icon="package-check" href="/sub-agents">
+    Different default models per agent profile.
+  </Card>
+  <Card title="Commands" icon="terminal" href="/commands">
+    `models`, `auth`, `billing` command reference.
+  </Card>
+</CardGroup>

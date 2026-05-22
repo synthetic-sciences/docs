@@ -1,0 +1,111 @@
+---
+title: "First session"
+description: "Walk through one complete Synci session end-to-end: open a project, pick a model, prompt the agent, attach a file, review changes, and resume later."
+icon: "terminal"
+---
+
+This is the end-to-end loop most people use day to day: open a project, drop into the agent, get one thing done. It assumes you have run `synsci connect login` and at least one provider is configured. If not, see [Quickstart](/quickstart) first.
+
+## Open a project
+
+```bash
+cd ~/code/my-project
+synsci
+```
+
+The bare `synsci` opens the TUI agent in your working directory with your default model and the built-in `synsci` profile. The agent sees the directory tree, the git status, and whatever files you mention in the prompt.
+
+To open the local browser UI instead, run `synsci web`. To run a single prompt without a UI, use `synsci run`. See [Sessions](/sessions) for when to pick each.
+
+## Send a prompt
+
+Inside the TUI, type a prompt and press Enter. Good first prompts focus the agent on one file or one symbol:
+
+```text
+Refactor utils/log.ts to use structured logging.
+Use pino. Keep the same exported function names.
+```
+
+The agent reads relevant files, proposes a plan, applies edits with your approval, and runs any verification commands you authorize. It does not block on every keystroke — only on tool calls that mutate state (`Write`, `Edit`, `Bash`).
+
+## Attach a file
+
+For prompts that need a specific file as input (a CIF file, a config, a paper):
+
+```bash
+synsci run -f data/sample.cif "Set up a DFT optimization for this file"
+```
+
+`-f, --file <path>` reads the file from disk and attaches it to the prompt. The agent gets the contents directly, not a path it has to discover.
+
+For remote artifacts (a paper URL, a public dataset):
+
+```bash
+synsci run --attach https://arxiv.org/pdf/2305.13245 "Summarize the architecture proposed in this paper"
+```
+
+## Pick a different model for one run
+
+The default model is whatever you set in your dashboard. Override it per call:
+
+```bash
+synsci run --model openai-codex/gpt-5-codex "Plan a migration off the old auth middleware"
+synsci run --model anthropic/claude-opus-4-7 "Review this diff for race conditions"
+```
+
+`synsci models` lists what's configured. See [Models](/models) for routing details.
+
+## Review changes
+
+The agent does not commit. After it edits files, review the diff:
+
+```bash
+git diff
+git diff --stat
+```
+
+If something is wrong, ask the agent to fix it:
+
+```text
+You changed log.warn to log.warning in three files; revert those.
+```
+
+The agent keeps the conversation context, so it knows which files you mean.
+
+## Continue tomorrow
+
+Sessions persist locally and sync to the dashboard. To pick up where you left off:
+
+```bash
+synsci run -c "Now add tests for the refactored module"
+```
+
+`-c, --continue` resumes the most recent session in this directory. To resume a specific session by id:
+
+```bash
+synsci session list
+synsci run -s ses_4xj3k "..."
+```
+
+See [Sessions](/sessions) for session management, listing, and attaching to running threads.
+
+## What success looks like
+
+A working first session usually means: the agent read the files it needed without you typing paths, edits applied with diffs you could review, and the verification commands the agent ran exited cleanly. If the agent looped on the same file or asked for permission on every read, your default model may be underpowered for the task — try a stronger model with `--model`.
+
+## What's next
+
+<CardGroup cols={2}>
+  <Card title="Sessions" icon="terminal" href="/sessions">
+    Manage past sessions, resume, attach, and inspect.
+  </Card>
+  <Card title="Models" icon="package-check" href="/models">
+    Routing rules, BYOK vs managed, per-provider behavior.
+  </Card>
+  <Card title="Sub-agents" icon="package-check" href="/sub-agents">
+    Custom agents with their own system prompt, tool set, and routing policy.
+  </Card>
+  <Card title="Web UI" icon="terminal" href="/web-ui">
+    Use the local browser interface instead of the TUI.
+  </Card>
+</CardGroup>

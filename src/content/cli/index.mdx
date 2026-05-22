@@ -87,14 +87,18 @@ After that, use `synsci run` for one-shot prompts, `synsci web` for the local br
 | Area | Read this | Commands |
 | --- | --- | --- |
 | Setup | [Installation](/installation), [Quickstart](/quickstart) | `--version`, `upgrade`, `uninstall` |
-| Account | [Connect](/connect) | `connect login`, `connect status`, `connect sync`, `connect devices`, `connect logout` |
-| Sessions | [Commands](/commands) | bare `synsci`, `run`, `session`, `generate`, `tui attach`, `tui thread` |
-| Models and providers | [Commands](/commands) | `models`, `auth`, `billing` |
+| First session | [First session](/first-session), [Agent onboarding](/agent-onboarding) | bare `synsci`, `run`, `generate` |
+| CLI runtime | [CLI runtime](/cli-runtime) | global flags, env vars, profiles, output formats |
+| Sessions | [Sessions](/sessions) | `session`, `tui attach`, `tui thread`, `export`, `import` |
+| Models and providers | [Models](/models) | `models`, `auth`, `billing` |
 | OpenAI Codex sign-in | [Codex](/codex) | provider auth via `synsci auth` |
 | Credentials sync | [Credentials](/credentials) | dashboard-managed BYOK and synced keys |
-| Skills library | [Research skills](/research-modes) | `skill add`, `skill list`, `skill show`, `skill remove` |
-| Servers and protocols | [Commands](/commands) | `serve`, `web`, `acp`, `mcp` |
-| Reference | [Commands](/commands), [Security](/security) | every shipped command and the security model |
+| Skills library | [Skills](/skills) | `skill add`, `skill list`, `skill show`, `skill remove` |
+| Sub-agents | [Sub-agents](/sub-agents) | `agent create` |
+| Web UI | [Web UI](/web-ui) | `synsci web` |
+| Server and protocols | [Server mode](/server-mode) | `serve`, `acp`, `mcp` |
+| Account | [Connect](/connect) | `connect login`, `connect status`, `connect sync`, `connect devices` |
+| Complete surface | [Feature map](/feature-map), [Commands](/commands) | every shipped command and the security model |
 
 The current package is `synsci@1.1.125` (a thin launcher that resolves `@synsci/cli@1.1.122` under the hood). It requires Node `18+`. Source lives at [github.com/synthetic-sciences/synsci-cli](https://github.com/synthetic-sciences/synsci-cli).
 

@@ -74,9 +74,16 @@ Create `.synsc/skills.json` in your project root:
 
 Every session started in that directory loads exactly those skills. CI agents and team members get the same primed agent without coordinating one-off install commands.
 
+## Claude Code plugin marketplace
+
+The same skill bundle is also published as a [Claude Code plugin marketplace](https://github.com/synthetic-sciences/synsci-cli/tree/main/.claude-plugin), so anyone running Claude Code can install the research-skills set with one command and get the same domain priming the Synci agent uses. The marketplace manifest lists the same 82 skills under the bundle name `ai-research-skills`.
+
 ## What's next
 
 <CardGroup cols={2}>
+  <Card title="Sub-agents" icon="package-check" href="/sub-agents">
+    Compose skills with custom system prompts to build domain-specific sub-agents.
+  </Card>
   <Card title="Commands" icon="terminal" href="/commands">
     `skill add`, `skill list`, `skill show`, `skill remove`, `skill set-entries`.
   </Card>

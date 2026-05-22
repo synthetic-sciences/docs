@@ -1,0 +1,98 @@
+---
+title: "Server mode"
+description: "synsci serve runs the agent as a long-lived HTTP API. ACP and MCP connect protocol-aware hosts. Authentication, attachment, and the deployment shapes that make sense."
+icon: "terminal"
+---
+
+`synsci serve` runs the CLI as a long-lived HTTP server: prompts in, responses out, tool calls executed on the server's host. It is the right surface for headless dev boxes, CI integrations, shared team agents, and hosts that want to talk to the agent over HTTP rather than spawn a child process.
+
+For host integrations that speak [Agent Client Protocol](https://github.com/zed-industries/agent-client-protocol) over stdio, use `synsci acp`. For [Model Context Protocol](https://modelcontextprotocol.io/) servers that the agent should be able to call as tools, use `synsci mcp`.
+
+## Start the server
+
+```bash
+synsci serve --port 4444
+```
+
+Defaults: bind on `127.0.0.1:4444`, run with the default agent and the default model, log to stderr. By default the server runs without authentication and logs a warning saying so. Set `SYNSCI_SERVER_PASSWORD` before you expose it beyond `127.0.0.1`.
+
+```bash
+SYNSCI_SERVER_PASSWORD="long-random-token" synsci serve --port 4444
+```
+
+That switches the server to HTTP Basic Auth on every request. Pair with a reverse proxy that adds TLS before you expose the port to anything wider than a single host.
+
+## Useful flags
+
+| Flag | Use |
+| --- | --- |
+| `--port <n>` | Bind on a different port. |
+| `--host <addr>` | Override the bind interface. `0.0.0.0` exposes to all interfaces; use only behind a proxy. |
+| `--agent <name>` | Default agent profile for new sessions on this server. |
+| `--model <provider/model>` | Default model for new sessions. |
+| `--print-logs` | Stream the agent's diagnostic log to stderr while the server runs. |
+
+## Attach from a different terminal
+
+```bash
+synsci tui attach
+synsci tui thread <id>
+```
+
+`tui attach` opens the TUI bound to the running server instead of starting a fresh local agent. `tui thread <id>` jumps to a specific thread on that server. Useful when the server is running on a remote dev box you reach via SSH.
+
+The browser UI also reattaches to a running server: a second `synsci web` invocation reuses the existing server instead of starting a new one.
+
+## ACP — Agent Client Protocol
+
+```bash
+synsci acp
+```
+
+`acp` speaks the Agent Client Protocol over stdio. Pair this with editors and hosts that want to talk to the agent as a subprocess: they pipe prompts in, get streamed events out, and route tool calls back to the host. The exact protocol surface is the upstream ACP spec — Synci is one implementation of the agent side.
+
+This is the right protocol when the host runs locally and wants the agent as a subprocess; HTTP serve is the right protocol when the agent runs on a different machine.
+
+## MCP — Model Context Protocol
+
+```bash
+synsci mcp
+```
+
+The CLI ships a manager for [MCP](https://modelcontextprotocol.io/) servers that the agent can call as tools. `synsci mcp` lists configured servers, adds new ones, and toggles them per session. MCP is how you give the agent access to a database, a code search index, an issue tracker, or any other tool surface that is already wrapped as an MCP server.
+
+The agent treats MCP tools like first-class tools: they show up in the tool picker, can be restricted on sub-agents with `--tools`, and respect the same approval flow as built-in tools.
+
+## Deployment shapes
+
+The patterns that make sense:
+
+| Shape | What it looks like |
+| --- | --- |
+| Single-user remote dev box | `synsci serve` on `127.0.0.1` of the dev box. Reach it from your laptop over SSH port-forward. No auth needed (SSH handles it). |
+| Single-user laptop background agent | `synsci serve` in a launch agent or systemd user unit. Bind `127.0.0.1`. Attach from any local terminal. |
+| Team-shared agent | `synsci serve` on an internal host. `SYNSCI_SERVER_PASSWORD` set. Reverse proxy with TLS and additional auth in front. Bind `127.0.0.1`; let the proxy take the public port. |
+| CI integration | `synsci run --format json` per job, no long-lived server. Use the JSON output to make pass/fail decisions. |
+
+Avoid: binding `0.0.0.0` directly to the public internet, sharing `SYNSCI_SERVER_PASSWORD` across teams, or relying on the unauthenticated default for anything beyond local development.
+
+## What the server does not protect
+
+`synsci serve` is not a sandbox. A request that gets through auth can run any tool call the agent is configured to run, on the host the server is running on. Run server mode inside a container or VM when you want to constrain what the agent can do beyond what your filesystem permissions already allow.
+
+## What's next
+
+<CardGroup cols={2}>
+  <Card title="Web UI" icon="terminal" href="/web-ui">
+    The local browser interface that drives the same agent.
+  </Card>
+  <Card title="Sessions" icon="terminal" href="/sessions">
+    Threads, attach, and resume against a running server.
+  </Card>
+  <Card title="Security" icon="shield-check" href="/security">
+    `SYNSCI_SERVER_PASSWORD`, env hygiene, and the trust boundary.
+  </Card>
+  <Card title="Commands" icon="terminal" href="/commands">
+    `serve`, `acp`, `mcp`, `tui attach`, `tui thread`.
+  </Card>
+</CardGroup>
