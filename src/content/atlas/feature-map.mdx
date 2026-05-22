@@ -1,0 +1,108 @@
+---
+title: "Feature map"
+description: "Everything the shipped Atlas CLI and docs package expose."
+icon: "map"
+---
+
+This page is grounded in the `@synsci/atlas@0.5.11` command registry and bundled skill package. It is the high-level map; [Commands](/commands) is the exact route table.
+
+## Package surface
+
+| Surface | What ships |
+| --- | --- |
+| CLI binary | `atlas` from `@synsci/atlas` |
+| Runtime | `src/atlas-runtime/` with command registry, config, dispatch, HTTP client, local commands, output, and parsing |
+| Skills | `8` bundled skills under `skills/` |
+| API base | `https://app.syntheticsciences.ai/api/v1` by default |
+| Commands | `106` public commands |
+| Node requirement | Node `18+` |
+
+## Command families
+
+| Family | Count | What it covers |
+| --- | ---: | --- |
+| Auth | `4` | Browser login, logout, current user, and doctor checks. |
+| Config and local secrets | `7` | Local config profiles, macOS Keychain helpers, and Atlas account metadata. |
+| Keys | `4` | Create, list, rotate, and revoke API keys. |
+| Nodes and maps | `40` | Nodes, branches, links, map reads, rendering, access, labels, drafts, history, exports, imports, and program snapshots. |
+| Evidence | `13` | Upload, inspect, note, delete, download, linked JSON evidence, and file listing. |
+| Library and research | `23` | Library source indexing, tree/read/grep, search, grounded Q&A, async library runs, research runs, and usage summary. |
+| Runs | `3` | Start, list, and stop node-scoped run records. |
+| Integrations | `9` | GitHub link/status/refresh/disconnect plus Hugging Face and W&B secret storage. |
+| Ops map export | `3` | Admin-only map listing and canonical JSON/NDJSON export. |
+
+## Local commands
+
+These commands run local CLI behavior:
+
+| Command | Local behavior |
+| --- | --- |
+| `login` | Starts a localhost callback, opens browser approval, redeems a one-time token, and writes the API key to local config. |
+| `logout` | Removes credentials for the active profile. |
+| `doctor` | Checks config path, active profile, API base URL, backend status, auth status when a key exists, and bundled skill presence. |
+
+`whoami` is not local; it calls `/auth/status`.
+
+## Map primitives
+
+Atlas map work is built from:
+
+- `nodes:create` for new durable map state.
+- `nodes:save` for changes to existing nodes.
+- `nodes:branch`, `link:add`, and `link:remove` for topology.
+- `map:view`, `link:parents`, `link:children`, and render commands for reads.
+- `access:*` for access policy.
+- `labels:*` for root-scoped labels.
+- `draft:*` for multi-agent edit coordination.
+- `evidence:link/refresh` for public HTTPS JSON evidence attached by URL.
+- `runs:*` for node-scoped run records.
+
+Use [Nodes and maps](/graph) for the concepts and [Build a first graph](/first-graph) for a workflow.
+
+## Evidence primitives
+
+Evidence files are attached to nodes. The CLI supports:
+
+- A high-level one-shot upload with `evidence:add`.
+- Lower-level prepare/finalize upload calls.
+- Evidence listing, reads, notes, and deletion.
+- Cross-node file listing with `evidence:files`.
+
+The one-shot upload path validates local files, prepares upload records, writes bytes to the signed upload URL, then finalizes the batch.
+
+## Library and research primitives
+
+Atlas library and research commands cover:
+
+- `library:list`, `library:add`, `library:show`, `library:update`, `library:delete`, and `library:sync`.
+- `library:tree`, `library:read`, and `library:grep` for source inspection.
+- `library:search` for unified search.
+- `library:ask` for synchronous document Q&A.
+- `library:runs:*` for async library jobs.
+- `research:ask` and `research:runs:*` for broader research tasks.
+- `usage:summary` for library and research usage.
+
+Supported source types are `repository`, `documentation`, `research_paper`, `huggingface_dataset`, `local_folder`, `slack`, `google_drive`, and `connector`. Atlas also normalizes common aliases like `repo`, `docs`, `dataset`, and `paper`; prefer the stable full names in scripts.
+
+## Output and safety
+
+The CLI supports `json`, `tsv`, `csv`, `table`, and `pretty` output. Use `--format=json` for agents.
+
+Destructive commands are safety-gated and require `--yes` or `--force`. This includes deletes, revokes, cancellations, disconnects, and key rotation.
+
+Use `--idempotency-key` when retrying writes from an external orchestrator.
+
+## Skills
+
+The package includes:
+
+- `atlas`
+- `atlas-auto`
+- `atlas-lookahead`
+- `atlas-prove`
+- `atlas-reproduce`
+- `atlas-search`
+- `atlas-to-graph`
+- `atlas-tree`
+
+See [Bundled skills](/skills) for when to use each skill.

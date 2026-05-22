@@ -1,0 +1,121 @@
+---
+title: "Atlas"
+description: "A practical guide to graph-native research with the Atlas CLI."
+icon: "git-branch"
+---
+
+Research is reorganizing around delegation. Researchers are integrating heavier scaffolding by the month: autoresearch loops, multi-agent harnesses, and AI scientists running in the background. The marginal cost of running an experiment is collapsing, and the volume of experimentation a single researcher can sustain is rising with it.
+
+Atlas is the infrastructure layer for this shift. It is a project graph that holds hypotheses, experiments, branches, and results in one continuous structure. Atlas is built for human-agent research collaboration at scale, in solo and team settings.
+
+Use these docs in order if you are setting up Atlas for the first time. Use the command reference when you already know what you want to call.
+
+<Columns cols={2}>
+  <Card
+    title="Set up the CLI"
+    icon="rocket"
+    href="/quickstart"
+  >
+    Install Atlas, sign in, verify your account, and run a first command.
+  </Card>
+  <Card
+    title="Build a first graph"
+    icon="git-branch"
+    href="/first-graph"
+  >
+    Create a root node, add branches, attach evidence, and render the tree.
+  </Card>
+  <Card
+    title="Build from library sources"
+    icon="search"
+    href="/source-to-graph"
+  >
+    Add a repository, paper, docs site, or dataset and turn answers into map state.
+  </Card>
+  <Card
+    title="Onboard an agent"
+    icon="bot"
+    href="/agent-onboarding"
+  >
+    Copy one prompt that installs Atlas, logs in, checks doctor, and verifies skills.
+  </Card>
+</Columns>
+
+## How Atlas works
+
+Atlas exists because delegated research work gets scattered across chats, notebooks, local files, logs, and memory. Agents can do more work than a single person can manually track; Atlas gives that work a shared map so humans and agents can return to the same state, audit what happened, and decide what to do next.
+
+The product vocabulary is intentionally small:
+
+- A **node** is a durable research object: a question, hypothesis, plan, experiment, result, claim, summary, or source-grounded observation.
+- A **link** records dependency or lineage between nodes.
+- **Evidence** attaches files, outputs, reports, logs, figures, patches, or external JSON to the node it supports.
+- The **Nia-backed library** indexes repositories, papers, docs, datasets, and folders so agents can search, ask grounded questions, use Oracle-style synthesis, and run async deep research before writing map state.
+- A **label** marks workflow state such as `planned`, `running`, `validated`, or `blocked`.
+- An **access policy** controls whether a node stays private, is shared with collaborators, or becomes public.
+
+The usual loop is: create or choose a root node, branch when there are competing hypotheses, attach evidence when support comes from a file or run, index library sources when external material needs to be searchable, and save only the claims, decisions, results, or open questions that should survive the session.
+
+When in doubt, make the next useful node small. A good node should be easy to read, easy to cite, and easy to branch from by a human or an agent.
+
+## How a command works
+
+Most Atlas CLI commands are direct HTTP calls to `https://app.syntheticsciences.ai/api/v1`. The command name is product-native; the route behind it can still use older backend nouns for compatibility. For example, `nodes:create` creates a saved research node, even though the stable REST route remains `/api/v1/nodes/commit-new`.
+
+The CLI handles local config, auth, argument parsing, output formatting, retries, destructive-command confirmation, and file upload orchestration.
+
+The loop is:
+
+```text
+agent or human
+  -> atlas command
+  -> local config and API key
+  -> /api/v1 route
+  -> map, evidence, library, integration, or export service
+  -> JSON, stream, file, table, or pretty output
+```
+
+`login`, `logout`, `doctor`, `config:*`, and `secrets:*` are local commands. They still call Atlas APIs when needed, but they also read or write local CLI config. Everything else maps to a concrete `/api/v1` route; the full map is in [Commands](/commands).
+
+## Minimum working loop
+
+```bash
+npm i -g @synsci/atlas@latest
+atlas login
+atlas doctor --format=json
+
+atlas nodes:create \
+  --payload-json '{
+    "local_temp_node_id": "tmp-first-question",
+    "parent_ids": [],
+    "staged_payload": {
+      "title": "first research question",
+      "content": "What should we verify first?",
+      "summary": "Initial Atlas research question.",
+      "kind": "question"
+    }
+  }' \
+  --format=json
+```
+
+After that, use `nodes:branch` for alternatives, `evidence:add` for local evidence, and `library:add` for external material.
+
+## What Atlas includes
+
+| Area | Read this | Commands |
+| --- | --- | --- |
+| Setup | [Quickstart](/quickstart) | `login`, `whoami`, `doctor` |
+| CLI runtime | [CLI runtime](/cli-runtime) | global flags, profiles, output formats, retries |
+| Map state | [Nodes and maps](/graph) | `map:view`, `nodes:*`, `map:*`, `link:*`, `access:*`, `draft:*`, `labels:*` |
+| Evidence | [Evidence and files](/artifacts-files) | `evidence:*`, `evidence:files` |
+| Library grounding | [Library and research](/sources-search) | `library:*`, `research:*`, `usage:summary` |
+| Portability | [Exports and imports](/exports-imports) | `history:export`, `map:export`, `map:summary:*`, `map:import` |
+| Accounts | [Auth and config](/auth-config) | config, keys, GitHub, Hugging Face, W&B |
+| Agents | [Bundled skills](/skills) | `atlas`, `atlas-auto`, `atlas-search`, `atlas-to-graph`, and related skills |
+| Complete surface | [Feature map](/feature-map) | every shipped Atlas feature family |
+
+The current package is `@synsci/atlas@0.5.11`. It requires Node `18+`, exposes `106` CLI commands, and bundles `8` Atlas skills. Atlas is direct REST plus CLI; there is no public Atlas MCP server.
+
+## Boundary
+
+Atlas stores research state, indexed sources, evidence, and run records. If a workflow depends on unavailable external infrastructure, record that blocked state in the map.

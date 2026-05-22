@@ -1,0 +1,43 @@
+---
+title: "Synci CLI"
+description: "A terminal agent for scientific work. Pick a research mode and the agent loads the right domain conventions, tools, and backends for the job."
+---
+
+Synci CLI is the terminal agent in the Synthetic Sciences stack. The binary is `synci`. It pairs with the Atlas web app through a shared Synthetic Sciences account, but you can run it on its own too.
+
+<CardGroup cols={2}>
+  <Card title="Install" href="/installation">
+    `npx synci` handles install, auth, and credential sync.
+  </Card>
+  <Card title="Quickstart" href="/quickstart">
+    Connect, pick a mode, send your first prompt.
+  </Card>
+  <Card title="Connect" href="/connect">
+    Device-flow login and Bearer token management.
+  </Card>
+  <Card title="Codex" href="/codex">
+    Sign in to OpenAI Codex from the terminal.
+  </Card>
+</CardGroup>
+
+## What you get
+
+- **Research modes** for general research, physics, chemistry, biology, scientific writing, and the model flywheel. Each mode primes the agent with the right domain conventions and routes calls to the matching backend.
+- **Credential sync** for Hugging Face, Weights & Biases, Modal, Lambda Cloud, AWS, and GCP. Tokens flow from the dashboard into subprocesses without ever touching disk.
+- **Included credits** that cover the agent's work, with pre-call balance checks that block runaway loops before they bill.
+- **Web UI and TUI**. Run `synci web` for a local browser interface or run `synci` bare for the terminal.
+
+## Two agents
+
+- `build` is the default. Full filesystem and shell access for development work.
+- `plan` is read-only. Same context and tools, but cannot mutate anything.
+
+Switch with the agent toggle in the web UI header, or press <kbd>Tab</kbd> in the TUI. Mention `@general` in any message to delegate a complex search or multi-step task to a sub-agent that runs in its own context.
+
+## Where it fits
+
+| You want to | Reach for |
+|---|---|
+| Run scientific compute in your terminal | Synci CLI with the right [research mode](/research-modes) |
+| Track hypotheses, experiments, and decisions over time | Atlas |
+| Use both side-by-side | Run both products against the same Synthetic Sciences account |

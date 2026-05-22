@@ -2,15 +2,26 @@
   "name": "synsci-docs",
   "private": true,
   "version": "1.0.0",
-  "description": "Synthetic Sciences documentation",
+  "description": "Synthetic Sciences documentation site",
   "license": "MIT",
+  "type": "module",
   "scripts": {
-    "dev": "mint dev",
-    "build": "mint export --output export.zip && rm -rf out && mkdir -p out && unzip -q -o export.zip -d out && node scripts/strip-watermark.js",
-    "broken-links": "mint broken-links",
-    "validate": "mint validate"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "lucide-react": "^0.453.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-markdown": "^9.0.1",
+    "remark-gfm": "^4.0.0"
   },
   "devDependencies": {
-    "mint": "^4.2.0"
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "typescript": "^5.6.3",
+    "vite": "^6.0.5"
   }
 }

@@ -1,0 +1,90 @@
+---
+title: "Auth and config"
+description: "Browser login, keys, local config, secrets, and integrations."
+icon: "key-round"
+---
+
+Atlas uses browser-first login for the CLI.
+
+```bash
+atlas login
+atlas whoami --format=json
+atlas logout
+```
+
+Login starts a localhost callback, opens the Atlas web approval page, redeems a one-time exchange token, and writes an API key to the active local config profile.
+
+## Local checks
+
+Run doctor after install, login, or config changes:
+
+```bash
+atlas doctor --format=json
+```
+
+Doctor checks local config, stored API key, backend reachability, package version, and bundled skill presence.
+
+It is safe to run doctor before login. In that state it checks backend reachability and package skill presence, then reports that no API key is present.
+
+## Keys
+
+Use Atlas API keys for agents and scripts:
+
+```bash
+atlas keys:create --name "local agent" --format=json
+atlas keys:list --format=json
+atlas keys:rotate --key-id key_... --format=json
+atlas keys:delete --key-id key_... --yes
+```
+
+The full secret is returned only once. Store it as a secret and prefer printing only the prefix in shared logs.
+
+| Command | Use |
+| --- | --- |
+| `keys:create` | Create a named key and print the secret once. |
+| `keys:list` | List key IDs, names, prefixes, and timestamps. |
+| `keys:rotate` | Replace one key while preserving the key record. |
+| `keys:delete` | Revoke a key. Requires `--yes`. |
+
+## Account and config
+
+```bash
+atlas config:show --format=json
+atlas account:update --display-name "Research Agent"
+```
+
+Use `account:update` for account metadata and `config:*` for local CLI profiles. Use `whoami` when an agent only needs to confirm that auth works.
+
+`account:update` supports display name, full name, avatar URL, GitHub username, and timezone fields.
+
+## Integrations
+
+```bash
+atlas github:link --open
+atlas github:status --format=json
+atlas github:refresh-repos --format=json
+atlas integrations:status --format=json
+```
+
+| Command | Use |
+| --- | --- |
+| `github:link` | Get the GitHub install URL. Pass `--open` to open it. |
+| `github:status` | Show whether GitHub is connected and usable. |
+| `github:refresh-repos` | Refresh repository access after an install or permission change. |
+| `github:disconnect` | Disconnect GitHub. Requires `--yes`. |
+| `integrations:huggingface:set` | Store a Hugging Face token for Atlas workflows. |
+| `integrations:huggingface:remove` | Remove the stored Hugging Face token. Requires `--yes`. |
+| `integrations:wandb:set` | Store a W&B API key for Atlas workflows. |
+| `integrations:wandb:remove` | Remove the stored W&B key. Requires `--yes`. |
+| `integrations:status` | Show all integration status in one payload. |
+
+Pass secrets through environment variables in automation instead of shell history:
+
+```bash
+export HF_TOKEN=...
+export WANDB_API_KEY=...
+atlas integrations:huggingface:set --token-env HF_TOKEN
+atlas integrations:wandb:set --api-key-env WANDB_API_KEY
+```
+
+Use `keys:create` for Atlas API keys. Use integration commands only for external provider tokens that Atlas workflows need.

@@ -1,0 +1,70 @@
+---
+title: "Synci CLI quickstart"
+description: "Connect, pick a mode, and send your first prompt in under five minutes."
+---
+
+This walks you from a fresh install to a working session with credentials, a research mode, and your first prompt.
+
+<Steps>
+  <Step title="Connect">
+    ```bash
+    synci connect login
+    synci connect status
+    ```
+
+    `login` opens the browser, completes device-flow auth, and stores the Bearer token in the OS keychain. `status` confirms the active account, mode, and credit balance.
+  </Step>
+
+  <Step title="Pick a mode">
+    Modes scope the agent to a domain. You can also switch mid-session with `/mode <name>`.
+
+    ```bash
+    synci web --mode research     # general scientific research
+    synci web --mode physics      # simulation, PDEs, dynamical systems
+    synci web --mode chemistry    # drug discovery, molecular design, docking
+    synci web --mode biology      # bioinformatics, structure prediction, omics
+    synci web --mode flywheel     # build a specialized LLM from production data
+    ```
+
+    <Warning>
+      If you don't know which mode you want yet, run `synci web` without `--mode` for the general-purpose agent.
+    </Warning>
+  </Step>
+
+  <Step title="Send your first prompt">
+    `synci web` opens the local browser UI on `http://localhost:4444`. Type a prompt and press Enter. The agent loads the right domain tools for the active mode and starts working.
+
+    For scripted workflows, skip the UI and pipe a single prompt with `synci run`:
+
+    ```bash
+    synci run --mode chemistry "Set up a DFT optimization for this CIF file"
+    ```
+  </Step>
+
+  <Step title="Sign into Codex (optional)">
+    If your workflow uses OpenAI Codex, link your account once so the agent can invoke `codex` and `codex exec` on demand:
+
+    ```bash
+    synci codex login
+    ```
+
+    The token sits next to the Synci Bearer token in your keychain. See [`synci codex`](/codex) for the full flow.
+  </Step>
+</Steps>
+
+## What's next
+
+<CardGroup cols={2}>
+  <Card title="Commands reference" href="/commands">
+    Every subcommand the binary ships with, grouped by area.
+  </Card>
+  <Card title="Research modes" href="/research-modes">
+    What each mode covers and which tools it bundles.
+  </Card>
+  <Card title="Credentials sync" href="/credentials">
+    Wire HF, W&B, Modal, Lambda, AWS, and GCP through the dashboard.
+  </Card>
+  <Card title="Security" href="/security">
+    Credential boundary, output redaction, per-user isolation.
+  </Card>
+</CardGroup>

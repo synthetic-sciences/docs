@@ -1,0 +1,46 @@
+---
+title: "Install Synci CLI"
+description: "One npx command sets up the binary, the dashboard connection, and the keychain credentials."
+---
+
+The CLI ships as the `@synci/cli` package on npm. The recommended path is `npx synci`, which handles everything end to end.
+
+<Steps>
+  <Step title="Run the installer">
+    From any directory, run:
+
+    ```bash
+    npx synci
+    ```
+
+    The first run does three things in sequence: installs the `synci` binary into your PATH, opens the device-flow login in your browser, and writes the resulting Bearer token to your OS keychain.
+  </Step>
+
+  <Step title="Verify the install">
+    ```bash
+    synci --version
+    synci doctor
+    ```
+
+    `doctor` checks the binary, the keychain entry, dashboard reachability, and the bundled research modes.
+  </Step>
+
+  <Step title="Connect your dashboard credentials">
+    Open [cli.syntheticsciences.ai](https://cli.syntheticsciences.ai) and paste the cloud and ML credentials you want available to the agent (Hugging Face, W&B, Modal, Lambda, AWS, GCP). They sync on the next `synci` session start; no further config is needed locally.
+  </Step>
+</Steps>
+
+## Other install paths
+
+<CardGroup cols={2}>
+  <Card title="Homebrew (macOS)" href="https://cli.syntheticsciences.ai/install">
+    `brew install synthetic-sciences/tap/synci`
+  </Card>
+  <Card title="Direct binary" href="https://cli.syntheticsciences.ai/install">
+    Download the platform binary from the dashboard download page.
+  </Card>
+</CardGroup>
+
+<Warning>
+  The CLI talks to the Synthetic Sciences dashboard for credentials, credits, and session storage. Pin `--offline` if you want a session that does not phone home; it disables credential sync and credit tracking.
+</Warning>

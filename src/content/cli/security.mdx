@@ -1,0 +1,50 @@
+---
+title: "Security"
+description: "How Synci handles credentials, subprocess envs, output redaction, and per-user isolation."
+---
+
+Synci runs in your terminal, with access to your filesystem and your dashboard credentials. The security model is designed so credentials never touch disk, subprocesses get the minimum env they need, and dashboard state stays scoped per user.
+
+## Credential boundary
+
+<Steps>
+  <Step title="Bearer token in OS keychain">
+    The Synci Bearer token lives in your operating system's secure credential store (Keychain on macOS, Secret Service on Linux, Credential Manager on Windows). It is never written to a config file on disk.
+  </Step>
+
+  <Step title="Provider credentials in memory only">
+    HF, W&B, Modal, Lambda, AWS, and GCP credentials sync from the dashboard at session start and are held only in the CLI process memory. They never touch your home directory.
+  </Step>
+
+  <Step title="Subprocess injection on demand">
+    When the agent runs a shell command, it injects the relevant credentials as environment variables into that subprocess only. Commands that don't need a given provider don't see its keys.
+  </Step>
+</Steps>
+
+## Output redaction
+
+Synci redacts known credential patterns from agent output before it lands in the transcript or the dashboard. Patterns include `hf_*`, `wandb-*`, `mt_*`, AWS access keys, and GCP service-account JSON. If you spot an unredacted secret, file an issue, the pattern set is updated as new providers ship.
+
+## Per-user isolation
+
+Sessions are scoped to your Synthetic Sciences account. The dashboard never mixes your sessions, credentials, or credit usage with another account. Team plans add explicit project-level sharing, but defaults are private.
+
+## Filesystem boundary
+
+The `build` agent has full filesystem read and write access from your working directory. The `plan` agent is read-only, so it can study a repo without changing it. Switch with the agent toggle in the web UI header, or with `--agent plan` on the CLI.
+
+<Warning>
+  The CLI does not sandbox arbitrary shell commands. If you run a session that executes untrusted prompts, run it inside a sandbox you control (a container, a VM, or a throwaway directory).
+</Warning>
+
+## What does not leave your machine
+
+- Source files you don't explicitly upload through a tool that takes the file as an argument.
+- Provider credentials beyond what the dashboard already holds.
+- Local environment variables not requested by a tool.
+
+## What does leave your machine
+
+- Prompts and assistant responses you send during a session (stored on the dashboard).
+- Credit-usage telemetry per session.
+- The list of paths the agent reads or writes when telemetry is enabled (disable with `--no-telemetry`).

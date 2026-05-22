@@ -1,0 +1,5 @@
+<svg width="220" height="36" viewBox="0 0 220 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M18 3l13 7.5v15L18 33 5 25.5v-15L18 3z" stroke="#f4f1ea" stroke-width="2"/>
+  <path d="M18 10v16M11 14.2l14 8.1M25 14.2l-14 8.1" stroke="#f4f1ea" stroke-width="1.6" stroke-linecap="round"/>
+  <text x="43" y="23.5" fill="#f4f1ea" font-family="Georgia, 'Times New Roman', serif" font-size="18">Synthetic Sciences</text>
+</svg>

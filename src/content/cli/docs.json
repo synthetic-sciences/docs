@@ -1,0 +1,51 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "name": "Synci CLI Docs",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Guides",
+        "groups": [
+          {
+            "group": "Start",
+            "pages": [
+              "index",
+              "installation",
+              "quickstart"
+            ]
+          },
+          {
+            "group": "Connection",
+            "pages": [
+              "connect",
+              "codex",
+              "credentials"
+            ]
+          },
+          {
+            "group": "Reference",
+            "pages": [
+              "commands",
+              "research-modes",
+              "security"
+            ]
+          }
+        ]
+      }
+    ],
+    "global": {
+      "anchors": [
+        {
+          "anchor": "Dashboard",
+          "href": "https://cli.syntheticsciences.ai"
+        }
+      ]
+    }
+  },
+  "navbar": {
+    "primary": {
+      "label": "Dashboard",
+      "href": "https://cli.syntheticsciences.ai"
+    }
+  }
+}

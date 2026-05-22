@@ -1,0 +1,145 @@
+---
+title: "Library and research"
+description: "Index repositories, docs, papers, and datasets, then search, ask, or run research over them."
+icon: "search"
+---
+
+Atlas library commands index external research material under your Atlas account. The CLI uses Atlas authentication only. You do not configure a separate search key in the CLI.
+
+For a workflow-first version of this page, read [Turn library sources into map state](/source-to-graph).
+
+<Warning>
+Use `research_paper` for paper library sources. Do not use `paper` as the source type.
+</Warning>
+
+## Library source types
+
+Stable source types are:
+
+- `repository`
+- `documentation`
+- `research_paper`
+- `huggingface_dataset`
+- `local_folder`
+- `slack`
+- `google_drive`
+- `connector`
+
+Atlas normalizes common aliases before sending requests. For scripts and docs, prefer the stable names above.
+
+| Alias | Normalized type |
+| --- | --- |
+| `repo`, `github` | `repository` |
+| `docs`, `doc` | `documentation` |
+| `paper` | `research_paper` |
+| `dataset`, `hf_dataset` | `huggingface_dataset` |
+
+The first four types are the common CLI onboarding path. The connector-oriented types are available when the corresponding account-side source is configured.
+
+## Library lifecycle
+
+| Command | Use |
+| --- | --- |
+| `library:list` | List indexed library sources, optionally filtered by type. |
+| `library:add` | Create or index a library source. |
+| `library:show` | Inspect library metadata and indexing status. |
+| `library:update` | Update library metadata or configuration. |
+| `library:delete` | Delete a library source. |
+| `library:sync` | Trigger indexing or sync for an existing library source. |
+| `library:tree` | Browse the indexed file or document tree. |
+| `library:read` | Read one indexed path. |
+| `library:grep` | Search text within one source. |
+
+## When to use each command
+
+- Use `library:tree` before reading files from a library source. It tells you what paths exist.
+- Use `library:read` when you already know the path you want.
+- Use `library:grep` when you know the exact term.
+- Use `library:search` when you know the concept but not the exact wording.
+- Use `library:ask` when you need a grounded answer over indexed documents.
+- Use `research:ask` for a synchronous Oracle-style answer.
+- Use async `research:runs:*` commands for deep research when the question is too broad for one synchronous answer.
+
+## Index a repository or documentation source
+
+```bash
+atlas library:add \
+  --type repository \
+  --url https://github.com/org/repo \
+  --format=json
+
+atlas library:sync --source-id src_...
+atlas library:tree --source-id src_... --format=json
+atlas library:grep --source-id src_... --pattern "loss function"
+```
+
+Use `library:show` after creation to inspect status:
+
+```bash
+atlas library:show --source-id src_... --format=json
+```
+
+For papers, use the stable `research_paper` type:
+
+```bash
+atlas library:add \
+  --type research_paper \
+  --url https://arxiv.org/abs/2401.00000 \
+  --display-name "paper notes" \
+  --format=json
+```
+
+## Query indexed context
+
+```bash
+atlas library:search --query "state space model scaling" --format=json
+atlas library:ask --query "what evidence supports this claim?" --format=json
+atlas research:ask --query "map the strongest open questions" --format=json
+atlas usage:summary --format=json
+```
+
+| Command | Use |
+| --- | --- |
+| `library:search` | Search across indexed sources and return grounded matches. |
+| `library:ask` | Ask a synchronous question over indexed documents. |
+| `research:ask` | Run a synchronous Oracle-style research pass. |
+| `usage:summary` | Inspect library and research usage. |
+
+`library:search` defaults to Atlas unified search. If you pass `data_sources` or `repositories`, the backend sends a scoped query request with sources included.
+
+## Async jobs
+
+Long-running library summaries and deep research use job commands:
+
+- `library:runs:list`
+- `library:runs:create`
+- `library:runs:show`
+- `library:runs:stream`
+- `library:runs:cancel`
+- `research:runs:list`
+- `research:runs:create`
+- `research:runs:show`
+- `research:runs:cancel`
+- `research:runs:stream`
+
+```bash
+atlas library:runs:create --payload '{"query":"summarize the dataset evidence"}'
+atlas library:runs:list --format=json
+atlas library:runs:stream --job-id job_...
+
+atlas research:runs:create --payload '{"query":"map the strongest objections"}'
+atlas research:runs:show --job-id job_... --format=json
+atlas research:runs:cancel --job-id job_... --yes
+```
+
+Stream commands return live server-sent events. Use them when you want progress and partial output instead of polling with `library:runs:show` or `research:runs:show`.
+
+## Grounding into the map
+
+Search and grounded answers should become map state when they affect research direction. A typical agent loop is:
+
+1. Index source material with `library:add`.
+2. Verify indexing with `library:show` or `library:tree`.
+3. Search with `library:search` or ask with `library:ask`.
+4. Save the grounded claim or observation with `nodes:create`.
+5. Attach raw evidence with `evidence:add` when the result is not already an indexed source path.

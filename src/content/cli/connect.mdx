@@ -1,0 +1,56 @@
+---
+title: "Connect"
+description: "Device-flow login that mints a Bearer token, stores it in your OS keychain, and pairs the CLI with your Synthetic Sciences account."
+---
+
+`synci connect` manages the Bearer token connection between your CLI and the dashboard at [cli.syntheticsciences.ai](https://cli.syntheticsciences.ai).
+
+| Subcommand | Purpose |
+|---|---|
+| `synci connect login` | Run the device-flow OAuth login. Opens your browser and stores the resulting Bearer token in the OS keychain. |
+| `synci connect status` | Show your account email, synced credentials, active mode, and credit balance. |
+| `synci connect logout` | Invalidate the local Bearer token. |
+
+## How login works
+
+<Steps>
+  <Step title="Start the flow">
+    ```bash
+    synci connect login
+    ```
+
+    The CLI prints a device code and opens your browser to the dashboard sign-in. If the browser doesn't open, copy the URL the CLI prints and paste it into any browser.
+  </Step>
+
+  <Step title="Approve the device">
+    Sign in to the dashboard if you aren't already, confirm the device code matches what the CLI printed, and click approve.
+  </Step>
+
+  <Step title="Token lands in the keychain">
+    The dashboard hands the CLI a Bearer token. The CLI writes it to the OS keychain under the `synci` service.
+
+    - macOS: Keychain Access, service `synci`
+    - Linux: Secret Service / libsecret, service `synci`
+    - Windows: Credential Manager, target `synci`
+  </Step>
+</Steps>
+
+## Checking status
+
+```bash
+synci connect status
+```
+
+Output includes the active account email, the active research mode for the current directory, and the remaining credit balance. Re-run `synci connect login` to swap to a different account.
+
+<Warning>
+  Bearer tokens expire on their own schedule. Re-running login is only necessary when `status` reports the token is invalid or you intentionally log out.
+</Warning>
+
+## Logging out
+
+```bash
+synci connect logout
+```
+
+Removes the local Bearer token. Credentials in the dashboard are unaffected; the next `login` pulls them back in.
