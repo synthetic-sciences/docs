@@ -1,26 +1,26 @@
 ---
-title: "Install Synsci CLI in one command"
+title: "Install Synci CLI in one command"
 description: "`npx synsci` runs the full install: it downloads the binary, walks you through dashboard authentication, and pre-fetches your credentials. Single-line setup."
 sidebarTitle: "Installation"
 ---
 
-The fastest path to a working Synsci CLI is the one-line installer:
+The fastest path to a working Synci CLI is the one-line installer:
 
 ```bash
 npx synsci
 ```
 
-This runs the full install in one step. It downloads the platform binary, drops `synsc` on your PATH, walks you through dashboard authentication, and pre-fetches your synced credentials so the first session is ready to go. No follow-up commands required.
+This runs the full install in one step. It downloads the platform binary, drops `synci` on your PATH, walks you through dashboard authentication, and pre-fetches your synced credentials so the first session is ready to go. No follow-up commands required.
 
 <Tip>
-  After `npx synsci` finishes, run `synsc web` to open the recommended browser UI, see the [Web UI page](/cli/web). The TUI and desktop app are both still available if you prefer them.
+  After `npx synsci` finishes, run `synci web` to open the recommended browser UI, see the [Web UI page](/cli/web). The TUI and desktop app are both still available if you prefer them.
 </Tip>
 
 ## What `npx synsci` does
 
 <Steps>
   <Step title="Download the binary">
-    The installer detects your OS and architecture and pulls the matching `synsc` binary from the release CDN. It places the binary in your platform's standard user-bin location and adds the directory to your shell PATH if it's not already there.
+    The installer detects your OS and architecture and pulls the matching `synci` binary from the release CDN. It places the binary in your platform's standard user-bin location and adds the directory to your shell PATH if it's not already there.
   </Step>
   <Step title="Authenticate to your dashboard">
     The installer launches the device-flow OAuth login against [cli.syntheticsciences.ai](https://cli.syntheticsciences.ai). You confirm the device code in your browser and the installer receives a Bearer token.
@@ -29,7 +29,7 @@ This runs the full install in one step. It downloads the platform binary, drops 
     With the Bearer token, the installer fetches your credit balance and the list of synced credentials (HF, W&B, Modal, Lambda, AWS, GCP). The token is stored in OS keychain so future sessions don't need to log in again.
   </Step>
   <Step title="Verify and exit">
-    A short health check confirms `synsc --version` runs, the dashboard is reachable, and credentials are present. Then the installer exits cleanly.
+    A short health check confirms `synci --version` runs, the dashboard is reachable, and credentials are present. Then the installer exits cleanly.
   </Step>
 </Steps>
 
@@ -37,29 +37,29 @@ You can re-run `npx synsci` any time to refresh the install or repair a broken o
 
 ## Manual install paths
 
-If you'd rather not use the all-in-one installer, three direct paths drop the same binary on your PATH. After any of them, run `synsc connect login` once to authenticate.
+If you'd rather not use the all-in-one installer, three direct paths drop the same binary on your PATH. After any of them, run `synci connect login` once to authenticate.
 
 <Tabs>
   <Tab title="npm">
     ```bash
     npm install -g @synsci/cli
-    synsc connect login
+    synci connect login
     ```
 
-    Cross-platform. Picks the right platform binary at install time. Updates land via `npm update -g @synsci/cli` or `synsc upgrade`.
+    Cross-platform. Picks the right platform binary at install time. Updates land via `npm update -g @synsci/cli` or `synci upgrade`.
   </Tab>
   <Tab title="Homebrew (macOS)">
     ```bash
-    brew install SyntheticSciences/tap/synsc
-    synsc connect login
+    brew install SyntheticSciences/tap/synci
+    synci connect login
     ```
 
-    Apple Silicon and Intel both supported. Updates via `brew upgrade synsc`.
+    Apple Silicon and Intel both supported. Updates via `brew upgrade synci`.
   </Tab>
   <Tab title="curl install">
     ```bash
     curl -fsSL https://syntheticsciences.ai/install | bash
-    synsc connect login
+    synci connect login
     ```
 
     Drops the binary in `~/.local/bin` (or your platform equivalent) and prints any PATH changes you need to make.
@@ -72,13 +72,13 @@ If you'd rather not use the all-in-one installer, three direct paths drop the sa
 
 ## Desktop app
 
-A separate native app for macOS, Windows, and Linux is available if you'd rather have a full windowed UI than `synsc web`. Download from the [GitHub releases page](https://github.com/synthetic-sciences/synsci-cli/releases). See [Desktop app](/cli/desktop) for details.
+A separate native app for macOS, Windows, and Linux is available if you'd rather have a full windowed UI than `synci web`. Download from the [GitHub releases page](https://github.com/synthetic-sciences/synsci-cli/releases). See [Desktop app](/cli/desktop) for details.
 
 ## Verify the install
 
 ```bash
-synsc --version
-synsc connect status
+synci --version
+synci connect status
 ```
 
 Healthy output prints the binary version, your account email, the synced credentials available, and your current credit balance.
@@ -86,14 +86,14 @@ Healthy output prints the binary version, your account email, the synced credent
 ## Upgrade and uninstall
 
 ```bash
-synsc upgrade        # upgrade to the latest version
-synsc uninstall      # remove the binary and clear local config
+synci upgrade        # upgrade to the latest version
+synci uninstall      # remove the binary and clear local config
 ```
 
-`synsc uninstall` does not affect your dashboard account, credits, or session history, only the local install.
+`synci uninstall` does not affect your dashboard account, credits, or session history, only the local install.
 
 ## What's next
 
 - **[Quickstart](/cli/quickstart).** Connect, send your first prompt, and switch agents and models, under five minutes.
-- **[Web UI](/cli/web).** `synsc web`, the recommended way to use Synsci CLI day-to-day.
+- **[Web UI](/cli/web).** `synci web`, the recommended way to use Synci CLI day-to-day.
 

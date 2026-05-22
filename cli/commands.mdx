@@ -1,35 +1,56 @@
 ---
-title: "Synsci CLI commands reference"
-description: "Every `synsc` subcommand: connect, mode, agent, run, session, stats, mcp, github, pr, export, import, upgrade, uninstall, web, serve, acp."
+title: "Synci CLI commands reference"
+description: "Every `synci` subcommand: connect, codex, mode, agent, run, session, stats, github, pr, export, import, upgrade, uninstall, web, serve, acp."
 sidebarTitle: "Commands reference"
 ---
 
-This page lists every subcommand that ships with `synsc`, what it does, and the most useful flags. The bare `synsc` (no arguments) drops you into the TUI in the build agent and the `general` research mode.
+This page lists every subcommand that ships with `synci`, what it does, and the most useful flags. The bare `synci` (no arguments) drops you into the TUI in the build agent and the `general` research mode.
 
 ## Connection
 
-### `synsc connect`
+### `synci connect`
 
 Manage the Bearer token connection between your CLI and the dashboard at [cli.syntheticsciences.ai](https://cli.syntheticsciences.ai).
 
 | Subcommand | Purpose |
 |---|---|
-| `synsc connect login` | Run the device-flow OAuth login. Opens your browser and stores the resulting Bearer token in OS keychain. |
-| `synsc connect status` | Show your account email, synced credentials, active mode, and credit balance. |
-| `synsc connect logout` | Invalidate the local Bearer token. |
+| `synci connect login` | Run the device-flow OAuth login. Opens your browser and stores the resulting Bearer token in OS keychain. |
+| `synci connect status` | Show your account email, synced credentials, active mode, and credit balance. |
+| `synci connect logout` | Invalidate the local Bearer token. |
+
+### `synci codex`
+
+Sign in to OpenAI Codex from the CLI. After the browser flow completes, the resulting Codex token is held in the OS keychain alongside your Synci Bearer token, and is injected into Codex-aware subprocesses (`codex`, `codex exec`, etc.) on demand.
+
+| Subcommand | Purpose |
+|---|---|
+| `synci codex login` | Open the Codex sign-in flow in your browser and store the returned token. |
+| `synci codex status` | Show the active Codex account, token expiry, and which workspaces are reachable. |
+| `synci codex logout` | Revoke and remove the local Codex token. |
+
+```bash
+synci codex login
+synci codex login --workspace my-org
+synci codex status
+```
+
+Flags:
+
+- `--workspace <slug>` to bind the token to a specific Codex workspace (default: your personal workspace).
+- `--no-browser` to print a device-code URL instead of opening a browser; useful on headless boxes.
 
 ## Sessions
 
-### `synsc web` (recommended)
+### `synci web` (recommended)
 
 Boot a local server and open the browser UI. The recommended day-to-day interface. See [Web UI](/cli/web) for the full feature set.
 
 ```bash
-synsc web
-synsc web --mode chemistry
-synsc web --port 5555
-synsc web --agent plan
-synsc web --host 0.0.0.0    # expose to LAN, use carefully
+synci web
+synci web --mode chemistry
+synci web --port 5555
+synci web --agent plan
+synci web --host 0.0.0.0    # expose to LAN, use carefully
 ```
 
 Flags:
@@ -40,15 +61,15 @@ Flags:
 - `--host <addr>` to override the bind interface (default: `127.0.0.1`).
 - `--no-open` to skip auto-opening the browser.
 
-### `synsc` (no args, TUI mode)
+### `synci` (no args, TUI mode)
 
 Start a TUI session. Useful when you want everything in the terminal.
 
 ```bash
-synsc
-synsc --mode biology
-synsc --agent plan
-synsc --project research-fork
+synci
+synci --mode biology
+synci --agent plan
+synci --project research-fork
 ```
 
 Flags:
@@ -58,165 +79,144 @@ Flags:
 - `--project <name>` to tag the session for dashboard rollups.
 - `--cwd <path>` to start with a specific working directory.
 
-### `synsc run`
+### `synci run`
 
 One-shot run. Sends the prompt, lets the agent work to completion, and exits.
 
 ```bash
-synsc run --mode ml "Refactor utils/log.ts to use structured logging"
-synsc run --mode chemistry "Set up a DFT optimization for this CIF file"
-synsc run --agent plan "Summarize the architecture of src/"
+synci run --mode ml "Refactor utils/log.ts to use structured logging"
+synci run --mode chemistry "Set up a DFT optimization for this CIF file"
+synci run --agent plan "Summarize the architecture of src/"
 ```
 
 Useful for git hooks, CI, and shell pipelines.
 
-### `synsc session`
+### `synci session`
 
 Inspect and manage past sessions stored on the dashboard.
 
 | Subcommand | Purpose |
 |---|---|
-| `synsc session list` | List recent sessions. |
-| `synsc session show <id>` | Print the prompts and assistant messages for a session. |
-| `synsc session resume <id>` | Continue a prior session in the TUI. |
+| `synci session list` | List recent sessions. |
+| `synci session show <id>` | Print the prompts and assistant messages for a session. |
+| `synci session resume <id>` | Continue a prior session in the TUI. |
 
 ## Research modes
 
-### `synsc mode`
+### `synci mode`
 
 Manage research modes. See [research](/cli/research/research), [physics](/cli/research/physics), [chemistry](/cli/research/chemistry), [biology](/cli/research/biology), and [flywheel](/cli/research/flywheel) for what each mode covers.
 
 | Subcommand | Purpose |
 |---|---|
-| `synsc mode list` | List available research modes on this install. |
-| `synsc mode show` | Show the active mode for the current directory. |
-| `synsc mode set <name>` | Set the default mode for the current working directory. |
+| `synci mode list` | List available research modes on this install. |
+| `synci mode show` | Show the active mode for the current directory. |
+| `synci mode set <name>` | Set the default mode for the current working directory. |
 
 ## Stats
 
-### `synsc stats`
+### `synci stats`
 
 Show credit usage by session, mode, and time window.
 
 ```bash
-synsc stats              # cumulative
-synsc stats --since 7d   # last 7 days
-synsc stats --json       # machine-readable
+synci stats              # cumulative
+synci stats --since 7d   # last 7 days
+synci stats --json       # machine-readable
 ```
 
 ## Agent management
 
-### `synsc agent`
+### `synci agent`
 
 Manage agent profiles. Defaults, per-project overrides, and custom profiles.
 
 | Subcommand | Purpose |
 |---|---|
-| `synsc agent list` | Show available agent profiles. |
-| `synsc agent set-default <name>` | Set your default agent. |
-| `synsc agent show <name>` | Print the full configuration for an agent. |
-
-## MCP
-
-### `synsc mcp`
-
-Configure Model Context Protocol servers. Synsci CLI can act as both an MCP host (consuming tools from external MCP servers like Thesis) and an MCP server (exposing its own tools to other hosts).
-
-| Subcommand | Purpose |
-|---|---|
-| `synsc mcp list` | List configured MCP servers. |
-| `synsc mcp add <name> --url <url>` | Register an MCP server. |
-| `synsc mcp remove <name>` | Unregister an MCP server. |
-| `synsc mcp test <name>` | Test connectivity to a registered MCP server. |
-
-To connect Synsci CLI to your Thesis workspace as an MCP host:
-
-```bash
-synsc mcp add thesis --url https://thesis.syntheticsciences.ai/mcp-server
-```
-
-See [Connect Synsci CLI to Thesis](/cli/mcp) for the full integration walkthrough.
+| `synci agent list` | Show available agent profiles. |
+| `synci agent set-default <name>` | Set your default agent. |
+| `synci agent show <name>` | Print the full configuration for an agent. |
 
 ## GitHub and PR helpers
 
-### `synsc github`
+### `synci github`
 
-GitHub helpers that compose with `gh` and the Synsci agent.
+GitHub helpers that compose with `gh` and the Synci agent.
 
 | Subcommand | Purpose |
 |---|---|
-| `synsc github review <pr>` | Open a PR and ask the agent to review it. |
-| `synsc github resolve <issue>` | Open an issue and ask the agent to plan a fix. |
+| `synci github review <pr>` | Open a PR and ask the agent to review it. |
+| `synci github resolve <issue>` | Open an issue and ask the agent to plan a fix. |
 
-### `synsc pr`
+### `synci pr`
 
 PR-focused workflows.
 
 | Subcommand | Purpose |
 |---|---|
-| `synsc pr open` | Create a PR from the current branch with an agent-generated body. |
-| `synsc pr update <pr>` | Update a PR description after new commits. |
+| `synci pr open` | Create a PR from the current branch with an agent-generated body. |
+| `synci pr update <pr>` | Update a PR description after new commits. |
 
 ## Sessions: export and import
 
-### `synsc export`
+### `synci export`
 
 Export a session as a JSON document for sharing or archiving.
 
 ```bash
-synsc export <session-id> --out session.json
+synci export <session-id> --out session.json
 ```
 
-### `synsc import`
+### `synci import`
 
 Import a session JSON back into your account.
 
 ```bash
-synsc import session.json
+synci import session.json
 ```
 
 Useful for handing off context to a teammate or restoring a session on a new machine.
 
 ## Distribution and lifecycle
 
-### `synsc upgrade`
+### `synci upgrade`
 
 Upgrade to the latest published version. Detects how you installed (npm, Homebrew, or direct binary) and runs the matching update flow.
 
 ```bash
-synsc upgrade
-synsc upgrade --version 1.2.0   # pin to a specific version
+synci upgrade
+synci upgrade --version 1.2.0   # pin to a specific version
 ```
 
-### `synsc uninstall`
+### `synci uninstall`
 
 Remove the CLI and clear local config.
 
 ```bash
-synsc uninstall
+synci uninstall
 ```
 
 The dashboard account, credentials, and session history are unaffected.
 
-### `synsc generate`
+### `synci generate`
 
-Generate boilerplate. The exact templates depend on the version, but typical generators include Synsci CLI plugin scaffolds and project templates.
+Generate boilerplate. The exact templates depend on the version, but typical generators include Synci CLI plugin scaffolds and project templates.
 
 ```bash
-synsc generate --help
+synci generate --help
 ```
 
 ## Server modes
 
-### `synsc serve`
+### `synci serve`
 
 Run the CLI as a long-lived backend server, exposing an HTTP API. Useful when you want a remote agent endpoint that other tools can call.
 
 ```bash
-synsc serve --port 4444
+synci serve --port 4444
 ```
 
-### `synsc acp`
+### `synci acp`
 
 Speak the Agent Communication Protocol over stdio. This is what the desktop app and IDE plugins use to talk to the agent. You usually don't run this directly.
 
@@ -247,5 +247,5 @@ Provider keys for credentials (HF, W&B, Modal, Lambda, AWS, GCP) come from the d
 
 ## What's next
 
-- **[Connect Thesis via MCP](/cli/mcp).** Wire Synsci CLI to your Thesis workspace.
+- **[Credentials sync](/cli/credentials).** Wire your provider keys through the dashboard.
 - **[Security model](/cli/security).** Credential boundary, output redaction, and per-user isolation.

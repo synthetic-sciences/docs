@@ -1,18 +1,18 @@
 ---
-title: "Get started with Thesis: create your first research node"
-description: "Sign in, create your first research node, add sources, chat with the agent, and optionally connect an MCP host, all in one guided walkthrough."
+title: "Get started with Atlas: create your first research node"
+description: "Sign in, create your first research node, add sources, chat with the agent, and optionally pair Synci CLI, all in one guided walkthrough."
 sidebarTitle: "Quickstart"
 ---
 
-You can go from a blank slate to an active research graph in a few minutes. This page walks you through the core Thesis flow: signing in, creating a node, indexing a source, talking to the agent, and, if you want agent-host integration, running the one-command MCP setup.
+You can go from a blank slate to an active research graph in a few minutes. This page walks you through the core Atlas flow: signing in, creating a node, indexing a source, talking to the agent, and optionally pairing it with the Synci CLI.
 
 <Note>
-  This is the **Thesis** quickstart (the research workspace). For the [Synsci CLI](/cli/introduction) terminal coding agent, see the [Synsci CLI quickstart](/cli/quickstart).
+  This is the **Atlas** quickstart (the research workspace). For the [Synsci CLI](/cli/introduction) terminal coding agent, see the [Synsci CLI quickstart](/cli/quickstart).
 </Note>
 
 <Steps>
-  <Step title="Sign in to Thesis">
-    Go to [thesis.syntheticsciences.ai](https://thesis.syntheticsciences.ai) and sign in. Thesis provisions your account automatically on first login, there is no separate registration step.
+  <Step title="Sign in to Atlas">
+    Go to [atlas.syntheticsciences.ai](https://atlas.syntheticsciences.ai) and sign in. Atlas provisions your account automatically on first login, there is no separate registration step.
 
     After signing in you land on the **Dashboard**, which shows your research graphs and a spotlight search bar.
   </Step>
@@ -20,7 +20,7 @@ You can go from a blank slate to an active research graph in a few minutes. This
   <Step title="Create a project node">
     From the Dashboard, click the **New graph** button (or the floating action button on the canvas). Give your root node a title that describes the research topic or question you are starting from.
 
-    Every node in Thesis is either **staged** (editable, work in progress) or **committed** (frozen as durable research history). Start staged, you can commit once findings are stable.
+    Every node in Atlas is either **staged** (editable, work in progress) or **committed** (frozen as durable research history). Start staged, you can commit once findings are stable.
 
     <Tip>
       Think of a root node as the top of a research tree. You will branch child nodes from it as experiments, source summaries, and insights accumulate below it.
@@ -28,7 +28,7 @@ You can go from a blank slate to an active research graph in a few minutes. This
   </Step>
 
   <Step title="Add a knowledge source">
-    Open the **Sources** panel from the sidebar (or navigate to `/sources`). Paste the URL of a paper, repository, documentation site, or dataset you want Thesis to index.
+    Open the **Sources** panel from the sidebar (or navigate to `/sources`). Paste the URL of a paper, repository, documentation site, or dataset you want Atlas to index.
 
     Once indexed, the source becomes searchable by the agent, Oracle jobs, and unified search. You can also attach source chunks directly to nodes as evidence.
 
@@ -44,7 +44,7 @@ You can go from a blank slate to an active research graph in a few minutes. This
     - **Agents**, a live view of running or recent sub-agent instances and their telemetry.
     - **Files**, the project filesystem for artifacts, reports, and sub-agent outputs.
 
-    Type a message to the agent. Unlike a generic chatbot, the Thesis agent hydrates from your actual graph state before responding. It reads your nodes, research log entries, project files, and indexed sources. Ask it to summarize what you have so far, suggest next experiments, or search for relevant prior work.
+    Type a message to the agent. Unlike a generic chatbot, the Atlas agent hydrates from your actual graph state before responding. It reads your nodes, research log entries, project files, and indexed sources. Ask it to summarize what you have so far, suggest next experiments, or search for relevant prior work.
 
     <Tip>
       You can open the Research modal from anywhere in the app with **Cmd+Shift+K** (or **Ctrl+Shift+K** on Windows/Linux). It gives you quick access to Ask, Oracle, Tracer, and Document search without leaving your current view.
@@ -70,52 +70,14 @@ You can go from a blank slate to an active research graph in a few minutes. This
     </Warning>
   </Step>
 
-  <Step title="Connect an MCP host (optional)">
-    If you want your AI coding agent. Claude Code, Codex, Cursor, OpenCode, [Synsci CLI](/cli/mcp), or another supported host, to read and write your Thesis graph directly, run the `@synsci/thesis` MCP helper:
+  <Step title="Pair with Synci CLI (optional)">
+    If you want a terminal agent that runs the experiments your Atlas nodes describe, install [Synci CLI](/cli/introduction):
 
     ```bash
-    npx --yes @synsci/thesis setup
+    npx synci
     ```
 
-    The CLI will:
-
-    1. Detect which supported hosts are installed on your machine.
-    2. Open your browser to authenticate and provision an API key.
-    3. Write the Thesis MCP server configuration into each detected host's config file.
-
-    After setup, your agent host has access to all 86 Thesis MCP tools: node lifecycle, graph topology, knowledge search, artifact management, compute leases, export, and more.
-
-    <CodeGroup>
-
-    ```bash npm / npx
-    npx --yes @synsci/thesis setup
-    ```
-
-    ```bash bun
-    bunx @synsci/thesis setup
-    ```
-
-    ```bash pnpm
-    pnpx @synsci/thesis setup
-    ```
-
-    ```bash yarn
-    yarn dlx @synsci/thesis setup
-    ```
-
-    </CodeGroup>
-
-    **On a headless or SSH machine**, use device auth instead:
-
-    ```bash
-    npx --yes @synsci/thesis setup --auth-mode device
-    ```
-
-    **For web-based MCP hosts** (Claude.ai, ChatGPT.com), paste this URL when prompted for a connector:
-
-    ```
-    https://thesis.syntheticsciences.ai/mcp-server
-    ```
+    Synci CLI signs into the same Synthetic Sciences account, pulls your credentials, and runs scientific workflows in the right [research mode](/cli/research/research) for the job. Atlas keeps the long-running graph; Synci does the work.
   </Step>
 </Steps>
 
@@ -123,6 +85,6 @@ You can go from a blank slate to an active research graph in a few minutes. This
 
 - **[Navigating the web app](/web-app).** A detailed tour of every UI area: dashboard, graph canvas, node editor, agent panel, sources, and settings.
 - **[Research graph concepts](/concepts/research-graph).** Understand staged vs. committed nodes, edges, branching, and provenance.
-- **[MCP setup and hosts](/mcp/quickstart).** Full reference for host-specific MCP configuration.
+- **[Synci CLI](/cli/introduction).** The terminal agent that pairs with Atlas.
 - **[Organize a research program](/guides/organize-research).** Practical workflows for turning notes, papers, and repos into a structured graph.
 

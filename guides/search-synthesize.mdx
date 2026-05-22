@@ -4,7 +4,7 @@ description: "Use unified search, Oracle jobs, Tracer, and Deep Research to find
 sidebarTitle: "Search"
 ---
 
-Thesis gives you four ways to retrieve and synthesize knowledge: unified search across your graph and indexed sources, Oracle research jobs for longer synthesis tasks, Tracer for GitHub-oriented code search, and Deep Research for Exa-backed paper and web discovery. All four are accessible from the Knowledge panel in the web app and as MCP tools. This guide shows you how to use each one.
+Atlas gives you four ways to retrieve and synthesize knowledge: unified search across your graph and indexed sources, Oracle research jobs for longer synthesis tasks, Tracer for GitHub-oriented code search, and Deep Research for Exa-backed paper and web discovery. All four are accessible from the Knowledge panel in the web app and as agent tools. This guide shows you how to use each one.
 
 ## The Knowledge panel
 
@@ -21,16 +21,16 @@ Open the Knowledge panel from any node view by clicking the search icon in the n
   <Step title="Run a unified search">
     Unified search fans out across two knowledge branches simultaneously:
 
-    - **Graph-as-KB**, committed Thesis nodes and their content, embedded into searchable chunks.
+    - **Graph-as-KB**, committed Atlas nodes and their content, embedded into searchable chunks.
     - **Nia proxy**, external papers, repositories, docs, and datasets you've indexed.
 
     Results are deduplicated, scores merged, and returned in a consistent shape regardless of source.
 
-    Call `thesis_search` directly:
+    Call `search` directly:
 
     ```json
     {
-      "name": "thesis_search",
+      "name": "search",
       "arguments": {
         "query": "learning rate warmup effect on GRPO reward stability",
         "node_id": "<optional-node-id-to-scope-search>"
@@ -56,7 +56,7 @@ Open the Knowledge panel from any node view by clicking the search icon in the n
 
     ```json
     {
-      "name": "thesis_oracle_start_job",
+      "name": "oracle_start_job",
       "arguments": {
         "query": "Compare cosine and linear LR schedules for GRPO training across recent papers",
         "mode": "deep",
@@ -65,7 +65,7 @@ Open the Knowledge panel from any node view by clicking the search icon in the n
     }
     ```
 
-    Check the job status with `thesis_oracle_job_status`, or stream live updates with `thesis_oracle_job_stream`. In the **Oracle** tab, you can see job history and results without leaving the node view.
+    Check the job status with `oracle_job_status`, or stream live updates with `oracle_job_stream`. In the **Oracle** tab, you can see job history and results without leaving the node view.
 
     <Tip>
       Generated Oracle reports land as files and assets on the associated node. You can attach them to other nodes or include them as evidence when writing up a synthesis insight node.
@@ -77,7 +77,7 @@ Open the Knowledge panel from any node view by clicking the search icon in the n
 
     ```json
     {
-      "name": "thesis_tracer_search",
+      "name": "tracer_search",
       "arguments": {
         "query": "cosine annealing scheduler GRPO",
         "repos_csv": "huggingface/trl,openai/spinningup"
@@ -89,7 +89,7 @@ Open the Knowledge panel from any node view by clicking the search icon in the n
 
     ```json
     {
-      "name": "thesis_tracer_status",
+      "name": "tracer_status",
       "arguments": {
         "job_id": "<tracer-job-id>"
       }
@@ -131,8 +131,8 @@ Open the Knowledge panel from any node view by clicking the search icon in the n
 
 | Tool | Speed | Depth | Best when |
 |------|-------|-------|-----------|
-| `thesis_search` | Fast | Shallow | You know roughly what you're looking for |
-| `thesis_oracle_start_job` (quick) | Medium | Medium | You want a synthesis in under a minute |
-| `thesis_oracle_start_job` (deep / oracle) | Slow | Deep | You want a thorough literature synthesis |
-| `thesis_tracer_search` | Medium | Code-focused | You need to find implementation patterns across repos |
+| `search` | Fast | Shallow | You know roughly what you're looking for |
+| `oracle_start_job` (quick) | Medium | Medium | You want a synthesis in under a minute |
+| `oracle_start_job` (deep / oracle) | Slow | Deep | You want a thorough literature synthesis |
+| `tracer_search` | Medium | Code-focused | You need to find implementation patterns across repos |
 | Deep Research | Slow | External | You want to discover new papers and web sources |

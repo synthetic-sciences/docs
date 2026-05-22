@@ -1,32 +1,32 @@
 ---
-title: "Synsci CLI web UI"
-description: "`synsc web` boots a local server and opens a browser UI for the agent. Multi-tab sessions, side-by-side file diffs, command palette, mode picker, and the full agent surface."
+title: "Synci CLI web UI"
+description: "`synci web` boots a local server and opens a browser UI for the agent. Multi-tab sessions, side-by-side file diffs, command palette, mode picker, and the full agent surface."
 sidebarTitle: "Web UI"
 ---
 
-`synsc web` is the recommended way to use Synsci CLI day-to-day. It boots a local server on your machine and opens a browser tab with a full chat interface. Multi-tab sessions, side-by-side file diffs, a mode picker, and the same agent surface as the TUI, without giving up a terminal split.
+`synci web` is the recommended way to use Synci CLI day-to-day. It boots a local server on your machine and opens a browser tab with a full chat interface. Multi-tab sessions, side-by-side file diffs, a mode picker, and the same agent surface as the TUI, without giving up a terminal split.
 
 ## Start the web UI
 
 ```bash
-synsc web
+synci web
 ```
 
 The CLI prints the local URL and opens your default browser to it. The default port is `4444`. Pass `--port` to override:
 
 ```bash
-synsc web --port 5555
+synci web --port 5555
 ```
 
 Pass `--mode` to start in a specific research mode:
 
 ```bash
-synsc web --mode chemistry
-synsc web --mode biology
-synsc web --mode ml
+synci web --mode chemistry
+synci web --mode biology
+synci web --mode ml
 ```
 
-The server runs as long as the `synsc web` process is alive. Stop it with <kbd>Ctrl+C</kbd> in the terminal where you started it, or close the browser tab and let the idle timeout shut it down.
+The server runs as long as the `synci web` process is alive. Stop it with <kbd>Ctrl+C</kbd> in the terminal where you started it, or close the browser tab and let the idle timeout shut it down.
 
 ## What you get
 
@@ -40,7 +40,7 @@ The server runs as long as the `synsc web` process is alive. Stop it with <kbd>C
 | Situation | Pick |
 |---|---|
 | Daily development, multi-hour sessions | Web |
-| Quick edits, scripts, CI hooks | TUI (`synsc` or `synsc run`) |
+| Quick edits, scripts, CI hooks | TUI (`synci` or `synci run`) |
 | You prefer a native app over a browser tab | [Desktop](/cli/desktop) |
 | Headless or remote-only machine | TUI (no browser available) |
 | Pair programming, screen-sharing demos | Web |
@@ -80,10 +80,10 @@ On Windows and Linux, substitute <kbd>Ctrl</kbd> for <kbd>Cmd</kbd>.
 
 ## Remote access
 
-`synsc web` binds to `127.0.0.1` by default. Only your local machine can reach it. To expose the UI on your LAN, pass `--host`:
+`synci web` binds to `127.0.0.1` by default. Only your local machine can reach it. To expose the UI on your LAN, pass `--host`:
 
 ```bash
-synsc web --host 0.0.0.0 --port 4444
+synci web --host 0.0.0.0 --port 4444
 ```
 
 <Warning>
@@ -94,12 +94,12 @@ synsc web --host 0.0.0.0 --port 4444
   ```
 </Warning>
 
-## When `synsc web` isn't right
+## When `synci web` isn't right
 
 A few cases where you'll reach for something else:
 
-- `synsc run "<prompt>"` for one-shot scripted runs without any UI.
-- `synsc` (bare TUI) when you want to stay in the terminal entirely.
+- `synci run "<prompt>"` for one-shot scripted runs without any UI.
+- `synci` (bare TUI) when you want to stay in the terminal entirely.
 - [Desktop app](/cli/desktop) for a native windowed app with the same agent surface.
 
 All three share the same dashboard account, credentials, and credits.
@@ -108,4 +108,4 @@ All three share the same dashboard account, credentials, and credits.
 
 - **[Research](/cli/research/research)**, **[physics](/cli/research/physics)**, **[chemistry](/cli/research/chemistry)**, **[biology](/cli/research/biology)**, **[write](/cli/research/write)**, **[flywheel](/cli/research/flywheel)**. The available research modes.
 - **[Agents](/cli/agents).** Build, plan, and the @general subagent.
-- **[Commands reference](/cli/commands).** The full `synsc` command surface.
+- **[Commands reference](/cli/commands).** The full `synci` command surface.

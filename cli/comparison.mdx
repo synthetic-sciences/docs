@@ -1,29 +1,28 @@
 ---
-title: "Synsci CLI vs. Claude Code, Cursor, and Codex"
-description: "How Synsci CLI compares to general-purpose terminal agents. Research modes, bundled scientific tools, native cloud sync, and included credits."
+title: "Synci CLI vs. Claude Code, Cursor, and Codex"
+description: "How Synci CLI compares to general-purpose terminal agents. Research modes, bundled scientific tools, native cloud sync, and included credits."
 sidebarTitle: "Comparison"
 ---
 
-Synsci CLI is one of several terminal AI coding agents. The core capabilities (file edits, shell access, code generation) overlap with peers like Claude Code, Cursor, and Codex CLI. What's different is the science focus.
+Synci CLI is one of several terminal AI coding agents. The core capabilities (file edits, shell access, code generation) overlap with peers like Claude Code, Cursor, and Codex CLI. What's different is the science focus.
 
 ## Quick comparison
 
-| | Synsci CLI | Claude Code | Cursor (terminal) | Codex CLI |
+| | Synci CLI | Claude Code | Cursor (terminal) | Codex CLI |
 |---|---|---|---|---|
 | **Research modes** | Yes (research, physics, chemistry, biology, write, flywheel) | None | None | None |
 | **Bundled scientific tools** | Hundreds across all modes | None bundled | Plugin marketplace | None bundled |
 | **Cloud credentials** | Synced from dashboard (HF, W&B, Modal, Lambda, AWS, GCP) | Local env or per-tool config | Local env or per-tool config | Local env |
 | **Credit model** | Subscription includes credits | Bring your own keys | Subscription | Bring your own keys |
-| **Browser UI** (`synsc web`) | Yes (built-in, recommended) | No | No | No |
+| **Browser UI** (`synci web`) | Yes (built-in, recommended) | No | No | No |
 | **Desktop app** | Yes (macOS / Windows / Linux) | No | Yes | No |
-| **MCP support** | Yes (host and server) | Yes (host) | Yes (host) | Limited |
 
-## When Synsci CLI is the better fit
+## When Synci CLI is the better fit
 
 - **You're a researcher or scientist.** The research modes mean the agent already knows the conventions of your field, whether that's DFT in chemistry, AlphaFold in biology, OpenFOAM in physics, or GRPO in ML.
 - **You'd rather not glue credentials together yourself.** HF, W&B, Modal, Lambda, AWS, and GCP all sync from a dashboard rather than scattered across `~/.cache/huggingface/token`, `~/.aws/credentials`, and a `MODAL_TOKEN_*` in your shell profile.
 - **You want predictable billing.** Credits are included in the subscription with pre-call balance checks. No surprise overage from a runaway loop.
-- **You want a desktop and web option too.** Both `synsc web` and the desktop app share the same dashboard account as the terminal CLI.
+- **You want a desktop and web option too.** Both `synci web` and the desktop app share the same dashboard account as the terminal CLI.
 
 ## When another tool might fit better
 
@@ -38,14 +37,13 @@ If you're already comfortable with a terminal coding agent, the patterns transfe
 - Slash commands inside a session (`/mode`, `/agent`, `/clear`).
 - File-edit-then-confirm flows.
 - Multi-step refactors that span many files.
-- MCP integration for external tool surfaces.
 - Tool activation by trigger phrase rather than explicit invocation.
 
-The biggest mental shift is **dashboard-first configuration**. Where other agents expect you to set env vars and config files locally, Synsci CLI assumes the dashboard is the source of truth. You paste credentials there once and the CLI pulls them in at every session start.
+The biggest mental shift is **dashboard-first configuration**. Where other agents expect you to set env vars and config files locally, Synci CLI assumes the dashboard is the source of truth. You paste credentials there once and the CLI pulls them in at every session start.
 
 ## Pairing them
 
-Synsci CLI doesn't compete in every workspace. A common pattern: use a general agent for non-research work (web apps, infra, scripts) and Synsci CLI for the research work where the modes and bundled tools save the most time. The two won't conflict on the same machine. They have different binaries, config paths, and credential paths.
+Synci CLI doesn't compete in every workspace. A common pattern: use a general agent for non-research work (web apps, infra, scripts) and Synci CLI for the research work where the modes and bundled tools save the most time. The two won't conflict on the same machine. They have different binaries, config paths, and credential paths.
 
 ## What's next
 

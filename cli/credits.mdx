@@ -4,11 +4,11 @@ description: "Pre-call balance checks, per-call usage reporting, and a dashboard
 sidebarTitle: "Credits"
 ---
 
-Your Synsci CLI subscription includes credits that cover the agent's work. Every call reports its cost back to your dashboard, the balance is checked before each request, and the CLI blocks new prompts when credits hit zero. You don't pick a provider, the credit envelope abstracts that away.
+Your Synci CLI subscription includes credits that cover the agent's work. Every call reports its cost back to your dashboard, the balance is checked before each request, and the CLI blocks new prompts when credits hit zero. You don't pick a provider, the credit envelope abstracts that away.
 
 ## How credits work
 
-Each call consumes credits proportional to the input and output tokens. The cost is computed from the active research mode and the work the agent performed. You see the cost in the dashboard and in `synsc stats`.
+Each call consumes credits proportional to the input and output tokens. The cost is computed from the active research mode and the work the agent performed. You see the cost in the dashboard and in `synci stats`.
 
 Switching modes mid-session draws from the same balance. There is no per-mode wallet to manage.
 
@@ -36,7 +36,7 @@ The dashboard updates the running balance and the spend feed in real time.
 ## Inspect spend from the CLI
 
 ```bash
-synsc stats
+synci stats
 ```
 
 `stats` aggregates usage across the current session and all prior sessions. It can break down by:
@@ -48,7 +48,7 @@ synsc stats
 Use the `--json` flag to pipe `stats` into your own dashboards or scripts:
 
 ```bash
-synsc stats --json
+synci stats --json
 ```
 
 ## Inspect spend from the dashboard
@@ -70,7 +70,7 @@ When your balance hits zero:
 
 You don't get partial responses or unexpected charges. The balance check is the floor.
 
-To restore service, top up credits in the dashboard, then run `synsc connect status` (or restart the session) so the CLI picks up the new balance.
+To restore service, top up credits in the dashboard, then run `synci connect status` (or restart the session) so the CLI picks up the new balance.
 
 ## Plans and limits
 

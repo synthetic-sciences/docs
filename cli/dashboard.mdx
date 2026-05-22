@@ -1,10 +1,10 @@
 ---
-title: "The Synsci CLI dashboard at cli.syntheticsciences.ai"
+title: "The Synci CLI dashboard at cli.syntheticsciences.ai"
 description: "Manage credentials, monitor sessions, view credit usage, and configure team access from the web dashboard. The CLI syncs against this dashboard at every session."
 sidebarTitle: "Dashboard"
 ---
 
-The Synsci CLI dashboard at [cli.syntheticsciences.ai](https://cli.syntheticsciences.ai) is the source of truth for everything the CLI doesn't store locally, credentials, credits, sessions, team access, and audit logs. The CLI talks to the dashboard over an authenticated channel at session start and reports usage back as you work.
+The Synci CLI dashboard at [cli.syntheticsciences.ai](https://cli.syntheticsciences.ai) is the source of truth for everything the CLI doesn't store locally, credentials, credits, sessions, team access, and audit logs. The CLI talks to the dashboard over an authenticated channel at session start and reports usage back as you work.
 
 ## What the dashboard does
 
@@ -19,7 +19,7 @@ The Synsci CLI dashboard at [cli.syntheticsciences.ai](https://cli.syntheticscie
 The dashboard issues short-lived Bearer tokens that the CLI uses to authenticate. Connect once with:
 
 ```bash
-synsc connect login
+synci connect login
 ```
 
 The CLI prints a device code and opens your browser. Confirm the login, and the dashboard issues the token. The CLI stores it in memory (and only in memory) for the session.
@@ -27,7 +27,7 @@ The CLI prints a device code and opens your browser. Confirm the login, and the 
 To verify the connection:
 
 ```bash
-synsc connect status
+synci connect status
 ```
 
 Output includes your account email, the credentials currently synced, and your remaining credit balance.
@@ -35,7 +35,7 @@ Output includes your account email, the credentials currently synced, and your r
 To disconnect:
 
 ```bash
-synsc connect logout
+synci connect logout
 ```
 
 This invalidates the local token. The dashboard credentials stay where they are; the CLI just stops being able to read them until you log in again.
@@ -53,13 +53,13 @@ Each provider has its own slot. Paste your token, the dashboard validates the fo
 | AWS | `AWS_ACCESS_KEY_ID` + `AWS_SECRET_ACCESS_KEY` (and optional session token) |
 | GCP | Service account JSON |
 
-Updating a credential is instant, the next session start picks up the new value. To force an immediate refresh in a running session, run `synsc connect status` again.
+Updating a credential is instant, the next session start picks up the new value. To force an immediate refresh in a running session, run `synci connect status` again.
 
 See [Credentials](/cli/credentials) for the in-CLI behavior.
 
 ## Sessions panel
 
-Every time you run `synsc`, a session record opens in the dashboard. While the session is active, the dashboard shows live model usage and cost. After the session ends, the record persists with:
+Every time you run `synci`, a session record opens in the dashboard. While the session is active, the dashboard shows live model usage and cost. After the session ends, the record persists with:
 
 - Total tokens (input/output) per model
 - Credits spent
@@ -100,7 +100,7 @@ Per-user credentials remain isolated even on a team plan, your AWS key isn't vis
 You can tag sessions with a project label so spend rolls up cleanly:
 
 ```bash
-synsc --project research-fork
+synci --project research-fork
 ```
 
 The dashboard groups sessions by project so you can answer "how much have we spent on the research-fork project this month" without exporting raw session data.

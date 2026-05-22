@@ -1,14 +1,14 @@
 ---
-title: "Design and stage a Thesis empirical experiment node"
-description: "Ask the Thesis agent to draft an 8-section experiment blueprint, review the proposal card in the UI, then approve or reject it to control what runs on compute."
+title: "Design and stage a Atlas empirical experiment node"
+description: "Ask the Atlas agent to draft an 8-section experiment blueprint, review the proposal card in the UI, then approve or reject it to control what runs on compute."
 sidebarTitle: "Design"
 ---
 
-Before any code runs on GPU, Thesis requires a structured experiment blueprint that makes the hypothesis falsifiable, the method reproducible, and the success criteria explicit. This guide walks through staging an empirical node, reviewing the proposal card, and understanding what happens when you approve or reject it.
+Before any code runs on GPU, Atlas requires a structured experiment blueprint that makes the hypothesis falsifiable, the method reproducible, and the success criteria explicit. This guide walks through staging an empirical node, reviewing the proposal card, and understanding what happens when you approve or reject it.
 
-## Node kinds in Thesis
+## Node kinds in Atlas
 
-Thesis has three node kinds:
+Atlas has three node kinds:
 
 | Kind | When to use |
 |------|-------------|
@@ -37,13 +37,13 @@ The rigor review is the agent's self-critique pass. A FAIL there does not block 
 
 <Steps>
   <Step title="Ask the agent to stage an empirical node">
-    In the agent chat, describe the experiment you want designed. The agent will call `thesis_stage_node_create` with `kind: "empirical"` and produce a `blueprint.json` artifact on the new node.
+    In the agent chat, describe the experiment you want designed. The agent will call `stage_node_create` with `kind: "empirical"` and produce a `blueprint.json` artifact on the new node.
 
-    You can also call the MCP tool directly to create a minimal empirical node, then let the agent fill in the blueprint:
+    You can also call the tool directly to create a minimal empirical node, then let the agent fill in the blueprint:
 
     ```json
     {
-      "name": "thesis_stage_node_create",
+      "name": "stage_node_create",
       "arguments": {
         "title": "Cosine vs. linear LR decay, 1B GRPO convergence",
         "summary": "Test whether cosine decay reaches 90% of peak reward 20% faster than linear decay under identical GRPO hyperparameters.",
@@ -91,7 +91,7 @@ The rigor review is the agent's self-critique pass. A FAIL there does not block 
 
 ## What the approval mints
 
-When you approve a proposal, Thesis writes two artifacts to the node:
+When you approve a proposal, Atlas writes two artifacts to the node:
 
 - `compute_approval.json`, the approval receipt, including the token, SKU, provider, budget, and timeout.
 - A `proposal_approved` entry in the research log, timestamped and tied to your user ID.

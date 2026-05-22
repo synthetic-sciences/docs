@@ -1,10 +1,10 @@
 ---
-title: "Navigating the Thesis web app: UI areas and shortcuts"
-description: "A practical tour of every major area in the Thesis web app: the dashboard, graph canvas, node editor, agent panel, sources, and settings."
+title: "Navigating the Atlas web app: UI areas and shortcuts"
+description: "A practical tour of every major area in the Atlas web app: the dashboard, graph canvas, node editor, agent panel, sources, and settings."
 sidebarTitle: "Web app"
 ---
 
-The Thesis web app is the primary interface for building and navigating your research graph, chatting with the agent, managing knowledge sources, and controlling compute. This page walks through each major area so you know what to expect and where to find things.
+The Atlas web app is the primary interface for building and navigating your research graph, chatting with the agent, managing knowledge sources, and controlling compute. This page walks through each major area so you know what to expect and where to find things.
 
 <Tabs>
   <Tab title="Dashboard">
@@ -23,12 +23,12 @@ The Thesis web app is the primary interface for building and navigating your res
     Use the **New graph** button or the floating action button to create a root node for a new research topic. You name the root node, and the canvas opens with it staged and ready to expand.
 
     <Tip>
-      The Explore page (`/explore`) is a public-facing view of shared and public graphs. Use it to discover research published by other Thesis users.
+      The Explore page (`/explore`) is a public-facing view of shared and public graphs. Use it to discover research published by other Atlas users.
     </Tip>
   </Tab>
 
   <Tab title="Graph canvas">
-    The graph canvas is the visual heart of Thesis. It renders your research as an interactive directed acyclic graph (DAG) using React Flow.
+    The graph canvas is the visual heart of Atlas. It renders your research as an interactive directed acyclic graph (DAG) using React Flow.
 
     **Nodes**
 
@@ -71,7 +71,7 @@ The Thesis web app is the primary interface for building and navigating your res
   </Tab>
 
   <Tab title="Agent panel">
-    The Agent page (`/agent`) is where you interact with the Thesis research agent. Unlike a generic chatbot, the agent hydrates from your actual project state, graph nodes, research log entries, filesystem stats, and assets, before responding.
+    The Agent page (`/agent`) is where you interact with the Atlas research agent. Unlike a generic chatbot, the agent hydrates from your actual project state, graph nodes, research log entries, filesystem stats, and assets, before responding.
 
     The panel has three tabs:
 
@@ -97,11 +97,11 @@ The Thesis web app is the primary interface for building and navigating your res
   </Tab>
 
   <Tab title="Sources">
-    The Sources page (`/sources`) is your knowledge index. It lists every external source you have added to Thesis for indexing and retrieval.
+    The Sources page (`/sources`) is your knowledge index. It lists every external source you have added to Atlas for indexing and retrieval.
 
     **Adding a source**
 
-    Click **Add source** and paste the URL of a paper, repository, documentation site, or dataset. Thesis sends the URL to the knowledge layer for indexing. Once indexed, the source is searchable by the agent, Oracle jobs, Tracer, and the unified search interface.
+    Click **Add source** and paste the URL of a paper, repository, documentation site, or dataset. Atlas sends the URL to the knowledge layer for indexing. Once indexed, the source is searchable by the agent, Oracle jobs, Tracer, and the unified search interface.
 
     **Source detail**
 
@@ -109,7 +109,7 @@ The Thesis web app is the primary interface for building and navigating your res
 
     **Unified search**
 
-    The Search page (`/search`) fans out across both your Thesis graph and all indexed external sources. It deduplicates results, merges relevance scores, and returns a consistent result shape. Use it to find prior evidence before designing a new experiment.
+    The Search page (`/search`) fans out across both your Atlas graph and all indexed external sources. It deduplicates results, merges relevance scores, and returns a consistent result shape. Use it to find prior evidence before designing a new experiment.
 
     <Tip>
       The Research modal (Cmd+Shift+K) provides the same unified search capability from anywhere in the app, plus Oracle synthesis jobs and Tracer code search, without navigating away from your current view.
@@ -121,7 +121,7 @@ The Thesis web app is the primary interface for building and navigating your res
 
     **API keys**
 
-    Add and manage your API keys for external services that power Thesis features:
+    Add and manage your API keys for external services that power Atlas features:
 
     - **Anthropic**, powers the web agent ReAct loop and deep-research synthesis.
     - **OpenAI**, provides graph embeddings for knowledge retrieval.
