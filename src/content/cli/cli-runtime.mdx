@@ -1,0 +1,128 @@
+---
+title: "CLI runtime"
+description: "Global flags, environment overrides, the local config tree, output formats, log levels, and the upgrade and uninstall paths. The cross-cutting things that don't belong to one command."
+icon: "terminal"
+---
+
+The CLI runtime is the layer below every command: how arguments are parsed, where credentials come from, what format output takes, and where local state lives. Most of the time you do not think about it. This page is what to read when you do.
+
+## Global flags
+
+| Flag | Use |
+| --- | --- |
+| `-v, --version` | Print the installed CLI version. |
+| `-h, --help` | Print help for the command or subcommand. |
+| `--print-logs` | Stream agent diagnostics to stderr while the command runs. |
+| `--log-level <DEBUG\|INFO\|WARN\|ERROR>` | Override the log threshold for this invocation. |
+
+Per-command flags that show up on every session entrypoint (`synsci`, `synsci run`, `synsci web`):
+
+| Flag | Use |
+| --- | --- |
+| `--model <provider/model>` | Override the default model. |
+| `--agent <name>` | Use a specific agent profile. |
+| `--format <default\|json>` | Switch to JSON output for scripting (`run` only). |
+
+## Environment overrides
+
+| Variable | Default | Purpose |
+| --- | --- | --- |
+| `SYNSC_AUTH_URL` | `https://app.syntheticsciences.ai/cli` | Verification URL the device flow opens in your browser. |
+| `SYNSC_API_BASE` | `https://thesis-synsc.fly.dev` | Synci backend base URL. Used by sync, billing, device approval. |
+| `XDG_CONFIG_HOME` | `~/.config` | Parent directory of `synsc/` where local config lives. |
+| `SYNSCI_SERVER_PASSWORD` | unset | If set, `synsci serve` requires HTTP Basic Auth on every request. |
+
+Set these in your shell rc when you want a non-default backend, a separate config path for a second account, or to point the CLI at a staging environment.
+
+## Local config tree
+
+```text
+~/.config/synsc/
+  config.json        # account binding, default profile, default model
+  credentials.json   # synced service credentials (encrypted at rest)
+  agents/            # user-global sub-agent definitions
+  sessions/          # local session metadata
+  skills/            # installed third-party skills
+```
+
+`config.json` holds the Bearer token from `synsci connect login` and the per-profile defaults. `credentials.json` mirrors the synced credentials the dashboard holds; it can be wiped and re-pulled with `synsci connect sync` any time.
+
+The native binary install path (curl-bash route) is separate:
+
+```text
+~/.synsc/bin/synsc   # native binary
+```
+
+The npm install puts `synsci` on your global Node bin instead.
+
+## Output formats
+
+For interactive use, every command defaults to a streaming human-readable transcript. For scripting:
+
+```bash
+synsci run --format json "Summarize the architecture of src/"
+```
+
+JSON output emits one envelope per event (prompt, reply, tool call, tool result, completion). Capture line-by-line for streaming, or take the last envelope for a final result.
+
+`synsci connect status`, `synsci models`, and `synsci skill list` are JSON-friendly by default — they print structured tables that diff cleanly across runs.
+
+## Log levels and debug
+
+```bash
+synsci --log-level DEBUG run "..."
+synsci debug
+```
+
+`--log-level DEBUG` is the right first knob when something is slow or silent. `synsci debug` prints a structured diagnostics dump (binary version, install path, config tree, recent errors) suitable for attaching to a support ticket or a GitHub issue. It does not include credentials.
+
+`--print-logs` streams diagnostics to stderr while the command is running, separate from the agent transcript on stdout. Useful when you want to grep stdout for the result and watch stderr for the agent's tool calls.
+
+## Upgrade and uninstall
+
+```bash
+synsci upgrade
+synsci upgrade --version 1.1.122
+synsci uninstall
+```
+
+`upgrade` detects the install path (npm, Homebrew, curl-bash binary) and runs the matching update flow. Pin a version with `--version` to roll back or stay on a tested release across a fleet. `uninstall` removes the binary and clears local config under `~/.config/synsc`; your dashboard account, billing balance, and synced credentials are unaffected.
+
+## Shell completion
+
+```bash
+synsci completion bash > /usr/local/etc/bash_completion.d/synsci
+synsci completion zsh  > "${fpath[1]}/_synsci"
+synsci completion fish > ~/.config/fish/completions/synsci.fish
+```
+
+Completion covers top-level commands, subcommands, and the flag names of the command you are completing. It does not complete model ids or session ids — those come from `synsci models` and `synsci session list`.
+
+## Two binary names
+
+The npm and Homebrew install paths produce slightly different entry points:
+
+| Install path | Binary name |
+| --- | --- |
+| `npm i -g synsci` or `npm i -g @synsci/cli` | `synsci` |
+| `brew install SyntheticSciences/tap/synsc` | `synsc` |
+| `curl -fsSL https://syntheticsciences.ai/install \| bash` | `synsc` |
+
+The commands and flags are identical between them; only the entry-point name differs. Pick one and stay consistent within a team.
+
+## What's next
+
+<CardGroup cols={2}>
+  <Card title="Commands" icon="terminal" href="/commands">
+    Full command reference with every subcommand and flag.
+  </Card>
+  <Card title="Connect" icon="key-round" href="/connect">
+    The Bearer token, where it lives, and how to refresh it.
+  </Card>
+  <Card title="Credentials" icon="key-round" href="/credentials">
+    Synced credentials and the subprocess env policy.
+  </Card>
+  <Card title="Security" icon="shield-check" href="/security">
+    Trust boundary, env hygiene, server mode auth.
+  </Card>
+</CardGroup>

@@ -11,15 +11,28 @@
             "pages": [
               "index",
               "installation",
-              "quickstart"
+              "quickstart",
+              "first-session",
+              "agent-onboarding"
             ]
           },
           {
-            "group": "Connect",
+            "group": "Primitives",
             "pages": [
+              "sessions",
+              "models",
+              "sub-agents",
+              "skills"
+            ]
+          },
+          {
+            "group": "Operations",
+            "pages": [
+              "cli-runtime",
               "connect",
               "codex",
-              "credentials"
+              "credentials",
+              "security"
             ]
           }
         ]
@@ -30,14 +43,15 @@
           {
             "group": "CLI reference",
             "pages": [
-              "commands",
-              "research-modes"
+              "feature-map",
+              "commands"
             ]
           },
           {
-            "group": "Operations",
+            "group": "Servers",
             "pages": [
-              "security"
+              "web-ui",
+              "server-mode"
             ]
           }
         ]
@@ -47,7 +61,7 @@
       "anchors": [
         {
           "anchor": "Dashboard",
-          "href": "https://cli.syntheticsciences.ai"
+          "href": "https://app.syntheticsciences.ai/cli"
         }
       ]
     }
@@ -55,7 +69,7 @@
   "navbar": {
     "primary": {
       "label": "Dashboard",
-      "href": "https://cli.syntheticsciences.ai"
+      "href": "https://app.syntheticsciences.ai/cli"
     }
   }
 }

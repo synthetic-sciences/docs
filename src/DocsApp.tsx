@@ -42,12 +42,21 @@ import atlasSafetyMdx from "./content/atlas/safety.mdx?raw";
 import cliIndexMdx from "./content/cli/index.mdx?raw";
 import cliInstallationMdx from "./content/cli/installation.mdx?raw";
 import cliQuickstartMdx from "./content/cli/quickstart.mdx?raw";
+import cliFirstSessionMdx from "./content/cli/first-session.mdx?raw";
+import cliAgentOnboardingMdx from "./content/cli/agent-onboarding.mdx?raw";
+import cliSessionsMdx from "./content/cli/sessions.mdx?raw";
+import cliModelsMdx from "./content/cli/models.mdx?raw";
+import cliSubAgentsMdx from "./content/cli/sub-agents.mdx?raw";
+import cliSkillsMdx from "./content/cli/skills.mdx?raw";
+import cliCliRuntimeMdx from "./content/cli/cli-runtime.mdx?raw";
 import cliConnectMdx from "./content/cli/connect.mdx?raw";
 import cliCodexMdx from "./content/cli/codex.mdx?raw";
 import cliCredentialsMdx from "./content/cli/credentials.mdx?raw";
-import cliCommandsMdx from "./content/cli/commands.mdx?raw";
-import cliResearchModesMdx from "./content/cli/research-modes.mdx?raw";
 import cliSecurityMdx from "./content/cli/security.mdx?raw";
+import cliFeatureMapMdx from "./content/cli/feature-map.mdx?raw";
+import cliCommandsMdx from "./content/cli/commands.mdx?raw";
+import cliWebUiMdx from "./content/cli/web-ui.mdx?raw";
+import cliServerModeMdx from "./content/cli/server-mode.mdx?raw";
 
 const mono = `"JetBrains Mono", "SF Mono", ui-monospace, monospace`;
 
@@ -137,12 +146,21 @@ const CLI_SOURCES: Record<string, string> = {
   index: cliIndexMdx,
   installation: cliInstallationMdx,
   quickstart: cliQuickstartMdx,
+  "first-session": cliFirstSessionMdx,
+  "agent-onboarding": cliAgentOnboardingMdx,
+  sessions: cliSessionsMdx,
+  models: cliModelsMdx,
+  "sub-agents": cliSubAgentsMdx,
+  skills: cliSkillsMdx,
+  "cli-runtime": cliCliRuntimeMdx,
   connect: cliConnectMdx,
   codex: cliCodexMdx,
   credentials: cliCredentialsMdx,
-  commands: cliCommandsMdx,
-  "research-modes": cliResearchModesMdx,
   security: cliSecurityMdx,
+  "feature-map": cliFeatureMapMdx,
+  commands: cliCommandsMdx,
+  "web-ui": cliWebUiMdx,
+  "server-mode": cliServerModeMdx,
 };
 
 const PRODUCT_SOURCES: Record<ProductKey, Record<string, string>> = {
@@ -162,7 +180,12 @@ const ICONS: Record<string, ReactNode> = {
   connect: <KeyRound size={17} strokeWidth={1.8} />,
   codex: <KeyRound size={17} strokeWidth={1.8} />,
   credentials: <KeyRound size={17} strokeWidth={1.8} />,
-  "research-modes": <Map size={17} strokeWidth={1.8} />,
+  "first-session": <Terminal size={17} strokeWidth={1.8} />,
+  sessions: <Terminal size={17} strokeWidth={1.8} />,
+  models: <PackageCheck size={17} strokeWidth={1.8} />,
+  "sub-agents": <PackageCheck size={17} strokeWidth={1.8} />,
+  "web-ui": <Terminal size={17} strokeWidth={1.8} />,
+  "server-mode": <Terminal size={17} strokeWidth={1.8} />,
   "first-graph": <GitBranch size={17} strokeWidth={1.8} />,
   "source-to-graph": <Search size={17} strokeWidth={1.8} />,
   "agent-onboarding": <PackageCheck size={17} strokeWidth={1.8} />,
