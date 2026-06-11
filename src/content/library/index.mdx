@@ -1,0 +1,63 @@
+---
+title: "Atlas Library"
+description: "Index repositories, docs, papers, datasets, and local folders, then search and ask grounded questions."
+icon: "library"
+---
+
+**Atlas Library** is the knowledge-source product in the Atlas suite. It is Atlas's library service: index external material once, then search it, ask grounded questions, and pull the useful answers straight into the [research graph](/graphs/index) as evidence.
+
+The library uses your Atlas authentication only. You do not configure any separate search key.
+
+<Columns cols={2}>
+  <Card title="Library quickstart" icon="rocket" href="/library/quickstart">
+    Index a repo and a local folder, run the search modes, and attach an answer to a node.
+  </Card>
+  <Card title="Index sources" icon="library" href="/library/indexing">
+    Add, sync, scope, and subscribe to sources of every type.
+  </Card>
+  <Card title="Search modes" icon="search" href="/library/search">
+    Universal, targeted, web, and deep search — and save hits to the graph.
+  </Card>
+  <Card title="Ask grounded questions" icon="search" href="/library/ask">
+    Document Q&A and Oracle research, with answers attached as evidence.
+  </Card>
+</Columns>
+
+## Source types
+
+| Type | Material |
+| --- | --- |
+| `repository` | A GitHub or Git repository. |
+| `documentation` | A docs site or technical docs. |
+| `research_paper` | A paper URL or PDF. Use `research_paper`, never `paper`. |
+| `huggingface_dataset` | A dataset page. |
+| `local_folder` | A local folder, walked and uploaded. **Private by default.** |
+
+Local folders are the newest source type: index a working directory privately without pushing it anywhere public. See [Index sources](/library/indexing).
+
+## The flow
+
+```text
+library:add  →  library:search / library:ask  →  save into the graph
+ (index)         (universal | targeted | web | deep)   (--save-to / --attach)
+```
+
+1. **Index** material with `library:add` (a URL, or a local folder with `--path`).
+2. **Search** with `library:search --mode …` or **ask** with `library:ask`.
+3. **Ground it** into the graph: `library:search --save-to <node>` saves hits as evidence, and `library:ask --attach <node>` attaches the grounded answer.
+
+## Index your first source
+
+```bash
+atlas library:add --type research_paper --url https://arxiv.org/abs/1706.03762
+atlas library:list --format=json
+atlas library:search --query "windowed attention"
+```
+
+## What's next
+
+- [Index sources](/library/indexing) for the full source lifecycle, including local folders and project scoping.
+- [Search modes](/library/search) for `universal | targeted | web | deep`.
+- [Ask grounded questions](/library/ask) for document Q&A and Oracle research.
+- [Async jobs](/library/jobs) for long-running library and research work.
+- [Library CLI & API](/library/commands) for the command and route reference.

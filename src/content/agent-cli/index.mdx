@@ -1,0 +1,64 @@
+---
+title: "Atlas Agent CLI"
+description: "The autonomous research agent in the Atlas suite. Coming soon."
+icon: "bot"
+---
+
+**Atlas Agent CLI** is the autonomous agent in the Atlas suite: a terminal-first coding agent built for ML engineering and scientific research that records its work straight into [Atlas Graphs](/graphs/index) and grounds itself in [Atlas Library](/library/index).
+
+<Warning>
+The Agent CLI is **coming soon**. The pages below document the shipping surface; expect the product entry in the app to read "coming soon" until general availability.
+</Warning>
+
+It comes in two shapes that share one Atlas account:
+
+- **Interactive agent** — `synsci`, the terminal/web coding agent you drive yourself: sessions, model routing, sub-agents, and a research-skills library.
+- **Autonomous runtime** — `atlas agent:run`, the sandboxed cognition loop that advances a research frontier on its own and writes results back to the graph.
+
+<Columns cols={2}>
+  <Card title="Quickstart" icon="rocket" href="/agent-cli/quickstart">
+    Install, sign in with your Atlas account, configure a model, and send your first prompt.
+  </Card>
+  <Card title="First session" icon="terminal" href="/agent-cli/first-session">
+    One complete loop: open a project, prompt the agent, review the diff, resume later.
+  </Card>
+  <Card title="Models" icon="package-check" href="/agent-cli/models">
+    BYOK and managed routing across the supported providers.
+  </Card>
+  <Card title="Sub-agents" icon="bot" href="/agent-cli/sub-agents">
+    Custom system prompts, tool sets, and routing policies you can delegate to.
+  </Card>
+</Columns>
+
+## How it fits the suite
+
+The agent authenticates with your Atlas account and uses the same `thk_*` credentials as the rest of the suite — there is no separate pairing step. As it works, it records runs, evidence, and decisions into the graph through the Atlas CLI, so an autonomous session leaves the same durable trail a human would.
+
+```text
+you / a schedule
+  -> synsci (interactive) or atlas agent:run (autonomous)
+  -> model provider (BYOK or managed route)
+  -> tool calls (files, shell, skills) on your machine or in a sandbox
+  -> runs + decisions recorded into Atlas Graphs
+```
+
+## The autonomous runtime
+
+```bash
+atlas agent:run --prompt "Advance the lr-schedule investigation; record every run."
+```
+
+`atlas agent:run` executes the sandboxed cognition loop. Tune it with `--model`, `--max-iterations`, `--reasoning-effort`, and `--thinking-budget-tokens`. It records into the graph as it goes, so you can inspect progress in the [web app views](/graphs/web-views) and pick up with `atlas brief`.
+
+## The interactive agent
+
+The `synsci` binary is the hands-on agent: open a session in any repo, prompt it, and review its diffs. It is not a sandbox — it has the same filesystem and shell access you do — so run it in a project you trust or inside a container. See [Security](/agent-cli/security).
+
+## Vocabulary
+
+- A **session** is one agent conversation with its own history, tool calls, and working directory.
+- A **provider** is a model backend the agent routes through (BYOK or the managed route).
+- An **agent profile** is a system prompt plus a tool set plus a routing policy.
+- A **skill** is a portable instruction bundle that primes the agent for a domain.
+
+Start with the [quickstart](/agent-cli/quickstart).

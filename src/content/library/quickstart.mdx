@@ -1,0 +1,67 @@
+---
+title: "Library quickstart"
+description: "Index a repo and a local folder, run the search modes, and attach an answer to the graph."
+icon: "rocket"
+---
+
+This gets you from zero indexed sources to a grounded answer saved on a graph node. Assumes the CLI is installed and you are signed in; if not, see [Installation](/getting-started/installation).
+
+<Steps>
+  <Step title="Index a repository">
+    ```bash
+    atlas library:add --type repository --url https://github.com/org/repo --display-name "baseline repo"
+    ```
+
+    Check indexing status until it completes:
+
+    ```bash
+    atlas library:list --format=json
+    atlas library:show --source-id src_... --format=json
+    ```
+  </Step>
+
+  <Step title="Index a local folder (private)">
+    ```bash
+    atlas library:add --type local_folder --path ./experiments --display-name "experiments"
+    ```
+
+    Local folders are walked (respecting `.gitignore`) and indexed **privately** — nothing is published. Re-walk and re-upload later with `atlas library:sync --source-id src_... --path ./experiments`.
+  </Step>
+
+  <Step title="Search across the modes">
+    ```bash
+    atlas library:search --query "where is validation loss computed?" --mode universal
+    atlas library:search --query "compare this to recent MoE routing papers" --mode deep
+    ```
+
+    `universal` searches your indexed sources; `targeted`, `web`, and `deep` change the strategy. See [Search modes](/library/search).
+  </Step>
+
+  <Step title="Ask a grounded question and attach it to the graph">
+    ```bash
+    atlas library:ask \
+      --query "Summarize how the baseline metric is computed and cite the files." \
+      --attach nd_baseline
+    ```
+
+    `--attach` saves the grounded answer and its citations as evidence on node `nd_baseline`, closing the loop from search to graph in one command.
+  </Step>
+
+  <Step title="Save raw search hits as evidence">
+    ```bash
+    atlas library:search --query "loss function definition" --save-to nd_baseline
+    ```
+
+    `--save-to` writes the hits onto the node as an evidence artifact, so the provenance lives next to the claim it supports.
+  </Step>
+</Steps>
+
+## What you just built
+
+Two indexed sources (one public repo, one private local folder), grounded answers, and evidence attached to a graph node — all queryable from the CLI and visible in the [web app](/graphs/web-views).
+
+## Next steps
+
+- [Index sources](/library/indexing) for sync, retry, subscriptions, and project scoping.
+- [Search modes](/library/search) and [Ask](/library/ask) for the full query surface.
+- [Async jobs](/library/jobs) when a question is too broad for one synchronous answer.

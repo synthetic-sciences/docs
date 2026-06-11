@@ -1,0 +1,48 @@
+---
+title: "Async jobs"
+description: "Long-running library and research jobs, plus usage and quotas."
+icon: "workflow"
+---
+
+Some library and research work is too slow for a synchronous call. Async jobs create work that runs in the background, streams events, and can be cancelled. There are two families: `library:jobs:*` for library work and `research:jobs:*` for Oracle research.
+
+## Library jobs
+
+```bash
+atlas library:jobs:create --payload '{"query":"summarize the dataset evidence"}'
+atlas library:jobs:list --format=json
+atlas library:jobs:show --job-id job_... --format=json
+atlas library:jobs:stream --job-id job_...
+atlas library:jobs:cancel --job-id job_... --yes
+```
+
+## Research jobs
+
+```bash
+atlas research:jobs:create --payload '{"query":"map the strongest objections to this baseline"}'
+atlas research:jobs:stream --job-id job_...
+atlas research:jobs:cancel --job-id job_... --yes
+```
+
+| Command | Use |
+| --- | --- |
+| `*:jobs:create` | Start an async job. |
+| `*:jobs:list` | List jobs. |
+| `*:jobs:show` | Show one job. |
+| `*:jobs:stream` | Stream live job events (server-sent events). |
+| `*:jobs:cancel` | Cancel a job (requires `--yes`). |
+
+Stream commands return live events — use them for progress and partial output instead of polling `*:jobs:show`.
+
+## Quotas and usage
+
+```bash
+atlas usage:summary --format=json
+```
+
+| Quota | Spent by |
+| --- | --- |
+| `oracle` | `research:ask` and each `research:jobs:create`. |
+| `deep_research` | The deep-research pipeline (`library:search --mode deep` and deep jobs). |
+
+`oracle` and `deep_research` are separate quotas: Oracle research answers questions over your indexed library, while deep research runs the slower LLM-plus-web pipeline. Check `usage:summary` before launching autonomous jobs. See [Billing & credits](/getting-started/billing).

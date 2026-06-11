@@ -1,0 +1,60 @@
+---
+title: "Forking & portability"
+description: "Branch nodes, fork subgraphs across workspaces, and export for review or backup."
+icon: "git-fork"
+---
+
+Atlas treats research like GitHub treats code: branch to explore alternatives, fork a subgraph into another workspace, and export for review or backup. Lineage is preserved throughout, so a fork knows where it came from.
+
+## Branch within a graph
+
+```bash
+atlas node:branch --node nd_root --title "try the alternative loss"
+```
+
+A branch is a child node that depends on its parent but may diverge. Use branches for competing hypotheses or parallel attempts; the [orbit and timeline views](/graphs/web-views) make the branch structure legible.
+
+## Fork a subgraph across workspaces
+
+Forking is **export then import**. Select a subgraph, export it, and import it into another workspace or account.
+
+```bash
+# In the source workspace
+atlas map:export --node-ids nd_root --include-descendants true --out subgraph.json
+
+# In the destination workspace
+atlas map:import --payload @subgraph.json --format=json
+```
+
+| Command | Use |
+| --- | --- |
+| `map:export` | Export a map subset by node ids (with `--include-descendants`, `--max-nodes`). |
+| `map:import` | Import a compatible exported subgraph. |
+
+This is how you hand a research thread to a collaborator, branch a public graph into your own workspace, or seed a new project from a template.
+
+## Export for backup and review
+
+```bash
+atlas history:export --out history.jsonl
+atlas map:summary:export --node-ids nd_root --out summary.md
+atlas map:summary:pdf --node-ids nd_root --out summary.pdf
+```
+
+| Command | Output |
+| --- | --- |
+| `history:export` | Map history as JSONL (machine backup). |
+| `map:summary:export` | Markdown summary (human review). |
+| `map:summary:stream` | Streamed summary for agents that want partial output. |
+| `map:summary:pdf` / `map:summary:render-pdf` | PDF for external sharing. |
+
+Use `--out <path>` for the JSONL, PDF, and streaming outputs.
+
+## Import safety
+
+Treat imports as graph mutations. In automation, inspect the payload first and keep the export file as evidence on the controlling node so the fork is auditable:
+
+```bash
+atlas evidence:add --node nd_control \
+  --items '[{"local_path":"subgraph.json","artifact_type":"json","note":"imported subgraph source"}]'
+```

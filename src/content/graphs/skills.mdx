@@ -1,0 +1,42 @@
+---
+title: "Graph skills"
+description: "The bundled skills that drive the research graph from a coding agent."
+icon: "book-open"
+---
+
+Atlas ships ten skills inside `@synsci/atlas`. They are workflow instructions that teach a coding agent how to drive Atlas safely; they are not extra binaries. Run `atlas install` to drop them into the agents on your machine. The router (`atlas`) is covered in the [CLI overview](/getting-started/cli-overview); the library skill (`atlas-search`) lives under [Atlas Library](/library/skills). The rest drive the graph.
+
+## Graph skills
+
+| Skill | Trigger / use case | First command |
+| --- | --- | --- |
+| `atlas-loop` | Doing or continuing actual research in a project. Runs the full loop: brief → hypothesis → plan → run → compare → decision. | `atlas brief --project <id>` |
+| `atlas-record` | A training script, notebook cell, or eval just finished (success or failure) and the result is worth keeping. | `atlas run:record …` |
+| `atlas-map` | Turning papers, repos, docs, or notes into durable map nodes and evidence, without launching runs. | `atlas node:create` / `atlas library:tree` |
+| `atlas-plan` | Deciding what to do next: stages option branches and records why one continuation was selected. Planning only, no runs. | `atlas brief --project <id>` |
+| `atlas-reproduce` | A paper, repo, or report needs a map-backed reproduction plan, validation record, or claim audit. | `atlas reproduce --node <id>` |
+| `atlas-optimize` | Improving a measurable artifact (prompt, config, code) with GEPA search, persisting every candidate as a node. | `atlas node:create` |
+| `atlas-auto` | Advancing a research frontier autonomously under an explicit objective, budget, and stop condition. | `atlas brief --project <id>` |
+| `atlas-tree` | Showing map structure, ancestry, or branch topology from a node. Read-only. | `atlas map:tree --node <id>` |
+
+## Pick the right one
+
+| User request | Skill |
+| --- | --- |
+| "Continue the research in this project" | `atlas-loop` |
+| "Record this run / capture this result" | `atlas-record` |
+| "Turn this paper/repo into map state" | `atlas-map` |
+| "Plan next steps without running them" | `atlas-plan` |
+| "Reproduce or audit this claim" | `atlas-reproduce` |
+| "Optimize this prompt/config against a metric" | `atlas-optimize` |
+| "Run this frontier autonomously" | `atlas-auto` |
+| "Show me the map / tree" | `atlas-tree` |
+
+## Verify
+
+```bash
+atlas doctor --format=json   # reports the skill count and names
+atlas install --dry-run      # preview where each skill would land
+```
+
+`doctor` checks that all ten skills are present in the installed package. Skills are bundled in the CLI — never configure separate skill downloads.

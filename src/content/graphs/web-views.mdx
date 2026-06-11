@@ -1,0 +1,52 @@
+---
+title: "Web app views"
+description: "Cards, orbit, and timeline — three ways the research graph renders in the app."
+icon: "layers"
+---
+
+Everything the CLI writes shows up in the web app at [app.syntheticsciences.ai](https://app.syntheticsciences.ai/atlas). The graph renders three ways, each tuned for a different question, and all colored by node kind.
+
+## Cards
+
+The default view. Each node is a kind-colored card showing its title, summary, outcome, and labels. Hypotheses and decisions get first-class card treatment: a hypothesis card surfaces its status (`proposed → testing → supported / weakened / rejected`) and a decision card surfaces what it rests on. Use cards to read and edit the substance of a project.
+
+## Orbit
+
+A force-directed layout of the whole graph, colored by kind. Nodes pull into clusters around their parents, so branches, dense experiment clusters, and orphaned work are visible at a glance. Use orbit to understand structure: where the work forked, which hypotheses spawned the most runs, and what is still unconnected.
+
+## Timeline
+
+A commit-graph-style view with time-ordered columns, like a git history for research. Runs, decisions, and branches line up by when they happened, so you can trace how an investigation actually unfolded. Use timeline to answer "what did we do, in what order, and why."
+
+| View | Best for | Layout |
+| --- | --- | --- |
+| Cards | Reading and editing nodes | Kind-colored cards |
+| Orbit | Seeing structure and branches | Force-directed, kind-colored |
+| Timeline | Tracing history over time | Commit-graph, time-ordered columns |
+
+## The app sidebar
+
+The app navigation reflects the Atlas suite:
+
+| Item | What it opens |
+| --- | --- |
+| Home | Account overview and recent activity. |
+| Atlas | The suite landing surface. |
+| Graphs | The research graph (cards / orbit / timeline). |
+| Library | Indexed knowledge sources. |
+| Agent CLI | The autonomous agent (coming soon). |
+| Billing | Credit, quotas, and invoices. |
+| Integrations | GitHub, Hugging Face, and W&B connections. |
+| Settings | Profile and account settings. |
+
+**Graphs** was formerly "Graph" and **Library** was formerly "Sources" — the names now match the product sections in these docs.
+
+## Publish a view
+
+Make a node public from the CLI and share the canonical URL:
+
+```bash
+atlas node:share --node nd_root --visibility public
+```
+
+A public graph viewer can open the exact code behind any node whose commit you pinned with [`repo:capture --pin`](/graphs/reproduction).

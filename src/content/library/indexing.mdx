@@ -1,0 +1,89 @@
+---
+title: "Index sources"
+description: "Add, inspect, sync, scope, and subscribe to library sources."
+icon: "library"
+---
+
+A source is external material Atlas has indexed: a repo, doc site, paper, dataset, or local folder. Indexing makes it searchable and citable from the graph.
+
+## Add a source
+
+By URL for remote material:
+
+```bash
+atlas library:add --type repository --url https://github.com/org/repo --display-name "baseline repo"
+atlas library:add --type research_paper --url https://arxiv.org/abs/1706.03762
+atlas library:add --type documentation --url https://docs.example.com
+```
+
+By `--path` for a local folder (walked, `.gitignore`-respecting, **private by default**):
+
+```bash
+atlas library:add --type local_folder --path ./experiments --display-name "experiments"
+```
+
+| Flag | Use |
+| --- | --- |
+| `--type` | `repository`, `documentation`, `research_paper`, `huggingface_dataset`, or `local_folder`. |
+| `--url` | Source URL for remote sources. |
+| `--path` | Local folder to index privately. |
+| `--repository` | `owner/name` for repository sources. |
+| `--display-name` | A human-readable name. |
+| `--max-files` | Max files to upload (default 2000). |
+| `--max-file-bytes` | Skip files larger than this (default 1048576). |
+| `--add-as-global-source` | Add to the shared global library. Local folders default to private. |
+
+<Warning>
+Use `research_paper` for papers — never `paper`. The five types above are the supported set.
+</Warning>
+
+## Inspect a source
+
+```bash
+atlas library:list --format=json
+atlas library:list --type research_paper --status completed
+atlas library:show --source-id src_... --format=json
+atlas library:tree --source-id src_... --format=json
+atlas library:read --source-id src_... --path src/eval.py
+atlas library:grep --source-id src_... --pattern "validation loss"
+```
+
+| Command | Use |
+| --- | --- |
+| `library:list` | List sources; `--errored` filters to ones stuck in error. |
+| `library:show` | Metadata and indexing status. |
+| `library:tree` | Browse the indexed file/document tree. |
+| `library:read` | Read one indexed path. |
+| `library:grep` | Exact-string search within one source. |
+| `library:summary` | Aggregate summary across sources. |
+
+## Keep sources fresh
+
+```bash
+atlas library:sync --source-id src_...
+atlas library:sync --source-id src_... --path ./experiments   # re-walk a local folder
+atlas library:retry --source-id src_...                       # re-trigger a stuck index
+atlas library:update --source-id src_... --display-name "new name"
+atlas library:delete --source-id src_... --yes
+```
+
+`library:retry` targets sources showing `status=error`; pair it with `library:list --errored` to find them.
+
+## Subscribe to an indexed public source
+
+If a public repo or docs site is already indexed in the library, subscribe instantly instead of re-indexing:
+
+```bash
+atlas library:subscribe --url https://github.com/org/repo
+```
+
+## Project scoping
+
+Bind a set of sources to the current project so `search` and `ask` auto-scope to them. The scope is written to `atlas.json` in the folder.
+
+```bash
+atlas library:scope --source-ids src_a,src_b      # set the scope
+atlas library:scope                               # print the current scope
+```
+
+With a scope in place, [search](/library/search) and [ask](/library/ask) default to the project's sources, so agents stay grounded in the right material without passing ids every time.

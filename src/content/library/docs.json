@@ -1,0 +1,56 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "name": "Atlas Library",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Guides",
+        "groups": [
+          {
+            "group": "Start",
+            "pages": [
+              "index",
+              "quickstart"
+            ]
+          },
+          {
+            "group": "Use the library",
+            "pages": [
+              "indexing",
+              "search",
+              "ask",
+              "jobs",
+              "skills"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Reference",
+        "groups": [
+          {
+            "group": "CLI and API",
+            "pages": [
+              "commands"
+            ]
+          }
+        ]
+      }
+    ],
+    "global": {
+      "anchors": [
+        { "anchor": "Library", "href": "https://app.syntheticsciences.ai/atlas" },
+        { "anchor": "llms-full.txt", "href": "https://app.syntheticsciences.ai/documentation/llms-full.txt" },
+        { "anchor": "skill.md", "href": "https://app.syntheticsciences.ai/documentation/skill.md" },
+        { "anchor": "GitHub", "href": "https://github.com/synthetic-sciences" }
+      ]
+    }
+  },
+  "navbar": {
+    "primary": {
+      "type": "button",
+      "label": "Open Library",
+      "href": "https://app.syntheticsciences.ai/atlas"
+    }
+  }
+}

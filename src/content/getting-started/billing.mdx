@@ -1,0 +1,44 @@
+---
+title: "Billing & credits"
+description: "Account credit, library and research quotas, and how to read usage."
+icon: "credit-card"
+---
+
+Atlas bills against your account. Most graph and library operations are included; the metered surfaces are research answers and managed compute. Check **Billing** in the app or read usage from the CLI.
+
+## Read your usage
+
+```bash
+atlas usage:summary --format=json
+```
+
+`usage:summary` returns the quota and consumption for the current billing period across the metered surfaces.
+
+| Quota | Spent by |
+| --- | --- |
+| `oracle` | `research:ask` and `research:jobs:create` (Oracle-style synthesis over your library). |
+| `deep_research` | The deep-research pipeline (`library:search --mode deep` and deep research jobs). |
+| credit | Managed executions (`exec:start`) and the managed agent runtime. |
+
+## What is metered
+
+- **Graph operations** — creating nodes, recording runs, comparing, exporting: included.
+- **Library indexing and search** — adding sources, `library:search`, `library:ask`: included, subject to fair-use limits on source size and count.
+- **Research answers** — `research:ask` and research jobs deduct from the `oracle` quota; deep research deducts from `deep_research`.
+- **Managed compute** — `exec:start` and the agent runtime draw down account credit.
+
+## Manage billing
+
+Open the app's **Billing** page to add credit, view invoices, and see plan limits:
+
+```bash
+atlas --open whoami
+```
+
+Then visit [app.syntheticsciences.ai](https://app.syntheticsciences.ai/atlas) and open **Billing** in the sidebar.
+
+## Keep automation predictable
+
+- Run `atlas usage:summary` at the start of an autonomous session and stop when a quota is exhausted.
+- Prefer `library:search` (included) over `research:ask` (metered) when a grounded match is enough.
+- Use `library:search --mode universal` for routine lookups; reserve `--mode deep` for questions that justify the `deep_research` spend.

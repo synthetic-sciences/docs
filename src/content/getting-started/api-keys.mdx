@@ -1,0 +1,49 @@
+---
+title: "API keys"
+description: "Create, list, rotate, and revoke thk_* keys for agents and CI."
+icon: "key-round"
+---
+
+API keys let agents, scripts, and CI authenticate without the browser flow. Every key is prefixed `thk_`, sent as `Authorization: Bearer <key>`, and managed through `/api/auth/api-keys`.
+
+## Create a key
+
+```bash
+atlas key:create --name "ci-runner" --expiry-days 90 --format=json
+```
+
+The full secret is returned **once**. Store it in your secret manager and export it as `ATLAS_API_KEY` where the CLI or API runs. In shared logs, print only the prefix.
+
+## Lifecycle
+
+```bash
+atlas key:list --active-only --format=json
+atlas key:rotate --key-id key_... --format=json
+atlas key:delete --key-id key_... --yes
+```
+
+| Command | Method | Route | Use |
+| --- | --- | --- | --- |
+| `key:create` | `POST` | `/auth/api-keys` | Create a named key; prints the secret once. |
+| `key:list` | `GET` | `/auth/api-keys` | List key ids, names, prefixes, and timestamps. |
+| `key:rotate` | `POST` | `/auth/api-keys/{key_id}/rotate` | Issue a new secret while keeping the key record. |
+| `key:delete` | `DELETE` | `/auth/api-keys/{key_id}` | Revoke a key. Requires `--yes`. |
+
+The `key:list` view shows a `PREFIX` column (for example `thk_856dc108`) so you can match a key to its usage without ever seeing the secret again.
+
+## Use a key
+
+```bash
+export ATLAS_API_KEY="thk_..."
+atlas whoami --format=json
+
+curl -H "Authorization: Bearer $ATLAS_API_KEY" \
+  https://app.syntheticsciences.ai/api/v1/auth/status
+```
+
+## Good hygiene
+
+- Name keys after where they run (`ci-runner`, `lab-box`, `notebook`) so rotation is obvious.
+- Set `--expiry-days` for short-lived automation.
+- Rotate instead of sharing: `key:rotate` invalidates the old secret immediately.
+- Never commit a `thk_*` secret or print it into an agent transcript.

@@ -1,0 +1,56 @@
+---
+title: "Onboard a coding agent"
+description: "One paste that installs Atlas, signs in, loads the skills, and opens the lab."
+icon: "bot"
+---
+
+Atlas is built for agents. Paste the prompt below into Claude Code, Cursor, Codex, or any coding agent and it will install the CLI, sign in, verify the bundled skills, and bootstrap a project. It mirrors the onboarding prompt on the Atlas page in the app.
+
+## The prompt
+
+```text
+You are setting up Atlas — the research map where my experiments, hypotheses, evidence, and decisions live permanently. From now on, work you do here survives this chat: every run you record, every decision you log, the next agent inherits.
+
+Set it up:
+1. `npm i -g @synsci/atlas@latest` — then `atlas login` and ask me to approve in the browser when it opens.
+2. `atlas doctor --format=json` — verify auth, backend, and the 10 bundled skills (atlas, atlas-loop, atlas-record, atlas-auto, atlas-map, atlas-optimize, atlas-plan, atlas-reproduce, atlas-search, atlas-tree). Run `atlas install` to wire them into this agent.
+3. `atlas project:create` — bootstrap the project for this folder (dedupe-safe, re-runnable).
+4. `atlas brief --project <id>` — load the research context packet and summarize it for me: open hypotheses, recent runs, failures, decisions, and what it suggests doing next.
+
+House rules: the skills are bundled in the CLI — never configure separate skill downloads. Commit code before recording runs (code state is auto-captured onto every run). Never print my full API key into logs — summarize the key prefix, CLI version, doctor result, and account, then tell me the lab is open.
+```
+
+## Why it works
+
+- It installs `@latest` (old versions are deprecated) and uses the browser login, so the agent never fabricates credentials.
+- `atlas doctor` is the load-bearing check: it confirms auth and that all ten skills are present before any real work.
+- `atlas project:create` is dedupe-aware and safe to re-run every session, so the agent always lands in the right project.
+- `atlas brief` returns the context packet, so the agent picks up exactly where the last session stopped.
+
+## Machine-readable references
+
+Point the agent at the published surface so it never guesses a flag:
+
+| Resource | Use |
+| --- | --- |
+| [llms.txt](https://app.syntheticsciences.ai/documentation/llms.txt) | The map of the docs. |
+| [llms-full.txt](https://app.syntheticsciences.ai/documentation/llms-full.txt) | The full command surface (130+ commands) and the research loop. |
+| [skill.md](https://app.syntheticsciences.ai/documentation/skill.md) | The bundled Atlas skill, ready to drop into an agent. |
+
+In-session, the agent can introspect any command:
+
+```bash
+atlas help --format=json
+atlas help run:record --schema --format=json
+```
+
+## A scoped variant
+
+For an agent that only needs to verify an existing install:
+
+```text
+Verify Atlas on this machine. Run `atlas --version`, `atlas doctor --format=json`,
+and `atlas whoami --format=json`. Report the version, the doctor result, the
+skill count, the authenticated account, and the API key prefix only. Do not
+repair anything or print the full key.
+```

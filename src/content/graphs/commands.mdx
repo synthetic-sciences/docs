@@ -1,0 +1,122 @@
+---
+title: "Graph CLI & API"
+description: "Command and route reference for Atlas Graphs."
+icon: "terminal"
+---
+
+Every Atlas Graphs command and the `/api/v1` route behind it. Names are canonical (singular namespaces); pre-0.8 aliases still work but are documented only on the [CLI overview](/getting-started/cli-overview). For global flags and output formats, see that page too.
+
+```bash
+atlas help --format=json                       # the whole catalog
+atlas help run:record --schema --format=json   # one command's request shape
+```
+
+## Research loop
+
+| Command | Method | Route | Use |
+| --- | --- | --- | --- |
+| `brief` | `GET` | `/projects/{id}/brief` | The project context packet: hypotheses, runs, decisions, next actions. |
+| `hypothesis:add` | `POST` | `/hypotheses:add` | Pose a falsifiable claim as a node. |
+| `hypothesis:update` | `POST` | `/hypotheses:update` | Move a hypothesis through its lifecycle. |
+| `experiment:plan` | `POST` | `/experiments:plan` | Declare config, metric, and success criterion before a run. |
+| `decision:add` | `POST` | `/decisions:add` | Record a decision and what it rests on. |
+| `eval:define` | `POST` | `/evals:define` | Define a reusable metric + direction + threshold. |
+| `reproduce` | `local` | `/reproduce` | Assemble a reproducibility packet (`--check` fails when incomplete). |
+
+## Runs & executions
+
+| Command | Method | Route | Use |
+| --- | --- | --- | --- |
+| `run:record` | `local` | `/runs:record` | Record a run as an empirical node; auto-captures git state. |
+| `run:compare` | `GET` | `/runs:compare` | Comparison matrix across a project's runs (depth ≤ 3). |
+| `leaderboard` | `local` | `/runs:leaderboard` | Rank runs by one metric. |
+| `run:spool:list` | `local` | `/runs:spool` | List queued offline runs. |
+| `run:spool:flush` | `local` | `/runs:spool/flush` | Replay queued runs. |
+| `run:spool:clear` | `local` | `/runs:spool` | Drop queued runs without posting. |
+| `exec:start` | `POST` | `/nodes/{id}/executions` | Start a managed execution on a node. |
+| `exec:list` | `GET` | `/nodes/{id}/executions` | List managed executions. |
+| `exec:stop` | `POST` | `/nodes/{id}/executions/{exec_id}/terminate` | Stop a managed execution. |
+
+## Journal
+
+| Command | Method | Route | Use |
+| --- | --- | --- | --- |
+| `note:add` | `local` | `/notes` | Add a freeform note as an insight node. |
+| `notebook:cell` | `local` | `/notebook/cell` | Capture a notebook cell + output as an empirical node. |
+
+## Projects & nodes
+
+| Command | Method | Route | Use |
+| --- | --- | --- | --- |
+| `project:create` | `local` | `/projects/create` | Find-or-create the project root (dedupe-aware). |
+| `project:list` | `local` | `/projects` | List project roots. |
+| `project:merge` | `local` | `/projects/merge` | Collapse duplicate project roots. |
+| `node:create` | `POST` | `/nodes/commit-new` | Create and save a node in one request. |
+| `node:save` | `POST` | `/nodes/{id}/commit` | Save staged changes to a node. |
+| `node:show` | `GET` | `/nodes/{id}` | Show one node. |
+| `node:list` | `GET` | `/nodes` | List visible nodes. |
+| `node:history` | `GET` | `/nodes/{id}/audit` | List a node's history events. |
+| `node:branch` | `POST` | `/nodes/{id}/branch` | Branch a node. |
+| `node:merge` | `POST` | `/nodes/merge` | Merge nodes into a resolved node. |
+| `node:resolve` | `GET` | `/nodes/resolve-by-slug` | Resolve a slug to a node. |
+| `node:share` | `local` | `/nodes/share` | Set visibility and print the web URL. |
+| `node:delete` / `node:delete-bulk` | `DELETE` / `POST` | `/nodes/{id}`, `/nodes/bulk-delete` | Delete one or many nodes. |
+| `program:snapshot` | `GET` | `/nodes/{id}/campaign/snapshot` | Resolve the program root snapshot. |
+
+## Links, maps, access & labels
+
+| Command | Method | Route | Use |
+| --- | --- | --- | --- |
+| `map:view` | `GET` | `/graph` | Structured map projection. |
+| `map:tree` | `GET` | `/nodes/{id}/tree` | Rendered tree. |
+| `map:lineage` | `GET` | `/nodes/{id}/ancestry` | Rendered lineage. |
+| `map:summary` | `GET` | `/nodes/{id}/summary` | Rendered summary. |
+| `link:add` | `POST` | `/nodes/{id}/parents/add` | Add a dependency link. |
+| `link:remove` | `POST` | `/nodes/{id}/parents/remove` | Remove a dependency link. |
+| `link:children` / `link:parents` | `GET` | `/nodes/{id}/children`, `/parents` | Page children or parents. |
+| `access:show` / `access:set` | `GET` / `PUT` | `/nodes/{id}/access-policy` | Read or set a node access policy. |
+| `access:set-bulk` / `access:summaries` | `POST` | `/nodes/access-policy/...` | Batch access operations. |
+| `draft:create` | `POST` | `/nodes` | Create a staged node shell. |
+| `draft:lock` / `draft:renew` / `draft:unlock` | `POST` | `/nodes/{id}/stage/lease/...` | Coordinate multi-agent edits. |
+| `label:create` | `POST` | `/nodes/{root_id}/tags` | Create a reusable label. |
+| `label:assign` | `PUT` | `/nodes/{id}/tags` | Assign labels to a node. |
+| `label:update` / `label:delete` | `PATCH` / `DELETE` | `/nodes/{root_id}/tags/{tag_id}` | Edit or delete a label. |
+
+## Evidence
+
+| Command | Method | Route | Use |
+| --- | --- | --- | --- |
+| `evidence:add` | `POST` | `/nodes/{id}/artifacts/uploads/prepare` | One-shot upload (prepare → write → finalize). |
+| `evidence:list` / `evidence:show` | `GET` | `/nodes/{id}/artifacts[/{artifact_id}]` | List or inspect evidence. |
+| `evidence:note` | `PATCH` | `/nodes/{id}/artifacts/{artifact_id}/note` | Edit an evidence note. |
+| `evidence:link` / `evidence:refresh` | `POST` | `/nodes/{id}/remote-artifacts/...` | Public HTTPS JSON evidence by URL. |
+| `evidence:download` | `GET` | `/blobs` | Download raw bytes by path. |
+| `evidence:files` | `GET` | `/users/me/files` | List all evidence you own. |
+| `evidence:delete` / `evidence:delete-bulk` | `DELETE` / `POST` | `/nodes/{id}/artifacts/...` | Delete one or many (requires `--yes`). |
+
+## Code state & integrations
+
+| Command | Method | Route | Use |
+| --- | --- | --- | --- |
+| `repo:capture` | `POST` | `/agent/projects/{id}/repo/capture` | Record code state on a node; `--pin` to tag it. |
+| `repo:pin` | `POST` | `/agent/projects/{id}/repo/pin` | Pin a commit as an immutable tag. |
+| `repo:push` | `local` | `/agent/runner/repo/push` | Push a branch from inside an Atlas sandbox. |
+| `github:link` | `GET` | `/auth/github/install-url` | Browser flow to connect GitHub. |
+| `github:set` | `POST` | `/auth/github/pat` | Connect GitHub with a PAT. |
+| `github:reconnect` | `GET` | `/auth/github/install-url` | Refresh an expired GitHub token. |
+| `github:status` | `GET` | `/auth/github/status` | Show GitHub status. |
+| `github:refresh-repos` / `github:disconnect` | `POST` / `DELETE` | `/auth/github/...` | Refresh repos or disconnect. |
+| `integration:status` | `GET` | `/auth/integrations/status` | Show all integration status. |
+
+## Export / import
+
+| Command | Method | Route | Use |
+| --- | --- | --- | --- |
+| `map:export` | `POST` | `/export` | Export a subgraph. |
+| `map:import` | `POST` | `/import` | Import a subgraph (fork). |
+| `history:export` | `GET` | `/legacy/history/export.jsonl` | Export map history as JSONL. |
+| `map:summary:export` | `POST` | `/export-summary` | Markdown summary. |
+| `map:summary:pdf` / `map:summary:render-pdf` | `POST` | `/export-summary-pdf` | Summary PDF. |
+| `map:summary:stream` | `POST` | `/export-summary-stream` | Streamed summary. |
+
+For library and research commands, see the [Library CLI & API](/library/commands). For auth, keys, and config, see [Getting started](/getting-started/cli-overview).

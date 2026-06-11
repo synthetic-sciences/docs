@@ -1,0 +1,65 @@
+---
+title: "Library CLI & API"
+description: "Command and route reference for Atlas Library."
+icon: "terminal"
+---
+
+Every Atlas Library command and the `/api/v1` route behind it. For global flags, output formats, and naming conventions, see the [CLI overview](/getting-started/cli-overview).
+
+```bash
+atlas help --format=json
+atlas help library:search --schema --format=json
+```
+
+## Sources
+
+| Command | Method | Route | Use |
+| --- | --- | --- | --- |
+| `library:add` | `POST` | `/sources` | Add a source by URL, or index a local folder with `--path`. |
+| `library:list` | `GET` | `/sources` | List sources; `--errored` filters to failed ones. |
+| `library:show` | `GET` | `/sources/{id}` | Metadata and indexing status. |
+| `library:summary` | `GET` | `/sources/summary` | Aggregate summary across sources. |
+| `library:update` | `PATCH` | `/sources/{id}` | Update source metadata. |
+| `library:delete` | `DELETE` | `/sources/{id}` | Delete a source (requires `--yes`). |
+| `library:sync` | `POST` | `/sources/{id}/sync` | Sync a source; re-upload a local folder with `--path`. |
+| `library:retry` | `POST` | `/sources/{id}/sync` | Re-trigger a stuck index. |
+| `library:subscribe` | `POST` | `/sources/subscribe` | Subscribe to an already-indexed public source by URL. |
+
+## Inspect
+
+| Command | Method | Route | Use |
+| --- | --- | --- | --- |
+| `library:tree` | `GET` | `/sources/{id}/tree` | Browse the indexed tree. |
+| `library:read` | `GET` | `/sources/{id}/content` | Read one indexed path. |
+| `library:grep` | `POST` | `/sources/{id}/grep` | Exact-string search within a source. |
+| `library:scope` | `local` | `/project/scope` | Read or set the project source scope (`atlas.json`). |
+
+## Search & ask
+
+| Command | Method | Route | Use |
+| --- | --- | --- | --- |
+| `library:search` | `POST` | `/search` | Search indexed sources (`--mode`, `--save-to`). |
+| `library:ask` | `POST` | `/documents/ask` | Grounded Q&A (`--attach` to a node). |
+| `research:ask` | `POST` | `/research/oracle` | Synchronous Oracle research (`oracle` quota). |
+| `usage:summary` | `GET` | `/usage/summary` | Library and research usage summary. |
+
+## Async jobs
+
+| Command | Method | Route | Use |
+| --- | --- | --- | --- |
+| `library:jobs:create` | `POST` | `/documents/jobs` | Create an async library job. |
+| `library:jobs:list` | `GET` | `/documents/jobs` | List library jobs. |
+| `library:jobs:show` | `GET` | `/documents/jobs/{job_id}` | Show one job. |
+| `library:jobs:stream` | `GET` | `/documents/jobs/{job_id}/stream` | Stream job events. |
+| `library:jobs:cancel` | `DELETE` | `/documents/jobs/{job_id}` | Cancel a job (requires `--yes`). |
+| `research:jobs:create` | `POST` | `/research/jobs` | Create an async Oracle research job. |
+| `research:jobs:list` | `GET` | `/research/jobs` | List research jobs. |
+| `research:jobs:show` | `GET` | `/research/jobs/{job_id}` | Show one job. |
+| `research:jobs:stream` | `GET` | `/research/jobs/{job_id}/stream` | Stream job events. |
+| `research:jobs:cancel` | `DELETE` | `/research/jobs/{job_id}` | Cancel a job (requires `--yes`). |
+
+## Source types
+
+`repository`, `documentation`, `research_paper`, `huggingface_dataset`, `local_folder`. Use `research_paper` for papers, never `paper`. Local folders are private by default.
+
+For graph, run, and evidence commands, see the [Graph CLI & API](/graphs/commands). For auth, keys, and billing, see [Getting started](/getting-started/cli-overview).

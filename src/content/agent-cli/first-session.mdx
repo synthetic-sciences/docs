@@ -1,0 +1,98 @@
+---
+title: "First session"
+description: "One complete loop: open a project, prompt the agent, attach a file, review changes, resume later."
+icon: "terminal"
+---
+
+The end-to-end loop most people run day to day: open a project, get one thing done, pick it up tomorrow. Assumes you have signed in with your Atlas account and configured at least one model — see the [quickstart](/agent-cli/quickstart).
+
+## Open a project
+
+```bash
+cd ~/code/my-project
+synsci
+```
+
+The bare `synsci` opens the TUI agent in your working directory with the default model and profile. The agent sees the directory tree, the git status, and any files you mention. For a browser UI, run `synsci web`; for a single prompt without a UI, use `synsci run`.
+
+## Send a prompt
+
+Focus the first prompt on one file or symbol:
+
+```text
+Refactor utils/log.ts to use structured logging.
+Use pino. Keep the same exported function names.
+```
+
+The agent reads relevant files, proposes a plan, applies edits with your approval, and runs verification commands you authorize. It only blocks on tool calls that mutate state (`Write`, `Edit`, `Bash`).
+
+## Attach a file or URL
+
+```bash
+synsci run -f data/sample.cif "Set up a DFT optimization for this file"
+synsci run --attach https://arxiv.org/pdf/2305.13245 "Summarize the architecture in this paper"
+```
+
+`-f, --file` reads a local file into the prompt; `--attach` fetches a remote artifact at runtime. Both stack.
+
+## Pick a model for one run
+
+```bash
+synsci run --model anthropic/claude-opus-4-7 "Review this diff for race conditions"
+synsci run --model openai-codex/gpt-5-codex "Plan a migration off the old auth middleware"
+```
+
+`synsci models` lists what is configured. See [Models](/agent-cli/models).
+
+## Review changes
+
+The agent does not commit. Review its diff, then ask for fixes in plain language:
+
+```bash
+git diff --stat
+git diff
+```
+
+```text
+You changed log.warn to log.warning in three files; revert those.
+```
+
+The agent keeps conversation context, so it knows which files you mean.
+
+## Continue later
+
+```bash
+synsci run -c "Now add tests for the refactored module"   # resume the latest session here
+synsci session list
+synsci run -s SES_4XJ3K "..."                              # resume a specific session
+```
+
+Sessions persist locally and sync to your account. See [Sessions](/agent-cli/sessions).
+
+## Record it in the graph
+
+When a run is worth keeping, record it into Atlas Graphs so the result is durable and reproducible:
+
+```bash
+git add -A && git commit -m "structured logging"
+atlas run:record --project <id> --config-json '{...}' --metrics-json '{...}' --outcome success
+```
+
+See [Runs & flight recorder](/graphs/runs).
+
+## What's next
+
+<CardGroup cols={2}>
+  <Card title="Sessions" icon="terminal" href="/agent-cli/sessions">
+    Resume, attach, inspect, and export sessions.
+  </Card>
+  <Card title="Sub-agents" icon="bot" href="/agent-cli/sub-agents">
+    Custom agents with their own prompt, tools, and model.
+  </Card>
+  <Card title="Web UI" icon="terminal" href="/agent-cli/web-ui">
+    The local browser interface for longer work.
+  </Card>
+  <Card title="Skills" icon="book-open" href="/agent-cli/skills">
+    The ML research-skills library.
+  </Card>
+</CardGroup>

@@ -1,0 +1,63 @@
+---
+title: "Search modes"
+description: "Universal, targeted, web, and deep search — and saving hits to the graph."
+icon: "search"
+---
+
+`library:search` runs across your indexed sources. The `--mode` flag picks the strategy, from a fast index lookup to a slow multi-hop research pass.
+
+## The modes
+
+```bash
+atlas library:search --query "windowed attention" --mode universal
+atlas library:search --query "how does this repo compute val loss?" --mode targeted --data-sources src_a
+atlas library:search --query "latest results on MoE routing" --mode web
+atlas library:search --query "synthesize the evidence for sparse attention" --mode deep
+```
+
+| Mode | What it does |
+| --- | --- |
+| `universal` (default) | Searches across your indexed sources. |
+| `targeted` | Asks a focused question of the given sources. |
+| `web` | Searches the live web. |
+| `deep` | A slower multi-hop research pass. Draws down the `deep_research` quota. |
+
+## Scope and shape
+
+| Flag | Use |
+| --- | --- |
+| `--query` | The search query (required). |
+| `--mode` | `universal`, `targeted`, `web`, or `deep`. |
+| `--data-sources` | Comma-separated source ids to scope to. |
+| `--top-k` | Max result count. |
+| `--full` | Full content per hit instead of the 300-char preview (pretty mode). |
+| `--save-to` | Node id/slug to save the hits onto as evidence. |
+
+If you have set a [project scope](/library/indexing#project-scoping), `universal` search defaults to those sources.
+
+## Save hits to the graph
+
+`--save-to` closes the loop from search to graph in one command: the hits are written onto a node as an evidence artifact, so provenance lives next to the claim it supports.
+
+```bash
+atlas library:search \
+  --query "where is the baseline loss computed?" \
+  --data-sources src_repo \
+  --save-to nd_baseline \
+  --format=json
+```
+
+## Pretty vs JSON
+
+Pretty output truncates each hit to a preview; pass `--full` to expand it. JSON is always lossless:
+
+```bash
+atlas library:search --query "loss function" --full          # expanded previews at a terminal
+atlas library:search --query "loss function" --format=json   # every field
+```
+
+## When to use search vs ask
+
+- Use **search** when you want grounded matches you can scan or save.
+- Use **[ask](/library/ask)** when you want a synthesized, cited answer.
+- Reserve **`--mode deep`** and Oracle research for questions that justify the spend; see [Billing & credits](/getting-started/billing).

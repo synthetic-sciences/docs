@@ -1,0 +1,57 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "name": "Atlas Agent CLI",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Guides",
+        "groups": [
+          {
+            "group": "Start",
+            "pages": [
+              "index",
+              "quickstart",
+              "first-session"
+            ]
+          },
+          {
+            "group": "Use the agent",
+            "pages": [
+              "sessions",
+              "models",
+              "sub-agents",
+              "skills",
+              "web-ui",
+              "credentials"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Reference",
+        "groups": [
+          {
+            "group": "CLI",
+            "pages": [
+              "commands",
+              "security"
+            ]
+          }
+        ]
+      }
+    ],
+    "global": {
+      "anchors": [
+        { "anchor": "App", "href": "https://app.syntheticsciences.ai/atlas" },
+        { "anchor": "GitHub", "href": "https://github.com/synthetic-sciences" }
+      ]
+    }
+  },
+  "navbar": {
+    "primary": {
+      "type": "button",
+      "label": "Open app",
+      "href": "https://app.syntheticsciences.ai/atlas"
+    }
+  }
+}

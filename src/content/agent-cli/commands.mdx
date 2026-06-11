@@ -1,0 +1,121 @@
+---
+title: "Agent commands"
+description: "Reference for the synsci subcommands: sessions, run, models, agents, skills, and lifecycle."
+icon: "terminal"
+---
+
+The interactive agent's command surface. For the live help, run `synsci --help` and `synsci <command> --help`. The autonomous runtime is `atlas agent:run` — see the [overview](/agent-cli/index).
+
+The bare `synsci` (no arguments) opens the TUI agent in your working directory with the default profile and model. Everything else is grouped below.
+
+## Global flags
+
+| Flag | Use |
+| --- | --- |
+| `-v, --version` | Print the installed version. |
+| `-h, --help` | Print help for a command. |
+| `--print-logs` | Stream agent diagnostics to stderr. |
+| `--log-level <DEBUG\|INFO\|WARN\|ERROR>` | Override the log threshold. |
+
+## Sessions
+
+| Command | Use |
+| --- | --- |
+| `synsci` | Start the TUI agent. |
+| `synsci run [message..]` | One-shot prompt; streams, then exits. |
+| `synsci generate` | Generate code or files without the TUI. |
+| `synsci session` | Inspect and manage past sessions. |
+| `synsci tui attach` | Attach to a running local agent (e.g. one started by `synsci web`). |
+| `synsci tui thread <id>` | Open a specific thread in an attached agent. |
+
+`run` flags: `-c/--continue`, `-s/--session <id>`, `-m/--model <provider/model>`, `--agent <name>`, `--format <default|json>`, `-f/--file <path>`, `--attach <url>`, `--title <text>`.
+
+```bash
+synsci run "Refactor utils/log.ts to use structured logging"
+synsci run -c "Now add tests"
+synsci run --format json "Summarize the architecture of src/" > summary.json
+```
+
+## Account
+
+| Command | Use |
+| --- | --- |
+| `synsci connect status` | Show the active Atlas account, default model, synced services, and credit balance. |
+| `synsci connect sync` | Re-pull synced credentials. |
+
+Sign in with the Atlas CLI (`atlas login`) or a `thk_*` key — see [Authentication](/getting-started/authentication).
+
+## Providers and routing
+
+| Command | Use |
+| --- | --- |
+| `synsci auth` | Interactive provider sign-in (BYOK keys; OAuth for OpenAI Codex). |
+| `synsci models` | List configured providers and their models. |
+| `synsci billing show` | Account credit and recent managed-route usage. |
+| `synsci billing topup` | Open the app to add credit. |
+
+## Agent profiles
+
+| Command | Use |
+| --- | --- |
+| `synsci agent create` | Scaffold a sub-agent (system prompt + tool set + routing policy). |
+
+Flags: `--path`, `--description`, `--mode <all\|primary\|subagent>`, `--tools`, `--model`. See [Sub-agents](/agent-cli/sub-agents).
+
+## Skills
+
+| Command | Use |
+| --- | --- |
+| `synsci skill list` | Show installed skills. |
+| `synsci skill show <name>` | Print a skill's metadata and entrypoints. |
+| `synsci skill add <url-or-name>` | Install a skill. |
+| `synsci skill remove <name>` | Uninstall a skill. |
+| `synsci skill set-entries <name>` | Update a skill's entrypoint mapping. |
+
+## Local server
+
+| Command | Use |
+| --- | --- |
+| `synsci web` | Boot the local server and open the browser UI on `127.0.0.1:4444`. |
+
+See [Web UI](/agent-cli/web-ui).
+
+## GitHub and PRs
+
+| Command | Use |
+| --- | --- |
+| `synsci github` | GitHub helpers that compose with `gh` and the agent. |
+| `synsci pr` | PR workflows: open, update, review. |
+
+## Portability and lifecycle
+
+| Command | Use |
+| --- | --- |
+| `synsci export` / `synsci import` | Export or import a session as JSON. |
+| `synsci stats` | Local usage stats. |
+| `synsci debug` | Structured diagnostics for support. |
+| `synsci upgrade` | Update to the latest version. |
+| `synsci uninstall` | Remove the binary and local config. |
+| `synsci completion` | Shell completion for bash, zsh, or fish. |
+
+```bash
+synsci upgrade
+synsci completion zsh > ~/.zsh/completions/_synsci
+```
+
+## What's next
+
+<CardGroup cols={2}>
+  <Card title="Credentials" icon="key-round" href="/agent-cli/credentials">
+    Provider keys and synced cloud/ML credentials.
+  </Card>
+  <Card title="Security" icon="shield-check" href="/agent-cli/security">
+    Credential boundary, env hygiene, the trust boundary.
+  </Card>
+  <Card title="Skills" icon="book-open" href="/agent-cli/skills">
+    The ML research-skills library.
+  </Card>
+  <Card title="Sub-agents" icon="bot" href="/agent-cli/sub-agents">
+    Custom agent profiles.
+  </Card>
+</CardGroup>
