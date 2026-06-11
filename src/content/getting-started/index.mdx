@@ -1,0 +1,85 @@
+---
+title: "Atlas"
+description: "A suite of tools that act as infrastructure for autonomous research."
+icon: "rocket"
+---
+
+Research is reorganizing around delegation. Autoresearch loops, multi-agent harnesses, and AI scientists now run experiments in the background, and the volume of work a single researcher sustains keeps rising. **Atlas** is the infrastructure layer for that shift: a suite of tools by Synthetic Sciences that give human-agent research a durable, shared substrate.
+
+Atlas is not one app. It is a set of products that work together so an investigation survives more than one chat, notebook, or agent run.
+
+<Columns cols={3}>
+  <Card title="Atlas Graphs" icon="git-branch" href="/graphs/index">
+    The research graph. Hypotheses, experiment plans, recorded runs, evidence, and decisions as durable nodes you can branch, compare, and reproduce.
+  </Card>
+  <Card title="Atlas Library" icon="search" href="/library/index">
+    The library service. Index repositories, docs, papers, datasets, and local folders, then search, ask grounded questions, and pull answers into the graph.
+  </Card>
+  <Card title="Atlas Agent CLI" icon="bot" href="/agent-cli/index">
+    The autonomous agent that runs research end to end. Coming soon.
+  </Card>
+</Columns>
+
+## Where to start
+
+This section holds everything shared across the suite: installing the CLI, signing in, API keys, billing, the command conventions, and onboarding a coding agent. Read it once, then move into the product you need.
+
+<Columns cols={2}>
+  <Card title="Install the CLI" icon="package-check" href="/getting-started/installation">
+    `npm i -g @synsci/atlas@latest`, sign in, and verify with `atlas doctor`.
+  </Card>
+  <Card title="Authentication" icon="key-round" href="/getting-started/authentication">
+    Browser login or `thk_*` API keys in the Authorization header.
+  </Card>
+  <Card title="CLI overview & conventions" icon="terminal" href="/getting-started/cli-overview">
+    Singular namespaces, the verb vocabulary, slug resolution, and output formats.
+  </Card>
+  <Card title="Onboard a coding agent" icon="bot" href="/getting-started/onboard-agent">
+    One paste that installs Atlas, logs in, and loads the bundled skills.
+  </Card>
+</Columns>
+
+## How the pieces fit
+
+One CLI, `@synsci/atlas`, drives the whole suite. It is a direct HTTP client for the Atlas API at `https://app.syntheticsciences.ai/api/v1`; there is no separate transport to configure.
+
+```text
+agent or human
+  -> atlas <command>
+  -> local profile + thk_* API key
+  -> https://app.syntheticsciences.ai/api/v1
+  -> graph, library, evidence, or integration service
+  -> JSON (piped) or a pretty terminal view
+```
+
+Atlas is direct REST plus CLI. There is no Atlas MCP server. The CLI also bundles ten skills that teach any coding agent how to drive Atlas safely; `atlas install` drops them into the agents on your machine.
+
+## The vocabulary
+
+The product vocabulary is intentionally small and shared across the suite:
+
+- A **node** is a durable research object: a question, hypothesis, experiment plan, recorded run, decision, claim, or source-grounded observation.
+- A **link** records dependency or lineage between nodes.
+- **Evidence** attaches files, metrics, logs, or external JSON to the node it supports.
+- A **library source** is indexed external material (a repo, doc site, paper, dataset, or local folder) the graph can search and cite.
+- A **project** is the root node for one folder or repo. It is where the research loop runs.
+
+## Minimum working setup
+
+```bash
+npm i -g @synsci/atlas@latest
+atlas login
+atlas doctor --format=json
+```
+
+`atlas login` opens a browser approval flow and stores an API key locally. `atlas doctor` confirms auth, backend reachability, and the ten bundled skills. From there, jump to [Atlas Graphs](/graphs/index) to run the research loop or [Atlas Library](/library/index) to index sources.
+
+## Built for agents
+
+Agent-facing docs are first class. Point any model at the published machine-readable surface:
+
+- [llms.txt](https://app.syntheticsciences.ai/documentation/llms.txt) — the map of the docs.
+- [llms-full.txt](https://app.syntheticsciences.ai/documentation/llms-full.txt) — the full command surface (130+ commands).
+- [skill.md](https://app.syntheticsciences.ai/documentation/skill.md) — the bundled Atlas skill.
+
+See [Onboard a coding agent](/getting-started/onboard-agent) for a one-paste setup prompt.

@@ -1,0 +1,81 @@
+---
+title: "Quickstart"
+description: "Install the agent, sign in with your Atlas account, add a model, and send your first prompt."
+icon: "rocket"
+---
+
+From a fresh shell to a working agent session. Assumes Node `18+`.
+
+<Steps>
+  <Step title="Install">
+    ```bash
+    npm i -g synsci
+    synsci --version
+    ```
+
+    Homebrew and the curl-bash installer also work; the binary surface is identical.
+  </Step>
+
+  <Step title="Sign in with your Atlas account">
+    The agent shares your Atlas credentials. Sign in once with the Atlas CLI, or export a `thk_*` API key:
+
+    ```bash
+    atlas login                      # browser sign-in
+    # or, for headless / CI
+    export ATLAS_API_KEY="thk_..."
+    ```
+
+    Then confirm the agent sees the account and pull any synced credentials:
+
+    ```bash
+    synsci connect status
+    synsci connect sync
+    ```
+
+    See [Authentication](/getting-started/authentication) for the credential model.
+  </Step>
+
+  <Step title="Add a model provider">
+    The agent needs at least one model route:
+
+    ```bash
+    synsci auth          # interactive provider picker (BYOK or the managed route)
+    synsci models        # list everything configured
+    ```
+
+    Bring your own key for Anthropic, OpenAI, Google, OpenRouter, Together, Groq, or Fireworks, sign in to OpenAI Codex, or use the managed Synthetic Sciences route on account credit. See [Models](/agent-cli/models).
+  </Step>
+
+  <Step title="Send your first prompt">
+    ```bash
+    synsci                                   # TUI agent in the current directory
+    synsci run "Refactor utils/log.ts to use structured logging"   # one-shot
+    synsci web                               # local browser UI on 127.0.0.1:4444
+    ```
+
+    <Warning>
+    The agent has the same filesystem and shell access you do. Run it in a project directory you trust, or inside Docker if you want isolation.
+    </Warning>
+  </Step>
+</Steps>
+
+## What success looks like
+
+`synsci connect status` shows your Atlas account and at least one configured model. A bare `synsci` opens a TUI; `synsci run "echo hello"` prints a short reply and exits. If commands fail after sign-in, check `synsci connect status` before changing config.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="First session" icon="terminal" href="/agent-cli/first-session">
+    The full day-to-day loop, end to end.
+  </Card>
+  <Card title="Models" icon="package-check" href="/agent-cli/models">
+    Routing, BYOK vs managed, per-provider behavior.
+  </Card>
+  <Card title="Commands" icon="terminal" href="/agent-cli/commands">
+    Every subcommand, grouped by area.
+  </Card>
+  <Card title="Credentials" icon="key-round" href="/agent-cli/credentials">
+    Wire HF, W&B, Modal, Lambda, and other keys through your account.
+  </Card>
+</CardGroup>

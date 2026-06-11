@@ -1,0 +1,55 @@
+---
+title: "Security"
+description: "Credential storage, subprocess env hygiene, output redaction, and the trust boundary."
+icon: "shield-check"
+---
+
+The agent runs locally with the same filesystem and shell access you do. The security model rests on two principles: keep provider credentials out of subprocesses that do not need them, and make the trust boundary explicit instead of pretending the CLI is a sandbox.
+
+## What the CLI is not
+
+**The CLI is not a sandbox.** The permission and approval system around destructive tool calls is a UX guardrail to keep you in the loop, not isolation. The agent can read, write, and execute anywhere your user can. For real isolation, run it inside Docker, a VM, or a remote dev container.
+
+## Credential storage
+
+| Surface | Where | Notes |
+| --- | --- | --- |
+| Atlas API key | `$XDG_CONFIG_HOME/synsc/config.json` (defaults to `~/.config/synsc/config.json`) | `thk_*` bearer key, shared with the Atlas suite, revocable from the app. |
+| Synced service credentials | `$XDG_CONFIG_HOME/synsc/credentials.json` | Encrypted at rest. Refreshed by `synsci connect sync`. |
+| Native binary (curl-bash install) | `~/.synsc/bin/synsc` | Added to PATH through your shell rc. |
+
+Your account holds the canonical copy of every synced credential. The local file is a session-time mirror you can delete and re-pull with `synsci connect sync`.
+
+## Subprocess env hygiene
+
+When the agent shells out, it rebuilds the subprocess environment from a curated allow-list rather than inheriting your full shell. This keeps provider keys out of commands that have no business seeing them.
+
+**Always passed through:** `PATH`, `HOME`, `USER`, `SHELL`, `TERM`, `LANG`, `LC_*`, `TMPDIR`, `XDG_*`, `EDITOR`, `VISUAL`.
+
+**Conditionally passed, only to subprocesses that declare a need:** `HF_TOKEN`, `WANDB_API_KEY`, `MODAL_TOKEN_ID`, `MODAL_TOKEN_SECRET`, `LAMBDA_API_KEY`, `RUNPOD_API_KEY`, `PRIME_INTELLECT_API_KEY`, `TENSORPOOL_API_KEY`, `VAST_API_KEY`, `TINKER_API_KEY`, `LANGSMITH_API_KEY`, `PINECONE_API_KEY`, `TOGETHER_API_KEY`, `GROQ_API_KEY`, `FIREWORKS_API_KEY`, `OPENROUTER_API_KEY`.
+
+**Explicitly filtered out, even if set in your shell:** `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`, `GOOGLE_GENERATIVE_AI_API_KEY`, `GEMINI_API_KEY`. The agent talks to model providers itself; subprocesses do not need these keys.
+
+## Output redaction
+
+Known credential patterns are redacted from agent output before it lands in a transcript or syncs to your account. The redaction matches the synced-key shapes (`hf_*`, `wandb-*`, Modal token ids, AWS access keys, and so on). If you spot an unredacted secret, report it (see below).
+
+## Per-account isolation
+
+Sessions and synced credentials are scoped to your Synthetic Sciences account. The platform never mixes one account's state with another's. Team plans add explicit project-level sharing; defaults are private.
+
+## What leaves your machine
+
+- Prompts and assistant responses you send during a session (stored against your account).
+- Credit-usage telemetry per session, when you use the managed route.
+- Model provider traffic, when you use a managed or hosted provider (each provider has its own policy).
+
+## What stays on your machine
+
+- Source files the agent reads or writes locally, unless you explicitly upload them through a tool.
+- Local environment variables not in the allow-list above.
+- The native binary, the local config directory, and session metadata under `~/.config/synsc`.
+
+## Reporting a vulnerability
+
+Report security issues through GitHub Security Advisories on the [synsci-cli repo](https://github.com/synthetic-sciences). Do not post security issues on public issue trackers.

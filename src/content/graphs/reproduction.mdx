@@ -1,0 +1,55 @@
+---
+title: "Reproduction & code state"
+description: "Package a result for exact replay: config, captured code, dataset, and success criterion."
+icon: "repeat-2"
+---
+
+A result is only as good as your ability to reproduce it. Atlas captures the code state behind every recorded run, and `reproduce` assembles the whole packet on demand. Pin the commits that matter so they stay reachable forever.
+
+## Reproducibility packet
+
+```bash
+atlas reproduce --node <run-id> --format=json
+atlas reproduce --node <run-id> --check
+```
+
+`reproduce` resolves the exact **config**, **captured code state** (repo, branch, commit, pin), **dataset ref**, and **success criterion** for a run or result node. Add `--check` and it fails with the list of missing pieces when the packet is incomplete — including a dirty working tree at record time. Wire `--check` into CI to block "results" that can't be replayed.
+
+## Capture code state
+
+`run:record` captures code state automatically (see [Runs](/graphs/runs)). To attach or refresh it on any node, or to pin a milestone:
+
+```bash
+atlas repo:capture --node <node-id> \
+  --repo-url "$(git remote get-url origin)" \
+  --branch-name "$(git rev-parse --abbrev-ref HEAD)" \
+  --head-commit-sha "$(git rev-parse HEAD)" \
+  --pin true
+```
+
+`repo:capture` records the repo/branch/commit behind a node so a public-graph viewer can open the exact code. `--pin true` also creates an immutable tag (default `atlas/<slug>-r<rev>`) so the commit stays reachable even if the branch moves.
+
+| Command | Use |
+| --- | --- |
+| `repo:capture` | Record code state on a node; `--pin` to tag it immutably. |
+| `repo:pin` | Pin an existing commit as an immutable tag (capture-by-value). |
+| `repo:push` | From inside an Atlas sandbox, bundle the current branch and push it via the backend (no token in the sandbox). |
+
+## Connect GitHub first
+
+Capturing and pinning need a connected GitHub account:
+
+```bash
+atlas github:link            # browser flow (recommended)
+atlas github:set --token-env GITHUB_PAT   # CLI-only with a PAT
+atlas github:status --format=json
+atlas github:reconnect       # refresh an expired token
+```
+
+`atlas doctor` warns when a GitHub token has expired; `github:reconnect` is the follow-up.
+
+## Recommended practice
+
+- **Commit before you record.** A clean tree is what makes `reproduce --check` pass.
+- **Pin milestones.** `repo:capture --pin true` on the runs behind a decision keeps the exact code reachable.
+- **Gate on reproducibility.** Run `atlas reproduce --node <id> --check` in CI before promoting a result.

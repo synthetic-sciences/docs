@@ -1,0 +1,109 @@
+---
+title: "Research loop quickstart"
+description: "Run one full cycle: project, hypothesis, plan, recorded run, comparison, decision, brief."
+icon: "rocket"
+---
+
+This is the headline workflow of Atlas Graphs. In one sitting you pose a hypothesis, declare what would change your mind, record a run with its exact code state, rank the results, and log the decision. The next agent (or you, next week) inherits all of it through `atlas brief`.
+
+Assumes the CLI is installed and you are signed in. If not, see [Installation](/getting-started/installation).
+
+<Steps>
+  <Step title="Create the project">
+    ```bash
+    atlas project:create
+    ```
+
+    Run this from your repo. It is dedupe-aware: it finds the existing project for this folder/repo or creates one, so it is safe to re-run every session. Save the returned project id (a slug like `able-helm-1359`).
+  </Step>
+
+  <Step title="Pose a hypothesis">
+    ```bash
+    atlas hypothesis:add \
+      --project able-helm-1359 \
+      --claim "Cosine LR schedule beats step decay on val loss for this model" \
+      --rationale "Smoother decay tends to help small-batch runs" \
+      --expected-observations "lower metrics.val_loss at the same step budget" \
+      --disconfirmers "no gap, or step decay wins"
+    ```
+
+    State the falsifiable claim and what would kill it before you test it. Save the hypothesis id.
+  </Step>
+
+  <Step title="Plan the experiment">
+    ```bash
+    atlas experiment:plan \
+      --project able-helm-1359 \
+      --hypothesis <hypothesis-id> \
+      --metric metrics.val_loss \
+      --success-criterion "metrics.val_loss < 2.0" \
+      --config '{"schedule":"cosine","lr":3e-4}'
+    ```
+
+    Declare the metric and the **success criterion** runs are judged against. The plan pre-allocates a `run_cluster_key` that recorded runs inherit, so repeats fold into one comparable axis. Save the plan id.
+  </Step>
+
+  <Step title="Commit your code, then record the run">
+    ```bash
+    git add -A && git commit -m "cosine schedule sweep"
+
+    atlas run:record \
+      --project able-helm-1359 \
+      --plan <plan-id> \
+      --config-json '{"schedule":"cosine","lr":3e-4,"seed":17}' \
+      --metrics-json '{"val_loss":1.88}' \
+      --outcome success
+    ```
+
+    `run:record` auto-captures the working tree's git state (repo URL, branch, head commit SHA, and a dirty flag), so commit first. Because the run is bound to the plan with `--plan`, Atlas evaluates the success criterion and stores `criterion_met`. Offline? The run spools to `~/.atlas/spool/` and flushes on the next call.
+  </Step>
+
+  <Step title="Compare and rank">
+    ```bash
+    atlas leaderboard --project able-helm-1359 --metric metrics.val_loss
+    atlas run:compare --project able-helm-1359 \
+      --columns title,config.lr,metrics.val_loss,criterion_met --format=table
+    ```
+
+    `leaderboard` ranks runs in the metric's better direction with the winner marked. `run:compare` is the full matrix; dot-paths into the captured data (`config.lr`, `metrics.val_loss`) become columns.
+  </Step>
+
+  <Step title="Record the decision">
+    ```bash
+    atlas decision:add \
+      --project able-helm-1359 \
+      --decision "Adopt cosine schedule for the baseline" \
+      --basis <run-id-1>,<run-id-2> \
+      --confidence high
+    ```
+
+    Link the runs the decision rests on so `map:lineage` can explain it later.
+  </Step>
+
+  <Step title="Close the loop and reload the brief">
+    ```bash
+    atlas hypothesis:update --node <hypothesis-id> --status supported --because <run-id-1>
+    atlas brief --project able-helm-1359
+    ```
+
+    Move the hypothesis through its lifecycle, then reload `brief`. Its `suggested_next` drives the next cycle.
+  </Step>
+</Steps>
+
+## What you just built
+
+A project with a hypothesis, an experiment plan, a recorded run carrying its exact code state, a ranked comparison, and a decision linked to its basis. Every piece is durable and navigable in the [web app views](/graphs/web-views).
+
+## The loop, condensed
+
+```text
+project:create → brief → hypothesis:add → experiment:plan
+  → (commit) → run:record --plan → run:compare / leaderboard
+  → decision:add → hypothesis:update → brief (suggested_next)
+```
+
+## Next steps
+
+- [The research loop](/graphs/research-loop) for the full workflow reference, including `eval:define`.
+- [Runs & flight recorder](/graphs/runs) for everything `run:record` and `run:compare` capture.
+- [Reproduction & code state](/graphs/reproduction) to package a result for exact replay.

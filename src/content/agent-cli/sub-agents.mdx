@@ -1,0 +1,98 @@
+---
+title: "Sub-agents"
+description: "An agent profile is a system prompt, a tool set, and a routing policy. Scaffold sub-agents and delegate to them."
+icon: "bot"
+---
+
+The default `synsci` profile is a general coding agent. When a task needs a different personality, tool set, or routing policy, scaffold a sub-agent.
+
+A **sub-agent** is an agent profile the main agent can delegate to. From inside a session you call it like a tool; from the CLI you can also run it as the primary agent.
+
+## Scaffold a sub-agent
+
+```bash
+synsci agent create
+```
+
+The non-interactive form:
+
+```bash
+synsci agent create \
+  --path .synsc/agents/reviewer.md \
+  --description "Reviews diffs for race conditions and unsound concurrency" \
+  --mode subagent \
+  --tools "Read,Grep,Bash" \
+  --model anthropic/claude-opus-4-7
+```
+
+| Flag | Use |
+| --- | --- |
+| `--path <dir-or-file>` | Where to write the definition. Project-local (`.synsc/agents/`) or user-global (`~/.config/synsc/agents/`). |
+| `--description <text>` | What the agent is for. Shown in the picker and to the main agent when it decides to delegate. |
+| `--mode <all\|primary\|subagent>` | `primary`: top-level agent for a session. `subagent`: only the main agent calls it. `all`: both. |
+| `--tools <tool[,tool...]>` | Restrict the tool set. Omit to inherit everything. |
+| `--model <provider/model>` | Default model for this agent. |
+
+The result is a Markdown file with YAML frontmatter (the manifest) and a body (the system prompt). Edit it like any prose file.
+
+## Invoke a sub-agent
+
+The main agent picks a sub-agent automatically when delegation makes sense. Force it by name in a prompt, or start a session with it as the primary:
+
+```bash
+synsci --agent reviewer
+synsci run --agent reviewer "Review the diff in src/auth"
+```
+
+`--agent <name>` resolves project-local first, then user-global, then built-in. Only `mode: primary` or `mode: all` agents can be invoked this way.
+
+## Tool restrictions
+
+`--tools "Read,Grep"` produces a read-only sub-agent. The main agent refuses delegations needing a tool the sub-agent lacks, so a read-only reviewer cannot be tricked into editing files.
+
+| Tool | What it does |
+| --- | --- |
+| `Read` | Read files. |
+| `Grep` | Search inside files. |
+| `Glob` | Find files by name pattern. |
+| `Bash` | Run shell commands. |
+| `Edit` | Mutate files. |
+| `Write` | Create or overwrite files. |
+
+The exact set comes from your CLI version; run `synsci agent create --help` for the current list.
+
+## Useful shapes
+
+- **Reviewer.** Read-only tools, a prompt focused on one bug class, a lower-cost model.
+- **Explorer.** Read-only with broad search, used for "where is X defined" without polluting the main context.
+- **Skill specialist.** Pairs a sub-agent with one or two [skills](/agent-cli/skills) so they always load.
+- **Pipeline driver.** A narrow tool set and a prompt that knows exactly one workflow.
+
+Keep system prompts short — a tight description plus a clear tool set usually beats a multi-page instruction.
+
+## Where agents live
+
+```text
+.synsc/agents/             # project-scoped
+~/.config/synsc/agents/    # user-global
+<bundled>                  # ships-with-CLI defaults
+```
+
+Resolution is project-local, then user-global, then built-in.
+
+## What's next
+
+<CardGroup cols={2}>
+  <Card title="Skills" icon="book-open" href="/agent-cli/skills">
+    Pair sub-agents with skills for domain priming.
+  </Card>
+  <Card title="Sessions" icon="terminal" href="/agent-cli/sessions">
+    Use `--agent` to start a session with a sub-agent.
+  </Card>
+  <Card title="Models" icon="package-check" href="/agent-cli/models">
+    Per-agent default models.
+  </Card>
+  <Card title="Commands" icon="terminal" href="/agent-cli/commands">
+    Full `agent create` reference.
+  </Card>
+</CardGroup>

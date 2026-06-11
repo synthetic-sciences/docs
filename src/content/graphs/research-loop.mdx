@@ -1,0 +1,133 @@
+---
+title: "The research loop"
+description: "Brief, hypotheses, experiment plans, decisions, and evals as a durable workflow."
+icon: "workflow"
+---
+
+The research loop turns an investigation into durable, comparable graph state. Every step leaves a node a later agent can read back, so research survives the session it happened in. For a hands-on walkthrough, do the [quickstart](/graphs/quickstart) first; this page is the workflow reference.
+
+```text
+brief → hypothesis:add → experiment:plan → run:record → run:compare / leaderboard
+      → decision:add → hypothesis:update → brief (suggested_next drives the next cycle)
+```
+
+## Start every session with brief
+
+```bash
+atlas brief --project able-helm-1359
+atlas brief --project able-helm-1359 --full
+```
+
+`brief` is the project context packet for agents: open hypotheses, recent runs, failure clusters, decisions, open branches, and `suggested_next` — runnable next actions. Read it before acting. `--full` raises the per-section caps for a deeper packet.
+
+## Pose a hypothesis
+
+```bash
+atlas hypothesis:add \
+  --project able-helm-1359 \
+  --claim "Cosine LR beats step decay on val loss" \
+  --assumptions "same data, same step budget" \
+  --expected-observations "lower metrics.val_loss" \
+  --disconfirmers "no gap, or step decay wins" \
+  --rationale "smoother decay helps small-batch runs"
+```
+
+A hypothesis is a first-class node: the falsifiable claim, why you believe it, what would confirm it, and what would kill it.
+
+| Flag | Meaning |
+| --- | --- |
+| `--claim` | The falsifiable claim, one sentence (required). |
+| `--rationale` | Why you believe it might be true. |
+| `--expected-observations` | Comma-separated observations that would support it. |
+| `--disconfirmers` | Comma-separated observations that would kill it. |
+| `--assumptions` | Comma-separated assumptions the claim rests on. |
+| `--status` | `proposed` (default), `testing`, `supported`, `weakened`, `rejected`. |
+
+## Plan the experiment
+
+```bash
+atlas experiment:plan \
+  --project able-helm-1359 \
+  --hypothesis <hypothesis-id> \
+  --metric metrics.val_loss \
+  --success-criterion "metrics.val_loss < 2.0" \
+  --config '{"schedule":"cosine"}' \
+  --risks "could overfit at high lr"
+```
+
+Declare what the experiment tests **before** running it: the hypothesis, the config, the metric, and the success criterion runs are judged against. The plan pre-allocates a `run_cluster_key` that `run:record --plan` inherits, so repeats fold into one comparable cluster.
+
+## Record and compare
+
+Recording runs and comparing them is the flight recorder. See [Runs & flight recorder](/graphs/runs) for the full surface.
+
+```bash
+atlas run:record --project able-helm-1359 --plan <plan-id> \
+  --config-json '{"schedule":"cosine","lr":3e-4}' \
+  --metrics-json '{"val_loss":1.88}' --outcome success
+atlas leaderboard --project able-helm-1359 --metric metrics.val_loss
+```
+
+Binding a run to its plan with `--plan` makes Atlas evaluate the success criterion and store `criterion_met`.
+
+## Define reusable evals
+
+```bash
+atlas eval:define \
+  --project able-helm-1359 \
+  --name cifar10-val \
+  --metric metrics.val_loss \
+  --direction min \
+  --threshold 2.0
+```
+
+An eval names a metric, its better direction, and an optional threshold, so plans and leaderboards share one definition of "good".
+
+| Flag | Meaning |
+| --- | --- |
+| `--name` | Eval name (e.g. `cifar10-val`). |
+| `--metric` | Metric dot-path runs report. |
+| `--direction` | `min` (lower is better) or `max`. |
+| `--threshold` | Optional pass threshold. |
+| `--dataset-ref` | Optional dataset URL, path, or library source id. |
+
+## Record the decision
+
+```bash
+atlas decision:add \
+  --project able-helm-1359 \
+  --decision "Adopt cosine schedule for the baseline" \
+  --basis <run-id-1>,<run-id-2> \
+  --alternatives "step decay, linear warmup" \
+  --confidence high
+```
+
+Link the runs, evidence, and hypotheses a decision rests on so `map:lineage` answers "why did we do this?" later.
+
+| Flag | Meaning |
+| --- | --- |
+| `--decision` | The decision, one sentence (required). |
+| `--basis` | Node ids/slugs the decision rests on. |
+| `--alternatives` | Comma-separated alternatives considered. |
+| `--confidence` | `low`, `medium` (default), `high`. |
+| `--reversible` | Whether it can be cheaply reversed (default true). |
+
+## Close the loop
+
+```bash
+atlas hypothesis:update --node <hypothesis-id> --status supported --because <run-id-1> --note "cosine won by 0.12"
+atlas brief --project able-helm-1359
+```
+
+`hypothesis:update` moves a hypothesis through `proposed → testing → supported | weakened | rejected`, citing the runs or evidence that justify the change. Then reload `brief` and let `suggested_next` drive the next cycle.
+
+## Journal entries
+
+Not everything is an experiment. Capture observations and notebook cells without a full run:
+
+```bash
+atlas note:add --project able-helm-1359 --text @notes.md
+atlas notebook:cell --project able-helm-1359 --config-json '{...}' --metrics-json '{...}'
+```
+
+`note:add` records an insight node; `notebook:cell` captures a cell and its output as an empirical node with the same spool semantics as `run:record`.

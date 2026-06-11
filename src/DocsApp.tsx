@@ -4,59 +4,31 @@ import remarkGfm from "remark-gfm";
 import {
   ArrowUpRight,
   BookOpen,
+  Bot,
   ChevronLeft,
   ChevronRight,
   Check,
   Copy,
+  CreditCard,
   FileText,
+  FlaskConical,
   GitBranch,
+  GitFork,
   KeyRound,
+  Layers,
+  Library,
   Map,
   Moon,
   PackageCheck,
+  Repeat2,
+  Rocket,
   Search,
   ShieldCheck,
   Sun,
   Terminal,
+  Workflow,
 } from "lucide-react";
 import { useTheme } from "./theme";
-import atlasDocsConfig from "./content/atlas/docs.json";
-import cliDocsConfig from "./content/cli/docs.json";
-import atlasIndexMdx from "./content/atlas/index.mdx?raw";
-import atlasQuickstartMdx from "./content/atlas/quickstart.mdx?raw";
-import atlasFirstGraphMdx from "./content/atlas/first-graph.mdx?raw";
-import atlasSourceToGraphMdx from "./content/atlas/source-to-graph.mdx?raw";
-import atlasAgentOnboardingMdx from "./content/atlas/agent-onboarding.mdx?raw";
-import atlasGraphMdx from "./content/atlas/graph.mdx?raw";
-import atlasSourcesSearchMdx from "./content/atlas/sources-search.mdx?raw";
-import atlasArtifactsFilesMdx from "./content/atlas/artifacts-files.mdx?raw";
-import atlasExportsImportsMdx from "./content/atlas/exports-imports.mdx?raw";
-import atlasAuthConfigMdx from "./content/atlas/auth-config.mdx?raw";
-import atlasCliRuntimeMdx from "./content/atlas/cli-runtime.mdx?raw";
-import atlasFeatureMapMdx from "./content/atlas/feature-map.mdx?raw";
-import atlasCommandsMdx from "./content/atlas/commands.mdx?raw";
-import atlasSkillsMdx from "./content/atlas/skills.mdx?raw";
-import atlasApiIntroductionMdx from "./content/atlas/api-reference/introduction.mdx?raw";
-import atlasRestMdx from "./content/atlas/api-reference/atlas-rest.mdx?raw";
-import atlasSafetyMdx from "./content/atlas/safety.mdx?raw";
-import cliIndexMdx from "./content/cli/index.mdx?raw";
-import cliInstallationMdx from "./content/cli/installation.mdx?raw";
-import cliQuickstartMdx from "./content/cli/quickstart.mdx?raw";
-import cliFirstSessionMdx from "./content/cli/first-session.mdx?raw";
-import cliAgentOnboardingMdx from "./content/cli/agent-onboarding.mdx?raw";
-import cliSessionsMdx from "./content/cli/sessions.mdx?raw";
-import cliModelsMdx from "./content/cli/models.mdx?raw";
-import cliSubAgentsMdx from "./content/cli/sub-agents.mdx?raw";
-import cliSkillsMdx from "./content/cli/skills.mdx?raw";
-import cliCliRuntimeMdx from "./content/cli/cli-runtime.mdx?raw";
-import cliConnectMdx from "./content/cli/connect.mdx?raw";
-import cliCodexMdx from "./content/cli/codex.mdx?raw";
-import cliCredentialsMdx from "./content/cli/credentials.mdx?raw";
-import cliSecurityMdx from "./content/cli/security.mdx?raw";
-import cliFeatureMapMdx from "./content/cli/feature-map.mdx?raw";
-import cliCommandsMdx from "./content/cli/commands.mdx?raw";
-import cliWebUiMdx from "./content/cli/web-ui.mdx?raw";
-import cliServerModeMdx from "./content/cli/server-mode.mdx?raw";
 
 const mono = `"JetBrains Mono", "SF Mono", ui-monospace, monospace`;
 
@@ -100,7 +72,10 @@ type DocsPage = {
   headings: string[];
 };
 
-type SearchResult = Pick<DocsPage, "path" | "title" | "description" | "icon">;
+type SearchResult = Pick<DocsPage, "path" | "title" | "description" | "icon"> & {
+  section: SectionKey;
+  sectionLabel: string;
+};
 
 type MintlifyCard = {
   title: string;
@@ -110,98 +85,80 @@ type MintlifyCard = {
   horizontal?: boolean;
 };
 
-type ProductKey = "atlas" | "cli";
+type SectionKey = "getting-started" | "graphs" | "library" | "agent-cli";
 
-const PRODUCT_LABELS: Record<ProductKey, string> = {
-  atlas: "Atlas @synsci/atlas@0.5.11",
-  cli: "CLI synsci@1.1.125",
+type Section = {
+  key: SectionKey;
+  label: string;
+  short: string;
+  tagline: string;
+  lead: boolean;
 };
 
-const PRODUCT_DOC_NAMES: Record<ProductKey, string> = {
-  atlas: "Atlas Docs",
-  cli: "Synci CLI Docs",
-};
+// Getting started leads; the three Atlas products follow it.
+const SECTIONS: Section[] = [
+  { key: "getting-started", label: "Getting started", short: "Getting started", tagline: "Install, auth, conventions", lead: true },
+  { key: "graphs", label: "Atlas Graphs", short: "Graphs", tagline: "The research graph", lead: false },
+  { key: "library", label: "Atlas Library", short: "Library", tagline: "Knowledge sources", lead: false },
+  { key: "agent-cli", label: "Atlas Agent CLI", short: "Agent CLI", tagline: "Autonomous agent · coming soon", lead: false },
+];
 
-const ATLAS_SOURCES: Record<string, string> = {
-  index: atlasIndexMdx,
-  quickstart: atlasQuickstartMdx,
-  "first-graph": atlasFirstGraphMdx,
-  "source-to-graph": atlasSourceToGraphMdx,
-  "agent-onboarding": atlasAgentOnboardingMdx,
-  graph: atlasGraphMdx,
-  "sources-search": atlasSourcesSearchMdx,
-  "artifacts-files": atlasArtifactsFilesMdx,
-  "exports-imports": atlasExportsImportsMdx,
-  "auth-config": atlasAuthConfigMdx,
-  "cli-runtime": atlasCliRuntimeMdx,
-  "feature-map": atlasFeatureMapMdx,
-  commands: atlasCommandsMdx,
-  skills: atlasSkillsMdx,
-  "api-reference/introduction": atlasApiIntroductionMdx,
-  "api-reference/atlas-rest": atlasRestMdx,
-  safety: atlasSafetyMdx,
-};
+const SECTION_KEYS = SECTIONS.map((section) => section.key);
+const SECTION_LABELS: Record<SectionKey, string> = Object.fromEntries(
+  SECTIONS.map((section) => [section.key, section.label]),
+) as Record<SectionKey, string>;
 
-const CLI_SOURCES: Record<string, string> = {
-  index: cliIndexMdx,
-  installation: cliInstallationMdx,
-  quickstart: cliQuickstartMdx,
-  "first-session": cliFirstSessionMdx,
-  "agent-onboarding": cliAgentOnboardingMdx,
-  sessions: cliSessionsMdx,
-  models: cliModelsMdx,
-  "sub-agents": cliSubAgentsMdx,
-  skills: cliSkillsMdx,
-  "cli-runtime": cliCliRuntimeMdx,
-  connect: cliConnectMdx,
-  codex: cliCodexMdx,
-  credentials: cliCredentialsMdx,
-  security: cliSecurityMdx,
-  "feature-map": cliFeatureMapMdx,
-  commands: cliCommandsMdx,
-  "web-ui": cliWebUiMdx,
-  "server-mode": cliServerModeMdx,
-};
+// All MDX content and per-section configs, loaded at build time. Adding a page is
+// just dropping an .mdx file into the right content/<section>/ folder.
+const RAW_PAGES = import.meta.glob("./content/**/*.{mdx,md}", {
+  query: "?raw",
+  import: "default",
+  eager: true,
+}) as Record<string, string>;
 
-const PRODUCT_SOURCES: Record<ProductKey, Record<string, string>> = {
-  atlas: ATLAS_SOURCES,
-  cli: CLI_SOURCES,
-};
-
-const PRODUCT_CONFIGS: Record<ProductKey, DocsConfig> = {
-  atlas: atlasDocsConfig as DocsConfig,
-  cli: cliDocsConfig as DocsConfig,
-};
+const RAW_CONFIGS = import.meta.glob("./content/**/docs.json", {
+  import: "default",
+  eager: true,
+}) as Record<string, DocsConfig>;
 
 const ICONS: Record<string, ReactNode> = {
   index: <GitBranch size={17} strokeWidth={1.8} />,
-  quickstart: <Terminal size={17} strokeWidth={1.8} />,
   installation: <PackageCheck size={17} strokeWidth={1.8} />,
-  connect: <KeyRound size={17} strokeWidth={1.8} />,
-  codex: <KeyRound size={17} strokeWidth={1.8} />,
-  credentials: <KeyRound size={17} strokeWidth={1.8} />,
+  quickstart: <Rocket size={17} strokeWidth={1.8} />,
+  authentication: <KeyRound size={17} strokeWidth={1.8} />,
+  "api-keys": <KeyRound size={17} strokeWidth={1.8} />,
+  billing: <CreditCard size={17} strokeWidth={1.8} />,
+  "cli-overview": <Terminal size={17} strokeWidth={1.8} />,
+  "onboard-agent": <Bot size={17} strokeWidth={1.8} />,
+  "rest-api": <BookOpen size={17} strokeWidth={1.8} />,
+  "graph-model": <GitBranch size={17} strokeWidth={1.8} />,
+  "research-loop": <Workflow size={17} strokeWidth={1.8} />,
+  runs: <FlaskConical size={17} strokeWidth={1.8} />,
+  reproduction: <Repeat2 size={17} strokeWidth={1.8} />,
+  evidence: <FileText size={17} strokeWidth={1.8} />,
+  forking: <GitFork size={17} strokeWidth={1.8} />,
+  "web-views": <Layers size={17} strokeWidth={1.8} />,
+  skills: <BookOpen size={17} strokeWidth={1.8} />,
+  commands: <Terminal size={17} strokeWidth={1.8} />,
+  indexing: <Library size={17} strokeWidth={1.8} />,
+  search: <Search size={17} strokeWidth={1.8} />,
+  ask: <Search size={17} strokeWidth={1.8} />,
+  jobs: <Workflow size={17} strokeWidth={1.8} />,
   "first-session": <Terminal size={17} strokeWidth={1.8} />,
   sessions: <Terminal size={17} strokeWidth={1.8} />,
   models: <PackageCheck size={17} strokeWidth={1.8} />,
-  "sub-agents": <PackageCheck size={17} strokeWidth={1.8} />,
+  "sub-agents": <Bot size={17} strokeWidth={1.8} />,
   "web-ui": <Terminal size={17} strokeWidth={1.8} />,
-  "server-mode": <Terminal size={17} strokeWidth={1.8} />,
-  "first-graph": <GitBranch size={17} strokeWidth={1.8} />,
-  "source-to-graph": <Search size={17} strokeWidth={1.8} />,
-  "agent-onboarding": <PackageCheck size={17} strokeWidth={1.8} />,
-  graph: <GitBranch size={17} strokeWidth={1.8} />,
-  "sources-search": <Search size={17} strokeWidth={1.8} />,
-  "artifacts-files": <FileText size={17} strokeWidth={1.8} />,
-  "exports-imports": <ArrowUpRight size={17} strokeWidth={1.8} />,
-  "auth-config": <KeyRound size={17} strokeWidth={1.8} />,
-  "cli-runtime": <Terminal size={17} strokeWidth={1.8} />,
-  "feature-map": <Map size={17} strokeWidth={1.8} />,
-  commands: <Terminal size={17} strokeWidth={1.8} />,
-  skills: <BookOpen size={17} strokeWidth={1.8} />,
-  "api-reference/introduction": <BookOpen size={17} strokeWidth={1.8} />,
-  "api-reference/atlas-rest": <BookOpen size={17} strokeWidth={1.8} />,
-  safety: <ShieldCheck size={17} strokeWidth={1.8} />,
+  credentials: <KeyRound size={17} strokeWidth={1.8} />,
   security: <ShieldCheck size={17} strokeWidth={1.8} />,
+  "feature-map": <Map size={17} strokeWidth={1.8} />,
+};
+
+const SECTION_FALLBACK_ICON: Record<SectionKey, ReactNode> = {
+  "getting-started": <Rocket size={17} strokeWidth={1.8} />,
+  graphs: <GitBranch size={17} strokeWidth={1.8} />,
+  library: <Library size={17} strokeWidth={1.8} />,
+  "agent-cli": <Bot size={17} strokeWidth={1.8} />,
 };
 
 const FRONTMATTER_RE = /^---\n([\s\S]*?)\n---\n?/;
@@ -231,52 +188,160 @@ function extractHeadings(markdown: string): string[] {
     .split("\n")
     .filter((line) => line.startsWith("## "))
     .map((line) => line.replace(/^##\s+/, "").trim())
-    .slice(0, 8);
+    .slice(0, 10);
 }
 
 function flattenPages(items: Array<string | { group: string; pages: string[] }>): string[] {
   return items.flatMap((item) => (typeof item === "string" ? [item] : item.pages));
 }
 
-function buildDocPages(sources: Record<string, string>): Record<string, DocsPage> {
-  return Object.fromEntries(
-    Object.entries(sources).map(([path, source]) => {
-      const parsed = parseFrontmatter(source);
-      return [
-        path,
-        {
-          path,
-          title: parsed.title,
-          description: parsed.description,
-          icon: ICONS[path] ?? <BookOpen size={17} strokeWidth={1.8} />,
-          body: parsed.body,
-          headings: extractHeadings(parsed.body),
-        },
-      ];
-    }),
-  );
+function iconForPath(path: string, section: SectionKey): ReactNode {
+  const leaf = path.split("/").pop() ?? path;
+  return ICONS[path] ?? ICONS[leaf] ?? SECTION_FALLBACK_ICON[section];
 }
 
-const PRODUCT_DOC_PAGES: Record<ProductKey, Record<string, DocsPage>> = {
-  atlas: buildDocPages(ATLAS_SOURCES),
-  cli: buildDocPages(CLI_SOURCES),
+function buildSectionPages(section: SectionKey): Record<string, DocsPage> {
+  const prefix = `./content/${section}/`;
+  const pages: Record<string, DocsPage> = {};
+  for (const [key, source] of Object.entries(RAW_PAGES)) {
+    if (!key.startsWith(prefix)) continue;
+    const path = key.slice(prefix.length).replace(/\.(mdx|md)$/, "");
+    const parsed = parseFrontmatter(source);
+    pages[path] = {
+      path,
+      title: parsed.title,
+      description: parsed.description,
+      icon: iconForPath(path, section),
+      body: parsed.body,
+      headings: extractHeadings(parsed.body),
+    };
+  }
+  return pages;
+}
+
+const SECTION_DOC_PAGES: Record<SectionKey, Record<string, DocsPage>> = {
+  "getting-started": buildSectionPages("getting-started"),
+  graphs: buildSectionPages("graphs"),
+  library: buildSectionPages("library"),
+  "agent-cli": buildSectionPages("agent-cli"),
 };
 
-let CURRENT_DOC_PAGES: Record<string, DocsPage> = PRODUCT_DOC_PAGES.atlas;
+const SECTION_CONFIGS: Record<SectionKey, DocsConfig> = {
+  "getting-started": RAW_CONFIGS["./content/getting-started/docs.json"],
+  graphs: RAW_CONFIGS["./content/graphs/docs.json"],
+  library: RAW_CONFIGS["./content/library/docs.json"],
+  "agent-cli": RAW_CONFIGS["./content/agent-cli/docs.json"],
+};
 
-function pageFromHash(productPages: Record<string, DocsPage>): string {
-  if (typeof window === "undefined") return "index";
-  const value = decodeURIComponent(window.location.hash.replace(/^#\/?/, ""));
-  return value && productPages[value] ? value : "index";
+function pageExists(section: SectionKey, path: string): boolean {
+  return Boolean(SECTION_DOC_PAGES[section]?.[path]);
 }
 
-function pageHref(path: string): string {
-  return `#/${path}`;
+// Redirects from the old two-toggle URLs (#/path with product in localStorage)
+// to the new #/<section>/<page> scheme. Keyed by `${oldProduct}:${oldPath}`.
+const LEGACY_REDIRECTS: Record<string, { section: SectionKey; path: string }> = {
+  "atlas:index": { section: "getting-started", path: "index" },
+  "atlas:quickstart": { section: "getting-started", path: "installation" },
+  "atlas:agent-onboarding": { section: "getting-started", path: "onboard-agent" },
+  "atlas:auth-config": { section: "getting-started", path: "authentication" },
+  "atlas:cli-runtime": { section: "getting-started", path: "cli-overview" },
+  "atlas:feature-map": { section: "getting-started", path: "cli-overview" },
+  "atlas:api-reference/introduction": { section: "getting-started", path: "rest-api" },
+  "atlas:api-reference/atlas-rest": { section: "getting-started", path: "rest-api" },
+  "atlas:first-graph": { section: "graphs", path: "quickstart" },
+  "atlas:graph": { section: "graphs", path: "graph-model" },
+  "atlas:artifacts-files": { section: "graphs", path: "evidence" },
+  "atlas:exports-imports": { section: "graphs", path: "forking" },
+  "atlas:commands": { section: "graphs", path: "commands" },
+  "atlas:skills": { section: "graphs", path: "skills" },
+  "atlas:source-to-graph": { section: "library", path: "quickstart" },
+  "atlas:sources-search": { section: "library", path: "indexing" },
+  "atlas:safety": { section: "getting-started", path: "cli-overview" },
+  "cli:index": { section: "agent-cli", path: "index" },
+  "cli:installation": { section: "agent-cli", path: "quickstart" },
+  "cli:quickstart": { section: "agent-cli", path: "quickstart" },
+  "cli:first-session": { section: "agent-cli", path: "first-session" },
+  "cli:agent-onboarding": { section: "getting-started", path: "onboard-agent" },
+  "cli:sessions": { section: "agent-cli", path: "sessions" },
+  "cli:models": { section: "agent-cli", path: "models" },
+  "cli:codex": { section: "agent-cli", path: "models" },
+  "cli:sub-agents": { section: "agent-cli", path: "sub-agents" },
+  "cli:skills": { section: "agent-cli", path: "skills" },
+  "cli:cli-runtime": { section: "agent-cli", path: "commands" },
+  "cli:connect": { section: "agent-cli", path: "index" },
+  "cli:credentials": { section: "agent-cli", path: "credentials" },
+  "cli:security": { section: "agent-cli", path: "security" },
+  "cli:feature-map": { section: "agent-cli", path: "commands" },
+  "cli:commands": { section: "agent-cli", path: "commands" },
+  "cli:web-ui": { section: "agent-cli", path: "web-ui" },
+  "cli:server-mode": { section: "agent-cli", path: "index" },
+};
+
+function readStoredProduct(): "atlas" | "cli" {
+  if (typeof window === "undefined") return "atlas";
+  try {
+    const stored = window.localStorage.getItem("docs-product");
+    if (stored === "cli" || stored === "atlas") return stored;
+  } catch {
+    /* ignore */
+  }
+  return "atlas";
 }
 
-function docsHref(href: string): string {
-  const docsPath = href.startsWith("/") ? href.slice(1).replace(/\/$/, "") : "";
-  return docsPath && CURRENT_DOC_PAGES[docsPath] ? pageHref(docsPath) : href;
+type Route = { section: SectionKey; path: string };
+
+function defaultRoute(): Route {
+  return { section: "getting-started", path: "index" };
+}
+
+function routeFromHash(): Route {
+  if (typeof window === "undefined") return defaultRoute();
+  const raw = decodeURIComponent(window.location.hash.replace(/^#\/?/, "")).replace(/\/$/, "");
+  if (!raw) return defaultRoute();
+  const segments = raw.split("/");
+  const maybeSection = segments[0] as SectionKey;
+  if (SECTION_KEYS.includes(maybeSection)) {
+    const path = segments.slice(1).join("/") || "index";
+    if (pageExists(maybeSection, path)) return { section: maybeSection, path };
+    return { section: maybeSection, path: "index" };
+  }
+  // Legacy single-segment URL: disambiguate via the stored product toggle.
+  const product = readStoredProduct();
+  const redirect = LEGACY_REDIRECTS[`${product}:${raw}`] ?? LEGACY_REDIRECTS[`atlas:${raw}`] ?? LEGACY_REDIRECTS[`cli:${raw}`];
+  if (redirect && pageExists(redirect.section, redirect.path)) return redirect;
+  return defaultRoute();
+}
+
+function pageHref(section: SectionKey, path: string): string {
+  return `#/${section}/${path}`;
+}
+
+// Module-level pointers updated on each render so the markdown renderer (which
+// can't take props through react-markdown) can resolve links and card icons.
+let CURRENT_SECTION: SectionKey = "getting-started";
+
+function resolveHref(href: string | undefined): string | undefined {
+  if (!href) return href;
+  if (href.startsWith("http") || href.startsWith("#") || href.startsWith("mailto:")) return href;
+  if (href.startsWith("/")) {
+    const clean = href.slice(1).replace(/\/$/, "");
+    if (!clean) return pageHref(CURRENT_SECTION, "index");
+    const segments = clean.split("/");
+    const maybeSection = segments[0] as SectionKey;
+    if (SECTION_KEYS.includes(maybeSection)) {
+      const path = segments.slice(1).join("/") || "index";
+      if (pageExists(maybeSection, path)) return pageHref(maybeSection, path);
+    }
+    if (pageExists(CURRENT_SECTION, clean)) return pageHref(CURRENT_SECTION, clean);
+  }
+  return href;
+}
+
+function sectionForHref(href: string): SectionKey {
+  const clean = href.replace(/^#\/?/, "").replace(/\/$/, "");
+  const segments = clean.split("/");
+  const maybeSection = segments[0] as SectionKey;
+  return SECTION_KEYS.includes(maybeSection) ? maybeSection : CURRENT_SECTION;
 }
 
 function parseMdxAttrs(attrs: string): Record<string, string | boolean> {
@@ -315,8 +380,14 @@ function parseCards(source: string): MintlifyCard[] {
 }
 
 function iconForCard(card: MintlifyCard): ReactNode {
-  const docsPath = card.href.startsWith("/") ? card.href.slice(1).replace(/\/$/, "") : "";
-  return CURRENT_DOC_PAGES[docsPath]?.icon ?? <BookOpen size={17} strokeWidth={1.8} />;
+  const resolved = resolveHref(card.href);
+  if (resolved && resolved.startsWith("#/")) {
+    const section = sectionForHref(resolved);
+    const path = resolved.replace(/^#\/?/, "").replace(/\/$/, "").split("/").slice(1).join("/");
+    const page = SECTION_DOC_PAGES[section]?.[path];
+    if (page) return page.icon;
+  }
+  return <BookOpen size={17} strokeWidth={1.8} />;
 }
 
 function CopyButton({ text }: { text: string }) {
@@ -346,7 +417,7 @@ const markdownComponents: Components = {
   },
   a({ href, children }) {
     const external = href?.startsWith("http");
-    const internalDocsHref = href ? docsHref(href) : undefined;
+    const internalDocsHref = href ? resolveHref(href) : undefined;
     return (
       <a
         href={internalDocsHref}
@@ -407,7 +478,7 @@ function MintlifyCardView({ card }: { card: MintlifyCard }) {
   return (
     <a
       className={card.horizontal ? "docs-card docs-card-horizontal" : "docs-card"}
-      href={docsHref(card.href)}
+      href={resolveHref(card.href)}
       target={external ? "_blank" : undefined}
       rel={external ? "noreferrer" : undefined}
     >
@@ -503,41 +574,19 @@ function renderMintlifyContent(source: string): ReactNode[] {
   return nodes;
 }
 
-function loadProductFromStorage(): ProductKey {
-  if (typeof window === "undefined") return "atlas";
-  try {
-    const stored = window.localStorage.getItem("docs-product");
-    if (stored === "cli" || stored === "atlas") return stored;
-  } catch {
-    /* localStorage may be unavailable */
-  }
-  return "atlas";
-}
-
 export function DocumentationPage() {
   const { theme, toggle: toggleTheme } = useTheme();
-  const [product, setProductState] = useState<ProductKey>(loadProductFromStorage);
-  const docPages = PRODUCT_DOC_PAGES[product];
-  CURRENT_DOC_PAGES = docPages;
-  const setProduct = (next: ProductKey) => {
-    if (next === product) return;
-    CURRENT_DOC_PAGES = PRODUCT_DOC_PAGES[next];
-    try {
-      window.localStorage.setItem("docs-product", next);
-    } catch {
-      /* ignore */
-    }
-    window.location.hash = pageHref("index");
-    setProductState(next);
-    setActivePath("index");
-  };
-  const [activePath, setActivePath] = useState(() => pageFromHash(docPages));
+  const [route, setRouteState] = useState<Route>(() => routeFromHash());
+  const section = route.section;
+  CURRENT_SECTION = section;
+  const docPages = SECTION_DOC_PAGES[section];
+  const config = SECTION_CONFIGS[section];
+  const sectionMeta = SECTIONS.find((entry) => entry.key === section) ?? SECTIONS[0];
+  const activePage = docPages[route.path] ?? docPages.index;
   const [query, setQuery] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
-  const activePage = docPages[activePath] ?? docPages.index;
-  const config = PRODUCT_CONFIGS[product];
+
   const navTabs = config.navigation.tabs;
-  const docsSourceName = PRODUCT_DOC_NAMES[product];
   const orderedPaths = useMemo(
     () =>
       navTabs
@@ -554,8 +603,7 @@ export function DocumentationPage() {
   );
   const activeGroup = useMemo(
     () =>
-      activeTab?.groups
-        .find((group) => flattenPages(group.pages).includes(activePage.path)),
+      activeTab?.groups.find((group) => flattenPages(group.pages).includes(activePage.path)),
     [activePage.path, activeTab],
   );
   const activeIndex = orderedPaths.indexOf(activePage.path);
@@ -564,23 +612,54 @@ export function DocumentationPage() {
     activeIndex >= 0 && activeIndex < orderedPaths.length - 1
       ? docPages[orderedPaths[activeIndex + 1]]
       : null;
+
+  // Search spans every section so people can jump anywhere from one box.
   const searchResults = useMemo<SearchResult[]>(() => {
-    const pages = orderedPaths.map((path) => docPages[path]).filter(Boolean);
+    const all: SearchResult[] = SECTIONS.flatMap((entry) => {
+      const pages = SECTION_CONFIGS[entry.key].navigation.tabs
+        .flatMap((tab) => tab.groups.flatMap((group) => flattenPages(group.pages)))
+        .map((path) => SECTION_DOC_PAGES[entry.key][path])
+        .filter(Boolean);
+      return pages.map((page) => ({
+        path: page.path,
+        title: page.title,
+        description: page.description,
+        icon: page.icon,
+        section: entry.key,
+        sectionLabel: entry.label,
+      }));
+    });
     const normalizedQuery = query.trim().toLowerCase();
-    if (!normalizedQuery) return pages.slice(0, 6);
-    return pages
+    if (!normalizedQuery) {
+      return all.filter((page) => page.section === section).slice(0, 6);
+    }
+    return all
       .filter((page) => {
-        const haystack = `${page.title} ${page.description} ${page.body}`.toLowerCase();
+        const body = SECTION_DOC_PAGES[page.section][page.path]?.body ?? "";
+        const haystack = `${page.title} ${page.description} ${page.sectionLabel} ${body}`.toLowerCase();
         return haystack.includes(normalizedQuery);
       })
       .slice(0, 8);
-  }, [orderedPaths, query, docPages]);
+  }, [query, section]);
+
+  const navigate = (next: Route) => {
+    window.location.hash = pageHref(next.section, next.path);
+    setRouteState(next);
+  };
 
   useEffect(() => {
-    const onHashChange = () => setActivePath(pageFromHash(docPages));
+    const onHashChange = () => setRouteState(routeFromHash());
     window.addEventListener("hashchange", onHashChange);
     return () => window.removeEventListener("hashchange", onHashChange);
-  }, [docPages]);
+  }, []);
+
+  // Keep the URL canonical (legacy + bare hashes resolve to #/<section>/<page>).
+  useEffect(() => {
+    const canonical = pageHref(route.section, route.path);
+    if (window.location.hash !== canonical) {
+      window.history.replaceState(null, "", canonical);
+    }
+  }, [route.section, route.path]);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -594,6 +673,11 @@ export function DocumentationPage() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, []);
 
+  const goToSection = (next: SectionKey) => {
+    if (next === section) return;
+    navigate({ section: next, path: "index" });
+  };
+
   return (
     <div className="atlas-docs-page">
       <header className="docs-topbar">
@@ -601,29 +685,9 @@ export function DocumentationPage() {
           <img src="/synsc-logo.png" alt="" />
           <span className="docs-brand-text">
             <small>Synthetic Sciences</small>
-            <strong>{product === "atlas" ? "Atlas docs" : "Synci CLI docs"}</strong>
+            <strong>Atlas docs</strong>
           </span>
         </a>
-        <div className="docs-version-toggle" role="tablist" aria-label="documentation product">
-          <button
-            type="button"
-            role="tab"
-            aria-selected={product === "atlas"}
-            className={product === "atlas" ? "active" : undefined}
-            onClick={() => setProduct("atlas")}
-          >
-            {PRODUCT_LABELS.atlas}
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={product === "cli"}
-            className={product === "cli" ? "active" : undefined}
-            onClick={() => setProduct("cli")}
-          >
-            {PRODUCT_LABELS.cli}
-          </button>
-        </div>
         <div className="docs-search" role="search">
           <Search size={14} strokeWidth={1.8} />
           <input
@@ -636,7 +700,7 @@ export function DocumentationPage() {
               setSearchOpen(true);
             }}
             onFocus={() => setSearchOpen(true)}
-            placeholder="Search or jump to..."
+            placeholder="Search all docs..."
             type="search"
           />
           <kbd>⌘K</kbd>
@@ -645,21 +709,20 @@ export function DocumentationPage() {
               {searchResults.length > 0 ? (
                 searchResults.map((page) => (
                   <a
-                    key={page.path}
-                    href={pageHref(page.path)}
+                    key={`${page.section}/${page.path}`}
+                    href={pageHref(page.section, page.path)}
                     role="option"
-                    aria-selected={activePath === page.path}
+                    aria-selected={section === page.section && route.path === page.path}
                     onMouseDown={(event) => {
                       event.preventDefault();
-                      window.location.hash = pageHref(page.path);
-                      setActivePath(page.path);
+                      navigate({ section: page.section, path: page.path });
                       setQuery("");
                       setSearchOpen(false);
                     }}
                   >
                     <span>{page.icon}</span>
                     <strong>{page.title}</strong>
-                    <small>{page.description}</small>
+                    <small>{page.sectionLabel}</small>
                   </a>
                 ))
               ) : (
@@ -683,41 +746,58 @@ export function DocumentationPage() {
             )}
             <span>{theme === "dark" ? "light" : "dark"}</span>
           </button>
-          {config.navbar?.primary ? (
-            <a className="docs-topbar-cta" href={config.navbar.primary.href}>
-              {config.navbar.primary.label.toLowerCase()}
-              <ArrowUpRight size={13} strokeWidth={1.8} />
-            </a>
-          ) : (
-            <a className="docs-topbar-cta" href="/atlas">
-              open app
-              <ArrowUpRight size={13} strokeWidth={1.8} />
-            </a>
-          )}
+          <a className="docs-topbar-cta" href={config.navbar?.primary?.href ?? "https://app.syntheticsciences.ai/atlas"}>
+            {(config.navbar?.primary?.label ?? "Open app").toLowerCase()}
+            <ArrowUpRight size={13} strokeWidth={1.8} />
+          </a>
         </nav>
       </header>
+
+      <nav className="docs-sectionbar" aria-label="product sections">
+        <div className="docs-sectionbar-inner">
+          {SECTIONS.map((entry, i) => {
+            const prevLead = i > 0 ? SECTIONS[i - 1].lead : false;
+            return (
+              <span key={entry.key} className="docs-sectionbar-item-wrap">
+                {entry.lead === false && prevLead ? <span className="docs-sectionbar-divider" aria-hidden /> : null}
+                <button
+                  type="button"
+                  className={`docs-sectionbar-item${section === entry.key ? " active" : ""}${entry.lead ? " lead" : ""}`}
+                  aria-current={section === entry.key ? "page" : undefined}
+                  onClick={() => goToSection(entry.key)}
+                >
+                  <span className="docs-sectionbar-label">{entry.short}</span>
+                  <span className="docs-sectionbar-tag">{entry.tagline}</span>
+                </button>
+              </span>
+            );
+          })}
+        </div>
+      </nav>
 
       <div className="docs-shell">
         <aside className="docs-sidebar" aria-label="documentation navigation">
           <div className="docs-sidebar-title">
-            <span>{docsSourceName}</span>
-            <small>{PRODUCT_LABELS[product]}</small>
+            <span>{sectionMeta.label}</span>
+            <small>{sectionMeta.tagline}</small>
           </div>
-          <nav className="docs-section-tabs" aria-label="documentation sections">
-            {navTabs.map((tab) => {
-              const firstPage = tab.groups.flatMap((group) => flattenPages(group.pages)).find((path) => docPages[path]);
-              return firstPage ? (
-                <a
-                  key={tab.tab}
-                  className={activeTab?.tab === tab.tab ? "active" : undefined}
-                  href={pageHref(firstPage)}
-                  onClick={() => setActivePath(firstPage)}
-                >
-                  {tab.tab}
-                </a>
-              ) : null;
-            })}
-          </nav>
+          {navTabs.length > 1 ? (
+            <nav className="docs-section-tabs" aria-label="documentation sections">
+              {navTabs.map((tab) => {
+                const firstPage = tab.groups.flatMap((group) => flattenPages(group.pages)).find((path) => docPages[path]);
+                return firstPage ? (
+                  <a
+                    key={tab.tab}
+                    className={activeTab?.tab === tab.tab ? "active" : undefined}
+                    href={pageHref(section, firstPage)}
+                    onClick={() => navigate({ section, path: firstPage })}
+                  >
+                    {tab.tab}
+                  </a>
+                ) : null;
+              })}
+            </nav>
+          ) : null}
           {activeTab ? (
             <div key={activeTab.tab}>
               {activeTab.groups.map((group) => (
@@ -729,9 +809,9 @@ export function DocumentationPage() {
                     return (
                       <a
                         key={path}
-                        href={pageHref(path)}
-                        className={activePath === path ? "active" : undefined}
-                        onClick={() => setActivePath(path)}
+                        href={pageHref(section, path)}
+                        className={route.path === path ? "active" : undefined}
+                        onClick={() => navigate({ section, path })}
                       >
                         <span>{page.icon}</span>
                         {page.title}
@@ -746,7 +826,7 @@ export function DocumentationPage() {
 
         <main className="docs-main">
           <nav className="docs-breadcrumbs" aria-label="breadcrumbs">
-            <a href="#/index">Docs</a>
+            <a href={pageHref(section, "index")}>{sectionMeta.label}</a>
             <ChevronRight size={13} strokeWidth={1.8} />
             {activeGroup ? <span>{activeGroup.group}</span> : null}
           </nav>
@@ -761,7 +841,7 @@ export function DocumentationPage() {
 
           <nav className="docs-pagination" aria-label="documentation pagination">
             {previousPage ? (
-              <a href={pageHref(previousPage.path)} onClick={() => setActivePath(previousPage.path)}>
+              <a href={pageHref(section, previousPage.path)} onClick={() => navigate({ section, path: previousPage.path })}>
                 <ChevronLeft size={16} strokeWidth={1.8} />
                 <span>
                   <small>Previous</small>
@@ -770,7 +850,7 @@ export function DocumentationPage() {
               </a>
             ) : <span />}
             {nextPage ? (
-              <a href={pageHref(nextPage.path)} onClick={() => setActivePath(nextPage.path)}>
+              <a href={pageHref(section, nextPage.path)} onClick={() => navigate({ section, path: nextPage.path })}>
                 <span>
                   <small>Next</small>
                   {nextPage.title}
@@ -792,13 +872,17 @@ export function DocumentationPage() {
           ) : (
             <span className="docs-toc-empty">No sections</span>
           )}
-          <div className="docs-agent-links">
-            {(config.navigation.global?.anchors ?? []).map((anchor) => (
-              <a key={anchor.href} href={anchor.href}>
-                {anchor.anchor}
-              </a>
-            ))}
-          </div>
+          {(config.navigation.global?.anchors ?? []).length > 0 ? (
+            <div className="docs-agent-links">
+              <span>Agent resources</span>
+              {(config.navigation.global?.anchors ?? []).map((anchor) => (
+                <a key={anchor.href} href={anchor.href} target={anchor.href.startsWith("http") ? "_blank" : undefined} rel="noreferrer">
+                  {anchor.anchor}
+                  <ArrowUpRight size={11} strokeWidth={1.8} />
+                </a>
+              ))}
+            </div>
+          ) : null}
         </aside>
       </div>
 
@@ -816,7 +900,7 @@ const docsCss = `
     --color-text: #0f172a;
     --color-text-muted: #475569;
     --color-text-faint: #94a3b8;
-    --docs-accent: #0f172a;
+    --docs-accent: #2f6f54;
     min-height: 100dvh;
     color: var(--color-text);
     background: var(--color-bg);
@@ -841,13 +925,13 @@ const docsCss = `
     --color-text: #f1f5f9;
     --color-text-muted: #b8bbc4;
     --color-text-faint: #6c7280;
-    --docs-accent: #e2e8f0;
+    --docs-accent: #9bd6b4;
   }
 
   .docs-topbar {
     height: 60px;
     display: grid;
-    grid-template-columns: minmax(220px, 1fr) auto minmax(260px, 460px) minmax(220px, 1fr);
+    grid-template-columns: minmax(200px, 1fr) minmax(240px, 520px) minmax(200px, 1fr);
     align-items: center;
     gap: 20px;
     padding: 0 28px;
@@ -1062,65 +1146,85 @@ const docsCss = `
     background: var(--color-bg-elevated);
   }
 
-  .docs-version-toggle {
-    justify-self: center;
+  .docs-sectionbar {
+    position: sticky;
+    top: 60px;
+    z-index: 29;
+    border-bottom: 1px solid var(--color-border);
+    background: color-mix(in srgb, var(--color-bg) 92%, transparent);
+    backdrop-filter: blur(14px);
+  }
+
+  .docs-sectionbar-inner {
+    display: flex;
+    align-items: stretch;
+    gap: 2px;
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 28px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .docs-sectionbar-inner::-webkit-scrollbar {
+    display: none;
+  }
+
+  .docs-sectionbar-item-wrap {
     display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 3px;
-    border: 1px solid var(--color-border);
-    border-radius: 8px;
-    background: var(--color-bg-elevated);
+    align-items: stretch;
   }
 
-  .docs-version-toggle button {
-    height: 28px;
-    padding: 0 12px;
-    border: 0;
-    border-radius: 6px;
-    background: transparent;
-    color: var(--color-text-muted);
-    font-family: ${DOCS_SERIF};
-    font-size: 13px;
-    font-weight: 400;
-    letter-spacing: 0;
-    cursor: pointer;
-    transition: background 120ms ease, color 120ms ease;
+  .docs-sectionbar-divider {
+    width: 1px;
+    align-self: center;
+    height: 24px;
+    margin: 0 10px;
+    background: var(--color-border);
   }
 
-  .docs-version-toggle button:hover {
-    color: var(--color-text);
-  }
-
-  .docs-version-toggle button.active {
-    background: var(--color-bg);
-    color: var(--color-text);
-    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
-  }
-
-  .docs-theme-toggle {
-    display: inline-flex;
-    align-items: center;
+  .docs-sectionbar-item {
+    display: flex;
+    flex-direction: column;
     justify-content: center;
-    gap: 7px;
-    height: 34px;
-    padding: 0 12px;
-    border-radius: 6px;
-    border: 1px solid var(--color-border);
+    gap: 1px;
+    min-height: 52px;
+    padding: 7px 14px;
+    border: 0;
+    border-bottom: 2px solid transparent;
     background: transparent;
     color: var(--color-text-muted);
-    font-family: ${DOCS_SERIF};
-    font-size: 14px;
-    font-weight: 400;
-    letter-spacing: 0;
     cursor: pointer;
-    transition: background 120ms ease, color 120ms ease, border-color 120ms ease;
+    white-space: nowrap;
+    text-align: left;
+    transition: color 120ms ease, border-color 120ms ease;
   }
 
-  .docs-theme-toggle:hover {
+  .docs-sectionbar-item:hover {
     color: var(--color-text);
-    border-color: var(--color-text-faint);
-    background: var(--color-bg-elevated);
+  }
+
+  .docs-sectionbar-item.active {
+    color: var(--color-text);
+    border-bottom-color: var(--docs-accent);
+  }
+
+  .docs-sectionbar-item.lead .docs-sectionbar-label {
+    color: inherit;
+  }
+
+  .docs-sectionbar-label {
+    font-family: ${DOCS_SERIF};
+    font-size: 14.5px;
+    font-weight: 700;
+    letter-spacing: 0;
+  }
+
+  .docs-sectionbar-tag {
+    font-family: ${mono};
+    font-size: 10px;
+    letter-spacing: 0.01em;
+    color: var(--color-text-faint);
   }
 
   .docs-shell {
@@ -1135,9 +1239,9 @@ const docsCss = `
   .docs-sidebar,
   .docs-toc {
     position: sticky;
-    top: 86px;
+    top: 132px;
     align-self: start;
-    max-height: calc(100dvh - 106px);
+    max-height: calc(100dvh - 152px);
     overflow: auto;
   }
 
@@ -1334,7 +1438,7 @@ const docsCss = `
     font-weight: 700;
     letter-spacing: 0;
     color: var(--color-text);
-    scroll-margin-top: 86px;
+    scroll-margin-top: 150px;
   }
 
   .docs-markdown h3 {
@@ -1585,6 +1689,18 @@ const docsCss = `
     border-top: 1px solid var(--color-border);
   }
 
+  .docs-agent-links > span {
+    font-family: ${mono};
+    font-size: 11px;
+    color: var(--color-text-faint);
+  }
+
+  .docs-agent-links a {
+    display: inline-flex;
+    gap: 5px;
+    align-items: center;
+  }
+
   .docs-pagination {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1647,6 +1763,14 @@ const docsCss = `
     }
 
     .docs-topbar nav a:not(.docs-topbar-cta) {
+      display: none;
+    }
+
+    .docs-sectionbar-inner {
+      padding: 0 16px;
+    }
+
+    .docs-sectionbar-tag {
       display: none;
     }
 

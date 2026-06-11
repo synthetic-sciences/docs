@@ -1,0 +1,52 @@
+---
+title: "Ask grounded questions"
+description: "Document Q&A and Oracle research, with answers attached to the graph as evidence."
+icon: "search"
+---
+
+Search returns matches; **ask** returns a synthesized, cited answer over your indexed library. The grounded answer can be attached directly to a graph node as evidence.
+
+## Ask over documents
+
+```bash
+atlas library:ask \
+  --query "Summarize how the baseline metric is computed and cite the files." \
+  --source-ids src_repo \
+  --attach nd_baseline
+```
+
+| Flag | Use |
+| --- | --- |
+| `--query` | The question (required). |
+| `--source-ids` | Comma-separated source ids to scope to. |
+| `--top-k` | Max results to ground on. |
+| `--attach` | Node id/slug to attach the grounded answer + citations to as evidence. |
+
+`--attach` is the bridge into the graph: the answer and its citations land on the node as an evidence artifact, so the reasoning behind a claim stays with the claim. See the [research graph](/graphs/index).
+
+## Oracle research
+
+For broader questions that synthesize across your library, use Oracle research:
+
+```bash
+atlas research:ask --query "Compare MoE routing across the indexed papers." --format=json
+```
+
+`research:ask` is a synchronous Oracle-style answer and deducts from the `oracle` quota in `usage:summary`. For questions too broad for one synchronous pass, use [async research jobs](/library/jobs).
+
+## Ask vs research:ask
+
+| You want... | Use |
+| --- | --- |
+| A grounded answer over specific documents | `library:ask` |
+| A synthesized answer across your whole library | `research:ask` |
+| A long-running, multi-step research pass | [research jobs](/library/jobs) |
+
+## Ground answers, then act
+
+A typical agent loop:
+
+1. `library:add` to index the material.
+2. `library:search` to find the relevant passages.
+3. `library:ask --attach <node>` to save a grounded answer onto the graph.
+4. Continue the [research loop](/graphs/research-loop) from there.

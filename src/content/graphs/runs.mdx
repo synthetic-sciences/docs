@@ -1,0 +1,110 @@
+---
+title: "Runs & flight recorder"
+description: "Record runs with auto-captured code state, then compare and rank them."
+icon: "flask-conical"
+---
+
+The flight recorder posts a single experiment run as an empirical node under a project: config, metrics, stdout tail, and outcome. It captures the exact code state automatically, so a result always points back at the commit that produced it.
+
+## Record a run
+
+```bash
+git add -A && git commit -m "lr sweep"
+
+atlas run:record \
+  --project able-helm-1359 \
+  --plan <plan-id> \
+  --title "lr=3e-4 seed=17" \
+  --config-json '{"lr":3e-4,"seed":17}' \
+  --metrics-json '{"val_loss":2.31}' \
+  --outcome success
+```
+
+### Auto-captured code state
+
+`run:record` reads the working tree and stores the **repo URL, branch, head commit SHA, and a dirty flag** onto the run. That is why the recommended practice is to **commit before recording** — a clean tree makes the result reproducible. Opt out with `--no-git`.
+
+### Bind to a plan or hypothesis
+
+| Flag | Effect |
+| --- | --- |
+| `--plan <id>` | Execute an `experiment:plan`. Atlas evaluates its success criterion and stores `criterion_met`; the run inherits the plan's `run_cluster_key`. |
+| `--hypothesis <id>` | Attach the run to a hypothesis when there is no plan. |
+| `--run-cluster-key <key>` | Fold repeats of the same experiment into one comparable cluster. |
+
+### Outcomes and failure modes
+
+| Field | Values |
+| --- | --- |
+| `--outcome` | `success`, `failure`, `inconclusive` (inferred from `--exit-code` when omitted). |
+| `--failure-mode` | `diverged`, `oom`, `data_bug`, `code_bug`, `underperformed`, `other`. |
+
+Record failures too — a logged `oom` or `diverged` run is how the next agent avoids repeating it.
+
+### Other flags
+
+| Flag | Use |
+| --- | --- |
+| `--config-json` | Run config as JSON or `@file.json`. |
+| `--metrics-json` | Numeric metrics as JSON or `@file.json`. |
+| `--stdout-tail` | Tail of stdout (secret-scrubbed before storage). |
+| `--exit-code` | Process exit code; the outcome is inferred from it. |
+| `--no-git` | Skip the automatic code-state capture. |
+| `--payload-json` | Full body as JSON; inline flags override its fields. |
+
+## Offline spool
+
+If the backend is unreachable, `run:record` writes to `~/.atlas/spool/` and pending entries flush on the next CLI call. Manage the queue directly:
+
+```bash
+atlas run:spool:list      # queued entries, oldest first
+atlas run:spool:flush     # replay; successful posts are removed
+atlas run:spool:clear     # drop everything without posting
+```
+
+## Compare runs
+
+`run:compare` renders a matrix across the runs under a project. It walks descendants (depth ≤ 3), so a project's whole run subtree is in scope. Columns can be node fields or dot-paths into the captured data.
+
+```bash
+atlas run:compare \
+  --project able-helm-1359 \
+  --cluster resnet50/cifar10/lr-sweep \
+  --columns title,config.lr,metrics.val_loss,criterion_met,outcome \
+  --sort metrics.val_loss --direction asc --best \
+  --format=table
+```
+
+| Flag | Use |
+| --- | --- |
+| `--columns` | Node fields (`title`, `outcome`, `failure_mode`, `run_cluster_key`, `criterion_met`, `created_at`) or dot-paths (`config.lr`, `metrics.val_loss`). |
+| `--cluster` | Filter to one `run_cluster_key`. |
+| `--sort` / `--direction` | Order rows (numeric-aware); `asc` (default) or `desc`. |
+| `--best` | Mark the top row after sorting. |
+| `--outcome` | Filter to one stored outcome. |
+| `--format=table` | Markdown rendering for terminal echo. |
+
+## Rank with a leaderboard
+
+`leaderboard` is a `run:compare` preset: sorted in the metric's better direction with the best row marked.
+
+```bash
+atlas leaderboard --project able-helm-1359 --metric metrics.val_loss --direction min
+```
+
+## Managed executions vs the flight recorder
+
+These are different surfaces — do not confuse them:
+
+| You want to... | Use | Namespace |
+| --- | --- | --- |
+| Record a run that already happened | `run:record`, `run:compare`, `leaderboard` | `run:*` (flight recorder) |
+| Start and manage compute on a node | `exec:start`, `exec:list`, `exec:stop` | `exec:*` (managed executions) |
+
+```bash
+atlas exec:start --node nd_... --provider modal
+atlas exec:list  --node nd_...
+atlas exec:stop  --node nd_... --execution-id ex_... --yes
+```
+
+`exec:*` draws down account credit; see [Billing & credits](/getting-started/billing).

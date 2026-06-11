@@ -1,0 +1,80 @@
+---
+title: "Evidence & files"
+description: "Attach durable files, metrics, and external JSON to graph nodes."
+icon: "file-text"
+---
+
+Evidence records attach durable files to nodes: run outputs, logs, PDFs, datasets, figures, patches, and notes. Keep the separation clean — **evidence is raw support, nodes are interpretation** — and later reviews get much easier.
+
+## Upload
+
+The one-shot uploader prepares, writes, and finalizes in one call:
+
+```bash
+atlas evidence:add \
+  --node nd_... \
+  --items '[{"local_path":"./runs/baseline/metrics.json","artifact_type":"json","note":"raw baseline metrics"}]' \
+  --format=json
+```
+
+It accepts up to 50 files and 100 MB per file. Supported `artifact_type` values include `text`, `table`, `json`, `image`, `banner`, `html`, `plotly_html`, `vega`, `checkpoint`, `binary`, and `diff_carousel`.
+
+## Commands
+
+| Command | Use |
+| --- | --- |
+| `evidence:add` | One-shot prepare, upload, and finalize. |
+| `evidence:prepare` / `evidence:finalize` | Lower-level upload flow for custom uploaders. |
+| `evidence:list` | List evidence attached to one node. |
+| `evidence:show` | Inspect one evidence item. |
+| `evidence:note` | Add, update, or clear an evidence note. |
+| `evidence:download` | Download raw bytes by storage path. |
+| `evidence:files` | List every evidence file you own, across nodes. |
+| `evidence:link` / `evidence:refresh` | Attach or refresh public HTTPS JSON evidence by URL. |
+| `evidence:delete` / `evidence:delete-bulk` | Delete one or many items (requires `--yes`). |
+
+## Lower-level flow
+
+Use prepare/finalize only when an external uploader needs the prepared target before finalization:
+
+```bash
+atlas evidence:prepare \
+  --node nd_... \
+  --items '[{"filename":"baseline.json","artifact_type":"json","media_type":"application/json"}]'
+
+atlas evidence:finalize --node nd_... --batch-token batch_...
+```
+
+## Inspect and annotate
+
+```bash
+atlas evidence:list --node nd_... --format=json
+atlas evidence:show --node nd_... --artifact-id art_... --format=json
+atlas evidence:note --node nd_... --artifact-id art_... --note "baseline metrics + raw stderr"
+```
+
+## Linked evidence
+
+Attach a public HTTPS JSON record without uploading a file. Useful for live metrics:
+
+```bash
+atlas evidence:link \
+  --node nd_... \
+  --remote-artifact-id metrics-live \
+  --url https://example.com/results.json \
+  --title "external run metrics" \
+  --rows-path data.rows \
+  --row-id id \
+  --format=json
+```
+
+Refresh it later with `evidence:refresh` using the same arguments.
+
+## Destructive actions
+
+```bash
+atlas evidence:delete --node nd_... --artifact-id art_... --yes
+atlas evidence:delete-bulk --node nd_... --artifact-ids art_1,art_2 --yes
+```
+
+Use `--yes` only after confirming the target ids.

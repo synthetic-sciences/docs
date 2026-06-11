@@ -1,0 +1,95 @@
+---
+title: "Authentication"
+description: "Browser login, thk_* API keys, local profiles, and config resolution."
+icon: "key-round"
+---
+
+Atlas authenticates two ways: an interactive **browser login** for humans, and **`thk_*` API keys** for agents, scripts, and CI. Both resolve to an Atlas API key sent as `Authorization: Bearer <key>`.
+
+<Warning>
+The legacy MCP-era pairing and token-exchange flows are retired and now return `HTTP 426 Upgrade Required`. Use `atlas login` or a `thk_*` API key. There is no device-pairing step.
+</Warning>
+
+## Browser login
+
+```bash
+atlas login
+atlas whoami --format=json
+atlas logout
+```
+
+`login` starts a localhost callback, opens the Atlas approval page, redeems a one-time token, and writes an API key to the active profile (file mode `0600`). `logout` removes the stored credential for the active profile.
+
+## API keys
+
+For agents and automation, mint a key and pass it through the environment:
+
+```bash
+atlas key:create --name "ci-runner" --format=json
+export ATLAS_API_KEY="thk_..."
+atlas whoami --format=json
+```
+
+Keys are prefixed `thk_` and the full secret is shown once. Manage them with `key:create`, `key:list`, `key:rotate`, and `key:delete` (backed by `/api/auth/api-keys`). See [API keys](/getting-started/api-keys) for the full lifecycle.
+
+Call the API directly with the same key:
+
+```bash
+curl -H "Authorization: Bearer $ATLAS_API_KEY" \
+  https://app.syntheticsciences.ai/api/v1/auth/status
+```
+
+## Config resolution
+
+The CLI resolves the API key in this order:
+
+1. `--api-key <key>`
+2. `ATLAS_API_KEY`
+3. the active profile written by `atlas login`
+4. root config fallback
+
+Useful environment variables:
+
+| Name | Purpose |
+| --- | --- |
+| `ATLAS_API_KEY` | Override the stored API key for one invocation. |
+| `ATLAS_BASE_URL` | Point at a non-production API base. |
+| `ATLAS_CLI_CONFIG_PATH` | Use an alternate profile config file. |
+| `ATLAS_LOGIN_TIMEOUT_MS` | Browser-login wait timeout (default 5 min). |
+| `NO_COLOR` / `FORCE_COLOR` | Disable or force ANSI color in pretty output. |
+
+## Profiles
+
+Keep more than one account or environment side by side with named profiles:
+
+```bash
+atlas config:list
+atlas config:set --name staging --base-url https://staging.example/api/v1
+atlas whoami --env staging --format=json
+```
+
+| Command | Use |
+| --- | --- |
+| `config:list` | List local profiles with secrets redacted. |
+| `config:show` | Show one profile with secrets redacted. |
+| `config:set` | Create or update a profile (base URL, default format, retries, timeout). |
+| `config:unset` | Remove a profile. |
+
+## macOS Keychain
+
+On macOS you can store the key in the Keychain instead of the config file:
+
+```bash
+echo "thk_..." | atlas secret:set
+atlas secret:clear
+```
+
+## Doctor
+
+Run `doctor` after install, login, or config changes:
+
+```bash
+atlas doctor --format=json
+```
+
+It checks the config path, active profile, base URL, backend reachability, auth status when a key is present, and the bundled skills. It is safe to run before login; it simply reports that no key is present.

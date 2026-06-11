@@ -1,0 +1,142 @@
+---
+title: "Nodes & links"
+description: "Node kinds, the staged/committed lifecycle, links, access, labels, and drafts."
+icon: "git-branch"
+---
+
+Atlas Graphs stores research state as committed nodes connected by links. Each node answers one question: what changed in the research state? If you are new, run the [research loop quickstart](/graphs/quickstart) first.
+
+## Node kinds
+
+A node's **kind** is its first-class type. The research-loop verbs create typed nodes for you; `node:create` makes an untyped one.
+
+| Kind | Created by | Holds |
+| --- | --- | --- |
+| `hypothesis` | `hypothesis:add` | A falsifiable claim with assumptions and disconfirmers. |
+| `empirical` | `run:record`, `notebook:cell` | A recorded run: config, metrics, outcome, code state. |
+| `decision` | `decision:add` | A choice and the runs/evidence it rests on. |
+| `insight` | `note:add` | A freeform observation worth keeping. |
+| `untyped` | `node:create`, `draft:create` | Anything that does not fit a typed kind yet. |
+
+`experiment:plan` nodes (the plans recorded runs execute) and project roots round out the structure. See [the research loop](/graphs/research-loop) for the typed-node workflow.
+
+## The staged / committed lifecycle
+
+Nodes move from **staged** to **committed**:
+
+- A **draft** is a staged shell. Create one with `draft:create`, edit it, then commit with `node:save`.
+- `node:create` does both at once: create and save a durable node in one request.
+- A **save** is a recorded state change with revision history you can audit.
+
+```bash
+atlas node:create \
+  --payload-json '{
+    "local_temp_node_id": "tmp-baseline-question",
+    "parent_ids": [],
+    "staged_payload": {
+      "title": "evaluate the sparse-attention baseline",
+      "content": "Which baseline should we trust before ablations?",
+      "summary": "Root question for baseline selection.",
+      "kind": "untyped"
+    }
+  }' \
+  --format=json
+```
+
+Inspect the exact envelope with `atlas help node:create --schema --format=json` before building payloads.
+
+## Node lifecycle commands
+
+| Command | Use |
+| --- | --- |
+| `draft:create` | Create an uncommitted node shell. |
+| `node:create` | Create and save a new node. |
+| `node:save` | Save staged changes to an existing node. |
+| `node:show` | Inspect one node. |
+| `node:list` | List visible nodes. |
+| `node:history` | List a node's history events. |
+| `node:files` | List evidence files for one node. |
+| `node:delete` / `node:delete-bulk` | Delete one or many nodes (requires `--yes`). |
+
+## Links and topology
+
+Links record dependency from prior context to derived work. Branching and merging are graph operations.
+
+```bash
+atlas node:branch --node nd_root --title "run the reference baseline"
+atlas link:add --node nd_child --parent-id nd_root
+atlas map:tree --node nd_root --max-depth 4
+```
+
+| Command | Use |
+| --- | --- |
+| `map:view` | Read a structured map projection with depth, paging, filters. |
+| `node:branch` | Create a child branch from a node. |
+| `node:merge` | Merge nodes into a resolved node. |
+| `link:add` / `link:remove` | Add or remove a dependency link. |
+| `link:parents` / `link:children` | Page direct parents or children. |
+| `node:resolve` | Resolve a slug to a node. |
+| `program:snapshot` | Resolve the program root snapshot for a node. |
+
+Merge only when there is a resolved synthesis. Do not merge unresolved alternatives just to shorten the tree.
+
+## Rendered views
+
+```bash
+atlas map:lineage --node nd_root --max-depth 4 --format=json
+atlas map:summary --node nd_root --max-nodes 50 --format=json
+atlas map:tree --node nd_root --max-depth 5
+```
+
+Use rendered views for terminal agents; use `map:view` when you need the raw projection for your own UI. The web app renders the same graph as cards, orbit, and timeline — see [Web app views](/graphs/web-views).
+
+## Access
+
+```bash
+atlas access:show --node nd_root --format=json
+atlas node:share --node nd_root --visibility public
+```
+
+`node:share` sets visibility (`private`, `unlisted`, `public`) and prints the canonical web URL. For batches, use `access:set-bulk` and `access:summaries`.
+
+## Labels
+
+```bash
+atlas label:create --root-node-id nd_root --name validated
+atlas label:assign --node nd_child --tag-ids tag_...
+```
+
+| Command | Use |
+| --- | --- |
+| `label:create` | Create a reusable, root-scoped label. |
+| `label:assign` | Assign labels to a node. |
+| `label:update` / `label:delete` | Edit or remove a label. |
+
+Use labels for workflow state such as `planned`, `running`, `validated`, or `blocked`.
+
+## Concurrency
+
+When multiple agents may edit the same node, use draft locks:
+
+```bash
+atlas draft:lock --node nd_... 
+atlas draft:renew --node nd_... --stage-session-id session_...
+atlas draft:unlock --node nd_... --stage-session-id session_...
+```
+
+A long-running agent should lock the draft, renew while editing, and unlock when the staged work is committed or abandoned.
+
+## Linked evidence
+
+Attach a public HTTPS JSON record to a node by URL without uploading a file:
+
+```bash
+atlas evidence:link \
+  --node nd_... \
+  --remote-artifact-id metrics-live \
+  --url https://example.com/results.json \
+  --title "external run metrics" \
+  --format=json
+```
+
+See [Evidence & files](/graphs/evidence) for uploads and notes.

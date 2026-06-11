@@ -1,0 +1,70 @@
+---
+title: "Web UI"
+description: "synsci web opens a local browser UI for longer conversations and visual review of tool calls."
+icon: "terminal"
+---
+
+`synsci web` is the same agent as the TUI, exposed through a local browser interface. The TUI is faster for tight loops; the web UI is better for longer conversations, multiple threads at once, and reviewing diffs and tool calls visually.
+
+The server is local: it binds `127.0.0.1` by default, holds the agent in its own process, and serves the UI from the same port. Closing the browser does not kill the agent — reattach any time.
+
+## Start the server
+
+```bash
+synsci web
+```
+
+Defaults: bind `127.0.0.1:4444`, open the system browser, run the default agent and model.
+
+| Flag | Use |
+| --- | --- |
+| `--port <n>` | Bind a different local port. |
+| `--no-open` | Skip auto-opening the browser. |
+| `--agent <name>` | Use a specific agent profile. |
+| `--model <provider/model>` | Override the default model. |
+
+```bash
+synsci web --port 5555
+synsci web --agent reviewer
+synsci web --no-open
+```
+
+## macOS Full Disk Access
+
+On macOS, the first `synsci web` invocation probes for Full Disk Access so the agent can read files outside the sandboxed Application Support tree (your home directory, project sources, dotfiles). If the probe fails, the UI shows a banner with instructions to grant access in System Settings → Privacy & Security; restart the server after granting.
+
+## What the UI gives you
+
+- **Threads.** Each conversation lives in its own thread; switch without losing context.
+- **Tool-call viewer.** Every file read, diff, and shell command renders inline with its result.
+- **Skill picker.** Toggle research skills mid-conversation; activation is additive.
+- **Agent and model switcher.** Change the active agent or model per thread.
+- **Attach pane.** Drag files or paste URLs onto the next prompt.
+
+## Reuse a running server
+
+A second `synsci web` reuses the running server instead of starting a new one. Attach a TUI from another terminal:
+
+```bash
+synsci tui attach
+synsci tui thread <id>
+```
+
+The web UI is intended for local `127.0.0.1` use. Run it on a machine you control.
+
+## What's next
+
+<CardGroup cols={2}>
+  <Card title="Sessions" icon="terminal" href="/agent-cli/sessions">
+    Threads, resume, attach, and export.
+  </Card>
+  <Card title="Sub-agents" icon="bot" href="/agent-cli/sub-agents">
+    Drive the web UI with a custom agent profile.
+  </Card>
+  <Card title="Models" icon="package-check" href="/agent-cli/models">
+    Per-thread model switching.
+  </Card>
+  <Card title="Security" icon="shield-check" href="/agent-cli/security">
+    The trust boundary and credential handling.
+  </Card>
+</CardGroup>

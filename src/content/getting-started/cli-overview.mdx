@@ -1,0 +1,94 @@
+---
+title: "CLI overview & conventions"
+description: "The command grammar shared across Atlas Graphs and Atlas Library: namespaces, verbs, slugs, and output."
+icon: "terminal"
+---
+
+One CLI, `@synsci/atlas`, drives the whole suite. Learn the grammar once here; the [Atlas Graphs](/graphs/commands) and [Atlas Library](/library/commands) reference pages list the commands for each product.
+
+Every command is a direct HTTP call to `https://app.syntheticsciences.ai/api/v1`, plus a handful of local commands (`login`, `logout`, `doctor`, `config:*`, `secret:*`) that also read or write local config. There is no second hidden surface: `atlas help --format=json` is generated from the same registry that dispatches requests.
+
+## Naming conventions
+
+Command names are `namespace:verb`. The rules, as of 0.8.x:
+
+- **Namespaces are singular nouns.** `node:*`, `label:*`, `key:*`, `secret:*`, `integration:*`, and `project:merge` (not `nodes:`, `labels:`, `keys:`, `secrets:`, `integrations:`, `projects:`).
+- **`exec:*` is managed compute.** `exec:start | list | stop` run and manage executions on a node.
+- **`run:*` is the flight recorder.** `run:record | compare | spool:*` capture and compare experiment results.
+- **`*:jobs:*` are async jobs.** `library:jobs:*` and `research:jobs:*` create, stream, and cancel long-running work.
+- **`github:reconnect`** is the canonical way to refresh an expired GitHub token.
+
+<Warning>
+Pre-0.8 names (`nodes:create`, `runs:record`, `labels:assign`, `keys:create`, `research:runs:create`, `github:refresh`, and so on) still work as hidden legacy aliases, so old scripts keep running. Write new scripts, prompts, and docs with the canonical singular names only. This is the one page that lists the aliases; everywhere else uses the canonical form. The full rule set lives in `cli/CONVENTIONS.md` in the Atlas repo.
+</Warning>
+
+## Slugs and ids
+
+Four resolver flags accept either a human-readable slug (`able-helm-1359`) or a UUID, and the CLI resolves them before dispatch:
+
+| Flag | Refers to |
+| --- | --- |
+| `--project` | A project root node. |
+| `--node` | Any node. |
+| `--plan` | An `experiment:plan` node. |
+| `--hypothesis` | A `hypothesis` node. |
+
+```bash
+atlas node:show --node able-helm-1359 --format=json
+atlas brief --project able-helm-1359 --format=json
+```
+
+## Output formats
+
+Output is **JSON when piped** and a **pretty terminal view** at a TTY. Force a format with `--format`:
+
+```bash
+atlas node:list                  # pretty at a terminal
+atlas node:list | jq '.nodes[0]' # json automatically when piped
+atlas node:list --format=json    # force json (always lossless)
+```
+
+| Format | When | Notes |
+| --- | --- | --- |
+| `pretty` | TTY default | Per-command views with status glyphs and relative times. |
+| `json` | Pipe default | Lossless. Every field, no truncation. |
+| `table` | Opt-in | The pretty view without color. |
+| `tsv` / `csv` | Opt-in | One row per item; nested objects stringified. |
+
+Set a sticky default with `atlas config:set --default-format json`.
+
+## Global flags
+
+| Flag | Use |
+| --- | --- |
+| `--format <format>` | `json`, `tsv`, `csv`, `table`, or `pretty`. |
+| `--env <profile>` | Select a stored CLI profile. |
+| `--out <path>` | Write output to a file, or `-` for stdout. |
+| `--open` | Open browser-bound URLs where supported. |
+| `--yes` | Confirm destructive operations. |
+| `--force` | Force a safety-gated operation where supported. |
+| `--idempotency-key <key>` | Stable key for retried writes. |
+| `--timeout <seconds>` | Per-request timeout. |
+| `--no-retry` / `--retry-max <n>` | Tune transient-error retries. |
+| `--debug` | Print structured request debugging. |
+
+Destructive commands (deletes, revokes, cancels, disconnects, rotation) require `--yes` or `--force`.
+
+## Discover commands
+
+```bash
+atlas help                                    # grouped text listing
+atlas help run:record                         # text help for one command
+atlas help run:record --schema --format=json  # the full request shape
+atlas help --format=json                      # the entire catalog
+```
+
+The bundled `atlas` skill is the router for agents: it points at the right specialized skill and first command for a task. Run `atlas install` to load it (and the other nine skills) into your coding agent.
+
+## Where commands live
+
+| Product | Namespaces | Reference |
+| --- | --- | --- |
+| Atlas Graphs | `project:*`, `node:*`, `link:*`, `map:*`, `access:*`, `draft:*`, `label:*`, research-loop verbs, `run:*`, `exec:*`, `evidence:*`, `repo:*`, `github:*` | [Graph commands](/graphs/commands) |
+| Atlas Library | `library:*`, `research:*`, `usage:summary` | [Library commands](/library/commands) |
+| Shared | `login`, `logout`, `whoami`, `doctor`, `config:*`, `secret:*`, `key:*`, `account:update`, `install` | This section |

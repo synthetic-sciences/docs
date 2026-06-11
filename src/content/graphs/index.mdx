@@ -1,0 +1,58 @@
+---
+title: "Atlas Graphs"
+description: "The research graph: hypotheses, experiment plans, recorded runs, evidence, and decisions in one durable structure."
+icon: "git-branch"
+---
+
+**Atlas Graphs** is the research graph product in the Atlas suite. It holds the thread of an investigation as durable nodes connected by links: the root question, the hypotheses posed, the experiments planned, the runs recorded with the exact code that produced them, the evidence attached, and the decisions made. Agents read that state back as a context packet with `atlas brief`.
+
+Delegated research scatters across chats, notebooks, logs, and memory. Atlas Graphs gives it a shared map so humans and agents return to the same state, audit what happened, and decide what to do next.
+
+<Columns cols={2}>
+  <Card title="Research loop quickstart" icon="rocket" href="/graphs/quickstart">
+    Project, hypothesis, plan, recorded run, comparison, decision, brief. The full loop in one sitting.
+  </Card>
+  <Card title="Nodes & links" icon="git-branch" href="/graphs/graph-model">
+    Node kinds, the staged/committed lifecycle, links, access, labels, and drafts.
+  </Card>
+  <Card title="The research loop" icon="workflow" href="/graphs/research-loop">
+    Hypotheses, experiment plans with success criteria, decisions, and evals as a workflow.
+  </Card>
+  <Card title="Runs & flight recorder" icon="flask-conical" href="/graphs/runs">
+    Record runs with auto-captured git state, then compare and rank them.
+  </Card>
+</Columns>
+
+## What lives in a graph
+
+| Object | Created by | What it captures |
+| --- | --- | --- |
+| Project | `project:create` | The root node for a folder or repo. |
+| Hypothesis | `hypothesis:add` | A falsifiable claim, its assumptions, and its disconfirmers. |
+| Experiment plan | `experiment:plan` | The config, metric, and success criterion, declared before the run. |
+| Run | `run:record` | Config, metrics, outcome, and auto-captured code state. |
+| Decision | `decision:add` | A choice and the runs or evidence it rests on. |
+| Insight / note | `note:add` | A freeform observation worth keeping. |
+| Evidence | `evidence:add` | Raw files, metrics, logs, or external JSON on a node. |
+
+## The lifecycle
+
+Nodes move from **staged** to **committed**. A draft is a staged shell you can edit; a save commits it into the durable graph with revision history. Most workflows commit directly with `node:create` or the research-loop verbs; reach for `draft:*` only when several agents coordinate edits on one node.
+
+Links record dependency and lineage, so `map:lineage` can answer "why did we do this?" long after the fact. Branching and merging are graph operations, not folders.
+
+## Run outcomes
+
+Every recorded run carries an **outcome** (`success`, `failure`, or `inconclusive`) and, when it failed, a **failure mode** (`diverged`, `oom`, `data_bug`, `code_bug`, `underperformed`, `other`). Bind a run to an experiment plan and Atlas also evaluates the plan's success criterion and stores `criterion_met`. Failures are first-class: recording them is how the next agent avoids repeating them.
+
+## See it in the app
+
+The graph renders three ways in the web app — kind-colored **cards**, a force-directed **orbit**, and a commit-graph **timeline**. See [Web app views](/graphs/web-views).
+
+## Where to go next
+
+- New here? Start with the [research loop quickstart](/graphs/quickstart).
+- Need the model? Read [Nodes & links](/graphs/graph-model).
+- Reproducing a result? See [Reproduction & code state](/graphs/reproduction).
+- Forking a graph into another workspace? See [Forking & portability](/graphs/forking).
+- Looking for a command? See the [graph CLI & API reference](/graphs/commands).

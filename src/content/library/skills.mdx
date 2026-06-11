@@ -1,0 +1,39 @@
+---
+title: "Library skill"
+description: "The bundled skill that drives library search and grounded research."
+icon: "book-open"
+---
+
+Of the ten skills bundled in `@synsci/atlas`, one drives the library: **`atlas-search`**. The other nine are covered under [Atlas Graphs](/graphs/skills) and the [CLI overview](/getting-started/cli-overview). Run `atlas install` to load them into your coding agent.
+
+## atlas-search
+
+| | |
+| --- | --- |
+| Trigger / use case | Source indexing, source inspection, library-backed search, grounded Q&A, Oracle answers, async deep research, and usage workflows. |
+| First commands | `atlas library:add`, `atlas library:search`, `atlas library:ask` |
+
+The skill uses Atlas authentication only — it never asks for an external search provider credential. It covers the full library surface:
+
+- Library sources: `library:list`, `library:add`, `library:subscribe`, `library:show`, `library:update`, `library:delete`, `library:sync`, `library:scope`.
+- Inspection: `library:tree`, `library:read`, `library:grep`.
+- Search and Q&A: `library:search` (with `--save-to`), `library:ask` (with `--attach`).
+- Research: `research:ask`, `research:jobs:*`.
+- Usage: `usage:summary`.
+
+## When the agent reaches for it
+
+| User request | Skill |
+| --- | --- |
+| "Search my indexed sources" | `atlas-search` |
+| "Index this paper/repo/folder" | `atlas-search` |
+| "Ask a grounded question and cite it" | `atlas-search` |
+| "Run deep research over my library" | `atlas-search` |
+
+For turning the results into durable graph state, the agent hands off to `atlas-map` and the research-loop skills — see [Graph skills](/graphs/skills).
+
+## Verify
+
+```bash
+atlas doctor --format=json   # reports all ten bundled skills
+```
