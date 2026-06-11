@@ -100,7 +100,7 @@ const SECTIONS: Section[] = [
   { key: "getting-started", label: "Getting started", short: "Getting started", tagline: "Install, auth, conventions", lead: true },
   { key: "graphs", label: "Atlas Graphs", short: "Graphs", tagline: "The research graph", lead: false },
   { key: "library", label: "Atlas Library", short: "Library", tagline: "Knowledge sources", lead: false },
-  { key: "agent-cli", label: "Atlas Agent CLI", short: "Agent CLI", tagline: "Autonomous agent · coming soon", lead: false },
+  { key: "agent-cli", label: "Atlas Agent CLI", short: "Agent CLI", tagline: "The SynSci agent CLI", lead: false },
 ];
 
 const SECTION_KEYS = SECTIONS.map((section) => section.key);
