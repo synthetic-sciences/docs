@@ -1146,6 +1146,35 @@ const docsCss = `
     background: var(--color-bg-elevated);
   }
 
+  .docs-theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 34px;
+    padding: 0 12px;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--color-text-muted);
+    font-family: ${DOCS_SERIF};
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1;
+    cursor: pointer;
+    transition: background 120ms ease, color 120ms ease, border-color 120ms ease;
+  }
+
+  .docs-theme-toggle:hover {
+    color: var(--color-text);
+    background: var(--color-bg-elevated);
+    border-color: var(--color-border);
+  }
+
+  .docs-theme-toggle:focus-visible {
+    outline: 2px solid var(--docs-accent);
+    outline-offset: 2px;
+  }
+
   .docs-sectionbar {
     position: sticky;
     top: 60px;
