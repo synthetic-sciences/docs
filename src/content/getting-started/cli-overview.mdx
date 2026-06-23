@@ -13,7 +13,7 @@ Every command is a direct HTTP call to `https://app.syntheticsciences.ai/api/v1`
 Command names are `namespace:verb`. The rules, as of 0.8.x:
 
 - **Namespaces are singular nouns.** `node:*`, `label:*`, `key:*`, `secret:*`, `integration:*`, and `project:merge` (not `nodes:`, `labels:`, `keys:`, `secrets:`, `integrations:`, `projects:`).
-- **`exec:*` is managed compute.** `exec:start | list | stop` run and manage executions on a node.
+- **`exec:*` is managed node executions.** `exec:start | list | stop` run and manage executions attached to a node. (Provisioning GPU VMs is no longer a CLI concern — that lives in the web app's Compute tab.)
 - **`run:*` is the flight recorder.** `run:record | compare | spool:*` capture and compare experiment results.
 - **`*:jobs:*` are async jobs.** `library:jobs:*` and `research:jobs:*` create, stream, and cancel long-running work.
 - **`github:reconnect`** is the canonical way to refresh an expired GitHub token.
@@ -74,6 +74,8 @@ Set a sticky default with `atlas config:set --default-format json`.
 
 Destructive commands (deletes, revokes, cancels, disconnects, rotation) require `--yes` or `--force`.
 
+Only genuinely transient failures (`408`, `425`, `5xx`) are retried. Rate-limit (`429`) and conflict (`409`) responses are deliberate, so the CLI surfaces a "wait a moment" / "refetch" message and backs off instead of retrying.
+
 ## Discover commands
 
 ```bash
@@ -83,7 +85,7 @@ atlas help run:record --schema --format=json  # the full request shape
 atlas help --format=json                      # the entire catalog
 ```
 
-The bundled `atlas` skill is the router for agents: it points at the right specialized skill and first command for a task. Run `atlas install` to load it (and the other nine skills) into your coding agent.
+The bundled `atlas` skill is the router for agents: it points at the right specialized skill and first command for a task. Run `atlas install` to load it (and the other eight skills) into your coding agent.
 
 ## Where commands live
 

@@ -18,16 +18,16 @@ The non-interactive form:
 
 ```bash
 synsci agent create \
-  --path .synsc/agents/reviewer.md \
+  --path .synsc/agent/reviewer.md \
   --description "Reviews diffs for race conditions and unsound concurrency" \
   --mode subagent \
-  --tools "Read,Grep,Bash" \
-  --model anthropic/claude-opus-4-7
+  --tools "read,grep,bash" \
+  --model anthropic/claude-sonnet-4-6
 ```
 
 | Flag | Use |
 | --- | --- |
-| `--path <dir-or-file>` | Where to write the definition. Project-local (`.synsc/agents/`) or user-global (`~/.config/synsc/agents/`). |
+| `--path <dir-or-file>` | Where to write the definition. Project-local (`.synsc/agent/`) or user-global (`~/.config/synsc/agent/`). |
 | `--description <text>` | What the agent is for. Shown in the picker and to the main agent when it decides to delegate. |
 | `--mode <all\|primary\|subagent>` | `primary`: top-level agent for a session. `subagent`: only the main agent calls it. `all`: both. |
 | `--tools <tool[,tool...]>` | Restrict the tool set. Omit to inherit everything. |
@@ -48,18 +48,22 @@ synsci run --agent reviewer "Review the diff in src/auth"
 
 ## Tool restrictions
 
-`--tools "Read,Grep"` produces a read-only sub-agent. The main agent refuses delegations needing a tool the sub-agent lacks, so a read-only reviewer cannot be tricked into editing files.
+`--tools "read,grep"` produces a read-only sub-agent. The main agent refuses delegations needing a tool the sub-agent lacks, so a read-only reviewer cannot be tricked into editing files.
 
 | Tool | What it does |
 | --- | --- |
-| `Read` | Read files. |
-| `Grep` | Search inside files. |
-| `Glob` | Find files by name pattern. |
-| `Bash` | Run shell commands. |
-| `Edit` | Mutate files. |
-| `Write` | Create or overwrite files. |
+| `read` | Read files. |
+| `grep` | Search inside files. |
+| `glob` | Find files by name pattern. |
+| `list` | List directory contents. |
+| `bash` | Run shell commands. |
+| `edit` | Mutate files. |
+| `write` | Create or overwrite files. |
+| `webfetch` | Fetch a URL. |
+| `task` | Delegate to a sub-agent. |
+| `todowrite` / `todoread` | Track a task list. |
 
-The exact set comes from your CLI version; run `synsci agent create --help` for the current list.
+Tool names are lowercase. The exact set comes from your CLI version; run `synsci agent create --help` for the current list.
 
 ## Useful shapes
 
@@ -73,9 +77,9 @@ Keep system prompts short — a tight description plus a clear tool set usually 
 ## Where agents live
 
 ```text
-.synsc/agents/             # project-scoped
-~/.config/synsc/agents/    # user-global
-<bundled>                  # ships-with-CLI defaults
+.synsc/agent/             # project-scoped
+~/.config/synsc/agent/    # user-global
+<bundled>                 # ships-with-CLI defaults
 ```
 
 Resolution is project-local, then user-global, then built-in.

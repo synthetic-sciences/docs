@@ -19,6 +19,7 @@
             "pages": [
               "research-loop",
               "runs",
+              "optimize",
               "reproduction"
             ]
           },

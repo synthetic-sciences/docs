@@ -1,0 +1,102 @@
+---
+title: "Optimize & autoresearch"
+description: "Improve a measurable artifact with the GEPA loop, referee the result, or run the whole refereed campaign from one goal."
+icon: "trending-up"
+---
+
+Once you have a benchmark, Atlas can search for a better artifact (a prompt, config, or piece of code) and record the entire optimization as graph state: every candidate as a node, the lineage between them, the live budget, and a refereed before→after delta. There are two entry points — the `optimize:*` primitives, and `autoresearch`, which runs the full campaign from a single plain-English goal.
+
+<Warning>
+Both surfaces drive the [`atlas-optimize`](/graphs/skills) and `atlas-autoresearch` skills under the hood, and both require `uv` plus a reflection-LM key for the GEPA reflection step. They orchestrate the existing research-loop primitives — there is no separate engine.
+</Warning>
+
+## The GEPA loop
+
+`optimize:start` runs a GEPA search: it mutates the target artifact, scores each candidate against your benchmark, and records the winner. Each candidate becomes an `empirical` node, failures become `failure` nodes, and a control node carries the run state.
+
+```bash
+atlas optimize:start \
+  --target ./prompts/system.txt \
+  --benchmark ./.atlas/benchmark.sh \
+  --objective "raise exact-match on the eval set" \
+  --metric max \
+  --max-metric-calls 50 \
+  --max-seconds 28800
+```
+
+| Flag | Purpose |
+| --- | --- |
+| `--target` | The artifact to optimize (required). |
+| `--benchmark` | Command that runs the eval and emits the contract JSON (required). |
+| `--objective` | Plain-English goal for the reflection step (required). |
+| `--metric` | `max` or `min` — which direction is better. |
+| `--max-metric-calls` | Budget in benchmark evaluations. |
+| `--max-seconds` | Wall-clock budget (maps to GEPA's timeout; `0` means no limit). Composes with `--max-metric-calls` — whichever is hit first wins. |
+| `--parallel` | Run `K` candidates concurrently, each in its own git worktree. |
+| `--stall` | Stop after this many rounds with no improvement. |
+| `--gate` | A Goodhart guard (for example a files-unchanged check) that disqualifies cheating candidates. |
+| `--ground` | Ground the reflection in indexed library sources. |
+| `--resume <control>` | Continue a prior run, seeding from its best candidate. |
+
+The harness writes a machine-readable `optimize-result.json` into the run directory (control node id, winner node id, `stop_reason`, candidates recorded), and `optimize:start` returns it — so a wrapper learns the control node without scraping stdout. `stop_reason` is one of `budget_exhausted`, `no_improvement`, `objective_met`, `user_cancelled`, or `runtime_error`.
+
+Track and control a run from its control node:
+
+```bash
+atlas optimize:status --node <control-id> --format=json   # status, budget used, best score, stop reason
+atlas optimize:stop --node <control-id>                    # graceful stop at the next iteration boundary
+```
+
+## Referee the result
+
+A higher score on one seed is not a result. `optimize:verify` is the referee: it replays the candidate at its exact commit across N seeds, computes mean and standard deviation, runs a one-sided t-test against a threshold, and writes a referee-report node.
+
+```bash
+atlas optimize:verify \
+  --node <candidate-id> \
+  --benchmark ./.atlas/benchmark.sh \
+  --seeds 10 \
+  --threshold 0.72 \
+  --metric max
+```
+
+`--seeds` defaults to `10` and `--alpha` (the significance level) defaults to `0.01`. Verify both the winner and the baseline so the delta is honest.
+
+## One-command campaigns: autoresearch
+
+`atlas autoresearch` runs the entire refereed campaign from one sentence. Point it at a forked repo with a `--goal` and it auto-detects the artifact, generates an editable benchmark, measures the seed baseline, **pre-registers a hypothesis and experiment plan before the first candidate** (the plan's timestamp is the guarantee), runs the GEPA search, then referees both the baseline and the winner over N seeds.
+
+```bash
+atlas autoresearch --goal "reduce validation loss on the cifar10 baseline"
+```
+
+It prints a verified delta:
+
+```text
+VERIFIED: 0.748 → 0.718 (Δ -0.030, p<0.05, n=10)
+```
+
+| Flag | Purpose |
+| --- | --- |
+| `--goal` | The plain-English objective (the only required input). |
+| `--path` | The repo/fork to operate on (also accepted as a bare positional). |
+| `--metric` | `max` or `min`; inferred from the goal verb (reduce/lower → `min`, raise/beat → `max`) when omitted. |
+| `--budget` | A wall-clock cap such as `8h`, `90m`, or `2d`. |
+| `--max-metric-calls` | Evaluation budget (default `50`). |
+| `--seeds` | Referee replications (default `10`); `--alpha` defaults to `0.05`. |
+| `--scaffold-only` | Stop after generating the benchmark for review. |
+| `--dry-run` | Preview the full plan without spending budget. |
+| `--resume` | Continue an interrupted campaign. |
+
+When `--benchmark` is omitted, autoresearch generates an editable scaffold in `.atlas/`: `benchmark.sh` (how to run the eval), `score.py` (one editable `METRIC=` line), and `gate.sh` (a files-unchanged Goodhart guard). Review or edit those before committing real budget. If a repo can't be auto-benchmarked, it stops with a one-line fix rather than guessing.
+
+## Discover the exact flags
+
+The flag sets above are the headline options; the registry is the source of truth:
+
+```bash
+atlas help optimize:start --schema --format=json
+atlas help autoresearch --schema --format=json
+```
+
+Recorded candidates, lineage, and referee reports all show up in the [web views](/graphs/web-views) and feed back into the [research loop](/graphs/research-loop).

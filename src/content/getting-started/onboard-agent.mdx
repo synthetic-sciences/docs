@@ -13,7 +13,7 @@ You are setting up Atlas — the research map where my experiments, hypotheses, 
 
 Set it up:
 1. `npm i -g @synsci/atlas@latest` — then `atlas login` and ask me to approve in the browser when it opens.
-2. `atlas doctor --format=json` — verify auth, backend, and the 10 bundled skills (atlas, atlas-loop, atlas-record, atlas-auto, atlas-map, atlas-optimize, atlas-plan, atlas-reproduce, atlas-search, atlas-tree). Run `atlas install` to wire them into this agent.
+2. `atlas doctor --format=json` — verify auth, backend, and the 9 bundled skills (atlas, atlas-lab, atlas-frontier, atlas-map, atlas-optimize, atlas-autoresearch, atlas-reproduce, atlas-search, atlas-paper). Run `atlas install` to wire them into this agent.
 3. `atlas project:create` — bootstrap the project for this folder (dedupe-safe, re-runnable).
 4. `atlas brief --project <id>` — load the research context packet and summarize it for me: open hypotheses, recent runs, failures, decisions, and what it suggests doing next.
 
@@ -23,7 +23,7 @@ House rules: the skills are bundled in the CLI — never configure separate skil
 ## Why it works
 
 - It installs `@latest` (old versions are deprecated) and uses the browser login, so the agent never fabricates credentials.
-- `atlas doctor` is the load-bearing check: it confirms auth and that all ten skills are present before any real work.
+- `atlas doctor` is the load-bearing check: it confirms auth and that all nine skills are present before any real work.
 - `atlas project:create` is dedupe-aware and safe to re-run every session, so the agent always lands in the right project.
 - `atlas brief` returns the context packet, so the agent picks up exactly where the last session stopped.
 
@@ -34,7 +34,7 @@ Point the agent at the published surface so it never guesses a flag:
 | Resource | Use |
 | --- | --- |
 | [llms.txt](https://app.syntheticsciences.ai/documentation/llms.txt) | The map of the docs. |
-| [llms-full.txt](https://app.syntheticsciences.ai/documentation/llms-full.txt) | The full command surface (130+ commands) and the research loop. |
+| [llms-full.txt](https://app.syntheticsciences.ai/documentation/llms-full.txt) | The full command surface (140+ commands) and the research loop. |
 | [skill.md](https://app.syntheticsciences.ai/documentation/skill.md) | The bundled Atlas skill, ready to drop into an agent. |
 
 In-session, the agent can introspect any command:
