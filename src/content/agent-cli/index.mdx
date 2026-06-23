@@ -7,7 +7,7 @@ icon: "bot"
 **Atlas Agent CLI** is the SynSci agent CLI — the same product, now part of the Atlas suite. It is a terminal-first coding agent built for ML engineering and scientific research that records its work straight into [Atlas Graphs](/graphs/index) and grounds itself in [Atlas Library](/library/index).
 
 <Warning>
-"Atlas Agent CLI" is the new name for the SynSci agent CLI — it is one product, not two. It ships today on npm as `synsci`; that package name predates the Atlas branding and is not changing yet, so you still install it with `npm i -g synsci`. The in-app Agent surface is rolling out and currently shows "coming soon".
+"Atlas Agent CLI" is the new name for the SynSci agent CLI — it is one product, not two. It ships on npm as `@synsci/cli` and runs as the `synsci` command, so you install it with `npm i -g @synsci/cli`. The in-app Agent surface is rolling out and currently shows "coming soon".
 </Warning>
 
 <Columns cols={2}>
@@ -40,10 +40,10 @@ you / a schedule
 ## Run the agent
 
 ```bash
-npm i -g synsci
+npm i -g @synsci/cli
 synsci                      # open the TUI agent in the current repo
 synsci run "Refactor utils/log.ts to use structured logging"
-synsci web                  # local browser UI on 127.0.0.1:4444
+synsci web                  # local browser UI (prints the URL, e.g. http://localhost:4096)
 ```
 
 It is not a sandbox — it has the same filesystem and shell access you do — so run it in a project you trust or inside a container. See [Security](/agent-cli/security).

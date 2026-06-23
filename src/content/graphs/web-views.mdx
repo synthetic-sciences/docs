@@ -35,11 +35,16 @@ The app navigation reflects the Atlas suite:
 | Graphs | The research graph (cards / orbit / timeline). |
 | Library | Indexed knowledge sources. |
 | Agent CLI | The SynSci agent CLI (coming soon in-app). |
+| Compute | Lease a GPU VM and get SSH access. |
 | Billing | Credit, quotas, and invoices. |
 | Integrations | GitHub, Hugging Face, and W&B connections. |
 | Settings | Profile and account settings. |
 
 **Graphs** was formerly "Graph" and **Library** was formerly "Sources" — the names now match the product sections in these docs.
+
+## Compute
+
+Provisioning GPU compute lives in the web app's **Compute** tab, not the CLI. Atlas resells Lambda Labs GPU VMs: lease a VM and Atlas generates a per-lease SSH keypair so you can connect. Connect your own Lambda key (bring-your-own-key) and it runs on your account for free; otherwise the lease is managed and funded from your CLI wallet.
 
 ## Publish a view
 

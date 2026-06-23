@@ -7,7 +7,7 @@ icon: "book-open"
 A **skill** is a portable instruction bundle the agent loads into the active session to prime it for a domain. Skills are pluggable knowledge that travels with a session and changes how the agent approaches a task.
 
 <Warning>
-These are the **agent's** research skills, distinct from the ten skills bundled in the Atlas CLI (`atlas`, `atlas-loop`, ...). For those, see [Graph skills](/graphs/skills) and the [CLI overview](/getting-started/cli-overview).
+These are the **agent's** research skills, distinct from the nine skills bundled in the Atlas CLI (`atlas`, `atlas-lab`, ...). For those, see [Graph skills](/graphs/skills) and the [CLI overview](/getting-started/cli-overview).
 </Warning>
 
 The agent ships an ML research-skills library covering the surface most teams hit: model architecture, tokenization, fine-tuning, RLHF and post-training, mechanistic interpretability, distributed training, inference serving, evaluation, MLOps, multimodal, RAG, and agents.
@@ -16,11 +16,14 @@ The agent ships an ML research-skills library covering the surface most teams hi
 
 | Command | Use |
 | --- | --- |
-| `synsci skill list` | Show installed skills, built-in and user-added. |
+| `synsci skill list` | Show installed skills, built-in and user-added (`--all` for the full bundled set). |
 | `synsci skill show <name>` | Print a skill's metadata and entrypoint instructions. |
-| `synsci skill add <url-or-name>` | Install from a URL (Git or HTTPS bundle) or by name. |
+| `synsci skill add <url-or-name>` | Install from a URL (Git or `gh:owner/repo`) or by name; runs a safety review by default. |
 | `synsci skill remove <name>` | Remove an installed skill. |
-| `synsci skill set-entries <name>` | Update which tools a skill injects and when it activates. |
+| `synsci skill new <name>` | Scaffold a new user skill to edit. |
+| `synsci skill edit <name>` | Open a user skill in your editor. |
+| `synsci skill validate <target>` | Check a skill's frontmatter and safety (`--strict`). |
+| `synsci skill set-entries <name>` | Update which skills surface in the `/` picker. |
 
 ## Built-in categories
 

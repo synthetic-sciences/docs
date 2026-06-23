@@ -26,6 +26,7 @@ import {
   ShieldCheck,
   Sun,
   Terminal,
+  TrendingUp,
   Workflow,
 } from "lucide-react";
 import { useTheme } from "./theme";
@@ -134,6 +135,7 @@ const ICONS: Record<string, ReactNode> = {
   "graph-model": <GitBranch size={17} strokeWidth={1.8} />,
   "research-loop": <Workflow size={17} strokeWidth={1.8} />,
   runs: <FlaskConical size={17} strokeWidth={1.8} />,
+  optimize: <TrendingUp size={17} strokeWidth={1.8} />,
   reproduction: <Repeat2 size={17} strokeWidth={1.8} />,
   evidence: <FileText size={17} strokeWidth={1.8} />,
   forking: <GitFork size={17} strokeWidth={1.8} />,

@@ -12,10 +12,10 @@ A **session** is a single agent conversation: a thread of prompts and replies, t
 | --- | --- |
 | `synsci` | Open the TUI agent. Default profile, default model, current directory. |
 | `synsci run [message..]` | Send one prompt, let the agent finish, and exit. Good for pipelines, CI, and git hooks. |
-| `synsci web` | Boot the local server and open the browser UI on `127.0.0.1:4444`. Good for longer conversations. |
-| `synsci generate` | Generate code or files without entering the TUI. |
+| `synsci web` | Boot the local server and open the browser UI (it prints the URL, e.g. `http://localhost:4096`). Good for longer conversations. |
+| `synsci serve` | Boot a headless local server (no browser) to attach a TUI or app to. |
 
-The bare `synsci` and `synsci web` are interactive; `synsci run` is the one to script. All four produce a session you can resume.
+The bare `synsci` and `synsci web` are interactive; `synsci run` is the one to script. Each produces a session you can resume.
 
 ## Continue or resume
 
@@ -23,23 +23,23 @@ The bare `synsci` and `synsci web` are interactive; `synsci run` is the one to s
 synsci session list
 synsci run -c "Now add tests for the refactored module"   # latest session in this dir
 synsci run -s SES_4XJ3K "..."                              # a specific session
-synsci session show SES_4XJ3K
 ```
 
 | Command | Use |
 | --- | --- |
 | `synsci run -c` | Continue the most recent session in the current directory. |
 | `synsci run -s <id>` | Resume a specific session by id. |
-| `synsci session list` | List recent sessions for the account. |
-| `synsci session show <id>` | Print prompts, replies, and tool calls. |
+| `synsci session list` | List recent sessions (`-n` to cap, `--format json`). |
+
+To read a past session's full transcript, export it (below) or open it from the session picker in the TUI.
 
 ## Attach to a running agent
 
-Leave `synsci web` running and attach a TUI from another terminal instead of starting fresh:
+Leave `synsci serve` (or `synsci web`) running and attach a TUI from another terminal instead of starting fresh:
 
 ```bash
-synsci tui attach           # attach to the running local agent
-synsci tui thread <id>      # attach and open a specific thread
+synsci attach http://localhost:4096                  # attach a TUI to the running server
+synsci attach http://localhost:4096 -s SES_4XJ3K     # attach and continue a specific session
 ```
 
 This drives a long-running local agent from a different terminal.
