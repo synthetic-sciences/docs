@@ -23,10 +23,8 @@ The bare `synsci` (no arguments) opens the TUI agent in your working directory w
 | --- | --- |
 | `synsci` | Start the TUI agent. |
 | `synsci run [message..]` | One-shot prompt; streams, then exits. |
-| `synsci generate` | Generate code or files without the TUI. |
-| `synsci session` | Inspect and manage past sessions. |
-| `synsci tui attach` | Attach to a running local agent (e.g. one started by `synsci web`). |
-| `synsci tui thread <id>` | Open a specific thread in an attached agent. |
+| `synsci session list` | List recent sessions (`-n`, `--format`). |
+| `synsci attach <url>` | Attach a TUI to a running server (e.g. one started by `synsci web` or `synsci serve`). |
 
 `run` flags: `-c/--continue`, `-s/--session <id>`, `-m/--model <provider/model>`, `--agent <name>`, `--format <default|json>`, `-f/--file <path>`, `--attach <url>`, `--title <text>`.
 
@@ -40,10 +38,13 @@ synsci run --format json "Summarize the architecture of src/" > summary.json
 
 | Command | Use |
 | --- | --- |
+| `synsci connect login` | Connect the CLI to your Synthetic Sciences / Atlas account (browser flow, or `--key thk_…`). |
 | `synsci connect status` | Show the active Atlas account, default model, synced services, and credit balance. |
 | `synsci connect sync` | Re-pull synced credentials. |
+| `synsci connect devices` | List authorized devices. |
+| `synsci connect logout` | Disconnect this device. |
 
-Sign in with the Atlas CLI (`atlas login`) or a `thk_*` key — see [Authentication](/getting-started/authentication).
+You can also sign in with the Atlas CLI (`atlas login`) or export a `thk_*` key — see [Authentication](/getting-started/authentication).
 
 ## Providers and routing
 
@@ -66,34 +67,40 @@ Flags: `--path`, `--description`, `--mode <all\|primary\|subagent>`, `--tools`, 
 
 | Command | Use |
 | --- | --- |
-| `synsci skill list` | Show installed skills. |
+| `synsci skill list` | Show installed skills (`--all` for the bundled set). |
 | `synsci skill show <name>` | Print a skill's metadata and entrypoints. |
-| `synsci skill add <url-or-name>` | Install a skill. |
+| `synsci skill add <url-or-name>` | Install a skill (URL or `gh:owner/repo`). |
+| `synsci skill new` / `edit` / `validate` | Author, edit, and check user skills. |
 | `synsci skill remove <name>` | Uninstall a skill. |
-| `synsci skill set-entries <name>` | Update a skill's entrypoint mapping. |
+| `synsci skill set-entries <name>` | Update which skills surface in the `/` picker. |
 
-## Local server
+## Local server and protocols
 
 | Command | Use |
 | --- | --- |
-| `synsci web` | Boot the local server and open the browser UI on `127.0.0.1:4444`. |
+| `synsci web` | Boot the local server and open the browser UI (prints the URL, e.g. `http://localhost:4096`). |
+| `synsci serve` | Boot a headless local server (no browser); secure with `SYNSCI_SERVER_PASSWORD`. |
+| `synsci acp` | Start an Agent Client Protocol server for editors like Zed. |
+| `synsci mcp` | Manage MCP servers (`list`, `add`, `remove`, `auth`). |
 
-See [Web UI](/agent-cli/web-ui).
+`web` and `serve` take `--port` and `--cors`. See [Web UI](/agent-cli/web-ui).
 
 ## GitHub and PRs
 
 | Command | Use |
 | --- | --- |
-| `synsci github` | GitHub helpers that compose with `gh` and the agent. |
-| `synsci pr` | PR workflows: open, update, review. |
+| `synsci github` | GitHub agent for CI/Actions (`install`, `run`). |
+| `synsci pr <number>` | Check out a PR branch, then launch the agent on it. |
 
-## Portability and lifecycle
+## Project and lifecycle
 
 | Command | Use |
 | --- | --- |
+| `synsci project` | Pin the Atlas project root for this folder (`merge`). |
 | `synsci export` / `synsci import` | Export or import a session as JSON. |
-| `synsci stats` | Local usage stats. |
-| `synsci debug` | Structured diagnostics for support. |
+| `synsci generate` | Emit the OpenAPI spec for the local server to stdout. |
+| `synsci stats` | Local token-usage and cost stats. |
+| `synsci debug` | Structured diagnostics for support (`debug paths` shows data/config dirs). |
 | `synsci upgrade` | Update to the latest version. |
 | `synsci uninstall` | Remove the binary and local config. |
 | `synsci completion` | Shell completion for bash, zsh, or fish. |

@@ -9,11 +9,11 @@ From a fresh shell to a working agent session. Assumes Node `18+`.
 <Steps>
   <Step title="Install">
     ```bash
-    npm i -g synsci
+    npm i -g @synsci/cli
     synsci --version
     ```
 
-    Homebrew and the curl-bash installer also work; the binary surface is identical.
+    Homebrew (`brew install SyntheticSciences/tap/synsc`) and the install script (`curl -fsSL https://syntheticsciences.ai/install | bash`) also work; the binary surface is identical.
   </Step>
 
   <Step title="Sign in with your Atlas account">
@@ -50,7 +50,7 @@ From a fresh shell to a working agent session. Assumes Node `18+`.
     ```bash
     synsci                                   # TUI agent in the current directory
     synsci run "Refactor utils/log.ts to use structured logging"   # one-shot
-    synsci web                               # local browser UI on 127.0.0.1:4444
+    synsci web                               # local browser UI (prints the URL, e.g. http://localhost:4096)
     ```
 
     <Warning>

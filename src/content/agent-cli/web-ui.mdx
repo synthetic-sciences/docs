@@ -14,20 +14,18 @@ The server is local: it binds `127.0.0.1` by default, holds the agent in its own
 synsci web
 ```
 
-Defaults: bind `127.0.0.1:4444`, open the system browser, run the default agent and model.
+By default it binds `127.0.0.1`, opens the system browser, and prints the URL (for example `http://localhost:4096`). It always binds localhost — the deprecated `server.hostname` / `server.mdns` config keys are ignored.
 
 | Flag | Use |
 | --- | --- |
-| `--port <n>` | Bind a different local port. |
-| `--no-open` | Skip auto-opening the browser. |
-| `--agent <name>` | Use a specific agent profile. |
-| `--model <provider/model>` | Override the default model. |
+| `--port <n>` | Bind a specific local port instead of the default. |
+| `--cors <origin>` | Allow an extra CORS origin (repeatable). |
 
 ```bash
 synsci web --port 5555
-synsci web --agent reviewer
-synsci web --no-open
 ```
+
+Choose the agent and model from inside the UI (the agent and model switcher), not from `synsci web` flags.
 
 ## macOS Full Disk Access
 
@@ -43,14 +41,14 @@ On macOS, the first `synsci web` invocation probes for Full Disk Access so the a
 
 ## Reuse a running server
 
-A second `synsci web` reuses the running server instead of starting a new one. Attach a TUI from another terminal:
+A second `synsci web` reuses the running server instead of starting a new one. Attach a TUI from another terminal with the server URL:
 
 ```bash
-synsci tui attach
-synsci tui thread <id>
+synsci attach http://localhost:4096
+synsci attach http://localhost:4096 -s <session-id>
 ```
 
-The web UI is intended for local `127.0.0.1` use. Run it on a machine you control.
+The web UI is intended for local `127.0.0.1` use. Run it on a machine you control. To run a server without opening a browser, use `synsci serve` (secure it with `SYNSCI_SERVER_PASSWORD`).
 
 ## What's next
 
