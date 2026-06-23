@@ -12,7 +12,7 @@ A **model** is one inference endpoint the agent routes through; a **provider** i
 | --- | --- | --- |
 | Anthropic | BYOK (API key) | Claude family. |
 | OpenAI | BYOK (API key) | GPT family. |
-| OpenAI Codex | OAuth (sign in with ChatGPT) | GPT-5 Codex. |
+| OpenAI Codex | OAuth (sign in with ChatGPT) | GPT-5.2 Codex. |
 | Google | BYOK (API key) | Gemini family. |
 | OpenRouter | BYOK (API key) | Aggregator for many models. |
 | Together | BYOK (API key) | Hosted open-weights models. |
@@ -32,12 +32,12 @@ synsci models    # list everything configured
 ## Pick a model per call
 
 ```bash
-synsci run --model anthropic/claude-opus-4-7 "Review this diff for race conditions"
-synsci run --model openai-codex/gpt-5-codex "Plan a migration off the old auth middleware"
-synsci run --model openrouter/meta-llama/llama-3.1-70b-instruct "..."
+synsci run --model anthropic/claude-sonnet-4-6 "Review this diff for race conditions"
+synsci run --model openai/gpt-5.2-codex "Plan a migration off the old auth middleware"
+synsci run --model synsci/glm-4.7 "..."   # a managed-route model, no external key
 ```
 
-`--model <provider>/<model-id>` overrides the default for one call. `synsci models` prints the full set per provider.
+`--model <provider>/<model-id>` overrides the default for one call. `synsci models` prints the full set per provider; the catalogue is models.dev-backed, so it tracks whatever models each provider currently exposes.
 
 ## BYOK vs the managed route
 

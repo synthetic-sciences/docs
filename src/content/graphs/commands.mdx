@@ -37,6 +37,18 @@ atlas help run:record --schema --format=json   # one command's request shape
 | `exec:list` | `GET` | `/nodes/{id}/executions` | List managed executions. |
 | `exec:stop` | `POST` | `/nodes/{id}/executions/{exec_id}/terminate` | Stop a managed execution. |
 
+## Optimize
+
+GEPA search and refereed campaigns. See [Optimize & autoresearch](/graphs/optimize) for the full flag sets and `atlas help optimize:start --schema --format=json` for the authoritative request shape.
+
+| Command | Method | Route | Use |
+| --- | --- | --- | --- |
+| `optimize:start` | `local` | `/optimize:start` | Run a GEPA search over a target artifact; records each candidate as a node. |
+| `optimize:status` | `local` | `/optimize:status` | Report a run's live state: budget used, best score, stop reason. |
+| `optimize:stop` | `local` | `/optimize:stop` | Gracefully stop a running optimization. |
+| `optimize:verify` | `local` | `/optimize:verify` | Referee a candidate over N seeds (mean/std + one-sided t-test). |
+| `autoresearch` | `local` | `/autoresearch` | One-command refereed campaign from a plain-English `--goal`. |
+
 ## Journal
 
 | Command | Method | Route | Use |

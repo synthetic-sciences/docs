@@ -16,7 +16,7 @@ Atlas is not one app. It is a set of products that work together so an investiga
     The library service. Index repositories, docs, papers, datasets, and local folders, then search, ask grounded questions, and pull answers into the graph.
   </Card>
   <Card title="Atlas Agent CLI" icon="bot" href="/agent-cli/index">
-    The SynSci agent CLI, now part of the Atlas suite. Installs today as the `synsci` package.
+    The SynSci agent CLI, now part of the Atlas suite. Installs today with `npm i -g @synsci/cli` (the `synsci` command).
   </Card>
 </Columns>
 
@@ -52,7 +52,7 @@ agent or human
   -> JSON (piped) or a pretty terminal view
 ```
 
-Atlas is direct REST plus CLI. There is no Atlas MCP server. The CLI also bundles ten skills that teach any coding agent how to drive Atlas safely; `atlas install` drops them into the agents on your machine.
+Atlas is direct REST plus CLI. There is no Atlas MCP server. The CLI also bundles nine skills that teach any coding agent how to drive Atlas safely; `atlas install` drops them into the agents on your machine.
 
 ## The vocabulary
 
@@ -72,14 +72,14 @@ atlas login
 atlas doctor --format=json
 ```
 
-`atlas login` opens a browser approval flow and stores an API key locally. `atlas doctor` confirms auth, backend reachability, and the ten bundled skills. From there, jump to [Atlas Graphs](/graphs/index) to run the research loop or [Atlas Library](/library/index) to index sources.
+`atlas login` opens a browser approval flow and stores an API key locally. `atlas doctor` confirms auth, backend reachability, and the nine bundled skills. From there, jump to [Atlas Graphs](/graphs/index) to run the research loop or [Atlas Library](/library/index) to index sources.
 
 ## Built for agents
 
 Agent-facing docs are first class. Point any model at the published machine-readable surface:
 
 - [llms.txt](https://app.syntheticsciences.ai/documentation/llms.txt) — the map of the docs.
-- [llms-full.txt](https://app.syntheticsciences.ai/documentation/llms-full.txt) — the full command surface (130+ commands).
+- [llms-full.txt](https://app.syntheticsciences.ai/documentation/llms-full.txt) — the full command surface (140+ commands).
 - [skill.md](https://app.syntheticsciences.ai/documentation/skill.md) — the bundled Atlas skill.
 
 See [Onboard a coding agent](/getting-started/onboard-agent) for a one-paste setup prompt.
