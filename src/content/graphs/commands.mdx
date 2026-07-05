@@ -36,6 +36,20 @@ atlas help run:record --schema --format=json   # one command's request shape
 | `exec:start` | `POST` | `/nodes/{id}/executions` | Start a managed execution on a node. |
 | `exec:list` | `GET` | `/nodes/{id}/executions` | List managed executions. |
 | `exec:stop` | `POST` | `/nodes/{id}/executions/{exec_id}/terminate` | Stop a managed execution. |
+| `run:chart` | `local` | `/runs:chart` | Score-progression chart (vega-lite) from a project's runs, attached to the project node. |
+| `agent:run` | `local` | `/agent/run` | Run the Atlas agent runtime (Modal sandbox cognition). |
+
+## Compute
+
+The cross-provider GPU marketplace. Pass-through pricing (provider cost plus a small fee); bring-your-own-key offers rank as free. See [web views → Compute](/graphs/web-views) for how leases surface in the app.
+
+| Command | Method | Route | Use |
+| --- | --- | --- | --- |
+| `compute:catalog` | `local` | `/compute/options` | Cheapest GPUs across every provider; `--gpu`, `--provider`, `--min-vram`, `--max-price`, `--gpus`, `--best`, `--all`. |
+| `compute:up` | `local` | `/compute/leases` | Launch a GPU VM. Zero flags = cheapest available; `--dry-run` previews; `--node` attaches the lease to a node. |
+| `compute:list` | `GET` | `/compute/leases` | List running leases (provider, GPU, $/hr, status). |
+| `compute:ssh` | `GET` | `/compute/leases/{lease_id}/connection` | SSH command + connection details for a lease. |
+| `compute:release` | `POST` | `/compute/leases/{lease_id}/release` | Release a lease and stop billing; managed leases reconcile to actual hours. |
 
 ## Optimize
 
@@ -48,6 +62,7 @@ GEPA search and refereed campaigns. See [Optimize & autoresearch](/graphs/optimi
 | `optimize:stop` | `local` | `/optimize:stop` | Gracefully stop a running optimization. |
 | `optimize:verify` | `local` | `/optimize:verify` | Referee a candidate over N seeds (mean/std + one-sided t-test). |
 | `autoresearch` | `local` | `/autoresearch` | One-command refereed campaign from a plain-English `--goal`. |
+| `optimize:progress` | `POST` | `/optimize:progress` | Merge optimizer run state (budget, best score, stop reason) into a control node. |
 
 ## Journal
 
@@ -55,6 +70,9 @@ GEPA search and refereed campaigns. See [Optimize & autoresearch](/graphs/optimi
 | --- | --- | --- | --- |
 | `note:add` | `local` | `/notes` | Add a freeform note as an insight node. |
 | `notebook:cell` | `local` | `/notebook/cell` | Capture a notebook cell + output as an empirical node. |
+| `log:append` | `local` | `/research/log` | Append a lightweight event to the project research log. |
+| `log:search` | `POST` | `/research/log/search` | Search the research log by title/body text. |
+| `log:tail` | `GET` | `/research/log` | Read recent research-log entries, newest first. |
 
 ## Projects & nodes
 
@@ -90,6 +108,8 @@ GEPA search and refereed campaigns. See [Optimize & autoresearch](/graphs/optimi
 | `access:set-bulk` / `access:summaries` | `POST` | `/nodes/access-policy/...` | Batch access operations. |
 | `draft:create` | `POST` | `/nodes` | Create a staged node shell. |
 | `draft:lock` / `draft:renew` / `draft:unlock` | `POST` | `/nodes/{id}/stage/lease/...` | Coordinate multi-agent edits. |
+| `draft:derive-hypothesis` | `POST` | `/nodes/{id}/stage/backfill/hypothesis` | Derive a staged hypothesis from draft content. |
+| `draft:derive-insights` | `POST` | `/nodes/{id}/stage/backfill/insights` | Derive staged insights from draft content. |
 | `label:create` | `POST` | `/nodes/{root_id}/tags` | Create a reusable label. |
 | `label:assign` | `PUT` | `/nodes/{id}/tags` | Assign labels to a node. |
 | `label:update` / `label:delete` | `PATCH` / `DELETE` | `/nodes/{root_id}/tags/{tag_id}` | Edit or delete a label. |
@@ -119,6 +139,17 @@ GEPA search and refereed campaigns. See [Optimize & autoresearch](/graphs/optimi
 | `github:status` | `GET` | `/auth/github/status` | Show GitHub status. |
 | `github:refresh-repos` / `github:disconnect` | `POST` / `DELETE` | `/auth/github/...` | Refresh repos or disconnect. |
 | `integration:status` | `GET` | `/auth/integrations/status` | Show all integration status. |
+| `integration:huggingface:set` / `:remove` | `PUT` / `DELETE` | `/auth/integrations/huggingface` | Store or remove a Hugging Face access token. |
+| `integration:wandb:set` / `:remove` | `PUT` / `DELETE` | `/auth/integrations/wandb` | Store or remove a W&B API key. |
+
+## Public archive
+
+| Command | Method | Route | Use |
+| --- | --- | --- | --- |
+| `explore` | `GET` | `/explore` | Browse the public Atlas archive of research graphs (authors, stars, forks, papers). |
+| `competitions` | `GET` | `/competitions` | List open research competitions with graph-backed leaderboards. |
+| `competition` | `GET` | `/competitions/{slug}` | Show a competition and its full leaderboard. |
+| `researchers` | `GET` | `/researchers` | Browse public researchers. |
 
 ## Export / import
 

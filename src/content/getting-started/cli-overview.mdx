@@ -13,7 +13,8 @@ Every command is a direct HTTP call to `https://app.syntheticsciences.ai/api/v1`
 Command names are `namespace:verb`. The rules, as of 0.8.x:
 
 - **Namespaces are singular nouns.** `node:*`, `label:*`, `key:*`, `secret:*`, `integration:*`, and `project:merge` (not `nodes:`, `labels:`, `keys:`, `secrets:`, `integrations:`, `projects:`).
-- **`exec:*` is managed node executions.** `exec:start | list | stop` run and manage executions attached to a node. (Provisioning GPU VMs is no longer a CLI concern — that lives in the web app's Compute tab.)
+- **`exec:*` is managed node executions.** `exec:start | list | stop` run and manage executions attached to a node.
+- **`compute:*` is the GPU marketplace.** `compute:catalog | up | list | ssh | release` browse the cheapest GPUs across providers, launch a VM, and release it when done. Pricing is pass-through (provider cost plus a small fee); bring-your-own-key providers rank as free.
 - **`run:*` is the flight recorder.** `run:record | compare | spool:*` capture and compare experiment results.
 - **`*:jobs:*` are async jobs.** `library:jobs:*` and `research:jobs:*` create, stream, and cancel long-running work.
 - **`github:reconnect`** is the canonical way to refresh an expired GitHub token.
@@ -91,6 +92,6 @@ The bundled `atlas` skill is the router for agents: it points at the right speci
 
 | Product | Namespaces | Reference |
 | --- | --- | --- |
-| Atlas Graphs | `project:*`, `node:*`, `link:*`, `map:*`, `access:*`, `draft:*`, `label:*`, research-loop verbs, `run:*`, `exec:*`, `evidence:*`, `repo:*`, `github:*` | [Graph commands](/graphs/commands) |
+| Atlas Graphs | `project:*`, `node:*`, `link:*`, `map:*`, `access:*`, `draft:*`, `label:*`, research-loop verbs, `run:*`, `exec:*`, `compute:*`, `evidence:*`, `repo:*`, `github:*` | [Graph commands](/graphs/commands) |
 | Atlas Library | `library:*`, `research:*`, `usage:summary` | [Library commands](/library/commands) |
 | Shared | `login`, `logout`, `whoami`, `doctor`, `config:*`, `secret:*`, `key:*`, `account:update`, `install` | This section |
