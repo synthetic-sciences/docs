@@ -7,7 +7,7 @@ icon: "trending-up"
 Once you have a benchmark, Atlas can search for a better artifact (a prompt, config, or piece of code) and record the entire optimization as graph state: every candidate as a node, the lineage between them, the live budget, and a refereed before→after delta. There are two entry points — the `optimize:*` primitives, and `autoresearch`, which runs the full campaign from a single plain-English goal.
 
 <Warning>
-Both surfaces drive the [`atlas-optimize`](/graphs/skills) and `atlas-autoresearch` skills under the hood, and both require `uv` plus a reflection-LM key for the GEPA reflection step. They orchestrate the existing research-loop primitives — there is no separate engine.
+Both surfaces drive the [`atlas-optimize`](/atlas/skills) and `atlas-autoresearch` skills under the hood, and both require `uv` plus a reflection-LM key for the GEPA reflection step. They orchestrate the existing research-loop primitives — there is no separate engine.
 </Warning>
 
 ## The GEPA loop
@@ -103,4 +103,4 @@ atlas help optimize:start --schema --format=json
 atlas help autoresearch --schema --format=json
 ```
 
-Recorded candidates, lineage, and referee reports all show up in the [web views](/graphs/web-views) and feed back into the [research loop](/graphs/research-loop).
+Recorded candidates, lineage, and referee reports all show up in the [web views](/atlas/web-views) and feed back into the [research loop](/atlas/research-loop).

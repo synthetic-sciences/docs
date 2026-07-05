@@ -1,0 +1,76 @@
+---
+title: "Atlas"
+description: "The research graph: hypotheses, experiment plans, recorded runs, evidence, and decisions in one durable, shared structure."
+icon: "git-branch"
+---
+
+Research is reorganizing around delegation. Autoresearch loops, multi-agent harnesses, and AI scientists now run experiments in the background, and the volume of work a single researcher sustains keeps rising. **Atlas** is the infrastructure layer for that shift: it holds the thread of an investigation as durable nodes connected by links — the root question, the hypotheses posed, the experiments planned, the runs recorded with the exact code that produced them, the evidence attached, and the decisions made.
+
+Delegated research scatters across chats, notebooks, logs, and memory. Atlas gives it a shared map, so humans and agents return to the same state, audit what happened, and decide what to do next. Agents read that state back as a context packet with `atlas brief`.
+
+<Columns cols={2}>
+  <Card title="Install the CLI" icon="package-check" href="/atlas/installation">
+    `npm i -g @synsci/atlas@latest`, sign in, and verify with `atlas doctor`. 159 commands, nine bundled skills.
+  </Card>
+  <Card title="Research loop quickstart" icon="rocket" href="/atlas/quickstart">
+    Project, hypothesis, plan, recorded run, comparison, decision, brief. The full loop in one sitting.
+  </Card>
+  <Card title="Nodes & links" icon="git-branch" href="/atlas/graph-model">
+    Node kinds, the staged/committed lifecycle, links, access, labels, and drafts.
+  </Card>
+  <Card title="Onboard a coding agent" icon="bot" href="/atlas/onboard-agent">
+    One paste that installs Atlas, logs in, and loads the bundled skills.
+  </Card>
+</Columns>
+
+## What lives in a graph
+
+| Object | Created by | What it captures |
+| --- | --- | --- |
+| Project | `project:create` | The root node for a folder or repo. |
+| Hypothesis | `hypothesis:add` | A falsifiable claim, its assumptions, and its disconfirmers. |
+| Experiment plan | `experiment:plan` | The config, metric, and success criterion, declared before the run. |
+| Run | `run:record` | Config, metrics, outcome, and auto-captured code state. |
+| Decision | `decision:add` | A choice and the runs or evidence it rests on. |
+| Insight / note | `note:add` | A freeform observation worth keeping. |
+| Evidence | `evidence:add` | Raw files, metrics, logs, or external JSON on a node. |
+
+A **library source** — a repo, doc site, paper, dataset, or local folder indexed by [Library](/library/index) — is the material a graph can search and cite. A **project** is the root node for one folder or repo; it is where the research loop runs.
+
+## The lifecycle
+
+Nodes move from **staged** to **committed**. A draft is a staged shell you can edit; a save commits it into the durable graph with revision history. Most workflows commit directly with `node:create` or the research-loop verbs; reach for `draft:*` only when several agents coordinate edits on one node.
+
+Links record dependency and lineage, so `map:lineage` can answer "why did we do this?" long after the fact. Branching and merging are graph operations, not folders.
+
+Every recorded run carries an **outcome** (`success`, `failure`, or `inconclusive`) and, when it failed, a **failure mode** (`diverged`, `oom`, `data_bug`, `code_bug`, `underperformed`, `other`). Failures are first-class: recording them is how the next agent avoids repeating them.
+
+## Minimum working setup
+
+One CLI, `@synsci/atlas`, drives everything. It is a direct HTTP client for the Atlas API at `https://app.syntheticsciences.ai/api/v1`; there is no separate transport to configure, and no Atlas MCP server.
+
+```bash
+npm i -g @synsci/atlas@latest
+atlas login
+atlas doctor --format=json
+```
+
+`atlas login` opens a browser approval flow and stores an API key locally. `atlas doctor` confirms auth, backend reachability, and the nine bundled skills. From there, run the [research loop](/atlas/research-loop), or index sources in [Library](/library/index).
+
+## Built for agents
+
+Agent-facing docs are first class. The CLI bundles nine skills that teach any coding agent how to drive Atlas safely — `atlas install` drops them into the agents on your machine. Point any model at the published machine-readable surface:
+
+- [llms.txt](https://app.syntheticsciences.ai/documentation/llms.txt) — the map of the docs.
+- [llms-full.txt](https://app.syntheticsciences.ai/documentation/llms-full.txt) — the full command surface (159 commands).
+- [skill.md](https://app.syntheticsciences.ai/documentation/skill.md) — the bundled Atlas skill.
+
+See [Onboard a coding agent](/atlas/onboard-agent) for a one-paste setup prompt.
+
+## Where to go next
+
+- New here? Start with the [research loop quickstart](/atlas/quickstart).
+- Need the model? Read [Nodes & links](/atlas/graph-model).
+- Reproducing a result? See [Reproduction & code state](/atlas/reproduction).
+- Looking for a command? See the [CLI & API reference](/atlas/commands).
+- Want the agent that drives all of this? Meet [OpenScience](/openscience/index).

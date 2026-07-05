@@ -11,7 +11,7 @@ import { fileURLToPath } from "node:url";
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const contentDir = join(root, "src", "content");
 
-const SECTIONS = ["getting-started", "graphs", "library", "agent-cli"];
+const SECTIONS = ["atlas", "openscience", "library"];
 
 function flattenPages(items) {
   return items.flatMap((item) => (typeof item === "string" ? [item] : flattenPages(item.pages)));
