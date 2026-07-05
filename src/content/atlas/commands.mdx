@@ -4,7 +4,7 @@ description: "Command and route reference for Atlas Graphs."
 icon: "terminal"
 ---
 
-Every Atlas Graphs command and the `/api/v1` route behind it. Names are canonical (singular namespaces); pre-0.8 aliases still work but are documented only on the [CLI overview](/getting-started/cli-overview). For global flags and output formats, see that page too.
+Every Atlas Graphs command and the `/api/v1` route behind it. Names are canonical (singular namespaces); pre-0.8 aliases still work but are documented only on the [CLI overview](/atlas/cli-overview). For global flags and output formats, see that page too.
 
 ```bash
 atlas help --format=json                       # the whole catalog
@@ -41,7 +41,7 @@ atlas help run:record --schema --format=json   # one command's request shape
 
 ## Compute
 
-The cross-provider GPU marketplace. Pass-through pricing (provider cost plus a small fee); bring-your-own-key offers rank as free. See [web views → Compute](/graphs/web-views) for how leases surface in the app.
+The cross-provider GPU marketplace. Pass-through pricing (provider cost plus a small fee); bring-your-own-key offers rank as free. See [web views → Compute](/atlas/web-views) for how leases surface in the app.
 
 | Command | Method | Route | Use |
 | --- | --- | --- | --- |
@@ -53,7 +53,7 @@ The cross-provider GPU marketplace. Pass-through pricing (provider cost plus a s
 
 ## Optimize
 
-GEPA search and refereed campaigns. See [Optimize & autoresearch](/graphs/optimize) for the full flag sets and `atlas help optimize:start --schema --format=json` for the authoritative request shape.
+GEPA search and refereed campaigns. See [Optimize & autoresearch](/atlas/optimize) for the full flag sets and `atlas help optimize:start --schema --format=json` for the authoritative request shape.
 
 | Command | Method | Route | Use |
 | --- | --- | --- | --- |
@@ -162,4 +162,4 @@ GEPA search and refereed campaigns. See [Optimize & autoresearch](/graphs/optimi
 | `map:summary:pdf` / `map:summary:render-pdf` | `POST` | `/export-summary-pdf` | Summary PDF. |
 | `map:summary:stream` | `POST` | `/export-summary-stream` | Streamed summary. |
 
-For library and research commands, see the [Library CLI & API](/library/commands). For auth, keys, and config, see [Getting started](/getting-started/cli-overview).
+For library and research commands, see the [Library CLI & API](/library/commands). For auth, keys, and config, see [Getting started](/atlas/cli-overview).
