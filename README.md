@@ -1,8 +1,8 @@
-# Atlas documentation
+# Synthetic Sciences Docs
 
-Source for the Synthetic Sciences docs site at [docs.syntheticsciences.ai](https://docs.syntheticsciences.ai). It documents the Atlas suite: **Atlas Graphs**, **Atlas Library**, and the **Atlas Agent CLI**, plus shared getting-started material.
+Source for [docs.syntheticsciences.ai](https://docs.syntheticsciences.ai) — the documentation for **Atlas** (the research graph), **[OpenScience](https://github.com/synthetic-sciences/openscience)** (the open-source AI workbench for scientific research), and **Library** (indexed knowledge sources).
 
-It is a small Vite + React app that renders MDX content. Pages are MDX with YAML frontmatter; navigation lives in a `docs.json` per section.
+It is a small Vite + React app that renders MDX content. Pages are MDX with YAML frontmatter; navigation lives in a `docs.json` per section. No docs framework, no server — the whole site is one static bundle.
 
 ## Local preview
 
@@ -35,10 +35,11 @@ src/
   DocsApp.tsx             The whole docs UI: section nav, routing, MDX rendering
   theme.ts                Light/dark theme
   content/
-    getting-started/      Shared: install, auth, API keys, billing, CLI conventions, agent onboarding, REST API
-    graphs/               Atlas Graphs: the research graph, research loop, runs, reproduction, forking, web views
-    library/              Atlas Library: indexing, search modes, ask, jobs
-    agent-cli/            Atlas Agent CLI: the autonomous agent (coming soon)
+    atlas/                Atlas: install, auth, the research graph, the research loop,
+                          runs, optimize, reproduction, CLI & API reference
+    openscience/          OpenScience: the open-source AI workbench — workspace,
+                          agents, models, skills, sessions, CLI reference
+    library/              Library: indexing, search modes, ask, jobs
   styles/index.css        Base styles
 scripts/
   check-links.mjs         Nav + internal-link checker
@@ -48,9 +49,9 @@ Each `content/<section>/` folder has its own `docs.json` (tabs, groups, page ord
 
 ## Information architecture
 
-The top-level navigation is a section bar: **Getting started** (shared) followed by the three product sections **Atlas Graphs**, **Atlas Library**, and **Atlas Agent CLI**.
+The top-level navigation is a section bar with the three products: **Atlas**, **OpenScience**, and **Library**. Each section has a **Guides** and a **Reference** sidebar tab.
 
-Routing is hash-based: `#/<section>/<page>` (for example `#/graphs/quickstart`). Old single-segment URLs from the previous Atlas/CLI toggle redirect to their new homes via the `LEGACY_REDIRECTS` map in `DocsApp.tsx`.
+Routing is hash-based: `#/<section>/<page>` (for example `#/atlas/quickstart`). URLs from earlier layouts (`#/getting-started/*`, `#/graphs/*`, `#/agent-cli/*`, and the oldest single-segment scheme) redirect to their current homes via the alias maps in `DocsApp.tsx`.
 
 ### Adding a page
 
@@ -60,10 +61,13 @@ Routing is hash-based: `#/<section>/<page>` (for example `#/graphs/quickstart`).
 
 ## Conventions
 
-- Atlas is **a suite of tools that act as infrastructure for autonomous research**; Atlas Graphs is one product in it.
-- Public copy says "Atlas" or "Synthetic Sciences". Do not name internal vendors.
+- Public copy says "Atlas", "OpenScience", or "Synthetic Sciences". Do not name internal vendors.
 - Atlas is **direct REST + CLI** — no MCP server docs. CLI auth is `atlas login` or `thk_*` API keys.
+- OpenScience is standalone and open source; docs present bring-your-own-key as the default and Atlas as optional.
 - Use canonical (singular) command names; legacy aliases are mentioned only on the CLI conventions page.
 - Install commands always use `@latest`; never pin an old version.
-- Active voice, second person. Sentence case headings. No em dashes.
-```
+- Active voice, second person. Sentence case headings.
+
+## License
+
+MIT — see [LICENSE](LICENSE). The products the site documents carry their own licenses (OpenScience is Apache-2.0).
