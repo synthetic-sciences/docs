@@ -22,7 +22,7 @@ atlas library:ask \
 | `--top-k` | Max results to ground on. |
 | `--attach` | Node id/slug to attach the grounded answer + citations to as evidence. |
 
-`--attach` is the bridge into the graph: the answer and its citations land on the node as an evidence artifact, so the reasoning behind a claim stays with the claim. See the [research graph](/graphs/index).
+`--attach` is the bridge into the graph: the answer and its citations land on the node as an evidence artifact, so the reasoning behind a claim stays with the claim. See the [research graph](/atlas/index).
 
 ## Oracle research
 
@@ -49,4 +49,4 @@ A typical agent loop:
 1. `library:add` to index the material.
 2. `library:search` to find the relevant passages.
 3. `library:ask --attach <node>` to save a grounded answer onto the graph.
-4. Continue the [research loop](/graphs/research-loop) from there.
+4. Continue the [research loop](/atlas/research-loop) from there.

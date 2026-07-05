@@ -4,7 +4,7 @@ description: "Node kinds, the staged/committed lifecycle, links, access, labels,
 icon: "git-branch"
 ---
 
-Atlas Graphs stores research state as committed nodes connected by links. Each node answers one question: what changed in the research state? If you are new, run the [research loop quickstart](/graphs/quickstart) first.
+Atlas Graphs stores research state as committed nodes connected by links. Each node answers one question: what changed in the research state? If you are new, run the [research loop quickstart](/atlas/quickstart) first.
 
 ## Node kinds
 
@@ -18,7 +18,7 @@ A node's **kind** is its first-class type. The research-loop verbs create typed 
 | `insight` | `note:add` | A freeform observation worth keeping. |
 | `untyped` | `node:create`, `draft:create` | Anything that does not fit a typed kind yet. |
 
-`experiment:plan` nodes (the plans recorded runs execute) and project roots round out the structure. See [the research loop](/graphs/research-loop) for the typed-node workflow.
+`experiment:plan` nodes (the plans recorded runs execute) and project roots round out the structure. See [the research loop](/atlas/research-loop) for the typed-node workflow.
 
 ## The staged / committed lifecycle
 
@@ -88,7 +88,7 @@ atlas map:summary --node nd_root --max-nodes 50 --format=json
 atlas map:tree --node nd_root --max-depth 5
 ```
 
-Use rendered views for terminal agents; use `map:view` when you need the raw projection for your own UI. The web app renders the same graph as cards, orbit, and timeline — see [Web app views](/graphs/web-views).
+Use rendered views for terminal agents; use `map:view` when you need the raw projection for your own UI. The web app renders the same graph as cards, orbit, and timeline — see [Web app views](/atlas/web-views).
 
 ## Access
 
@@ -139,4 +139,4 @@ atlas evidence:link \
   --format=json
 ```
 
-See [Evidence & files](/graphs/evidence) for uploads and notes.
+See [Evidence & files](/atlas/evidence) for uploads and notes.

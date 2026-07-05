@@ -24,6 +24,7 @@ import {
   Rocket,
   Search,
   ShieldCheck,
+  Star,
   Sun,
   Terminal,
   TrendingUp,
@@ -86,7 +87,7 @@ type MintlifyCard = {
   horizontal?: boolean;
 };
 
-type SectionKey = "getting-started" | "graphs" | "library" | "agent-cli";
+type SectionKey = "atlas" | "openscience" | "library";
 
 type Section = {
   key: SectionKey;
@@ -96,12 +97,11 @@ type Section = {
   lead: boolean;
 };
 
-// Getting started leads; the three Atlas products follow it.
+// The three Synthetic Sciences products, in order.
 const SECTIONS: Section[] = [
-  { key: "getting-started", label: "Getting started", short: "Getting started", tagline: "Install, auth, conventions", lead: true },
-  { key: "graphs", label: "Atlas Graphs", short: "Graphs", tagline: "The research graph", lead: false },
-  { key: "library", label: "Atlas Library", short: "Library", tagline: "Knowledge sources", lead: false },
-  { key: "agent-cli", label: "Atlas Agent CLI", short: "Agent CLI", tagline: "The SynSci agent CLI", lead: false },
+  { key: "atlas", label: "Atlas", short: "Atlas", tagline: "The research graph", lead: false },
+  { key: "openscience", label: "OpenScience", short: "OpenScience", tagline: "Open-source AI workbench", lead: false },
+  { key: "library", label: "Library", short: "Library", tagline: "Knowledge sources", lead: false },
 ];
 
 const SECTION_KEYS = SECTIONS.map((section) => section.key);
@@ -151,16 +151,18 @@ const ICONS: Record<string, ReactNode> = {
   models: <PackageCheck size={17} strokeWidth={1.8} />,
   "sub-agents": <Bot size={17} strokeWidth={1.8} />,
   "web-ui": <Terminal size={17} strokeWidth={1.8} />,
+  workspace: <Layers size={17} strokeWidth={1.8} />,
+  agents: <Bot size={17} strokeWidth={1.8} />,
+  atlas: <GitBranch size={17} strokeWidth={1.8} />,
   credentials: <KeyRound size={17} strokeWidth={1.8} />,
   security: <ShieldCheck size={17} strokeWidth={1.8} />,
   "feature-map": <Map size={17} strokeWidth={1.8} />,
 };
 
 const SECTION_FALLBACK_ICON: Record<SectionKey, ReactNode> = {
-  "getting-started": <Rocket size={17} strokeWidth={1.8} />,
-  graphs: <GitBranch size={17} strokeWidth={1.8} />,
+  atlas: <GitBranch size={17} strokeWidth={1.8} />,
+  openscience: <FlaskConical size={17} strokeWidth={1.8} />,
   library: <Library size={17} strokeWidth={1.8} />,
-  "agent-cli": <Bot size={17} strokeWidth={1.8} />,
 };
 
 const FRONTMATTER_RE = /^---\n([\s\S]*?)\n---\n?/;
@@ -222,61 +224,75 @@ function buildSectionPages(section: SectionKey): Record<string, DocsPage> {
 }
 
 const SECTION_DOC_PAGES: Record<SectionKey, Record<string, DocsPage>> = {
-  "getting-started": buildSectionPages("getting-started"),
-  graphs: buildSectionPages("graphs"),
+  atlas: buildSectionPages("atlas"),
+  openscience: buildSectionPages("openscience"),
   library: buildSectionPages("library"),
-  "agent-cli": buildSectionPages("agent-cli"),
 };
 
 const SECTION_CONFIGS: Record<SectionKey, DocsConfig> = {
-  "getting-started": RAW_CONFIGS["./content/getting-started/docs.json"],
-  graphs: RAW_CONFIGS["./content/graphs/docs.json"],
+  atlas: RAW_CONFIGS["./content/atlas/docs.json"],
+  openscience: RAW_CONFIGS["./content/openscience/docs.json"],
   library: RAW_CONFIGS["./content/library/docs.json"],
-  "agent-cli": RAW_CONFIGS["./content/agent-cli/docs.json"],
 };
 
 function pageExists(section: SectionKey, path: string): boolean {
   return Boolean(SECTION_DOC_PAGES[section]?.[path]);
 }
 
-// Redirects from the old two-toggle URLs (#/path with product in localStorage)
-// to the new #/<section>/<page> scheme. Keyed by `${oldProduct}:${oldPath}`.
+// Redirects from the retired section names (and the per-page renames inside
+// them) to the current three sections. Applied to the first URL segment.
+const SECTION_ALIASES: Record<string, SectionKey> = {
+  "getting-started": "atlas",
+  graphs: "atlas",
+  "agent-cli": "openscience",
+};
+
+// Old agent-cli page names that moved during the OpenScience rebuild.
+const PAGE_ALIASES: Record<string, string> = {
+  "first-session": "sessions",
+  "sub-agents": "agents",
+  "web-ui": "workspace",
+  credentials: "atlas",
+};
+
+// Redirects from the oldest two-toggle URLs (#/path with product in
+// localStorage) to the #/<section>/<page> scheme. Keyed by `${oldProduct}:${oldPath}`.
 const LEGACY_REDIRECTS: Record<string, { section: SectionKey; path: string }> = {
-  "atlas:index": { section: "getting-started", path: "index" },
-  "atlas:quickstart": { section: "getting-started", path: "installation" },
-  "atlas:agent-onboarding": { section: "getting-started", path: "onboard-agent" },
-  "atlas:auth-config": { section: "getting-started", path: "authentication" },
-  "atlas:cli-runtime": { section: "getting-started", path: "cli-overview" },
-  "atlas:feature-map": { section: "getting-started", path: "cli-overview" },
-  "atlas:api-reference/introduction": { section: "getting-started", path: "rest-api" },
-  "atlas:api-reference/atlas-rest": { section: "getting-started", path: "rest-api" },
-  "atlas:first-graph": { section: "graphs", path: "quickstart" },
-  "atlas:graph": { section: "graphs", path: "graph-model" },
-  "atlas:artifacts-files": { section: "graphs", path: "evidence" },
-  "atlas:exports-imports": { section: "graphs", path: "forking" },
-  "atlas:commands": { section: "graphs", path: "commands" },
-  "atlas:skills": { section: "graphs", path: "skills" },
+  "atlas:index": { section: "atlas", path: "index" },
+  "atlas:quickstart": { section: "atlas", path: "installation" },
+  "atlas:agent-onboarding": { section: "atlas", path: "onboard-agent" },
+  "atlas:auth-config": { section: "atlas", path: "authentication" },
+  "atlas:cli-runtime": { section: "atlas", path: "cli-overview" },
+  "atlas:feature-map": { section: "atlas", path: "cli-overview" },
+  "atlas:api-reference/introduction": { section: "atlas", path: "rest-api" },
+  "atlas:api-reference/atlas-rest": { section: "atlas", path: "rest-api" },
+  "atlas:first-graph": { section: "atlas", path: "quickstart" },
+  "atlas:graph": { section: "atlas", path: "graph-model" },
+  "atlas:artifacts-files": { section: "atlas", path: "evidence" },
+  "atlas:exports-imports": { section: "atlas", path: "forking" },
+  "atlas:commands": { section: "atlas", path: "commands" },
+  "atlas:skills": { section: "atlas", path: "skills" },
   "atlas:source-to-graph": { section: "library", path: "quickstart" },
   "atlas:sources-search": { section: "library", path: "indexing" },
-  "atlas:safety": { section: "getting-started", path: "cli-overview" },
-  "cli:index": { section: "agent-cli", path: "index" },
-  "cli:installation": { section: "agent-cli", path: "quickstart" },
-  "cli:quickstart": { section: "agent-cli", path: "quickstart" },
-  "cli:first-session": { section: "agent-cli", path: "first-session" },
-  "cli:agent-onboarding": { section: "getting-started", path: "onboard-agent" },
-  "cli:sessions": { section: "agent-cli", path: "sessions" },
-  "cli:models": { section: "agent-cli", path: "models" },
-  "cli:codex": { section: "agent-cli", path: "models" },
-  "cli:sub-agents": { section: "agent-cli", path: "sub-agents" },
-  "cli:skills": { section: "agent-cli", path: "skills" },
-  "cli:cli-runtime": { section: "agent-cli", path: "commands" },
-  "cli:connect": { section: "agent-cli", path: "index" },
-  "cli:credentials": { section: "agent-cli", path: "credentials" },
-  "cli:security": { section: "agent-cli", path: "security" },
-  "cli:feature-map": { section: "agent-cli", path: "commands" },
-  "cli:commands": { section: "agent-cli", path: "commands" },
-  "cli:web-ui": { section: "agent-cli", path: "web-ui" },
-  "cli:server-mode": { section: "agent-cli", path: "index" },
+  "atlas:safety": { section: "atlas", path: "cli-overview" },
+  "cli:index": { section: "openscience", path: "index" },
+  "cli:installation": { section: "openscience", path: "quickstart" },
+  "cli:quickstart": { section: "openscience", path: "quickstart" },
+  "cli:first-session": { section: "openscience", path: "sessions" },
+  "cli:agent-onboarding": { section: "atlas", path: "onboard-agent" },
+  "cli:sessions": { section: "openscience", path: "sessions" },
+  "cli:models": { section: "openscience", path: "models" },
+  "cli:codex": { section: "openscience", path: "models" },
+  "cli:sub-agents": { section: "openscience", path: "agents" },
+  "cli:skills": { section: "openscience", path: "skills" },
+  "cli:cli-runtime": { section: "openscience", path: "commands" },
+  "cli:connect": { section: "openscience", path: "atlas" },
+  "cli:credentials": { section: "openscience", path: "atlas" },
+  "cli:security": { section: "openscience", path: "security" },
+  "cli:feature-map": { section: "openscience", path: "commands" },
+  "cli:commands": { section: "openscience", path: "commands" },
+  "cli:web-ui": { section: "openscience", path: "workspace" },
+  "cli:server-mode": { section: "openscience", path: "workspace" },
 };
 
 function readStoredProduct(): "atlas" | "cli" {
@@ -293,7 +309,7 @@ function readStoredProduct(): "atlas" | "cli" {
 type Route = { section: SectionKey; path: string };
 
 function defaultRoute(): Route {
-  return { section: "getting-started", path: "index" };
+  return { section: "atlas", path: "index" };
 }
 
 function routeFromHash(): Route {
@@ -306,6 +322,14 @@ function routeFromHash(): Route {
     const path = segments.slice(1).join("/") || "index";
     if (pageExists(maybeSection, path)) return { section: maybeSection, path };
     return { section: maybeSection, path: "index" };
+  }
+  // Retired section names redirect into the new three-section scheme.
+  const aliasSection = SECTION_ALIASES[segments[0]];
+  if (aliasSection) {
+    const rawPath = segments.slice(1).join("/") || "index";
+    const path = PAGE_ALIASES[rawPath] ?? rawPath;
+    if (pageExists(aliasSection, path)) return { section: aliasSection, path };
+    return { section: aliasSection, path: "index" };
   }
   // Legacy single-segment URL: disambiguate via the stored product toggle.
   const product = readStoredProduct();
@@ -320,7 +344,7 @@ function pageHref(section: SectionKey, path: string): string {
 
 // Module-level pointers updated on each render so the markdown renderer (which
 // can't take props through react-markdown) can resolve links and card icons.
-let CURRENT_SECTION: SectionKey = "getting-started";
+let CURRENT_SECTION: SectionKey = "atlas";
 
 function resolveHref(href: string | undefined): string | undefined {
   if (!href) return href;
@@ -390,6 +414,69 @@ function iconForCard(card: MintlifyCard): ReactNode {
     if (page) return page.icon;
   }
   return <BookOpen size={17} strokeWidth={1.8} />;
+}
+
+const OPENSCIENCE_REPO = "synthetic-sciences/openscience";
+
+function formatStars(count: number): string {
+  return count >= 1000 ? `${(count / 1000).toFixed(1).replace(/\.0$/, "")}k` : String(count);
+}
+
+function GitHubStars() {
+  const [stars, setStars] = useState<number | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    const cacheKey = `docs-gh-stars:${OPENSCIENCE_REPO}`;
+    try {
+      const cached = JSON.parse(window.localStorage.getItem(cacheKey) ?? "null") as
+        | { stars: number; at: number }
+        | null;
+      if (cached && Date.now() - cached.at < 60 * 60 * 1000) {
+        setStars(cached.stars);
+        return;
+      }
+    } catch {
+      /* ignore */
+    }
+    fetch(`https://api.github.com/repos/${OPENSCIENCE_REPO}`)
+      .then((response) => (response.ok ? response.json() : null))
+      .then((data: { stargazers_count?: number } | null) => {
+        const count = data?.stargazers_count;
+        if (typeof count !== "number" || cancelled) return;
+        setStars(count);
+        try {
+          window.localStorage.setItem(cacheKey, JSON.stringify({ stars: count, at: Date.now() }));
+        } catch {
+          /* ignore */
+        }
+      })
+      .catch(() => undefined);
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  return (
+    <div className="docs-ghstars">
+      <a
+        className="docs-ghstars-primary"
+        href={`https://github.com/${OPENSCIENCE_REPO}`}
+        target="_blank"
+        rel="noreferrer"
+      >
+        <Star size={13} strokeWidth={1.8} />
+        <span>Star on GitHub</span>
+        {stars !== null ? <em>{formatStars(stars)}</em> : null}
+      </a>
+      <a href={`https://github.com/${OPENSCIENCE_REPO}/blob/main/LICENSE`} target="_blank" rel="noreferrer">
+        Apache-2.0
+      </a>
+      <a href="https://www.npmjs.com/package/@synsci/openscience" target="_blank" rel="noreferrer">
+        npm · @synsci/openscience
+      </a>
+    </div>
+  );
 }
 
 function CopyButton({ text }: { text: string }) {
@@ -540,7 +627,7 @@ function MintlifyCallout({ children }: { children: string }) {
 
 function renderMintlifyContent(source: string): ReactNode[] {
   const nodes: ReactNode[] = [];
-  const componentRe = /<(Columns|CardGroup)\b([^>]*)>\s*([\s\S]*?)\s*<\/\1>|<Card\b([^>]*)>\s*([\s\S]*?)\s*<\/Card>|<Steps>\s*([\s\S]*?)\s*<\/Steps>|<Warning>\s*([\s\S]*?)\s*<\/Warning>/g;
+  const componentRe = /<(Columns|CardGroup)\b([^>]*)>\s*([\s\S]*?)\s*<\/\1>|<Card\b([^>]*)>\s*([\s\S]*?)\s*<\/Card>|<Steps>\s*([\s\S]*?)\s*<\/Steps>|<Warning>\s*([\s\S]*?)\s*<\/Warning>|<GitHubStars\s*\/>/g;
   let lastIndex = 0;
   let index = 0;
 
@@ -566,6 +653,8 @@ function renderMintlifyContent(source: string): ReactNode[] {
       nodes.push(<MintlifySteps key={`steps-${index++}`} source={match[6] ?? ""} />);
     } else if (match[7] !== undefined) {
       nodes.push(<MintlifyCallout key={`warning-${index++}`}>{match[7] ?? ""}</MintlifyCallout>);
+    } else if (match[0].startsWith("<GitHubStars")) {
+      nodes.push(<GitHubStars key={`ghstars-${index++}`} />);
     }
 
     lastIndex = matchIndex + match[0].length;
@@ -687,7 +776,7 @@ export function DocumentationPage() {
           <img src="/synsc-logo.png" alt="" />
           <span className="docs-brand-text">
             <small>Synthetic Sciences</small>
-            <strong>Atlas docs</strong>
+            <strong>Docs</strong>
           </span>
         </a>
         <div className="docs-search" role="search">
@@ -1506,6 +1595,48 @@ const docsCss = `
     text-decoration: underline;
     text-decoration-color: var(--color-text-faint);
     text-underline-offset: 3px;
+  }
+
+  .docs-ghstars {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin: 2px 0 26px;
+  }
+
+  .docs-ghstars a {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    height: 30px;
+    padding: 0 13px;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    background: var(--color-bg-elevated);
+    color: var(--color-text-muted);
+    text-decoration: none;
+    font-family: ${mono};
+    font-size: 12px;
+    transition: border-color 120ms ease, color 120ms ease, background 120ms ease;
+  }
+
+  .docs-ghstars a:hover {
+    color: var(--color-text);
+    border-color: color-mix(in srgb, var(--docs-accent) 44%, var(--color-border));
+  }
+
+  .docs-ghstars-primary {
+    color: var(--color-text) !important;
+    font-weight: 500;
+  }
+
+  .docs-ghstars-primary em {
+    font-style: normal;
+    font-weight: 700;
+    padding-left: 8px;
+    border-left: 1px solid var(--color-border);
+    color: var(--docs-accent);
   }
 
   .docs-card-grid {
