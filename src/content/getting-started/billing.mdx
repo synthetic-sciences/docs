@@ -18,14 +18,14 @@ atlas usage:summary --format=json
 | --- | --- |
 | `oracle` | `research:ask` and `research:jobs:create` (Oracle-style synthesis over your library). |
 | `deep_research` | The deep-research pipeline (`library:search --mode deep` and deep research jobs). |
-| credit | Managed executions (`exec:start`) and the managed agent runtime. |
+| credit | Managed executions (`exec:start`), the managed agent runtime, and managed GPU leases (`compute:up`). |
 
 ## What is metered
 
 - **Graph operations** — creating nodes, recording runs, comparing, exporting: included.
 - **Library indexing and search** — adding sources, `library:search`, `library:ask`: included, subject to fair-use limits on source size and count.
 - **Research answers** — `research:ask` and research jobs deduct from the `oracle` quota; deep research deducts from `deep_research`.
-- **Managed compute** — `exec:start` and the agent runtime draw down account credit.
+- **Managed compute** — `exec:start` and the agent runtime draw down account credit. A managed GPU lease (`compute:up`) bills the wallet per hour at pass-through pricing (provider cost plus a small fee) and is reconciled to actual hours on `compute:release`; bring-your-own-key leases are free.
 
 ## Manage billing
 

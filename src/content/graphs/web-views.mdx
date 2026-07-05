@@ -44,7 +44,9 @@ The app navigation reflects the Atlas suite:
 
 ## Compute
 
-Provisioning GPU compute lives in the web app's **Compute** tab, not the CLI. Atlas resells Lambda Labs GPU VMs: lease a VM and Atlas generates a per-lease SSH keypair so you can connect. Connect your own Lambda key (bring-your-own-key) and it runs on your account for free; otherwise the lease is managed and funded from your CLI wallet.
+GPU compute is available from both the web app's **Compute** tab and the CLI. The marketplace is cross-provider: `atlas compute:catalog` shows the cheapest offer per GPU model across every provider (filter with `--gpu h100`, `--provider vast`, `--min-vram 80`, `--max-price 2.50`; `--best` ranks live stock first), and `atlas compute:up` launches one — zero flags picks the cheapest available, `--dry-run` previews the pick and price without spending, and `--node` attaches the lease to a research node. `compute:list`, `compute:ssh`, and `compute:release` manage running leases.
+
+Pricing is pass-through: you pay the provider's cost plus a small fee, billed hourly from the CLI wallet and reconciled to actual hours on release. Connect your own provider key (bring-your-own-key) and those offers rank as free — the lease runs on your account.
 
 ## Publish a view
 

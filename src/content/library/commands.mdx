@@ -41,6 +41,8 @@ atlas help library:search --schema --format=json
 | `library:search` | `POST` | `/search` | Search indexed sources (`--mode`, `--save-to`). |
 | `library:ask` | `POST` | `/documents/ask` | Grounded Q&A (`--attach` to a node). |
 | `research:ask` | `POST` | `/research/oracle` | Synchronous Oracle research (`oracle` quota). |
+| `web:fetch` | `POST` | `/web/fetch` | Fetch and extract a URL through the metered web layer; optionally log the source. |
+| `web:search` | `POST` | `/web/search` | Metered general web search. |
 | `usage:summary` | `GET` | `/usage/summary` | Library and research usage summary. |
 
 ## Async jobs
