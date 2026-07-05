@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "name": "Atlas Agent CLI",
+  "name": "OpenScience",
   "navigation": {
     "tabs": [
       {
@@ -11,18 +11,17 @@
             "pages": [
               "index",
               "quickstart",
-              "first-session"
+              "workspace"
             ]
           },
           {
             "group": "Use the agent",
             "pages": [
-              "sessions",
+              "agents",
               "models",
-              "sub-agents",
               "skills",
-              "web-ui",
-              "credentials"
+              "sessions",
+              "atlas"
             ]
           }
         ]
@@ -42,16 +41,17 @@
     ],
     "global": {
       "anchors": [
-        { "anchor": "App", "href": "https://app.syntheticsciences.ai/atlas" },
-        { "anchor": "GitHub", "href": "https://github.com/synthetic-sciences" }
+        { "anchor": "GitHub", "href": "https://github.com/synthetic-sciences/openscience" },
+        { "anchor": "npm", "href": "https://www.npmjs.com/package/@synsci/openscience" },
+        { "anchor": "Releases", "href": "https://github.com/synthetic-sciences/openscience/releases" }
       ]
     }
   },
   "navbar": {
     "primary": {
       "type": "button",
-      "label": "Open app",
-      "href": "https://app.syntheticsciences.ai/atlas"
+      "label": "Star on GitHub",
+      "href": "https://github.com/synthetic-sciences/openscience"
     }
   }
 }

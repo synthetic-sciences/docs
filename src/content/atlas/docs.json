@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "name": "Getting started",
+  "name": "Atlas",
   "navigation": {
     "tabs": [
       {
@@ -11,15 +11,39 @@
             "pages": [
               "index",
               "installation",
+              "quickstart",
+              "graph-model"
+            ]
+          },
+          {
+            "group": "Set up",
+            "pages": [
               "authentication",
               "api-keys",
               "billing"
             ]
           },
           {
-            "group": "Use the CLI",
+            "group": "The research loop",
             "pages": [
-              "cli-overview",
+              "research-loop",
+              "runs",
+              "optimize",
+              "reproduction"
+            ]
+          },
+          {
+            "group": "Work with graphs",
+            "pages": [
+              "evidence",
+              "forking",
+              "web-views",
+              "skills"
+            ]
+          },
+          {
+            "group": "Agents",
+            "pages": [
               "onboard-agent"
             ]
           }
@@ -29,8 +53,10 @@
         "tab": "Reference",
         "groups": [
           {
-            "group": "HTTP API",
+            "group": "CLI and API",
             "pages": [
+              "cli-overview",
+              "commands",
               "rest-api"
             ]
           }
@@ -39,8 +65,7 @@
     ],
     "global": {
       "anchors": [
-        { "anchor": "App", "href": "https://app.syntheticsciences.ai/atlas" },
-        { "anchor": "llms.txt", "href": "https://app.syntheticsciences.ai/documentation/llms.txt" },
+        { "anchor": "Open Atlas", "href": "https://app.syntheticsciences.ai/atlas" },
         { "anchor": "llms-full.txt", "href": "https://app.syntheticsciences.ai/documentation/llms-full.txt" },
         { "anchor": "skill.md", "href": "https://app.syntheticsciences.ai/documentation/skill.md" },
         { "anchor": "GitHub", "href": "https://github.com/synthetic-sciences" }
@@ -50,7 +75,7 @@
   "navbar": {
     "primary": {
       "type": "button",
-      "label": "Open app",
+      "label": "Open Atlas",
       "href": "https://app.syntheticsciences.ai/atlas"
     }
   }

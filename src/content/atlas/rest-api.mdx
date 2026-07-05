@@ -21,7 +21,7 @@ curl -H "Authorization: Bearer $ATLAS_API_KEY" \
   https://app.syntheticsciences.ai/api/v1/auth/status
 ```
 
-Keys are prefixed `thk_` and minted with `atlas key:create` or in the app. See [API keys](/getting-started/api-keys).
+Keys are prefixed `thk_` and minted with `atlas key:create` or in the app. See [API keys](/atlas/api-keys).
 
 <Warning>
 Atlas is direct REST plus CLI. There is no Atlas MCP server. The retired MCP-era auth and device-pairing endpoints now return `HTTP 426 Upgrade Required` — use `atlas login` or a `thk_*` key instead.
@@ -31,15 +31,15 @@ Atlas is direct REST plus CLI. There is no Atlas MCP server. The retired MCP-era
 
 | Family | Representative routes | CLI reference |
 | --- | --- | --- |
-| Auth & account | `GET /auth/status`, `POST /auth/cli/browser/start`, `GET\|POST\|DELETE /auth/api-keys`, `PATCH /users/me` | [Authentication](/getting-started/authentication) |
-| Graph & nodes | `GET /graph`, `POST /nodes/commit-new`, `GET /nodes/{id}/tree`, `POST /nodes/{id}/branch` | [Graph commands](/graphs/commands) |
-| Research loop | `GET /projects/{id}/brief`, `POST /hypotheses:add`, `POST /experiments:plan`, `POST /decisions:add` | [The research loop](/graphs/research-loop) |
-| Runs | `LOCAL /runs:record`, `GET /runs:compare`, `LOCAL /runs:leaderboard` | [Runs & flight recorder](/graphs/runs) |
-| Evidence | `GET\|POST /nodes/{id}/artifacts`, `POST /nodes/{id}/artifacts/uploads/prepare` | [Evidence & files](/graphs/evidence) |
+| Auth & account | `GET /auth/status`, `POST /auth/cli/browser/start`, `GET\|POST\|DELETE /auth/api-keys`, `PATCH /users/me` | [Authentication](/atlas/authentication) |
+| Graph & nodes | `GET /graph`, `POST /nodes/commit-new`, `GET /nodes/{id}/tree`, `POST /nodes/{id}/branch` | [Graph commands](/atlas/commands) |
+| Research loop | `GET /projects/{id}/brief`, `POST /hypotheses:add`, `POST /experiments:plan`, `POST /decisions:add` | [The research loop](/atlas/research-loop) |
+| Runs | `LOCAL /runs:record`, `GET /runs:compare`, `LOCAL /runs:leaderboard` | [Runs & flight recorder](/atlas/runs) |
+| Evidence | `GET\|POST /nodes/{id}/artifacts`, `POST /nodes/{id}/artifacts/uploads/prepare` | [Evidence & files](/atlas/evidence) |
 | Library | `GET\|POST /sources`, `POST /search`, `POST /documents/ask`, `POST /documents/jobs` | [Library commands](/library/commands) |
 | Research | `POST /research/oracle`, `POST /research/jobs`, `GET /usage/summary` | [Library commands](/library/commands) |
-| Export / import | `POST /export`, `POST /import`, `GET /legacy/history/export.jsonl` | [Forking & portability](/graphs/forking) |
-| Integrations | `GET /auth/github/status`, `POST /auth/github/pat`, `PUT /auth/integrations/wandb` | [Authentication](/getting-started/authentication) |
+| Export / import | `POST /export`, `POST /import`, `GET /legacy/history/export.jsonl` | [Forking & portability](/atlas/forking) |
+| Integrations | `GET /auth/github/status`, `POST /auth/github/pat`, `PUT /auth/integrations/wandb` | [Authentication](/atlas/authentication) |
 
 ## Output and idempotency
 
