@@ -1,9 +1,16 @@
 <div align="center">
 
 ```text
- _  .__|_|_  __|_o _  _ _o _ ._  _ _  _     _| _  _ _
-_>\/| ||_| |(/_|_|(_ _>(_|(/_| |(_(/__>    (_|(_)(__>
-  /
+ _______ ___ ___ _______ _______ _______ _______ _______ _______ ______
+|     __|   |   |    |  |_     _|   |   |    ___|_     _|_     _|      |
+|__     |\     /|       | |   | |       |    ___| |   |  _|   |_|   ---|
+|_______| |___| |__|____| |___| |___|___|_______| |___| |_______|______|
+
+     _______ ______ _______ _______ _______ ______ _______ _______
+    |     __|      |_     _|    ___|    |  |      |    ___|     __|
+    |__     |   ---|_|   |_|    ___|       |   ---|    ___|__     |
+    |_______|______|_______|_______|__|____|______|_______|_______|
+                                                               docs
 ```
 
 **the words behind [docs.syntheticsciences.ai](https://docs.syntheticsciences.ai)**
@@ -20,11 +27,11 @@ This is the whole docs site. No docs framework, no CMS, no server — one small 
 
 ## what's inside
 
-| section | the thing it documents | try it |
-| --- | --- | --- |
-| 🗺️ **[Atlas](https://docs.syntheticsciences.ai/#/atlas/index)** | the research graph — hypotheses, runs, evidence, and decisions that outlive any one chat | [tryatlas.sh](https://tryatlas.sh) |
-| 🔬 **[OpenScience](https://docs.syntheticsciences.ai/#/openscience/index)** | the [open-source AI workbench](https://github.com/synthetic-sciences/openscience) for scientific research | [openscience.sh](https://openscience.sh) |
-| 📚 **[Library](https://docs.syntheticsciences.ai/#/library/index)** | indexed knowledge sources — repos, papers, datasets — that graphs can search and cite; [Delphi](https://github.com/synthetic-sciences/delphi) is the open-source engine | [trydelphi.ai](https://trydelphi.ai) |
+**[Atlas](https://docs.syntheticsciences.ai/#/atlas/index)** — the research graph: hypotheses, runs, evidence, and decisions that outlive any one chat. Try it at [tryatlas.sh](https://tryatlas.sh).
+
+**[OpenScience](https://docs.syntheticsciences.ai/#/openscience/index)** — the [open-source AI workbench](https://github.com/synthetic-sciences/openscience) for scientific research. Try it at [openscience.sh](https://openscience.sh).
+
+**[Library](https://docs.syntheticsciences.ai/#/library/index)** — indexed knowledge sources that graphs can search and cite. [Delphi](https://github.com/synthetic-sciences/delphi) is the open-source engine; try it at [trydelphi.ai](https://trydelphi.ai).
 
 Each section lives in `src/content/<section>/` as `.mdx` pages plus a `docs.json` for the sidebar. That's the entire content model.
 
