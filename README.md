@@ -1,19 +1,20 @@
 <div align="center">
 
 ```text
- _______ ___ ___ _______ _______ _______ _______ _______ _______ ______
-|     __|   |   |    |  |_     _|   |   |    ___|_     _|_     _|      |
-|__     |\     /|       | |   | |       |    ___| |   |  _|   |_|   ---|
-|_______| |___| |__|____| |___| |___|___|_______| |___| |_______|______|
-
-     _______ ______ _______ _______ _______ ______ _______ _______
-    |     __|      |_     _|    ___|    |  |      |    ___|     __|
-    |__     |   ---|_|   |_|    ___|       |   ---|    ___|__     |
-    |_______|______|_______|_______|__|____|______|_______|_______|
-                                                               docs
+ ____              _   _          _   _
+/ ___| _   _ _ __ | |_| |__   ___| |_(_) ___
+\___ \| | | | '_ \| __| '_ \ / _ \ __| |/ __|
+ ___) | |_| | | | | |_| | | |  __/ |_| | (__
+|____/ \__, |_| |_|\__|_| |_|\___|\__|_|\___|
+       |___/
+ ____       _
+/ ___|  ___(_) ___ _ __   ___ ___  ___
+\___ \ / __| |/ _ \ '_ \ / __/ _ \/ __|
+ ___) | (__| |  __/ | | | (_|  __/\__ \
+|____/ \___|_|\___|_| |_|\___\___||___/
 ```
 
-**the words behind [docs.syntheticsciences.ai](https://docs.syntheticsciences.ai)**
+The source for [docs.syntheticsciences.ai](https://docs.syntheticsciences.ai).
 
 [![site](https://img.shields.io/badge/live-docs.syntheticsciences.ai-2f6f54)](https://docs.syntheticsciences.ai)
 [![license](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
@@ -21,46 +22,44 @@
 
 </div>
 
----
+## About
 
-This is the whole docs site. No docs framework, no CMS, no server — one small Vite + React app that turns a folder of MDX into [docs.syntheticsciences.ai](https://docs.syntheticsciences.ai). Merges to `main` deploy automatically.
+This repository is the whole docs site: a small Vite + React app that renders a folder of MDX pages. There is no docs framework, no CMS, and no server. Merges to `main` deploy automatically.
 
-## what's inside
+It documents three products:
 
-**[Atlas](https://docs.syntheticsciences.ai/#/atlas/index)** — the research graph: hypotheses, runs, evidence, and decisions that outlive any one chat. Try it at [tryatlas.sh](https://tryatlas.sh).
+- **[Atlas](https://docs.syntheticsciences.ai/#/atlas/index)**: the research graph. Hypotheses, runs, evidence, and decisions that outlive any one chat. Try it at [tryatlas.sh](https://tryatlas.sh).
+- **[OpenScience](https://docs.syntheticsciences.ai/#/openscience/index)**: the [open-source AI workbench](https://github.com/synthetic-sciences/openscience) for scientific research. Try it at [openscience.sh](https://openscience.sh).
+- **[Library](https://docs.syntheticsciences.ai/#/library/index)**: indexed knowledge sources that graphs can search and cite. [Delphi](https://github.com/synthetic-sciences/delphi) is the open-source engine; try it at [trydelphi.ai](https://trydelphi.ai).
 
-**[OpenScience](https://docs.syntheticsciences.ai/#/openscience/index)** — the [open-source AI workbench](https://github.com/synthetic-sciences/openscience) for scientific research. Try it at [openscience.sh](https://openscience.sh).
-
-**[Library](https://docs.syntheticsciences.ai/#/library/index)** — indexed knowledge sources that graphs can search and cite. [Delphi](https://github.com/synthetic-sciences/delphi) is the open-source engine; try it at [trydelphi.ai](https://trydelphi.ai).
-
-Each section lives in `src/content/<section>/` as `.mdx` pages plus a `docs.json` for the sidebar. That's the entire content model.
-
-## run it
+## Development
 
 ```bash
 npm install
 npm run dev        # hot-reloads .mdx edits
 ```
 
+Before opening a PR:
+
 ```bash
-npm run validate   # link check + production build — run before every PR
+npm run validate   # link check plus a production build
 ```
 
-## add a page
+## Adding a page
 
-1. Drop `src/content/<section>/<page>.mdx` with `title` + `description` frontmatter.
-2. Add it to that section's `docs.json` under the right group.
-3. `npm run check-links` — green means the nav and every internal link resolve.
+1. Create `src/content/<section>/<page>.mdx` with `title` and `description` frontmatter.
+2. Add the page to that section's `docs.json` under the right group.
+3. Run `npm run check-links` to confirm the nav and every internal link resolve.
 
-Routing is hash-based (`#/<section>/<page>`), and URLs from older layouts redirect via the alias maps in `src/DocsApp.tsx`, so old links never die.
+Each section lives in `src/content/<section>/` as `.mdx` pages plus a `docs.json` for the sidebar. Routing is hash-based (`#/<section>/<page>`), and URLs from older layouts redirect through the alias maps in `src/DocsApp.tsx`, so old links keep working.
 
-## house style
+## Style guide
 
-- copy says "Atlas", "OpenScience", or "Synthetic Sciences" — no internal vendor names
-- OpenScience docs are bring-your-own-key first; Atlas is optional, never required
-- canonical singular command names; installs always use `@latest`
-- active voice, second person, sentence case headings
+- Copy says "Atlas", "OpenScience", or "Synthetic Sciences". No internal vendor names.
+- OpenScience docs present bring-your-own-key as the default; Atlas is optional, never required.
+- Use canonical singular command names. Installs always use `@latest`.
+- Active voice, second person, sentence case headings.
 
-## license
+## License
 
-MIT for this site — see [LICENSE](LICENSE). The products keep their own licenses (OpenScience is Apache-2.0).
+MIT for this site; see [LICENSE](LICENSE). The products keep their own licenses (OpenScience is Apache-2.0).
