@@ -6,6 +6,17 @@ icon: "repeat-2"
 
 A result is only as good as your ability to reproduce it. Atlas captures the code state behind every recorded run, and `reproduce` assembles the whole packet on demand. Pin the commits that matter so they stay reachable forever.
 
+## Turn a paper into a graph
+
+The `atlas-reproduce` skill runs the other direction: start from someone else's paper and end with a reproduced result in your graph. Hand your agent an arXiv id (or a paper URL or repo) and it:
+
+1. Indexes the paper — `atlas library:add --type research_paper --url https://arxiv.org/abs/<id>`.
+2. Finds the code behind it.
+3. Runs a **minimal reproduction** of the headline claim.
+4. Lays the result out as a graph: paper → claim → setup → result.
+
+Whatever the paper doesn't say — hyperparameters, dataset splits, hardware — the agent asks you, and records each answered gap as a `decision` node, so the reproduction is honest about what was assumed. The reproduced node is a launch point, not an endpoint: `atlas autoresearch --project <node>` continues the campaign from it, and `atlas fork` carries the code state so someone else can continue from yours.
+
 ## Reproducibility packet
 
 ```bash

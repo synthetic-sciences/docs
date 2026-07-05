@@ -15,7 +15,7 @@ Atlas ships nine skills inside `@synsci/atlas`. They are workflow instructions t
 | `atlas-map` | Turning papers, repos, docs, or notes into durable map nodes and evidence, without launching runs. | `atlas node:create` / `atlas library:tree` |
 | `atlas-optimize` | Improving a measurable artifact (prompt, config, code) with the GEPA search loop, persisting every candidate as a node. | `atlas optimize:start …` |
 | `atlas-autoresearch` | Running an entire refereed campaign from one plain-English goal: baseline → pre-register → search → referee → report. | `atlas autoresearch --goal "…"` |
-| `atlas-reproduce` | A paper, repo, or report needs a map-backed reproduction plan, validation record, or claim audit. | `atlas reproduce --node <id>` |
+| `atlas-reproduce` | Turning a paper into a graph. Hand it an arXiv id (or a paper URL/repo): it indexes the paper, finds the code, runs a minimal reproduction, and lays the result out as paper → claim → setup → result — asking for whatever the paper didn't say and recording each answered gap as a `decision` node. Continue from the reproduced node with `atlas autoresearch --project <node>`. | `atlas library:add --type research_paper --url https://arxiv.org/abs/<id>` |
 | `atlas-paper` | Drafting a manuscript or report from the recorded graph state. | `atlas map:summary --node <id>` |
 
 ## Pick the right one
@@ -27,7 +27,7 @@ Atlas ships nine skills inside `@synsci/atlas`. They are workflow instructions t
 | "Turn this paper/repo into map state" | `atlas-map` |
 | "Optimize this prompt/config against a metric" | `atlas-optimize` |
 | "Run the whole campaign from a goal and verify it" | `atlas-autoresearch` |
-| "Reproduce or audit this claim" | `atlas-reproduce` |
+| "Reproduce this paper" / "does this result hold?" | `atlas-reproduce` |
 | "Write this up as a paper" | `atlas-paper` |
 
 ## Verify

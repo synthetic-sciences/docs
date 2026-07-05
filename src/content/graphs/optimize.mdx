@@ -87,6 +87,10 @@ VERIFIED: 0.748 → 0.718 (Δ -0.030, p<0.05, n=10)
 | `--scaffold-only` | Stop after generating the benchmark for review. |
 | `--dry-run` | Preview the full plan without spending budget. |
 | `--resume` | Continue an interrupted campaign. |
+| `--project <node>` | Attach the campaign under an existing node — the handoff from a reproduced paper (`atlas-reproduce`) into a campaign. |
+| `--target` / `--benchmark` | Override artifact and benchmark auto-detection. |
+
+The campaign root's canonical URL (`/nodes/<id>`) is printed at launch so you can watch it in the web views.
 
 When `--benchmark` is omitted, autoresearch generates an editable scaffold in `.atlas/`: `benchmark.sh` (how to run the eval), `score.py` (one editable `METRIC=` line), and `gate.sh` (a files-unchanged Goodhart guard). Review or edit those before committing real budget. If a repo can't be auto-benchmarked, it stops with a one-line fix rather than guessing.
 
