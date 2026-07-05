@@ -39,10 +39,11 @@
     ],
     "global": {
       "anchors": [
+        { "anchor": "trydelphi.ai", "href": "https://trydelphi.ai" },
         { "anchor": "Library", "href": "https://app.syntheticsciences.ai/atlas" },
         { "anchor": "llms-full.txt", "href": "https://app.syntheticsciences.ai/documentation/llms-full.txt" },
         { "anchor": "skill.md", "href": "https://app.syntheticsciences.ai/documentation/skill.md" },
-        { "anchor": "GitHub", "href": "https://github.com/synthetic-sciences" }
+        { "anchor": "GitHub", "href": "https://github.com/synthetic-sciences/delphi" }
       ]
     }
   },

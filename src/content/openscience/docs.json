@@ -41,6 +41,7 @@
     ],
     "global": {
       "anchors": [
+        { "anchor": "openscience.sh", "href": "https://openscience.sh" },
         { "anchor": "GitHub", "href": "https://github.com/synthetic-sciences/openscience" },
         { "anchor": "npm", "href": "https://www.npmjs.com/package/@synsci/openscience" },
         { "anchor": "Releases", "href": "https://github.com/synthetic-sciences/openscience/releases" }
