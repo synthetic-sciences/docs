@@ -1,10 +1,10 @@
 ---
 title: "CLI overview & conventions"
-description: "The command grammar shared across Atlas Graphs and Atlas Library: namespaces, verbs, slugs, and output."
+description: "The command grammar shared across Atlas graphs, indexed sources, and research workflows: namespaces, verbs, slugs, and output."
 icon: "terminal"
 ---
 
-One CLI, `@synsci/atlas`, drives the whole suite. Learn the grammar once here; the [Atlas Graphs](/atlas/commands) and [Atlas Library](/library/commands) reference pages list the commands for each product.
+One CLI, `@synsci/atlas`, drives the whole product. Learn the grammar once here; the [CLI & API reference](/atlas/commands) covers graph workflows, while `atlas help --format=json` is the authoritative catalog for source indexing, search, and research commands.
 
 Every command is a direct HTTP call to `https://app.syntheticsciences.ai/api/v1`, plus a handful of local commands (`login`, `logout`, `doctor`, `config:*`, `secret:*`) that also read or write local config. There is no second hidden surface: `atlas help --format=json` is generated from the same registry that dispatches requests.
 
@@ -90,8 +90,8 @@ The bundled `atlas` skill is the router for agents: it points at the right speci
 
 ## Where commands live
 
-| Product | Namespaces | Reference |
+| Surface | Namespaces | Reference |
 | --- | --- | --- |
-| Atlas Graphs | `project:*`, `node:*`, `link:*`, `map:*`, `access:*`, `draft:*`, `label:*`, research-loop verbs, `run:*`, `exec:*`, `compute:*`, `evidence:*`, `repo:*`, `github:*` | [Graph commands](/atlas/commands) |
-| Atlas Library | `library:*`, `research:*`, `usage:summary` | [Library commands](/library/commands) |
+| Graphs and experiments | `project:*`, `node:*`, `link:*`, `map:*`, `access:*`, `draft:*`, `label:*`, research-loop verbs, `run:*`, `exec:*`, `compute:*`, `evidence:*`, `repo:*`, `github:*` | [CLI & API reference](/atlas/commands) |
+| Indexed sources and research | `library:*`, `research:*`, `usage:summary` | `atlas help library:search` / `atlas help research:ask` |
 | Shared | `login`, `logout`, `whoami`, `doctor`, `config:*`, `secret:*`, `key:*`, `account:update`, `install` | This section |

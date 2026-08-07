@@ -1,0 +1,84 @@
+---
+title: "Artifacts & provenance"
+description: "Inspect research outputs as versioned artifacts, trace how they were made, and record reviews against exact immutable bytes."
+icon: "boxes"
+---
+
+OpenScience treats outputs as research objects, not loose filenames. The workspace's **Files** pane opens on **All artifacts**, grouping the outputs produced by your sessions before showing the rest of the project tree.
+
+The artifact catalog recognizes notebooks, datasets, figures, reports, structures, sequences, genomics files, spectra, models, and archives. Search by name, path, type, or format; sort by recency, size, or name; and move unwanted artifacts to Trash without deleting unrelated project files.
+
+## Choose a file source
+
+The source picker separates three boundaries:
+
+| Group | Sources |
+| --- | --- |
+| Artifacts | All artifacts and Trash. |
+| This computer | The current project, session working directories, and explicitly connected local folders. |
+| Remote | Read-only Modal Volumes when Modal is connected and enabled. |
+
+This makes the default view answer "what did the research produce?" while keeping raw project files and remote storage one switch away.
+
+## Preview and inspect
+
+Artifact cards show a preview when the exact stored version is renderable. Open an artifact for deeper views:
+
+- **Preview** renders images, PDFs, and bounded text content without reading a different live file.
+- **Versions** lists immutable revisions with their byte size, MIME type, and SHA-256.
+- **Made** shows the producing session, message, run, command, inputs, and recorded lineage when available.
+- **Review** shows supporting or refuting findings attached to the exact output.
+
+Scientific formats use specialized viewers when supported, including molecules, protein structures, genomes, notebooks, datasets, figures, and plots. Unsupported or oversized binaries stay downloadable without pretending that a preview was verified.
+
+## Immutable versions
+
+Each stored version carries an artifact id, version id, byte count, MIME type, and SHA-256. Review reads the immutable snapshot from the artifact store rather than the mutable source path. If the bytes no longer match the recorded hash, the review target fails closed.
+
+Text snapshots can be paged by byte offset. Images and PDFs up to 32 MiB can be attached to a reviewer as their exact stored bytes. A reviewer never marks an unsupported binary as sound from metadata alone.
+
+## Provenance graph
+
+The agent-facing provenance tools record four node kinds:
+
+| Node | Captures |
+| --- | --- |
+| `source` | Input data, paper, repository, or other origin. |
+| `run` | The command or tool invocation that performed work. |
+| `artifact` | A dataset, figure, model, report, or other output. |
+| `claim` | A scientific statement or reviewer finding. |
+
+`derived-from` edges connect outputs to their inputs. `supports` and `refutes` edges attach review findings to the exact artifact, run, or claim they evaluate. Because nodes are content-addressed, recording the same content returns the same id instead of duplicating evidence.
+
+## Review findings
+
+A review finding records:
+
+- the exact claim or number being checked;
+- the issue found, or `verified` when the check supports it;
+- severity (`blocking`, `major`, `minor`, or `info`);
+- concrete evidence such as a file and line, measured value, tool-output id, or provenance node;
+- a `supports` or `refutes` verdict.
+
+Findings are append-only audit records. They do not silently rewrite the artifact under review.
+
+## Compute outputs
+
+[Compute jobs](/openscience/compute) declare their output globs and optional checkpoint before execution. Delivered outputs record path, size, modification time, and SHA-256. If execution succeeds but delivery fails, OpenScience retains the owned Modal resource so you can retry delivery without paying to rerun the command.
+
+## What's next
+
+<Columns cols={2}>
+  <Card title="Compute" icon="cpu" href="/openscience/compute">
+    Produce and recover local or Modal job outputs.
+  </Card>
+  <Card title="Scientific data" icon="database" href="/openscience/scientific-data">
+    Fetch structures, sequences, molecules, papers, and omics records.
+  </Card>
+  <Card title="Sessions" icon="layers" href="/openscience/sessions">
+    Understand the session that produced an artifact.
+  </Card>
+  <Card title="Atlas" icon="git-branch" href="/atlas/index">
+    Persist hypotheses, runs, evidence, and decisions in a shared research graph.
+  </Card>
+</Columns>

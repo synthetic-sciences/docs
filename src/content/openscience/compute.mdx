@@ -1,0 +1,149 @@
+---
+title: "Compute"
+description: "Run local kernels, governed Modal jobs, dedicated GPU clouds, multi-cloud jobs, or Atlas GPU leases."
+icon: "cpu"
+---
+
+OpenScience supports several compute paths. They do not all have the same controls, so choose the path that matches the job.
+
+| Path | Best for | How it runs |
+| --- | --- | --- |
+| Local kernels and jobs | Analysis, debugging, CPU work, and a GPU already attached to your machine | Native OpenScience **Kernels** and **Jobs** views |
+| Modal | Reproducible remote commands with explicit uploads, outputs, limits, and recovery | Native governed job adapter |
+| Lambda Labs | Dedicated GPU VMs, persistent filesystems, SSH, and long training runs | Bundled Lambda Labs skill plus the provider API and SSH |
+| TensorPool | GPU clusters, Slurm, shared storage, and batch training | Bundled TensorPool skill plus the `tp` CLI |
+| AWS, Google Cloud, Azure, or Kubernetes | Portable jobs, spot capacity, and cloud or region selection | Bundled SkyPilot skill plus the `sky` CLI |
+| Atlas Compute | Comparing live GPU VM offers and leasing with BYOK or wallet credit | Atlas web app, then SSH to the leased VM |
+
+Only local work and Modal appear as native OpenScience jobs today. Lambda Labs, TensorPool, SkyPilot, and Atlas leases use their own lifecycle tools. Their outputs become OpenScience artifacts after they are copied into the project.
+
+## Pick the right path
+
+- Use a local kernel while exploring data or debugging code.
+- Use Modal when you want the exact command, environment, inputs, outputs, resource limits, and network policy reviewed before launch.
+- Use Lambda Labs or TensorPool when you need a persistent machine, direct SSH, or multi-node training.
+- Use SkyPilot when the same task should be portable across AWS, Google Cloud, Azure, Kubernetes, Lambda Cloud, RunPod, or another supported cloud.
+- Use Atlas Compute when you want to compare available GPU VMs across providers before leasing one.
+
+## Configure cloud credentials
+
+Open **Settings > Compute** in the workspace. The page separates native Modal setup from credentials used by cloud skills and vendor CLIs.
+
+| Credential | What it enables |
+| --- | --- |
+| Modal token or `~/.modal.toml` | Native governed Modal jobs and read-only Modal Volume browsing |
+| Lambda Labs or TensorPool key | Bundled provider skills and vendor CLI or API calls |
+| AWS, Google Cloud, or Azure credentials | Cloud CLIs, storage tools, and SkyPilot |
+| Prime Intellect, Vast.ai, or RunPod key | Approved provider CLI or API workflows and Atlas BYOK compute where supported |
+
+Stored credentials are encrypted at rest. Modal tokens are resolved only inside the trusted Modal adapter and never enter the agent shell. Other cloud credentials are exposed only to approved subprocesses that need them and are registered for output redaction. See [Security](/openscience/security).
+
+<Warning>
+Creating a VM, cluster, managed job, or serverless GPU run can incur charges. Review the provider, hardware, region, hourly rate, expected duration, storage, and shutdown plan before approving a launch.
+</Warning>
+
+## Native kernels and jobs
+
+The **Compute** surface has two views:
+
+| View | Use |
+| --- | --- |
+| Kernels | Interactive Python and R execution attached to the current project |
+| Jobs | Durable local or Modal runs with status, logs, outputs, metadata, cancellation, and recovery |
+
+Jobs stay attached to the project that created them. You can switch sessions without losing the job or its history.
+
+## Governed Modal jobs
+
+Connect Modal in **Settings > Compute** by reading the active profile from `~/.modal.toml` or pasting a token id and secret. Enable the provider, test the connection, and set defaults for the app, image, network policy, timeout, and concurrency.
+
+Before a paid run, the native `modal` tool creates a plan with the complete execution contract:
+
+| Reviewed field | What is fixed before launch |
+| --- | --- |
+| Command and working directory | The exact process that will run |
+| Runtime image and packages | The remote software environment |
+| Inputs and outputs | Files uploaded and output patterns collected |
+| CPU, GPU, memory, timeout, and concurrency | Resource and runtime limits |
+| Network policy | Whether the remote sandbox can reach the network |
+
+The approval is bound to a digest of this plan. Any change produces a new digest and requires another approval. Credentials resolve only after approval succeeds.
+
+```text
+Run train.py on one A100 in Modal. Upload configs/base.yaml and
+data/sample.parquet. Collect results/** and checkpoints/best.pt.
+Set a 90 minute timeout and show me the complete plan before launch.
+```
+
+The Jobs view and `compute_job` tool can read status and logs, cancel a live run, inspect captured outputs, and retry output delivery. If the command succeeds but the download fails, OpenScience can retain the owned Modal Volume and recover the files without rerunning the paid command.
+
+## Lambda Labs and TensorPool
+
+OpenScience ships cloud-compute skills for both providers. Ask the agent to use the named provider, show the launch request and current price, wait for approval, keep checkpoints on persistent storage, and terminate the resource when the output is safe.
+
+```text
+Use Lambda Labs for this training run. Find a single GPU with at least 80 GB
+of VRAM. Show the available instance, region, hourly price, storage plan, and
+termination command before creating it. Copy results back into results/lambda/.
+```
+
+For TensorPool, the bundled skill works with `tp cluster` for interactive or multi-node machines and `tp job` for batch work. Multi-node clusters can use Slurm and shared storage. Provider availability and prices change, so check the live catalog instead of copying old numbers from a guide.
+
+## AWS and other clouds with SkyPilot
+
+The bundled SkyPilot skill provides one task format across AWS, Google Cloud, Azure, Kubernetes, Lambda Cloud, RunPod, and other supported backends. OpenScience can write and review the task file, then run the local `sky` CLI after you approve the cloud and cost.
+
+```yaml
+# configs/train.sky.yaml
+resources:
+  cloud: aws
+  accelerators: A100:1
+  use_spot: true
+  disk_size: 200
+
+workdir: .
+
+setup: |
+  pip install -r requirements.txt
+
+run: |
+  python train.py --config configs/base.yaml --output results/aws
+```
+
+```bash
+sky check aws
+sky launch -c openscience-train configs/train.sky.yaml
+sky logs openscience-train
+sky down openscience-train
+```
+
+OpenScience stores AWS, Google Cloud, and Azure credentials in **Settings > Compute**. You can also use the standard credential chain already configured for the vendor CLI. AWS does not have a native OpenScience Jobs adapter, so SkyPilot and direct AWS CLI work do not get Modal's digest approval or retained-output recovery.
+
+## Atlas GPU marketplace
+
+When you connect Atlas, its **Compute** page can compare live GPU VM offers from Lambda Labs, RunPod, Vast.ai, and Prime Intellect. Use your own provider key or fund a managed lease from the Atlas wallet. The lease gives you an SSH machine rather than a native OpenScience job.
+
+Use the SSH connection from Atlas to run the project, keep checkpoints on persistent storage, copy final outputs back into the OpenScience project, and release the lease when finished. See [Atlas web app views](/atlas/web-views) and [Connect to Atlas](/openscience/atlas).
+
+## Local safety and output handling
+
+Local kernels and jobs follow the [execution sandbox](/openscience/sandbox) policy when it is enabled. Remote providers enforce their own isolation and network rules. Do not assume a provider skill inherits the native Modal restrictions.
+
+Modal Volumes appear under **Files > Remote > Modal** when Modal is enabled. The source is read-only in the workspace. Files copied into the project can be cataloged, versioned, and reviewed through [Artifacts and provenance](/openscience/artifacts).
+
+## Continue
+
+<Columns cols={2}>
+  <Card title="Artifacts" icon="boxes" href="/openscience/artifacts">
+    Inspect outputs, versions, checksums, and provenance.
+  </Card>
+  <Card title="Execution sandbox" icon="lock" href="/openscience/sandbox">
+    Restrict local writes and optional network access.
+  </Card>
+  <Card title="Skills" icon="book-open" href="/openscience/skills">
+    Review the bundled cloud and scientific workflows.
+  </Card>
+  <Card title="Connect to Atlas" icon="link" href="/openscience/atlas">
+    Sync credentials and use the GPU marketplace.
+  </Card>
+</Columns>

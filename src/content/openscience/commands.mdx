@@ -35,25 +35,45 @@ openscience run --format json "Summarize the experiment in results/" > summary.j
 
 ## Account
 
-Connecting an Atlas account is optional — see [Atlas](/openscience/atlas). OpenScience runs fully standalone with your own provider keys.
+Connecting an Atlas account is optional. See [Connect to Atlas](/openscience/atlas). OpenScience also runs with your own provider keys or local models.
 
 | Command | Use |
 | --- | --- |
-| `openscience connect login` | Connect your Atlas account (browser flow, or `--key thk_…`). |
-| `openscience connect status` | Show the active account, default model, synced services, and credit. |
-| `openscience connect sync` | Re-pull synced credentials. |
-| `openscience connect devices` | List authorized devices. |
-| `openscience connect logout` | Disconnect this device from Atlas. |
+| `openscience init` | Run the setup wizard. Choose managed models, your own keys, or skip model setup. Alias: `onboard`. |
+| `openscience login` | Connect your Atlas account (browser flow, or `--key thk_…`). |
+| `openscience status` | Show the Atlas account, synced services, subscription, wallet, recent usage, compute availability, and bundled `atlas` version. Alias: `whoami`. |
+| `openscience sync` | Re-pull synced credentials. |
+| `openscience devices` | List authorized devices. |
+| `openscience logout` | Disconnect this device from Atlas. |
+| `openscience doctor` | Report what's configured: account, provider keys, wallet, default model. |
+
+`openscience connect …` still works as an alias for `login` / `logout` / `status` / `sync` / `devices`.
 
 ## Providers and routing
 
 | Command | Use |
 | --- | --- |
-| `openscience auth` | Interactive provider sign-in (BYOK keys; OAuth where supported). |
-| `openscience logout [provider]` | Log out of a connected provider. |
+| `openscience keys add` | Add a provider API key (BYOK; OAuth sign-in where supported). Alias: `auth`. |
+| `openscience keys signin` | Sign in with ChatGPT / Codex (subscription). |
+| `openscience keys list` | List saved provider keys and active env vars. |
+| `openscience keys rm` | Remove a saved provider key. |
 | `openscience models` | List configured providers and their models. |
-| `openscience billing show` | Credit and recent managed-route usage (Atlas-connected mode). |
-| `openscience billing topup` | Open the app to add credit. |
+| `openscience local add` | Detect and register Ollama, LM Studio, or another OpenAI-compatible endpoint. |
+| `openscience local list` | List configured local providers. |
+| `openscience local remove <id>` | Remove a local provider from config. |
+| `openscience wallet` | Wallet balance and key routing (alias `billing`). |
+| `openscience wallet topup` | Open the app to add credit. |
+
+## Sandbox
+
+| Command | Use |
+| --- | --- |
+| `openscience sandbox` | Show sandbox status: OS backend + current policy. |
+| `openscience sandbox enable` | Confine the agent's shell + notebook execution to the workspace (`--network deny`, `--allow <path>`, `--on-unavailable <warn\|error\|allow>`). |
+| `openscience sandbox disable` | Turn the sandbox off. |
+| `openscience sandbox test` | Prove containment on this machine (writes inside/outside the workspace, network egress). |
+
+Off by default. See [Execution sandbox](/openscience/sandbox).
 
 ## Agent profiles
 
@@ -80,11 +100,23 @@ Flags: `--path`, `--description`, `--mode <all\|primary\|subagent>`, `--tools`, 
 | Command | Use |
 | --- | --- |
 | `openscience web` | Start the server and open the browser workspace (prints the URL, e.g. `http://localhost:4096`). |
-| `openscience serve` | Headless local server — loopback-only (`127.0.0.1`), no browser. |
+| `openscience serve` | Start a headless local server on `127.0.0.1` without opening a browser. |
 | `openscience acp` | Start an Agent Client Protocol server for editors like Zed. |
 | `openscience mcp` | Manage MCP servers (`list`, `add`, `remove`, `auth`). |
 
 `web` and `serve` take `--port` and `--cors`. See [Workspace](/openscience/workspace).
+
+## Agent-facing research tools
+
+These capabilities run inside an agent session rather than as shell subcommands:
+
+| Tool family | Use |
+| --- | --- |
+| `science_list_dbs`, `science_search`, `science_fetch` | Discover 42 scientific sources, search them, and retrieve structured records or supported files. See [Scientific data](/openscience/scientific-data). |
+| `modal`, `compute_job` | Review and dispatch governed Modal work, then inspect logs, outputs, cancellation, and retained-output recovery. See [Compute](/openscience/compute). |
+| `provenance_record`, `provenance_query`, `provenance_review` | Record outputs and runs, trace lineage, and attach supporting or refuting review findings. See [Artifacts & provenance](/openscience/artifacts). |
+
+Cloud provider work is skill-driven. OpenScience bundles skills for Lambda Labs, TensorPool, Modal, and SkyPilot. SkyPilot covers AWS, Google Cloud, Azure, Kubernetes, Lambda Cloud, RunPod, and other supported backends. See [Compute](/openscience/compute) for native versus skill-driven execution.
 
 ## GitHub and PRs
 
@@ -115,13 +147,13 @@ openscience completion zsh > ~/.zsh/completions/_openscience
 
 <CardGroup cols={2}>
   <Card title="Workspace" icon="layers" href="/openscience/workspace">
-    The browser workspace: files, editor, terminal, inline scientific rendering.
+    The browser workspace: files, editor, sessions, and inline scientific rendering.
   </Card>
   <Card title="Security" icon="shield-check" href="/openscience/security">
     Credential boundary, env hygiene, the trust boundary.
   </Card>
   <Card title="Skills" icon="book-open" href="/openscience/skills">
-    250+ research skills and the scientific databases.
+    290+ research skills and 42 scientific database connectors.
   </Card>
   <Card title="Agents" icon="bot" href="/openscience/agents">
     The research agent, the specialists, and custom profiles.

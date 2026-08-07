@@ -29,13 +29,13 @@ Piped stdin is appended to the message. `openscience run` supports:
 | --- | --- |
 | `-c, --continue` | Continue the most recent session. |
 | `-s, --session <id>` | Continue a specific session by id. |
-| `-m, --model <provider/model>` | Model for this run, e.g. `anthropic/claude-opus-4-8`. See [Models](/openscience/models). |
+| `-m, --model <provider/model>` | Model for this run, e.g. `anthropic/claude-opus-5`. See [Models](/openscience/models). |
 | `--variant <tier>` | Reasoning-effort tier (`high`, `max`, `minimal`; model-dependent). |
 | `--agent <name>` | Run a specific primary agent. See [Agents](/openscience/agents). |
 | `--command <name>` | Run a custom command, with the message as its arguments. |
 | `-f, --file <path>` | Attach a local file to the message (repeatable). |
 | `--title <text>` | Title for the session in `session list`. |
-| `--format <default\|json>` | `json` emits one JSON event per line (`tool_use`, `step_start`, `step_finish`, `text`, `error`), tagged with the session id — pipe it to a file and parse line by line. |
+| `--format <default\|json>` | `json` emits one JSON event per line (`tool_use`, `step_start`, `step_finish`, `text`, `error`) with the session id. Pipe it to a file and parse line by line. |
 | `--attach <url>` | Send the prompt to a running server instead of starting one. |
 | `--port <n>` | Port for the throwaway local server (random by default). |
 

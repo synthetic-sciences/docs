@@ -28,11 +28,10 @@ The source for [docs.syntheticsciences.ai](https://docs.syntheticsciences.ai).
 
 This repository is the whole docs site: a small Vite + React app that renders a folder of MDX pages. There is no docs framework, no CMS, and no server. Merges to `main` deploy automatically.
 
-It documents three products:
+It documents two products:
 
-- **[Atlas](https://docs.syntheticsciences.ai/#/atlas/index)**: the research graph. Hypotheses, runs, evidence, and decisions that outlive any one chat. Try it at [tryatlas.sh](https://tryatlas.sh).
 - **[OpenScience](https://docs.syntheticsciences.ai/#/openscience/index)**: the [open-source AI workbench](https://github.com/synthetic-sciences/openscience) for scientific research. Try it at [openscience.sh](https://openscience.sh).
-- **[Library](https://docs.syntheticsciences.ai/#/library/index)**: indexed knowledge sources that graphs can search and cite. [Delphi](https://github.com/synthetic-sciences/delphi) is the open-source engine; try it at [trydelphi.ai](https://trydelphi.ai).
+- **[Atlas](https://docs.syntheticsciences.ai/#/atlas/index)**: the research graph. Hypotheses, runs, evidence, and decisions that outlive any one chat. Try it at [tryatlas.sh](https://tryatlas.sh).
 
 ## Development
 

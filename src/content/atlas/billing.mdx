@@ -1,10 +1,10 @@
 ---
 title: "Billing & credits"
-description: "Account credit, library and research quotas, and how to read usage."
+description: "Account credit, source-search and research quotas, and how to read usage."
 icon: "credit-card"
 ---
 
-Atlas bills against your account. Most graph and library operations are included; the metered surfaces are research answers and managed compute. Check **Billing** in the app or read usage from the CLI.
+Atlas bills against your account. Most graph, source-indexing, and search operations are included; the metered surfaces are research answers and managed compute. Check **Billing** in the app or read usage from the CLI.
 
 ## Read your usage
 
@@ -16,16 +16,16 @@ atlas usage:summary --format=json
 
 | Quota | Spent by |
 | --- | --- |
-| `oracle` | `research:ask` and `research:jobs:create` (Oracle-style synthesis over your library). |
+| `oracle` | `research:ask` and `research:jobs:create` (Oracle-style synthesis over your indexed sources). |
 | `deep_research` | The deep-research pipeline (`library:search --mode deep` and deep research jobs). |
 | credit | Managed executions (`exec:start`), the managed agent runtime, and managed GPU leases (`compute:up`). |
 
 ## What is metered
 
-- **Graph operations** — creating nodes, recording runs, comparing, exporting: included.
-- **Library indexing and search** — adding sources, `library:search`, `library:ask`: included, subject to fair-use limits on source size and count.
-- **Research answers** — `research:ask` and research jobs deduct from the `oracle` quota; deep research deducts from `deep_research`.
-- **Managed compute** — `exec:start` and the agent runtime draw down account credit. A managed GPU lease (`compute:up`) bills the wallet per hour at pass-through pricing (provider cost plus a small fee) and is reconciled to actual hours on `compute:release`; bring-your-own-key leases are free.
+- **Graph operations:** creating nodes, recording runs, comparing, and exporting are included.
+- **Source indexing and search:** adding sources, `library:search`, and `library:ask` are included, subject to fair-use limits on source size and count.
+- **Research answers:** `research:ask` and research jobs deduct from the `oracle` quota. Deep research deducts from `deep_research`.
+- **Managed compute:** `exec:start` and the agent runtime draw account credit. A managed GPU lease created with `compute:up` bills the wallet at pass-through pricing and reconciles actual runtime on `compute:release`. BYOK leases use the connected provider account.
 
 ## Manage billing
 

@@ -4,10 +4,10 @@ description: "Improve a measurable artifact with the GEPA loop, referee the resu
 icon: "trending-up"
 ---
 
-Once you have a benchmark, Atlas can search for a better artifact (a prompt, config, or piece of code) and record the entire optimization as graph state: every candidate as a node, the lineage between them, the live budget, and a refereed before→after delta. There are two entry points — the `optimize:*` primitives, and `autoresearch`, which runs the full campaign from a single plain-English goal.
+Once you have a benchmark, Atlas can search for a better artifact such as a prompt, config, or code file. It records each candidate, its lineage, the live budget, and the refereed before-to-after result as graph state. Use the `optimize:*` primitives for direct control or `autoresearch` for a full campaign from one goal.
 
 <Warning>
-Both surfaces drive the [`atlas-optimize`](/atlas/skills) and `atlas-autoresearch` skills under the hood, and both require `uv` plus a reflection-LM key for the GEPA reflection step. They orchestrate the existing research-loop primitives — there is no separate engine.
+Both surfaces use the [`atlas-optimize`](/atlas/skills) and `atlas-autoresearch` skills. They require `uv` and a reflection-model key for the GEPA reflection step. The workflow uses the existing research-loop primitives rather than a separate engine.
 </Warning>
 
 ## The GEPA loop
@@ -29,16 +29,16 @@ atlas optimize:start \
 | `--target` | The artifact to optimize (required). |
 | `--benchmark` | Command that runs the eval and emits the contract JSON (required). |
 | `--objective` | Plain-English goal for the reflection step (required). |
-| `--metric` | `max` or `min` — which direction is better. |
+| `--metric` | `max` or `min`, depending on which direction is better. |
 | `--max-metric-calls` | Budget in benchmark evaluations. |
-| `--max-seconds` | Wall-clock budget (maps to GEPA's timeout; `0` means no limit). Composes with `--max-metric-calls` — whichever is hit first wins. |
+| `--max-seconds` | Wall-clock budget mapped to GEPA's timeout. `0` means no limit. When combined with `--max-metric-calls`, the first limit reached stops the run. |
 | `--parallel` | Run `K` candidates concurrently, each in its own git worktree. |
 | `--stall` | Stop after this many rounds with no improvement. |
 | `--gate` | A Goodhart guard (for example a files-unchanged check) that disqualifies cheating candidates. |
 | `--ground` | Ground the reflection in indexed library sources. |
 | `--resume <control>` | Continue a prior run, seeding from its best candidate. |
 
-The harness writes a machine-readable `optimize-result.json` into the run directory (control node id, winner node id, `stop_reason`, candidates recorded), and `optimize:start` returns it — so a wrapper learns the control node without scraping stdout. `stop_reason` is one of `budget_exhausted`, `no_improvement`, `objective_met`, `user_cancelled`, or `runtime_error`.
+The harness writes `optimize-result.json` into the run directory and returns the same data from `optimize:start`. It includes the control node id, winner node id, recorded candidate count, and `stop_reason`, so wrappers do not need to scrape stdout. `stop_reason` is one of `budget_exhausted`, `no_improvement`, `objective_met`, `user_cancelled`, or `runtime_error`.
 
 Track and control a run from its control node:
 
@@ -87,7 +87,7 @@ VERIFIED: 0.748 → 0.718 (Δ -0.030, p<0.05, n=10)
 | `--scaffold-only` | Stop after generating the benchmark for review. |
 | `--dry-run` | Preview the full plan without spending budget. |
 | `--resume` | Continue an interrupted campaign. |
-| `--project <node>` | Attach the campaign under an existing node — the handoff from a reproduced paper (`atlas-reproduce`) into a campaign. |
+| `--project <node>` | Attach the campaign under an existing node, including a paper reproduced with `atlas-reproduce`. |
 | `--target` / `--benchmark` | Override artifact and benchmark auto-detection. |
 
 The campaign root's canonical URL (`/nodes/<id>`) is printed at launch so you can watch it in the web views.

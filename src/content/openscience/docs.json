@@ -8,21 +8,15 @@
         "groups": [
           {
             "group": "Start",
-            "pages": [
-              "index",
-              "quickstart",
-              "workspace"
-            ]
+            "pages": ["index", "quickstart", "workspace"]
           },
           {
-            "group": "Use the agent",
-            "pages": [
-              "agents",
-              "models",
-              "skills",
-              "sessions",
-              "atlas"
-            ]
+            "group": "Research",
+            "pages": ["agents", "skills", "scientific-data", "compute", "artifacts", "sessions"]
+          },
+          {
+            "group": "Models and Atlas",
+            "pages": ["models", "local-models", "atlas"]
           }
         ]
       },
@@ -31,10 +25,7 @@
         "groups": [
           {
             "group": "CLI",
-            "pages": [
-              "commands",
-              "security"
-            ]
+            "pages": ["commands", "security", "sandbox"]
           }
         ]
       }

@@ -4,7 +4,7 @@ description: "Bring your own keys for any provider, switch models per run, and o
 icon: "package-check"
 ---
 
-OpenScience is model-agnostic. A **model** is one inference endpoint the agent routes through; a **provider** is a vendor that exposes models. Routing happens on your machine: with your own keys (the default), each call goes straight from your machine to the provider — no gateway in the middle, no account required.
+OpenScience is model-agnostic. A **model** is an inference endpoint. A **provider** exposes one or more models. With your own key, each request goes directly from your machine to that provider. No account or OpenScience gateway is involved.
 
 ## Bring your own keys
 
@@ -15,7 +15,40 @@ export ANTHROPIC_API_KEY=sk-ant-...   # or OPENAI_API_KEY, GEMINI_API_KEY, ...
 openscience
 ```
 
-Keys stay on your machine. Anthropic, OpenAI, Google, OpenRouter, Groq, Mistral, xAI, DeepSeek, and dozens more work the same way — the catalogue is models.dev-backed, so any `provider/model` id a provider currently exposes is addressable. You can also paste keys into the Credentials panel in the [workspace](/openscience/workspace) instead of exporting them, and OpenAI Codex signs in via OAuth.
+Keys stay on your machine. Anthropic, OpenAI, Google, OpenRouter, Groq, Mistral, xAI, Meta Model API, DeepSeek, and other models.dev providers use the same `provider/model` naming scheme. You can paste keys into the Credentials panel instead of exporting them. Supported subscription-based OpenAI models can also use the OAuth sign-in flow.
+
+The current frontier families are available on both paths:
+
+| Family | BYOK model | Atlas managed model |
+| --- | --- | --- |
+| GPT-5.6 Sol / Terra / Luna | `openai/gpt-5.6-*` | `openrouter/openai/gpt-5.6-*` |
+| Grok 4.5 | `xai/grok-4.5` | `openrouter/x-ai/grok-4.5` |
+| Muse Spark 1.1 | `meta/muse-spark-1.1` | `meta/muse-spark-1.1` through the Atlas Meta proxy |
+
+For BYOK, use `OPENAI_API_KEY`, `XAI_API_KEY`, or `META_MODEL_API_KEY`. The managed Meta route sends only your Atlas session token and proxy URL to OpenScience; Atlas keeps its shared Meta credential server-side.
+
+Current frontier families include:
+
+| Provider | Model IDs |
+| --- | --- |
+| Anthropic | `claude-opus-5`, `claude-sonnet-5` |
+| OpenAI | `gpt-5.6`, `gpt-5.6-sol`, `gpt-5.6-terra`, `gpt-5.6-luna` |
+| xAI | `grok-4.5`, `grok-4.3`, `grok-build-0.1`, and Grok 4.20 reasoning, non-reasoning, and multi-agent models |
+| Moonshot AI | `kimi-k3` |
+| Vercel AI Gateway | `meta/muse-spark-1.1` |
+
+This is not a hardcoded allowlist for your own provider keys. OpenScience refreshes models.dev at startup and hourly, so newly published models appear without waiting for an OpenScience release. The OpenAI Codex OAuth provider is the exception: it only shows models verified to work through a ChatGPT subscription, currently including the full GPT-5.6 family.
+
+## Local models
+
+OpenScience also connects to local OpenAI-compatible endpoints such as Ollama, LM Studio, llama.cpp, and vLLM:
+
+```bash
+openscience local add        # detects Ollama / LM Studio, lists + adds their models
+openscience run --model ollama/llama3.1 "hello"
+```
+
+Local models are free and never metered. See **[Local models](/openscience/local-models)** for the full guide.
 
 ## List what is configured
 
@@ -24,31 +57,33 @@ openscience models             # grouped by provider, with a routing label per p
 openscience models anthropic   # one provider
 ```
 
-Each provider is labeled `your key`, `managed`, `Signed in with Codex`, or `unconfigured`, so you always know which route a model takes. `--verbose` adds per-model metadata like costs, `--refresh` refetches the catalogue, and `--flat` prints one `provider/model` id per line for scripting.
+Each provider is labeled `your key`, `managed`, `local`, `Signed in with Codex`, or `unconfigured`, so you always know which route a model takes. `--verbose` adds per-model metadata like costs, `--refresh` refetches the catalogue, and `--flat` prints one `provider/model` id per line for scripting.
 
 ## Pick a model per run
 
 ```bash
-openscience run --model anthropic/claude-opus-4-8 --variant xhigh "Design the ablation study"
+openscience run --model anthropic/claude-opus-5 --variant xhigh "Design the ablation study"
 openscience run --model anthropic/claude-sonnet-5 "Clean up the plotting code"
+openscience run --model openai/gpt-5.6-terra --variant max "Review the analysis"
+openscience run --model moonshotai/kimi-k3 "Implement the pipeline"
 ```
 
-`--model <provider>/<model>` overrides the default for one run; in the workspace, use the model selector per session. `--variant` picks a reasoning-effort tier — `minimal`, `high`, `max`, and so on. Available tiers depend on the model: Claude Opus 4.8 exposes the full range up to `xhigh` and `max`; other adaptive Claude models cap at `max`.
+`--model <provider>/<model>` overrides the default for one run. In the workspace, use the model selector per session. `--variant` picks a provider-supported reasoning tier such as `minimal`, `high`, `xhigh`, or `max`. The available tiers depend on the model.
 
 ## Atlas managed (optional)
 
-[Atlas](/atlas/index) is Synthetic Sciences' managed platform. Connecting adds a curated set of frontier models billed from a prepaid wallet, so you can skip per-provider keys entirely:
+[Atlas](/atlas/index) is the managed platform. Connecting adds a curated set of frontier models billed from a prepaid wallet, so you can skip per-provider keys entirely:
 
 ```bash
-openscience connect login   # defaults to app.syntheticsciences.ai
+openscience login   # defaults to app.syntheticsciences.ai
 ```
 
-Once connected, launching the workspace syncs your provider config and credentials, and Settings → Billing has independent managed/BYOK spend toggles for LLM calls and compute — mix routes freely, per concern. BYOK usage is always free and never gated; Atlas only meters the models it serves.
+After login, the workspace can sync provider configuration and credentials. **Settings > Billing** controls managed or BYOK routing separately for models and compute. Atlas meters only requests and resources it serves.
 
 | Path | What runs where | Billing |
 | --- | --- | --- |
 | BYOK (default) | Your machine calls the provider directly. | Your provider account. |
-| Atlas managed | Your machine calls Atlas, which calls the provider. | Prepaid wallet. See [Billing](/atlas/billing). |
+| Atlas managed | Your machine calls Atlas, which calls the provider. | Prepaid wallet. See [Atlas billing](/atlas/billing). |
 
 ## Key hygiene
 

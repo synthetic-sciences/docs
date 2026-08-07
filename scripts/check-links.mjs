@@ -1,7 +1,8 @@
-// Validates the docs navigation and internal links after the section restructure.
+// Validates the docs navigation, internal links, and source quality.
 // - Every page referenced in a section's docs.json must exist on disk.
 // - Every internal MDX link / Card href (/section/page or /page) must resolve.
 // - Warns about page files that no nav references (orphans).
+// - Rejects long dash punctuation and unlabelled fenced code blocks.
 // Exits non-zero on any hard error so it can gate a build.
 
 import { readFileSync, readdirSync, existsSync, statSync } from "node:fs";
@@ -11,7 +12,7 @@ import { fileURLToPath } from "node:url";
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const contentDir = join(root, "src", "content");
 
-const SECTIONS = ["atlas", "openscience", "library"];
+const SECTIONS = ["openscience", "atlas"];
 
 function flattenPages(items) {
   return items.flatMap((item) => (typeof item === "string" ? [item] : flattenPages(item.pages)));
@@ -83,6 +84,24 @@ for (const section of SECTIONS) {
       ? join(contentDir, section, `${file}.mdx`)
       : join(contentDir, section, `${file}.md`);
     const src = readFileSync(filePath, "utf8");
+
+    if (/[\u2014\u2013]/.test(src)) {
+      errors.push(`[style] ${section}/${file}.mdx contains an em dash or en dash`);
+    }
+
+    let inFence = false;
+    src.split("\n").forEach((line, index) => {
+      const fence = line.match(/^\s*```(.*)$/);
+      if (!fence) return;
+      if (!inFence && !fence[1].trim()) {
+        errors.push(`[code] ${section}/${file}.mdx:${index + 1} has a fenced code block without a language`);
+      }
+      inFence = !inFence;
+    });
+    if (inFence) {
+      errors.push(`[code] ${section}/${file}.mdx has an unclosed fenced code block`);
+    }
+
     const hrefs = new Set();
     let m;
     while ((m = linkRe.exec(src))) hrefs.add(m[1]);
@@ -119,4 +138,4 @@ if (errors.length) {
   for (const e of errors) console.error("  " + e);
   process.exit(1);
 }
-console.log("\nAll nav entries and internal links resolve. No 404s.");
+console.log("\nAll nav entries, internal links, and content checks pass. No 404s.");
