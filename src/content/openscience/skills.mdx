@@ -1,10 +1,10 @@
 ---
 title: "Skills"
-description: "250+ bundled research skills, direct access to around 30 scientific databases, and commands for installing, writing, and pinning skills."
+description: "290+ bundled research skills, direct access to 42 scientific databases, and commands for installing, writing, and pinning skills."
 icon: "book-open"
 ---
 
-A **skill** is a portable instruction bundle the agent loads into a session to prime it for a domain. OpenScience ships more than 250 of them, spanning the surface a working scientist actually hits.
+A **skill** is a portable instruction bundle the agent loads into a session to prime it for a domain. OpenScience ships more than 290 of them, spanning the surface a working scientist actually hits.
 
 ## Built-in categories
 
@@ -23,7 +23,7 @@ Run `openscience skill list --all` to print the full bundled set, grouped by cat
 
 ## Scientific databases
 
-The major scientific databases are wired in as tools, not skills: UniProt, PDB, Ensembl, ChEMBL, PubChem, arXiv, OpenAlex, Semantic Scholar, and around 30 in total. The agent queries them directly during a session — no API keys, no manual downloads — and the specialist agents lean on them heavily (see [Agents](/openscience/agents)).
+The scientific databases are wired in as tools, not skills: 42 key-free sources across proteins and structures, genomics, chemistry, pathways and interactions, literature, and omics. The agent searches them and fetches individual records or supported file formats directly during a session; call `science_list_dbs` through the agent to inspect the live catalog.
 
 ## Skill commands
 
@@ -46,6 +46,16 @@ openscience skill list
 ```
 
 Each skill in the repo passes a static safety check and an LLM safety review before it installs; rejected skills are skipped and reported. Installed skills are namespaced by repo, so `remove <namespace>` uninstalls the whole set.
+
+### Community skills
+
+Skills contributed by the community that install with the command above:
+
+- **1000 Genomes genotypes** — [`dnaerys/onekgpd-skill`](https://github.com/dnaerys/onekgpd-skill) (MIT). Individual-level queries over the 1000 Genomes cohort (3,202 WGS samples, GRCh38): which individuals carry variants matching given criteria and zygosity, kinship between individuals, and cohort population/pedigree metadata. Queries a public, keyless [Dnaerys](https://dnaerys.org) endpoint (an external service the maintainers don't control), with an offline metadata tier.
+
+  ```bash
+  openscience skill add gh:dnaerys/onekgpd-skill
+  ```
 
 ## Write your own
 

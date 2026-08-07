@@ -6,20 +6,22 @@ icon: "shield-check"
 
 OpenScience is open source under Apache-2.0, so the whole security model below is auditable in the [repository](https://github.com/synthetic-sciences/openscience). The agent runs locally with the same filesystem and shell access you have. Two principles anchor the design: keep credentials out of subprocesses that do not need them, and make the trust boundary explicit instead of pretending the agent is a sandbox.
 
-## The agent is not a sandbox
+## The agent is not a sandbox by default
 
-The permission system prompts you before the agent runs a command or writes a file. That keeps you aware of what it is doing — it is not an isolation boundary. The agent can read, write, and execute anywhere your user can. For real isolation, run OpenScience inside a container or a VM.
+The permission system prompts you before the agent runs a command or writes a file. That keeps you aware of what it is doing — it is not, on its own, an isolation boundary. By default the agent can read, write, and execute anywhere your user can.
+
+You can add a real boundary: the opt-in [execution sandbox](/openscience/sandbox) wraps the agent's shell commands in an OS sandbox (macOS Seatbelt, Linux bubblewrap) that confines writes to the workspace and can deny network egress. Turn it on with `openscience sandbox enable` and verify it with `openscience sandbox test`. It is write-containment, not a full jail — for hostile code, still run OpenScience inside a container or a VM.
 
 ## Credential storage
 
 | Surface | Where | Notes |
 | --- | --- | --- |
 | BYOK provider keys | Environment variables or the local credential store | Never leave your machine; requests go straight to the provider. No account required. |
-| Atlas session | `~/.config/openscience/config.json` | `thk_*` key created by `openscience connect login`; revocable from the dashboard. |
-| Synced service credentials | `~/.config/openscience/credentials.json` | Present only when [connected to Atlas](/openscience/atlas); refresh with `openscience connect sync`. |
+| Atlas session | `~/.config/openscience/config.json` | `thk_*` key created by `openscience login`; revocable from the dashboard. |
+| Synced service credentials | `~/.config/openscience/credentials.json` | Present only when [connected to Atlas](/openscience/atlas); refresh with `openscience sync`. |
 | Native binary (curl install) | `~/.openscience/bin/openscience` | Added to PATH through your shell rc. |
 
-Override the config parent directory with `XDG_CONFIG_HOME`.
+Override the config parent directory with `XDG_CONFIG_HOME`. Run `openscience debug paths` to print the resolved data, config, cache, and state directories on your machine.
 
 ## Subprocess environment allow-list
 
@@ -29,7 +31,7 @@ When the agent shells out, it rebuilds the subprocess environment from a curated
 
 **Passed through only when a subprocess needs them:** `HF_TOKEN`, `WANDB_API_KEY`, `MODAL_TOKEN_ID`, `MODAL_TOKEN_SECRET`, `LAMBDA_API_KEY`, `RUNPOD_API_KEY`, `PRIME_INTELLECT_API_KEY`, `TENSORPOOL_API_KEY`, `VAST_API_KEY`, `TINKER_API_KEY`, `LANGSMITH_API_KEY`, `PINECONE_API_KEY`, `TOGETHER_API_KEY`, `GROQ_API_KEY`, `FIREWORKS_API_KEY`, `OPENROUTER_API_KEY`.
 
-**Explicitly filtered out, even if set in your shell:** `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`, `GOOGLE_GENERATIVE_AI_API_KEY`, `GEMINI_API_KEY`. The agent talks to model providers itself; subprocesses do not need these keys.
+**Explicitly filtered out, even if set in your shell:** provider credentials such as `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`, `GOOGLE_GENERATIVE_AI_API_KEY`, `GEMINI_API_KEY`, `XAI_API_KEY`, and `META_MODEL_API_KEY`. The agent talks to model providers itself; subprocesses do not need these keys.
 
 ## Output redaction
 

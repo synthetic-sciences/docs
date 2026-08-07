@@ -1,10 +1,10 @@
 ---
 title: "Workspace"
-description: "The bare openscience command opens the browser workspace: files, editor, terminal, sessions, and inline scientific rendering."
+description: "The bare openscience command opens the browser workspace: files, editor, sessions, and inline scientific rendering."
 icon: "app-window"
 ---
 
-The workspace is how you use OpenScience. Run the bare command and it starts a local server, opens your browser, and gives you the full research surface: a file tree, an editor, a terminal, session history, and inline rendering for molecules, structures, genomes, and plots.
+The workspace is how you use OpenScience. Run the bare command and it starts a local server, opens your browser, and gives you the full research surface: a file tree, an editor, session history, and inline rendering for molecules, structures, genomes, and plots.
 
 ```bash
 openscience                    # open the workspace in the current directory
@@ -23,12 +23,13 @@ The server always binds localhost — the deprecated `server.hostname` / `server
 ## What the workspace gives you
 
 - **File tree and editor.** Browse and edit the project the agent is working in; edits and diffs render inline.
-- **Terminal.** A real shell in the project directory, alongside the agent's own tool calls.
+- **System-terminal workflow.** The browser workspace does not include a Terminal tab; run project commands in your system terminal alongside the browser.
 - **Session history.** Every conversation is a session; switch between them without losing context.
 - **Inline scientific rendering.** Molecules, protein structures, genomes, and plots render directly in the transcript instead of as file paths.
 - **Prompt queueing.** Type your next prompt while the agent is still streaming; queued prompts run in order.
 - **Undo from here.** Roll the session back to any message and take a different path from that point.
 - **Model selector and credentials panel.** Pick any configured model per session and add provider keys without leaving the browser. See [Models](/openscience/models).
+- **Settings panels.** Manage credentials, skills, and storage, and — when connected to Atlas — a **Wallet** panel showing your balance, billing mode, and recent usage, without leaving the browser.
 
 ## Headless server
 
