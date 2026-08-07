@@ -11,8 +11,12 @@
             "pages": ["index", "quickstart", "workspace"]
           },
           {
-            "group": "Use the agent",
-            "pages": ["agents", "models", "local-models", "skills", "sessions", "atlas"]
+            "group": "Research",
+            "pages": ["agents", "skills", "scientific-data", "compute", "artifacts", "sessions"]
+          },
+          {
+            "group": "Models and Atlas",
+            "pages": ["models", "local-models", "atlas"]
           }
         ]
       },

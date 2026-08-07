@@ -58,6 +58,9 @@ Connecting an Atlas account is optional — see [Atlas](/openscience/atlas). Ope
 | `openscience keys list` | List saved provider keys and active env vars. |
 | `openscience keys rm` | Remove a saved provider key. |
 | `openscience models` | List configured providers and their models. |
+| `openscience local add` | Detect and register Ollama, LM Studio, or another OpenAI-compatible endpoint. |
+| `openscience local list` | List configured local providers. |
+| `openscience local remove <id>` | Remove a local provider from config. |
 | `openscience wallet` | Wallet balance and key routing (alias `billing`). |
 | `openscience wallet topup` | Open the app to add credit. |
 
@@ -102,6 +105,16 @@ Flags: `--path`, `--description`, `--mode <all\|primary\|subagent>`, `--tools`, 
 | `openscience mcp` | Manage MCP servers (`list`, `add`, `remove`, `auth`). |
 
 `web` and `serve` take `--port` and `--cors`. See [Workspace](/openscience/workspace).
+
+## Agent-facing research tools
+
+These capabilities run inside an agent session rather than as shell subcommands:
+
+| Tool family | Use |
+| --- | --- |
+| `science_list_dbs`, `science_search`, `science_fetch` | Discover 42 scientific sources, search them, and retrieve structured records or supported files. See [Scientific data](/openscience/scientific-data). |
+| `modal`, `compute_job` | Review and dispatch governed Modal work, then inspect logs, outputs, cancellation, and retained-output recovery. See [Compute](/openscience/compute). |
+| `provenance_record`, `provenance_query`, `provenance_review` | Record outputs and runs, trace lineage, and attach supporting or refuting review findings. See [Artifacts & provenance](/openscience/artifacts). |
 
 ## GitHub and PRs
 

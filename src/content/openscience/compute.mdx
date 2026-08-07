@@ -1,0 +1,90 @@
+---
+title: "Compute"
+description: "Run local kernels and governed Modal jobs with exact approvals, explicit inputs and outputs, durable logs, and recoverable delivery."
+icon: "cpu"
+---
+
+OpenScience treats compute as part of the research workspace, not an opaque shell command. The **Compute** surface has two views:
+
+- **Kernels** for interactive Python and R execution attached to the current project.
+- **Jobs** for durable local or Modal work with status, logs, outputs, reproducibility metadata, and lifecycle controls.
+
+Jobs stay scoped to the project that created them. Switching sessions does not lose a running job or its history.
+
+## Connect Modal
+
+Open **Settings → Compute** and choose one setup path:
+
+- Read the active profile from `~/.modal.toml`.
+- Paste a Modal token id and token secret.
+
+Saving a credential does not enable Modal. Enable it explicitly, then use **Test connection** to verify the profile. You can also set the default app, runtime image, network policy, timeout, and concurrency from the same panel.
+
+<Warning>
+Modal credentials are control-plane secrets. OpenScience never adds them to the agent's shell, notebook kernel, or remote job environment.
+</Warning>
+
+## One exact approval per paid run
+
+When the agent is ready to dispatch Modal work, the `modal` tool builds a plan that fixes the full execution contract:
+
+| Reviewed field | Why it matters |
+| --- | --- |
+| Command and working directory | Defines exactly what executes. |
+| Runtime image and Python packages | Makes the environment explicit before launch. |
+| Uploaded inputs and collected outputs | Prevents the remote job from inheriting arbitrary host files. |
+| CPU, GPU, memory, and timeout | Bounds the resources and run duration. |
+| Network policy | Records whether the sandbox has outbound network access. |
+
+The approval is bound to a digest of that plan. If any reviewed field changes, the digest changes and OpenScience asks again. Modal credentials resolve only after the approval succeeds.
+
+## Dispatch from a prompt
+
+Ask for the outcome and include constraints that affect cost or runtime:
+
+```text
+Run train.py on one A100 in Modal, upload configs/base.yaml and data/sample.parquet,
+collect results/** and checkpoints/best.pt, and cap the job at 90 minutes.
+```
+
+The agent prepares the files and packages, presents the governed approval card, and dispatches only after you approve it. For a long job it can return immediately and continue tracking through the Jobs view.
+
+## Inspect and control jobs
+
+The Jobs view and `compute_job` tool expose the same lifecycle:
+
+| Action | Use |
+| --- | --- |
+| Status | See queued, running, succeeded, failed, cancelled, or interrupted state. |
+| Logs | Read control-plane lifecycle events and command output separately. |
+| Artifacts | Inspect expected outputs, delivered files, checkpoints, and capture errors. |
+| Cancel | Stop a live job through the provider adapter. |
+| Retry delivery | Recover already-computed outputs from a retained Modal Volume without rerunning the paid command. |
+| Release | Abandon retained recovery state and release the owned remote resource. |
+
+Execution, output delivery, and remote-resource state are tracked independently. A successful command with a failed download remains recoverable instead of being flattened into a generic failure.
+
+## Files and Modal Volumes
+
+When Modal is connected and enabled, the [Files pane](/openscience/artifacts) adds **Remote → Modal**. Browse Volumes and preview or download supported files without handing a Modal credential to the agent. The remote source is read-only from the workspace.
+
+## Local safety
+
+Local jobs and notebook kernels follow the [execution sandbox](/openscience/sandbox) policy when it is enabled. Modal jobs use an isolated remote sandbox with explicit uploads and output patterns; they do not inherit your workstation environment.
+
+## What's next
+
+<Columns cols={2}>
+  <Card title="Artifacts" icon="boxes" href="/openscience/artifacts">
+    Inspect outputs, versions, checksums, and provenance.
+  </Card>
+  <Card title="Execution sandbox" icon="lock" href="/openscience/sandbox">
+    Contain local writes and optionally deny local network egress.
+  </Card>
+  <Card title="Workspace" icon="app-window" href="/openscience/workspace">
+    See where Compute fits into the browser UI.
+  </Card>
+  <Card title="Connect to Atlas" icon="link" href="/openscience/atlas">
+    Add optional managed models, credentials, and research graphs.
+  </Card>
+</Columns>
