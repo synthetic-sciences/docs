@@ -35,7 +35,7 @@ Delegated research scatters across chats, notebooks, logs, and memory. Atlas giv
 | Insight / note | `note:add` | A freeform observation worth keeping. |
 | Evidence | `evidence:add` | Raw files, metrics, logs, or external JSON on a node. |
 
-A **library source** — a repo, doc site, paper, dataset, or local folder indexed by [Library](/library/index) — is the material a graph can search and cite. A **project** is the root node for one folder or repo; it is where the research loop runs.
+An **indexed source** — a repo, doc site, paper, dataset, or local folder — is material a graph can search and cite. A **project** is the root node for one folder or repo; it is where the research loop runs. Use the `library:*` command namespace to add and search sources; discover the exact commands through the [CLI overview](/atlas/cli-overview).
 
 ## The lifecycle
 
@@ -55,7 +55,7 @@ atlas login
 atlas doctor --format=json
 ```
 
-`atlas login` opens a browser approval flow and stores an API key locally. `atlas doctor` confirms auth, backend reachability, and the nine bundled skills. From there, run the [research loop](/atlas/research-loop), or index sources in [Library](/library/index).
+`atlas login` opens a browser approval flow and stores an API key locally. `atlas doctor` confirms auth, backend reachability, and the nine bundled skills. From there, run the [research loop](/atlas/research-loop), or index sources with `atlas library:add`.
 
 ## Built for agents
 

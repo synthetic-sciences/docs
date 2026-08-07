@@ -1,10 +1,10 @@
 ---
-title: "Graph CLI & API"
-description: "Command and route reference for Atlas Graphs."
+title: "CLI & API reference"
+description: "Command and route reference for Atlas graphs, experiments, evidence, compute, and integrations."
 icon: "terminal"
 ---
 
-Every Atlas Graphs command and the `/api/v1` route behind it. Names are canonical (singular namespaces); pre-0.8 aliases still work but are documented only on the [CLI overview](/atlas/cli-overview). For global flags and output formats, see that page too.
+Atlas commands and the `/api/v1` routes behind them. Names are canonical (singular namespaces); pre-0.8 aliases still work but are documented only on the [CLI overview](/atlas/cli-overview). For global flags and output formats, see that page too.
 
 ```bash
 atlas help --format=json                       # the whole catalog
@@ -162,4 +162,4 @@ GEPA search and refereed campaigns. See [Optimize & autoresearch](/atlas/optimiz
 | `map:summary:pdf` / `map:summary:render-pdf` | `POST` | `/export-summary-pdf` | Summary PDF. |
 | `map:summary:stream` | `POST` | `/export-summary-stream` | Streamed summary. |
 
-For library and research commands, see the [Library CLI & API](/library/commands). For auth, keys, and config, see [Getting started](/atlas/cli-overview).
+For source indexing, search, and research-answer commands, use `atlas help library:search`, `atlas help library:ask`, and `atlas help research:ask`. For auth, keys, config, global flags, and output formats, see [CLI overview & conventions](/atlas/cli-overview).

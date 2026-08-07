@@ -1,4 +1,4 @@
-// Validates the docs navigation and internal links after the section restructure.
+// Validates the docs navigation and internal links.
 // - Every page referenced in a section's docs.json must exist on disk.
 // - Every internal MDX link / Card href (/section/page or /page) must resolve.
 // - Warns about page files that no nav references (orphans).
@@ -11,7 +11,7 @@ import { fileURLToPath } from "node:url";
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const contentDir = join(root, "src", "content");
 
-const SECTIONS = ["atlas", "openscience", "library"];
+const SECTIONS = ["openscience", "atlas"];
 
 function flattenPages(items) {
   return items.flatMap((item) => (typeof item === "string" ? [item] : flattenPages(item.pages)));

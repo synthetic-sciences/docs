@@ -16,7 +16,6 @@ import {
   GitFork,
   KeyRound,
   Layers,
-  Library,
   Map,
   Moon,
   PackageCheck,
@@ -87,7 +86,7 @@ type MintlifyCard = {
   horizontal?: boolean;
 };
 
-type SectionKey = "atlas" | "openscience" | "library";
+type SectionKey = "openscience" | "atlas";
 
 type Section = {
   key: SectionKey;
@@ -97,11 +96,10 @@ type Section = {
   lead: boolean;
 };
 
-// The three Synthetic Sciences products, in order.
+// The two Synthetic Sciences products, in order.
 const SECTIONS: Section[] = [
-  { key: "atlas", label: "Atlas", short: "Atlas", tagline: "The research graph", lead: false },
   { key: "openscience", label: "OpenScience", short: "OpenScience", tagline: "Open-source AI workbench", lead: false },
-  { key: "library", label: "Library", short: "Library", tagline: "Knowledge sources", lead: false },
+  { key: "atlas", label: "Atlas", short: "Atlas", tagline: "The research graph", lead: false },
 ];
 
 const SECTION_KEYS = SECTIONS.map((section) => section.key);
@@ -142,10 +140,6 @@ const ICONS: Record<string, ReactNode> = {
   "web-views": <Layers size={17} strokeWidth={1.8} />,
   skills: <BookOpen size={17} strokeWidth={1.8} />,
   commands: <Terminal size={17} strokeWidth={1.8} />,
-  indexing: <Library size={17} strokeWidth={1.8} />,
-  search: <Search size={17} strokeWidth={1.8} />,
-  ask: <Search size={17} strokeWidth={1.8} />,
-  jobs: <Workflow size={17} strokeWidth={1.8} />,
   "first-session": <Terminal size={17} strokeWidth={1.8} />,
   sessions: <Terminal size={17} strokeWidth={1.8} />,
   models: <PackageCheck size={17} strokeWidth={1.8} />,
@@ -160,9 +154,8 @@ const ICONS: Record<string, ReactNode> = {
 };
 
 const SECTION_FALLBACK_ICON: Record<SectionKey, ReactNode> = {
-  atlas: <GitBranch size={17} strokeWidth={1.8} />,
   openscience: <FlaskConical size={17} strokeWidth={1.8} />,
-  library: <Library size={17} strokeWidth={1.8} />,
+  atlas: <GitBranch size={17} strokeWidth={1.8} />,
 };
 
 const FRONTMATTER_RE = /^---\n([\s\S]*?)\n---\n?/;
@@ -224,23 +217,21 @@ function buildSectionPages(section: SectionKey): Record<string, DocsPage> {
 }
 
 const SECTION_DOC_PAGES: Record<SectionKey, Record<string, DocsPage>> = {
-  atlas: buildSectionPages("atlas"),
   openscience: buildSectionPages("openscience"),
-  library: buildSectionPages("library"),
+  atlas: buildSectionPages("atlas"),
 };
 
 const SECTION_CONFIGS: Record<SectionKey, DocsConfig> = {
-  atlas: RAW_CONFIGS["./content/atlas/docs.json"],
   openscience: RAW_CONFIGS["./content/openscience/docs.json"],
-  library: RAW_CONFIGS["./content/library/docs.json"],
+  atlas: RAW_CONFIGS["./content/atlas/docs.json"],
 };
 
 function pageExists(section: SectionKey, path: string): boolean {
   return Boolean(SECTION_DOC_PAGES[section]?.[path]);
 }
 
-// Redirects from the retired section names (and the per-page renames inside
-// them) to the current three sections. Applied to the first URL segment.
+// Redirects from retired section names (and the per-page renames inside them)
+// to the current two sections. Applied to the first URL segment.
 const SECTION_ALIASES: Record<string, SectionKey> = {
   "getting-started": "atlas",
   graphs: "atlas",
@@ -272,8 +263,6 @@ const LEGACY_REDIRECTS: Record<string, { section: SectionKey; path: string }> = 
   "atlas:exports-imports": { section: "atlas", path: "forking" },
   "atlas:commands": { section: "atlas", path: "commands" },
   "atlas:skills": { section: "atlas", path: "skills" },
-  "atlas:source-to-graph": { section: "library", path: "quickstart" },
-  "atlas:sources-search": { section: "library", path: "indexing" },
   "atlas:safety": { section: "atlas", path: "cli-overview" },
   "cli:index": { section: "openscience", path: "index" },
   "cli:installation": { section: "openscience", path: "quickstart" },
@@ -296,20 +285,20 @@ const LEGACY_REDIRECTS: Record<string, { section: SectionKey; path: string }> = 
 };
 
 function readStoredProduct(): "atlas" | "cli" {
-  if (typeof window === "undefined") return "atlas";
+  if (typeof window === "undefined") return "cli";
   try {
     const stored = window.localStorage.getItem("docs-product");
     if (stored === "cli" || stored === "atlas") return stored;
   } catch {
     /* ignore */
   }
-  return "atlas";
+  return "cli";
 }
 
 type Route = { section: SectionKey; path: string };
 
 function defaultRoute(): Route {
-  return { section: "atlas", path: "index" };
+  return { section: "openscience", path: "index" };
 }
 
 function routeFromHash(): Route {
@@ -323,7 +312,7 @@ function routeFromHash(): Route {
     if (pageExists(maybeSection, path)) return { section: maybeSection, path };
     return { section: maybeSection, path: "index" };
   }
-  // Retired section names redirect into the new three-section scheme.
+  // Retired section names redirect into the current two-section scheme.
   const aliasSection = SECTION_ALIASES[segments[0]];
   if (aliasSection) {
     const rawPath = segments.slice(1).join("/") || "index";
@@ -333,7 +322,7 @@ function routeFromHash(): Route {
   }
   // Legacy single-segment URL: disambiguate via the stored product toggle.
   const product = readStoredProduct();
-  const redirect = LEGACY_REDIRECTS[`${product}:${raw}`] ?? LEGACY_REDIRECTS[`atlas:${raw}`] ?? LEGACY_REDIRECTS[`cli:${raw}`];
+  const redirect = LEGACY_REDIRECTS[`${product}:${raw}`] ?? LEGACY_REDIRECTS[`cli:${raw}`] ?? LEGACY_REDIRECTS[`atlas:${raw}`];
   if (redirect && pageExists(redirect.section, redirect.path)) return redirect;
   return defaultRoute();
 }
@@ -344,7 +333,7 @@ function pageHref(section: SectionKey, path: string): string {
 
 // Module-level pointers updated on each render so the markdown renderer (which
 // can't take props through react-markdown) can resolve links and card icons.
-let CURRENT_SECTION: SectionKey = "atlas";
+let CURRENT_SECTION: SectionKey = "openscience";
 
 function resolveHref(href: string | undefined): string | undefined {
   if (!href) return href;
