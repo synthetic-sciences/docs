@@ -22,7 +22,7 @@ atlas run:record \
 
 ### Auto-captured code state
 
-`run:record` reads the working tree and stores the **repo URL, branch, head commit SHA, and a dirty flag** onto the run. That is why the recommended practice is to **commit before recording** — a clean tree makes the result reproducible. Opt out with `--no-git`.
+`run:record` reads the working tree and stores the **repo URL, branch, head commit SHA, and a dirty flag** on the run. Commit before recording so the captured commit matches the code that ran. Opt out with `--no-git`.
 
 ### Bind to a plan or hypothesis
 
@@ -39,7 +39,7 @@ atlas run:record \
 | `--outcome` | `success`, `failure`, `inconclusive` (inferred from `--exit-code` when omitted). |
 | `--failure-mode` | `diverged`, `oom`, `data_bug`, `code_bug`, `underperformed`, `other`. |
 
-Record failures too — a logged `oom` or `diverged` run is how the next agent avoids repeating it.
+Record failures too. A logged `oom` or `diverged` run helps the next agent avoid repeating it.
 
 ### Other flags
 
@@ -94,7 +94,7 @@ atlas leaderboard --project able-helm-1359 --metric metrics.val_loss --direction
 
 ## Managed executions vs the flight recorder
 
-These are different surfaces — do not confuse them:
+These are separate surfaces:
 
 | You want to... | Use | Namespace |
 | --- | --- | --- |

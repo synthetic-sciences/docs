@@ -15,7 +15,7 @@ Atlas ships nine skills inside `@synsci/atlas`. They are workflow instructions t
 | `atlas-map` | Turning papers, repos, docs, or notes into durable map nodes and evidence, without launching runs. | `atlas node:create` / `atlas library:tree` |
 | `atlas-optimize` | Improving a measurable artifact (prompt, config, code) with the GEPA search loop, persisting every candidate as a node. | `atlas optimize:start …` |
 | `atlas-autoresearch` | Running an entire refereed campaign from one plain-English goal: baseline → pre-register → search → referee → report. | `atlas autoresearch --goal "…"` |
-| `atlas-reproduce` | Turning a paper into a graph. Hand it an arXiv id (or a paper URL/repo): it indexes the paper, finds the code, runs a minimal reproduction, and lays the result out as paper → claim → setup → result — asking for whatever the paper didn't say and recording each answered gap as a `decision` node. Continue from the reproduced node with `atlas autoresearch --project <node>`. | `atlas library:add --type research_paper --url https://arxiv.org/abs/<id>` |
+| `atlas-reproduce` | Turn a paper into a graph. It indexes the paper, finds the code, runs a minimal reproduction, and records paper → claim → setup → result. Missing details become explicit questions, and each answer is saved as a `decision` node. Continue with `atlas autoresearch --project <node>`. | `atlas library:add --type research_paper --url https://arxiv.org/abs/<id>` |
 | `atlas-paper` | Drafting a manuscript or report from the recorded graph state. | `atlas map:summary --node <id>` |
 
 ## Pick the right one
@@ -37,4 +37,4 @@ atlas doctor --format=json   # reports the skill count and names
 atlas install --dry-run      # preview where each skill would land
 ```
 
-`doctor` checks that all nine skills are present in the installed package. Skills are bundled in the CLI — never configure separate skill downloads.
+`doctor` checks that all nine skills are present in the installed package. The skills ship with the CLI, so do not configure separate downloads.

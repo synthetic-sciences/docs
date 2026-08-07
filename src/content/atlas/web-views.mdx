@@ -1,6 +1,6 @@
 ---
 title: "Web app views"
-description: "Cards, orbit, and timeline — three ways the research graph renders in the app."
+description: "Use cards, orbit, and timeline views to inspect the same research graph."
 icon: "layers"
 ---
 
@@ -42,9 +42,9 @@ The app navigation reflects the Atlas suite:
 
 ## Compute
 
-GPU compute is available from both the web app's **Compute** tab and the CLI. The marketplace is cross-provider: `atlas compute:catalog` shows the cheapest offer per GPU model across every provider (filter with `--gpu h100`, `--provider vast`, `--min-vram 80`, `--max-price 2.50`; `--best` ranks live stock first), and `atlas compute:up` launches one — zero flags picks the cheapest available, `--dry-run` previews the pick and price without spending, and `--node` attaches the lease to a research node. `compute:list`, `compute:ssh`, and `compute:release` manage running leases.
+GPU compute is available from the **Compute** tab and the CLI. The marketplace aggregates live offers from Lambda Labs, RunPod, Vast.ai, and Prime Intellect. `atlas compute:catalog` shows the cheapest offer per GPU model and accepts filters such as `--gpu h100`, `--provider vast`, `--min-vram 80`, and `--max-price 2.50`. Add `--best` to prefer live stock. `atlas compute:up` launches a VM. With no flags, it selects the cheapest available offer; `--dry-run` previews the selection and price; `--node` attaches the lease to a research node. Use `compute:list`, `compute:ssh`, and `compute:release` to manage it.
 
-Pricing is pass-through: you pay the provider's cost plus a small fee, billed hourly from the CLI wallet and reconciled to actual hours on release. Connect your own provider key (bring-your-own-key) and those offers rank as free — the lease runs on your account.
+Managed pricing is the provider cost plus a platform fee and is billed from the CLI wallet. Atlas reconciles the charge to the recorded runtime when you release the lease. With a connected provider key, the lease runs on your provider account instead.
 
 ## Publish a view
 

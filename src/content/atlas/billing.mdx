@@ -22,10 +22,10 @@ atlas usage:summary --format=json
 
 ## What is metered
 
-- **Graph operations** — creating nodes, recording runs, comparing, exporting: included.
-- **Source indexing and search** — adding sources, `library:search`, `library:ask`: included, subject to fair-use limits on source size and count.
-- **Research answers** — `research:ask` and research jobs deduct from the `oracle` quota; deep research deducts from `deep_research`.
-- **Managed compute** — `exec:start` and the agent runtime draw down account credit. A managed GPU lease (`compute:up`) bills the wallet per hour at pass-through pricing (provider cost plus a small fee) and is reconciled to actual hours on `compute:release`; bring-your-own-key leases are free.
+- **Graph operations:** creating nodes, recording runs, comparing, and exporting are included.
+- **Source indexing and search:** adding sources, `library:search`, and `library:ask` are included, subject to fair-use limits on source size and count.
+- **Research answers:** `research:ask` and research jobs deduct from the `oracle` quota. Deep research deducts from `deep_research`.
+- **Managed compute:** `exec:start` and the agent runtime draw account credit. A managed GPU lease created with `compute:up` bills the wallet at pass-through pricing and reconciles actual runtime on `compute:release`. BYOK leases use the connected provider account.
 
 ## Manage billing
 

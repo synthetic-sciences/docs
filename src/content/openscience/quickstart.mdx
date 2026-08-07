@@ -1,73 +1,83 @@
 ---
 title: "Quickstart"
-description: "Install OpenScience, set a provider key, and run your first research session."
+description: "Install OpenScience, configure a model, and run a research task."
 icon: "rocket"
 ---
 
-Five minutes from zero to a running research session. No account required.
+You can start with a provider key or a local model. An Atlas account is optional.
 
 <Steps>
-  <Step title="Install">
+  <Step title="Install OpenScience">
     ```bash
     npm install -g @synsci/openscience@latest
     ```
 
-    Or without a global install, `npx synsci` runs the same workbench in one step. The install script (`curl -fsSL https://openscience.sh/install | bash`) drops a standalone `openscience` binary into `~/.openscience/bin`, and platform binaries are attached to every [GitHub release](https://github.com/synthetic-sciences/openscience/releases).
+    You can also run `npx synsci` without a global install. The shell installer, `curl -fsSL https://openscience.sh/install | bash`, places a standalone binary in `~/.openscience/bin`. Platform binaries are published on [GitHub Releases](https://github.com/synthetic-sciences/openscience/releases).
 
-    Linux requires kernel 5.1 or newer. Glibc builds require glibc 2.17 or newer, and musl builds are selected separately. CentOS 7's stock 3.10 kernel is not supported; use a newer host kernel or VM.
+    Linux requires kernel 5.1 or newer. Glibc builds require glibc 2.17 or newer. Separate musl builds are available.
   </Step>
-  <Step title="Set a provider key">
+
+  <Step title="Configure a model">
     ```bash
-    export ANTHROPIC_API_KEY=sk-ant-...   # or OPENAI_API_KEY, GEMINI_API_KEY, ...
+    export ANTHROPIC_API_KEY=sk-ant-...
     ```
 
-    Any provider works — bring your own key and it stays on your machine. `openscience keys add` gives you an interactive sign-in for providers that support it. See [Models](/openscience/models) for routing and reasoning-effort tiers.
+    Replace this with the environment variable for your provider. You can also run `openscience keys add`, use the Credentials panel, or register a local server with `openscience local add`. See [Models and providers](/openscience/models).
   </Step>
-  <Step title="Open the workspace">
+
+  <Step title="Open your project">
     ```bash
-    openscience
+    openscience ~/code/my-project
     ```
 
-    The command starts a local server and opens the browser workspace: file tree, editor, and session history, with inline rendering for molecules, structures, genomes, and plots. See [Workspace](/openscience/workspace).
+    OpenScience starts a local server and opens the project in your browser. The workspace has files, an editor, sessions, scientific previews, compute status, and artifact history. Project commands still run in your system terminal.
   </Step>
-  <Step title="Give it a goal">
-    Ask for the outcome, not the steps. The default `research` agent plans, reads, codes, runs, and reports:
+
+  <Step title="Run a focused task">
+    State the outcome, relevant inputs, and any cost or runtime limit.
 
     ```text
-    Reproduce the headline result of arXiv:2305.13245 on a small model
-    and tell me whether it holds at 125M parameters.
+    Reproduce the main result of arXiv:2305.13245 on a 125M parameter model.
+    Use no more than one GPU for 90 minutes. Save the config, metrics, and plot.
     ```
 
-    Prefer your system terminal? One-shot runs work without the browser:
+    For a one-shot terminal run:
 
     ```bash
-    openscience run "Profile train.py and find the input-pipeline bottleneck"
+    openscience run "Profile train.py and identify the input pipeline bottleneck"
     ```
   </Step>
-  <Step title="Optional: connect Atlas">
+
+  <Step title="Connect Atlas if you need it">
     ```bash
     openscience login
     ```
 
-    Connecting an [Atlas](/atlas/index) account records your research into durable graphs and unlocks a managed model route with spend controls. OpenScience never requires it. See [Connect to Atlas](/openscience/atlas).
+    Atlas adds credential sync, managed models, shared research graphs, and GPU leases. OpenScience remains usable without it. See [Connect to Atlas](/openscience/atlas).
   </Step>
 </Steps>
 
-## Verify the install
+## Check the installation
 
 ```bash
 openscience --version
-openscience models        # configured providers and models
-openscience skill list    # installed skills
+openscience models
+openscience skill list --all
 ```
 
-## Where next
+## Continue
 
 <Columns cols={2}>
+  <Card title="Workspace" icon="layers" href="/openscience/workspace">
+    Learn the browser interface, local server, and headless mode.
+  </Card>
+  <Card title="Compute" icon="cpu" href="/openscience/compute">
+    Choose local, Modal, Lambda Labs, SkyPilot, or Atlas compute.
+  </Card>
   <Card title="Agents" icon="bot" href="/openscience/agents">
-    The research agent, the biology / physics / ml specialists, and plan mode.
+    Select a built-in specialist or create your own profile.
   </Card>
   <Card title="Command reference" icon="terminal" href="/openscience/commands">
-    Every subcommand: runs, sessions, skills, server, lifecycle.
+    Review the complete CLI and agent tool surface.
   </Card>
 </Columns>

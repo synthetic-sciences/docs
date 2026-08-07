@@ -1,12 +1,12 @@
 ---
 title: "Execution sandbox"
-description: "Confine the agent's shell commands to the workspace with a real OS sandbox — macOS Seatbelt, Linux bubblewrap. Opt-in, off by default."
+description: "Confine agent shell commands to the workspace with macOS Seatbelt or Linux bubblewrap. The sandbox is off by default."
 icon: "lock"
 ---
 
-The permission system decides **whether** the agent runs a command; it does not decide **what that command can reach** once it runs. An approved (or auto-approved) command executes with your full user authority — it can touch `~/.ssh`, rewrite `~/.bashrc`, or delete another project. The permission prompt keeps you *aware*; it is not an isolation boundary.
+The permission system decides **whether** the agent runs a command. It does not limit what that command can reach. An approved or auto-approved command normally executes with your full user authority. It can touch `~/.ssh`, rewrite `~/.bashrc`, or modify another project. A permission prompt is not an isolation boundary.
 
-The execution sandbox adds the missing boundary. When enabled, everything the agent executes — shell commands via the `bash` tool, and code run by the Python and R notebook kernels — is wrapped in a real OS sandbox that **confines writes to the workspace** and can optionally **deny network egress**. It is **off by default** — turn it on when you want the agent's blast radius contained.
+The execution sandbox adds write containment. When enabled, shell commands and code run by the Python and R kernels execute inside an OS sandbox. Writes are confined to the workspace and approved paths. Network access can also be denied. The sandbox is off by default.
 
 ## Quick start
 
@@ -16,7 +16,7 @@ openscience sandbox test            # prove it actually confines writes + networ
 openscience sandbox                 # show status: backend + current policy
 ```
 
-`sandbox test` runs real sandboxed commands — it writes inside a scratch workspace (must succeed), writes outside it (must be blocked), and checks that network-deny mode blocks egress — then prints a pass/fail for each. If it doesn't say **Containment verified**, don't rely on the sandbox.
+`sandbox test` runs actual containment checks. It writes inside a scratch workspace, attempts a blocked write outside it, and checks network-deny mode. Do not rely on the sandbox unless the command prints **Containment verified**.
 
 ## What it does
 
@@ -30,7 +30,7 @@ openscience sandbox                 # show status: backend + current policy
 | --- | --- | --- |
 | macOS | Seatbelt (`sandbox-exec`) | Built in. |
 | Linux | bubblewrap (`bwrap`) | Install `bubblewrap`; unprivileged user namespaces must be enabled. |
-| Windows | — | No backend; commands run per `onUnavailable` (see below). |
+| Windows | Not available | Commands follow the `onUnavailable` policy. |
 
 Check what's available on your machine with `openscience sandbox` or `openscience doctor`.
 
@@ -60,7 +60,7 @@ Open **Settings → Sandbox**. The panel shows whether a backend is available on
 
 ## By hand (config)
 
-The sandbox is a `sandbox` block in your **global** `openscience.json` (or an enterprise **managed** config). `openscience sandbox enable` writes it for you. The policy is read **only** from global and managed config — never from a project's `openscience.json` — so opening an untrusted repo cannot weaken or disable your sandbox:
+The sandbox is a `sandbox` block in the **global** `openscience.json` or an enterprise managed config. `openscience sandbox enable` writes it for you. Project config cannot weaken or disable the machine policy.
 
 ```jsonc
 {
@@ -73,10 +73,10 @@ The sandbox is a `sandbox` block in your **global** `openscience.json` (or an en
 }
 ```
 
-- `enabled` — master switch. Off by default.
-- `network` — `allow` (default) or `deny`.
-- `allowWrite` — extra absolute paths the sandbox may write to.
-- `onUnavailable` — `warn` (default) · `error` · `allow`, for machines with no backend.
+- `enabled`: master switch. Off by default.
+- `network`: `allow` by default, or `deny`.
+- `allowWrite`: extra absolute paths the sandbox may write to.
+- `onUnavailable`: `warn` by default, `error`, or `allow` on a machine without a backend.
 
 ## Limitations
 
@@ -88,4 +88,4 @@ This is deliberately a **write-containment** sandbox, not a deny-by-default sysc
 - **Linux needs bubblewrap** and unprivileged user namespaces; where they're unavailable the sandbox can't engage (`onUnavailable` decides what happens).
 - **Windows has no backend** yet.
 
-What it *does* reliably stop: an agent command writing outside your workspace, and — in deny mode — a command phoning home. Verify it on your machine with `openscience sandbox test`.
+The sandbox can stop a command from writing outside the allowed paths. Network-deny mode can also block IP egress. Verify both behaviors on your machine with `openscience sandbox test`.

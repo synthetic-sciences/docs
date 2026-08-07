@@ -1,41 +1,41 @@
 ---
 title: "Workspace"
-description: "The bare openscience command opens the browser workspace: files, editor, sessions, and inline scientific rendering."
+description: "Open project files, sessions, compute, scientific previews, and artifact history in the local browser workspace."
 icon: "app-window"
 ---
 
-The workspace is how you use OpenScience. Run the bare command and it starts a local server, opens your browser, and gives you the full research surface: a file tree, an editor, session history, and inline rendering for molecules, structures, genomes, and plots.
+Run the bare command to start a local server and open the browser workspace. The workspace keeps project files, sessions, scientific previews, compute, and artifact history in one place.
 
 ```bash
 openscience                    # open the workspace in the current directory
 openscience ~/code/my-project  # open it in a specific project
 ```
 
-The server is local by design: it binds `127.0.0.1`, holds the agent in its own process, and serves the UI from the same port (`http://localhost:4096` by default; if 4096 is taken it falls back to a free port and prints the URL). Closing the browser tab does not kill the agent — reopen the URL to pick up where you left off.
+The server binds `127.0.0.1`, holds the agent in its own process, and serves the UI from the same port. The default URL is `http://localhost:4096`. If that port is occupied, OpenScience selects a free port and prints the URL. Closing the browser tab does not stop the agent. Reopen the URL to continue.
 
 | Flag | Use |
 | --- | --- |
 | `--port <n>` | Bind a specific local port instead of the default 4096. |
 | `--cors <origin>` | Allow an extra CORS origin (repeatable). |
 
-The server always binds localhost — the deprecated `server.hostname` / `server.mdns` config keys are parsed but ignored. Persistent settings live in `~/.config/openscience/openscience.json` under `server.port` and `server.cors`.
+The server always binds localhost. The deprecated `server.hostname` and `server.mdns` settings are parsed but ignored. Persistent settings live in `~/.config/openscience/openscience.json` under `server.port` and `server.cors`.
 
 ## What the workspace gives you
 
-- **Artifact-first Files pane.** OpenScience starts with the outputs your sessions produced, grouped by session. Switch the source to project files, connected folders, or read-only Modal Volumes. See [Artifacts & provenance](/openscience/artifacts).
+- **Artifact-first Files pane.** OpenScience starts with the outputs your sessions produced, grouped by session. Switch the source to project files, connected folders, or read-only Modal Volumes. See [Artifacts and provenance](/openscience/artifacts).
 - **File tree and editor.** Browse and edit the project the agent is working in; edits and diffs render inline.
 - **System-terminal workflow.** The browser workspace does not include a Terminal tab; run project commands in your system terminal alongside the browser.
 - **Session history.** Every conversation is a session; switch between them without losing context.
 - **Inline scientific rendering.** Molecules, protein structures, genomes, and plots render directly in the transcript instead of as file paths.
-- **Compute.** Run local kernels and inspect project jobs from one surface. Connect Modal in Settings for governed remote execution. See [Compute](/openscience/compute).
+- **Compute.** Run local kernels, inspect native jobs, and configure cloud credentials. See [Compute](/openscience/compute).
 - **Prompt queueing.** Type your next prompt while the agent is still streaming; queued prompts run in order.
 - **Undo from here.** Roll the session back to any message and take a different path from that point.
 - **Model selector and credentials panel.** Pick any configured model per session and add provider keys without leaving the browser. See [Models](/openscience/models).
-- **Settings panels.** Manage credentials, skills, and storage, and — when connected to Atlas — a **Wallet** panel showing your balance, billing mode, and recent usage, without leaving the browser.
+- **Settings panels.** Manage models, local runtimes, compute credentials, skills, storage, and the execution sandbox. When Atlas is connected, the Wallet panel shows balance, billing mode, and recent usage.
 
 ## Headless server
 
-`openscience serve` starts the same server without opening a browser — useful for keeping a long-lived agent running that other terminals attach to. It takes the same `--port` and `--cors` flags and is loopback-only (`127.0.0.1`).
+`openscience serve` starts the same server without opening a browser. Use it to keep a long-lived agent running for other terminals to attach to. It takes the same `--port` and `--cors` flags and remains loopback-only at `127.0.0.1`.
 
 ```bash
 openscience serve --port 4096
@@ -69,7 +69,7 @@ On macOS, launching the workspace probes whether the binary can read `~/Desktop`
     The research agent and its specialists.
   </Card>
   <Card title="Compute" icon="cpu" href="/openscience/compute">
-    Local kernels, governed Modal jobs, logs, outputs, and recovery.
+    Local kernels, governed Modal jobs, cloud skills, GPU providers, logs, and outputs.
   </Card>
   <Card title="Artifacts" icon="boxes" href="/openscience/artifacts">
     Versioned outputs, previews, provenance, and review.

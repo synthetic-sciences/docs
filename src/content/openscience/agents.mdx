@@ -1,6 +1,6 @@
 ---
 title: "Agents"
-description: "The research agent roster — a default research agent, three domain specialists, critique sub-agents, and a read-only plan mode — plus how to build your own."
+description: "Use the default research agent, domain specialists, review agents, read-only planning, or a custom profile."
 icon: "bot"
 ---
 
@@ -10,17 +10,17 @@ The default agent is `research`, a scientific research agent that runs the whole
 
 | Agent | Role | What it does |
 | --- | --- | --- |
-| `research` | Default | Scientific research across the full skill library — literature, data analysis, GPU compute, and synthesis. |
+| `research` | Default | Literature, data analysis, compute, and research synthesis across the full skill set. |
 | `biology` | Specialist | Computational biology: bioinformatics workflows and 30+ biological database integrations. |
 | `physics` | Specialist | Computational physics: simulation, PDE solving, dynamical systems, symbolic regression. |
-| `ml` | Specialist | Trains, evaluates, and analyzes models end to end — deep learning, LLMs, classical ML, RL. |
+| `ml` | Specialist | Trains, evaluates, and analyzes deep learning, language, classical ML, and reinforcement learning models. |
 | `plan` | Mode | Read-only planning. Edit tools are disabled except for plan files. |
 
 Two sub-agents back the roster. The main agent delegates to them like tools:
 
 | Sub-agent | What it does |
 | --- | --- |
-| `critique` | Read-only scientific critique. Finds blocking errors — data leakage, wrong statistics, unsupported claims — before expensive or irreversible actions. |
+| `critique` | Read-only scientific critique. Checks data leakage, statistics, and unsupported claims before expensive or irreversible actions. |
 | `literature-review` | Full PRISMA literature review: systematic search, screening, eligibility, synthesis, verification. |
 
 Run `openscience agent list` to print the complete set on your install, including utility sub-agents like `explore` and `reviewer`.
@@ -59,7 +59,7 @@ The result is a Markdown file: YAML frontmatter (description, mode, tools) plus 
 
 ## Tool restrictions
 
-`--tools "read,grep,glob"` produces a read-only agent that cannot be tricked into editing files. The available tools are `bash`, `read`, `write`, `edit`, `list`, `glob`, `grep`, `webfetch`, `task`, `todowrite`, and `todoread` — run `openscience agent create --help` for the list on your version.
+`--tools "read,grep,glob"` produces a read-only profile without edit tools. Run `openscience agent create --help` to see the tool names available in your installed version.
 
 ## Where agents live
 

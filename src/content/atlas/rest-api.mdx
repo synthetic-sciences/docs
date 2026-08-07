@@ -24,7 +24,7 @@ curl -H "Authorization: Bearer $ATLAS_API_KEY" \
 Keys are prefixed `thk_` and minted with `atlas key:create` or in the app. See [API keys](/atlas/api-keys).
 
 <Warning>
-Atlas is direct REST plus CLI. There is no Atlas MCP server. The retired MCP-era auth and device-pairing endpoints now return `HTTP 426 Upgrade Required` — use `atlas login` or a `thk_*` key instead.
+Atlas uses direct REST and the CLI. There is no Atlas MCP server. Retired MCP-era authentication and device-pairing endpoints return `HTTP 426 Upgrade Required`. Use `atlas login` or a `thk_*` key instead.
 </Warning>
 
 ## Route families

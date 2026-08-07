@@ -4,14 +4,15 @@ description: "Optionally link OpenScience to the Atlas managed platform for wall
 icon: "link"
 ---
 
-OpenScience never requires an account: bring-your-own-key usage is free and never gated. [Atlas](/atlas/index) is the managed platform, and connecting to it is optional. Atlas only meters the models it serves.
+OpenScience works without an account. With your own provider keys, requests go directly to the providers you choose. [Atlas](/atlas/index) is optional.
 
 ## What connecting adds
 
-- **A managed model route.** Curated frontier models billed from a prepaid wallet, so you do not need per-provider keys. The default endpoint is `app.syntheticsciences.ai` (override with `OPENSCIENCE_API_BASE`).
-- **Spend controls.** Managed/BYOK toggles for LLM and compute spend, per surface, in **Settings → Billing** on the dashboard.
-- **Synced service credentials.** Store cloud and ML keys (Hugging Face, W&B, Modal, and others) once on your account and pull them to any machine.
-- **Research graphs.** Record sessions and findings into [Atlas graphs](/atlas/index), the durable research map.
+- **Managed models.** Use supported models through a prepaid wallet instead of maintaining a separate key for each provider. The default endpoint is `app.syntheticsciences.ai`; `OPENSCIENCE_API_BASE` overrides it.
+- **Billing controls.** Choose managed or BYOK routing separately for models and compute in **Settings > Billing**.
+- **Credential sync.** Store supported cloud, data, and ML service credentials on your account and pull them to another machine.
+- **Research graphs.** Record hypotheses, runs, evidence, and decisions in [Atlas](/atlas/index).
+- **GPU marketplace.** Compare live Lambda Labs, RunPod, Vast.ai, and Prime Intellect VM offers in the Atlas Compute page.
 
 ## Link your account
 
@@ -20,18 +21,21 @@ OpenScience never requires an account: bring-your-own-key usage is free and neve
     ```bash
     openscience login
     ```
+
     Opens your browser to approve the device. On headless or CI machines, pass `--no-browser` and paste a key, or run `openscience login --key thk_...` with a key created at `app.syntheticsciences.ai/cli`.
   </Step>
   <Step title="Verify">
     ```bash
     openscience status
     ```
-    One answer to "what's my Atlas state?" — the connected user and device, synced-credential count, wallet balance and lifetime spend, recent usage, whether managed compute is available, and the bundled `atlas` companion version.
+
+    Prints the connected user and device, credential sync status, wallet balance, recent usage, managed compute availability, and the bundled `atlas` CLI version.
   </Step>
   <Step title="Sync credentials">
     ```bash
     openscience sync
     ```
+
     Refreshes synced service credentials after you change them on the dashboard.
   </Step>
 </Steps>
@@ -42,14 +46,14 @@ Key routing is per-provider and automatic: if you set a BYOK key for a provider,
 
 ```bash
 openscience wallet         # wallet balance and current key routing
-openscience wallet topup   # opens the Plan tab — $50 or $200, one-time or recurring monthly
+openscience wallet topup   # open the Plan tab to add wallet credit
 ```
 
 Flip managed versus BYOK per surface (LLM and compute) in **Settings → Billing**. BYOK works on every plan.
 
 ## Where credentials live
 
-Connected, your account holds the canonical copy of every synced credential; the local `~/.config/openscience/credentials.json` is a mirror you can delete and re-pull with `openscience sync`. In BYOK mode, keys exist only on your machine — see [Security](/openscience/security) for the storage and subprocess rules.
+After login, the account holds the canonical copy of each synced credential. The local `~/.config/openscience/credentials.json` file is a mirror that `openscience sync` can rebuild. Provider keys saved only in local BYOK mode stay on the machine. See [Security](/openscience/security) for storage and subprocess rules.
 
 ## Account commands
 
@@ -69,6 +73,9 @@ Connected, your account holds the canonical copy of every synced credential; the
   </Card>
   <Card title="Atlas billing" icon="credit-card" href="/atlas/billing">
     Plans, credit, quotas, and managed-model metering.
+  </Card>
+  <Card title="Compute" icon="cpu" href="/openscience/compute">
+    Native jobs, cloud skills, AWS, Lambda Labs, and Atlas GPU leases.
   </Card>
   <Card title="Models" icon="package-check" href="/openscience/models">
     BYOK provider setup and model selection.

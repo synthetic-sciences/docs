@@ -4,7 +4,7 @@ description: "The research graph: hypotheses, experiment plans, recorded runs, e
 icon: "git-branch"
 ---
 
-Research is reorganizing around delegation. Autoresearch loops, multi-agent harnesses, and AI scientists now run experiments in the background, and the volume of work a single researcher sustains keeps rising. **Atlas** is the infrastructure layer for that shift: it holds the thread of an investigation as durable nodes connected by links — the root question, the hypotheses posed, the experiments planned, the runs recorded with the exact code that produced them, the evidence attached, and the decisions made.
+Atlas stores an investigation as durable nodes connected by links. A graph can hold the root question, hypotheses, experiment plans, recorded runs, code state, evidence, and decisions. This gives researchers and agents the same history when work moves between sessions.
 
 Delegated research scatters across chats, notebooks, logs, and memory. Atlas gives it a shared map, so humans and agents return to the same state, audit what happened, and decide what to do next. Agents read that state back as a context packet with `atlas brief`.
 
@@ -35,7 +35,7 @@ Delegated research scatters across chats, notebooks, logs, and memory. Atlas giv
 | Insight / note | `note:add` | A freeform observation worth keeping. |
 | Evidence | `evidence:add` | Raw files, metrics, logs, or external JSON on a node. |
 
-An **indexed source** — a repo, doc site, paper, dataset, or local folder — is material a graph can search and cite. A **project** is the root node for one folder or repo; it is where the research loop runs. Use the `library:*` command namespace to add and search sources; discover the exact commands through the [CLI overview](/atlas/cli-overview).
+An **indexed source** is a repository, documentation site, paper, dataset, or local folder that a graph can search and cite. A **project** is the root node for one folder or repository. Use the `library:*` command namespace to add and search sources. Discover the exact commands through the [CLI overview](/atlas/cli-overview).
 
 ## The lifecycle
 
@@ -59,11 +59,11 @@ atlas doctor --format=json
 
 ## Built for agents
 
-Agent-facing docs are first class. The CLI bundles nine skills that teach any coding agent how to drive Atlas safely — `atlas install` drops them into the agents on your machine. Point any model at the published machine-readable surface:
+The CLI bundles nine skills that teach coding agents how to use Atlas. `atlas install` places them into supported agent directories on your machine. The published machine-readable references are:
 
-- [llms.txt](https://app.syntheticsciences.ai/documentation/llms.txt) — the map of the docs.
-- [llms-full.txt](https://app.syntheticsciences.ai/documentation/llms-full.txt) — the full command surface (159 commands).
-- [skill.md](https://app.syntheticsciences.ai/documentation/skill.md) — the bundled Atlas skill.
+- [llms.txt](https://app.syntheticsciences.ai/documentation/llms.txt): documentation map.
+- [llms-full.txt](https://app.syntheticsciences.ai/documentation/llms-full.txt): full command surface.
+- [skill.md](https://app.syntheticsciences.ai/documentation/skill.md): bundled Atlas skill.
 
 See [Onboard a coding agent](/atlas/onboard-agent) for a one-paste setup prompt.
 
