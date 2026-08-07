@@ -593,7 +593,11 @@ function MintlifyCardGrid({ source, cols }: { source: string; cols: number }) {
 }
 
 function MintlifySteps({ source }: { source: string }) {
-  const steps = Array.from(source.matchAll(/<Step\s+([^>]*)>\s*([\s\S]*?)\s*<\/Step>/g)).map((match) => {
+  // Do not consume the whitespace after the opening tag here. That whitespace
+  // includes the indentation of the first Markdown line. If it is removed
+  // before dedent(), the opening fence lands at column 0 while the closing
+  // fence stays indented and the rest of the step is parsed as code.
+  const steps = Array.from(source.matchAll(/<Step\s+([^>]*)>([\s\S]*?)<\/Step>/g)).map((match) => {
     const attrs = parseMdxAttrs(match[1] ?? "");
     return {
       title: String(attrs.title ?? "Step"),
@@ -749,6 +753,13 @@ export function DocumentationPage() {
     if (window.location.hash !== canonical) {
       window.history.replaceState(null, "", canonical);
     }
+  }, [route.section, route.path]);
+
+  // Hash-based page changes do not trigger the browser's normal document
+  // navigation scroll reset. Without this, opening another guide can leave the
+  // reader halfway down the new page.
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   }, [route.section, route.path]);
 
   useEffect(() => {
@@ -1824,6 +1835,10 @@ const docsCss = `
 
   .docs-step h3 {
     margin: 2px 0 8px;
+  }
+
+  .docs-step > div {
+    min-width: 0;
   }
 
   .docs-toc {
