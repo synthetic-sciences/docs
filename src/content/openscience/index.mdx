@@ -1,83 +1,82 @@
 ---
 title: "OpenScience"
-description: "An open-source workspace for scientific research, code, data, compute, and reproducible outputs."
-icon: "flask-conical"
+description: "A workbench for literature, data, code, experiments, and scientific writing."
 ---
 
 <GitHubStars />
 
-OpenScience is a local workspace for computational research. It combines an agent runtime, project files, scientific data connectors, execution tools, and artifact history in one browser interface.
+OpenScience helps you work through a research question in one project. Ask it to compare papers, analyze a dataset, write and run code, or prepare a report with the evidence behind its conclusions. Review its work in the desktop app, browser workspace, or terminal.
 
-Give it a concrete research task. It can search papers and scientific databases, inspect a repository, write and run code, dispatch approved compute jobs, and assemble the result in the same project. You choose the model and control every paid or destructive action.
-
-```bash
-npm install -g @synsci/openscience@latest
-openscience
-```
-
-The bare `openscience` command starts the local server and opens the workspace. `npx synsci` runs it without a global install. No account is required.
-
-## What is included
+Choose **Ace** for managed models and research search, connect **your own provider account or API key**, or run a **local model**. You can change model access without starting a new project.
 
 <Columns cols={2}>
-  <Card title="Research sessions" icon="workflow" href="/openscience/sessions">
-    Keep prompts, responses, tool calls, and the working directory together. Resume from the browser or terminal.
+  <Card title="Start your first project" href="/openscience/quickstart">
+    Install OpenScience, choose model access, and produce your first result.
   </Card>
-  <Card title="Research agents" icon="bot" href="/openscience/agents">
-    Use the general research agent, a biology, physics, or ML specialist, read-only planning, and focused review agents.
-  </Card>
-  <Card title="290+ skills" icon="book-open" href="/openscience/skills">
-    Load tested workflows for model training, evaluation, biology, chemistry, papers, figures, and cloud compute.
-  </Card>
-  <Card title="42 scientific data sources" icon="database" href="/openscience/scientific-data">
-    Search proteins, structures, genomics, chemistry, pathways, literature, and omics through one tool interface.
-  </Card>
-  <Card title="Browser workspace" icon="layers" href="/openscience/workspace">
-    Work with project files, sessions, scientific previews, compute status, and versioned outputs.
-  </Card>
-  <Card title="Local and cloud compute" icon="cpu" href="/openscience/compute">
-    Run local kernels, governed Modal jobs, dedicated GPU clouds, or multi-cloud jobs through bundled skills.
-  </Card>
-  <Card title="Artifacts and provenance" icon="boxes" href="/openscience/artifacts">
-    Inspect immutable output versions, checksums, producing runs, and review findings.
-  </Card>
-  <Card title="Extensible runtime" icon="package-check" href="/openscience/commands">
-    Add agents, skills, commands, LSP integrations, MCP servers, plugins, and TypeScript SDK clients.
+  <Card title="Understand pricing" href="/openscience/pricing">
+    Compare Ace, your own provider access, and local models.
   </Card>
 </Columns>
 
-## Use your preferred model
+## Start with a question
 
-Bring a provider key, sign in through a supported provider flow, or connect a local OpenAI-compatible server.
+A useful first request names the input, the output, and any limits:
+
+```text
+Analyze data/measurements.csv. Check missing values and outliers, compare
+the treatment groups, and save a plot and a short methods note in results/.
+Ask me before dropping observations or running a paid external service.
+```
+
+OpenScience can inspect the files, suggest a method, run the analysis, and save the outputs. Read the methods and check the results before using them in a publication or a consequential decision.
+
+## Choose how to use it
+
+| Interface | Start here |
+| --- | --- |
+| Desktop app | [Download for macOS, Windows, or Linux](https://openscience.sh/download). |
+| Browser workspace | Install the CLI, then run `openscience` in your project folder. |
+| Terminal | Run `openscience run "your request"` for a single turn. |
 
 ```bash
-export ANTHROPIC_API_KEY=sk-ant-...
+npm install -g @synsci/openscience
 openscience
 ```
 
-With your own key, requests go directly from your machine to the selected provider. Local models and provider keys do not require Atlas. See [Models and providers](/openscience/models) and [Local models](/openscience/local-models).
+The workbench is open source under [Apache-2.0](https://github.com/synthetic-sciences/openscience/blob/main/LICENSE). Model usage and connected services have their own costs; see [Pricing](/openscience/pricing).
 
-## Source and releases
+## Explore the workbench
 
-OpenScience is licensed under Apache-2.0. The agent runtime, workspace, skills, connectors, and compute integrations are in the public repository.
+Browse by [capability](/openscience/capabilities), [input type](/openscience/source-types), or a complete [workflow example](/openscience/workflow-examples). The **Explore tools** tab lists built-in operations, scientific software, databases, and integrations. The **Skills** tab describes every bundled procedure and links to its usage instructions.
 
-- Site: [openscience.sh](https://openscience.sh)
-- Source: [synthetic-sciences/openscience](https://github.com/synthetic-sciences/openscience)
-- Issues: [GitHub Issues](https://github.com/synthetic-sciences/openscience/issues)
-- Binaries and changelog: [GitHub Releases](https://github.com/synthetic-sciences/openscience/releases)
-- npm package: [`@synsci/openscience`](https://www.npmjs.com/package/@synsci/openscience)
+| Start with | Explore |
+| --- | --- |
+| A research question | [Literature reviews](/openscience/literature-review), [search](/openscience/research-search), and [evidence extraction](/openscience/documents). |
+| A dataset | [Tables](/openscience/tables), [Python and R](/openscience/python-r), [statistics](/openscience/statistics), and [machine learning](/openscience/machine-learning). |
+| Scientific files | [Genomics](/openscience/genomics), [molecular research](/openscience/molecular-research), and [scientific viewers](/openscience/scientific-viewers). |
+| A result to communicate | [Figures](/openscience/figures), [writing](/openscience/writing), and [saved Results](/openscience/results). |
+| A larger investigation | [Planning](/openscience/planning), [compute jobs](/openscience/jobs), and [handoffs](/openscience/context). |
+| An integration | [SDK and local API](/openscience/api), [MCP](/openscience/connectors), and [custom tools](/openscience/custom-tools). |
 
-## Atlas is optional
-
-[Atlas](/atlas/index) adds synced credentials, managed model billing, shared research graphs, and a GPU marketplace. Standalone OpenScience keeps its sessions and files local. See [Connect to Atlas](/openscience/atlas) for the exact boundary.
-
-## Start here
+## Find your next step
 
 <Columns cols={2}>
-  <Card title="Quickstart" icon="rocket" href="/openscience/quickstart">
-    Install OpenScience, configure one model, and run a research task.
+  <Card title="The workspace" href="/openscience/workspace">
+    Work with projects, conversations, files, and scientific previews.
   </Card>
-  <Card title="Workspace" icon="layers" href="/openscience/workspace">
-    Learn the browser interface and the local server behind it.
+  <Card title="Models and providers" href="/openscience/models">
+    Select Ace, connect your own keys, or choose a provider sign-in.
+  </Card>
+  <Card title="Local models" href="/openscience/local-models">
+    Connect Ollama, LM Studio, or another compatible endpoint.
+  </Card>
+  <Card title="Research skills" href="/openscience/skills">
+    Use the bundled library and add your own research procedures.
   </Card>
 </Columns>
+
+## Get help and contribute
+
+For a reproducible bug, [open an issue](https://github.com/synthetic-sciences/openscience/issues) with your version, operating system, and steps to reproduce it. Check [release notes](https://github.com/synthetic-sciences/openscience/releases) when a guide differs from your installed version.
+
+The [contributor guide](https://github.com/synthetic-sciences/openscience/blob/main/CONTRIBUTING.md) covers development setup and pull requests.
