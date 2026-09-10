@@ -1,83 +1,109 @@
 ---
 title: "Quickstart"
-description: "Install OpenScience, configure a model, and run a research task."
-icon: "rocket"
+description: "Install OpenScience, choose model access, and complete your first research task."
 ---
 
-You can start with a provider key or a local model. An Atlas account is optional.
+Start with a small dataset or a few papers you know. This makes it easier to check the first result before giving OpenScience a larger task.
 
-<Steps>
-  <Step title="Install OpenScience">
-    ```bash
-    npm install -g @synsci/openscience@latest
-    ```
+## 1. Install and open OpenScience
 
-    You can also run `npx synsci` without a global install. The shell installer, `curl -fsSL https://openscience.sh/install | bash`, places a standalone binary in `~/.openscience/bin`. Platform binaries are published on [GitHub Releases](https://github.com/synthetic-sciences/openscience/releases).
+Download the [desktop app](https://openscience.sh/download) for your operating system and open it. You can also install the command-line app with npm:
 
-    Linux requires kernel 5.1 or newer. Glibc builds require glibc 2.17 or newer. Separate musl builds are available.
-  </Step>
+```bash
+npm install -g @synsci/openscience
+openscience
+```
 
-  <Step title="Configure a model">
-    ```bash
-    export ANTHROPIC_API_KEY=sk-ant-...
-    ```
+`openscience` opens the browser workspace. To use an existing project folder:
 
-    Replace this with the environment variable for your provider. You can also run `openscience keys add`, use the Credentials panel, or register a local server with `openscience local add`. See [Models and providers](/openscience/models).
-  </Step>
+```bash
+openscience ~/research/my-project
+```
 
-  <Step title="Open your project">
-    ```bash
-    openscience ~/code/my-project
-    ```
+`npx synsci` is an alternative launcher that installs and opens OpenScience. It requires Node.js and npm.
 
-    OpenScience starts a local server and opens the project in your browser. The workspace has files, an editor, sessions, scientific previews, compute status, and artifact history. Project commands still run in your system terminal.
-  </Step>
+## 2. Set up your account, Ace, and connections
 
-  <Step title="Run a focused task">
-    State the outcome, relevant inputs, and any cost or runtime limit.
+The first launch walks through four short steps. The desktop app shows them as
+cards; `openscience` in a terminal asks the same questions inline before it opens
+the workspace. Every install sees the setup once.
 
-    ```text
-    Reproduce the main result of arXiv:2305.13245 on a 125M parameter model.
-    Use no more than one GPU for 90 minutes. Save the config, metrics, and plot.
-    ```
+1. **Account.** Select **Continue with Synthetic Sciences**. Your browser opens
+   [app.syntheticsciences.ai](https://app.syntheticsciences.ai), where you sign up
+   or sign in and choose a workspace you belong to. An account is required; on a
+   machine without a browser, paste a sign-in key instead.
+2. **Ace** (recommended, optional). **Turn on Ace** opens your billing page.
+   Ace is a $0 activation, pay as you go: managed frontier models, literature
+   search through Firecrawl, scientific schematics and image generation, and one
+   team wallet. OpenScience notices when Ace is on and continues. **Skip for
+   now** keeps your own keys as the model source.
+3. **Connect your own models** (optional). Connect a ChatGPT / Codex
+   subscription, add Anthropic, OpenAI, OpenRouter, or Firecrawl keys, or detect a
+   Modal compute profile. Keys are stored in an owner-only file on this device.
+4. **Done.** **Open workspace** shows the Projects page. Select **New project**,
+   open a folder or start blank, and send your first message.
 
-    For a one-shot terminal run:
+You can change any of these later in **Customize**.
 
-    ```bash
-    openscience run "Profile train.py and identify the input pipeline bottleneck"
-    ```
-  </Step>
+## 3. Choose model access
 
-  <Step title="Connect Atlas if you need it">
-    ```bash
-    openscience login
-    ```
+Open **Customize → Models** and choose the option that fits your setup:
 
-    Atlas adds credential sync, managed models, shared research graphs, and GPU leases. OpenScience remains usable without it. See [Connect to Atlas](/openscience/atlas).
-  </Step>
-</Steps>
+| Option | What to do | What you pay for |
+| --- | --- | --- |
+| Ace | Sign in, select your funding workspace, and add Wallet funds or enable automatic reloads. | Usage charged to that workspace's Wallet. |
+| Your provider | Select **Keys & subscriptions**, then connect an API key or a supported provider sign-in. | Your provider's usage or subscription terms. |
+| Local model | Open **Customize → Local models**, connect a running endpoint, and select its model. | Your hardware; no Ace model charge. |
 
-## Check the installation
+An OpenScience account is optional when using your own provider access or local models. See [Models](/openscience/models), [Local models](/openscience/local-models), and [Pricing](/openscience/pricing) for the details.
+
+For terminal setup, run `openscience keys add` to connect a provider, or `openscience local add` to connect a local endpoint.
+
+## 4. Open a project and add your inputs
+
+Create a project or open an existing folder in the workspace. Add the files the task needs and mention them in your request. Keep the original data and ask OpenScience to write results to a separate folder.
+
+Try this request with your own CSV:
+
+```text
+Inspect data/measurements.csv and explain each column. Check missing
+values, units, and duplicate rows. Save a data-quality report in results/.
+Do not change the original dataset.
+```
+
+Without a dataset, try:
+
+```text
+Help me plan a literature review on protein language models. Ask about
+my research question and inclusion criteria before searching.
+```
+
+## 5. Review and continue
+
+Read the response and open the files it produced. Check the cited sources, assumptions, and any reported limitations. Continue in the same conversation to refine the result:
+
+```text
+Make a plot of the missing-value counts. Explain which columns need
+attention before we compare treatment groups.
+```
+
+Use a new conversation for a separate question. Your previous conversations remain available in the project history.
+
+## Try a terminal run
+
+```bash
+openscience run "Summarize the files in this project and suggest a first analysis"
+openscience run --continue "Write the analysis plan to results/plan.md"
+```
+
+See [Sessions](/openscience/sessions) for attachments, continuing a specific conversation, and exporting your work.
+
+## Check your setup
 
 ```bash
 openscience --version
+openscience doctor
 openscience models
-openscience skill list --all
 ```
 
-## Continue
-
-<Columns cols={2}>
-  <Card title="Workspace" icon="layers" href="/openscience/workspace">
-    Learn the browser interface, local server, and headless mode.
-  </Card>
-  <Card title="Compute" icon="cpu" href="/openscience/compute">
-    Choose local, Modal, Lambda Labs, SkyPilot, or Atlas compute.
-  </Card>
-  <Card title="Agents" icon="bot" href="/openscience/agents">
-    Select a built-in specialist or create your own profile.
-  </Card>
-  <Card title="Command reference" icon="terminal" href="/openscience/commands">
-    Review the complete CLI and agent tool surface.
-  </Card>
-</Columns>
+If no model is available, finish connecting your provider or local endpoint, then select a model. If Ace is selected, check the funding workspace and Wallet in **Customize → Models**.
