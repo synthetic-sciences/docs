@@ -35,6 +35,7 @@ import {
   Workflow,
 } from "lucide-react";
 import { useTheme } from "./theme";
+import { headings, pageHref, parseRoute, resolveLink, slug, type Route, type SectionKey } from "./navigation";
 
 const mono = `"JetBrains Mono", "SF Mono", ui-monospace, monospace`;
 
@@ -91,8 +92,6 @@ type MintlifyCard = {
   horizontal?: boolean;
 };
 
-type SectionKey = "openscience" | "atlas";
-
 type Section = {
   key: SectionKey;
   label: string;
@@ -101,10 +100,10 @@ type Section = {
   lead: boolean;
 };
 
-// The two Synthetic Sciences products, in order.
+// Product guides and the shared account service.
 const SECTIONS: Section[] = [
   { key: "openscience", label: "OpenScience", short: "OpenScience", tagline: "Open-source AI workbench", lead: false },
-  { key: "atlas", label: "Atlas", short: "Atlas", tagline: "The research graph", lead: false },
+  { key: "account", label: "Synthetic Sciences", short: "Account & Graphs", tagline: "Ace, workspaces, and private research", lead: false },
 ];
 
 const SECTION_KEYS = SECTIONS.map((section) => section.key);
@@ -165,7 +164,7 @@ const ICONS: Record<string, ReactNode> = {
 
 const SECTION_FALLBACK_ICON: Record<SectionKey, ReactNode> = {
   openscience: <FlaskConical size={17} strokeWidth={1.8} />,
-  atlas: <GitBranch size={17} strokeWidth={1.8} />,
+  account: <GitBranch size={17} strokeWidth={1.8} />,
 };
 
 const FRONTMATTER_RE = /^---\n([\s\S]*?)\n---\n?/;
@@ -190,14 +189,6 @@ function parseFrontmatter(source: string): { title: string; description: string;
   };
 }
 
-function extractHeadings(markdown: string): string[] {
-  return markdown
-    .split("\n")
-    .filter((line) => line.startsWith("## "))
-    .map((line) => line.replace(/^##\s+/, "").trim())
-    .slice(0, 10);
-}
-
 function flattenPages(items: Array<string | { group: string; pages: string[] }>): string[] {
   return items.flatMap((item) => (typeof item === "string" ? [item] : item.pages));
 }
@@ -220,7 +211,7 @@ function buildSectionPages(section: SectionKey): Record<string, DocsPage> {
       description: parsed.description,
       icon: iconForPath(path, section),
       body: parsed.body,
-      headings: extractHeadings(parsed.body),
+      headings: headings(parsed.body),
     };
   }
   return pages;
@@ -228,81 +219,12 @@ function buildSectionPages(section: SectionKey): Record<string, DocsPage> {
 
 const SECTION_DOC_PAGES: Record<SectionKey, Record<string, DocsPage>> = {
   openscience: buildSectionPages("openscience"),
-  atlas: buildSectionPages("atlas"),
+  account: buildSectionPages("account"),
 };
 
 const SECTION_CONFIGS: Record<SectionKey, DocsConfig> = {
   openscience: RAW_CONFIGS["./content/openscience/docs.json"],
-  atlas: RAW_CONFIGS["./content/atlas/docs.json"],
-};
-
-function pageExists(section: SectionKey, path: string): boolean {
-  return Boolean(SECTION_DOC_PAGES[section]?.[path]);
-}
-
-// Redirects from retired section names (and the per-page renames inside them)
-// to the current two sections. Applied to the first URL segment.
-const SECTION_ALIASES: Record<string, SectionKey> = {
-  "getting-started": "atlas",
-  graphs: "atlas",
-  "agent-cli": "openscience",
-};
-
-// Old agent-cli page names that moved during the OpenScience rebuild.
-const PAGE_ALIASES: Record<string, string> = {
-  "first-session": "sessions",
-  "sub-agents": "agents",
-  "web-ui": "workspace",
-  "server-mode": "workspace",
-  "cli-runtime": "commands",
-  "feature-map": "commands",
-  codex: "models",
-  credentials: "ace",
-  connect: "ace",
-  gateway: "ace",
-  atlas: "ace",
-  security: "permissions",
-  sandbox: "permissions",
-  artifacts: "results",
-  "scientific-data": "databases",
-};
-
-// Redirects from the oldest two-toggle URLs (#/path with product in
-// localStorage) to the #/<section>/<page> scheme. Keyed by `${oldProduct}:${oldPath}`.
-const LEGACY_REDIRECTS: Record<string, { section: SectionKey; path: string }> = {
-  "atlas:index": { section: "atlas", path: "index" },
-  "atlas:quickstart": { section: "atlas", path: "installation" },
-  "atlas:agent-onboarding": { section: "atlas", path: "onboard-agent" },
-  "atlas:auth-config": { section: "atlas", path: "authentication" },
-  "atlas:cli-runtime": { section: "atlas", path: "cli-overview" },
-  "atlas:feature-map": { section: "atlas", path: "cli-overview" },
-  "atlas:api-reference/introduction": { section: "atlas", path: "rest-api" },
-  "atlas:api-reference/atlas-rest": { section: "atlas", path: "rest-api" },
-  "atlas:first-graph": { section: "atlas", path: "quickstart" },
-  "atlas:graph": { section: "atlas", path: "graph-model" },
-  "atlas:artifacts-files": { section: "atlas", path: "evidence" },
-  "atlas:exports-imports": { section: "atlas", path: "forking" },
-  "atlas:commands": { section: "atlas", path: "commands" },
-  "atlas:skills": { section: "atlas", path: "skills" },
-  "atlas:safety": { section: "atlas", path: "cli-overview" },
-  "cli:index": { section: "openscience", path: "index" },
-  "cli:installation": { section: "openscience", path: "quickstart" },
-  "cli:quickstart": { section: "openscience", path: "quickstart" },
-  "cli:first-session": { section: "openscience", path: "sessions" },
-  "cli:agent-onboarding": { section: "atlas", path: "onboard-agent" },
-  "cli:sessions": { section: "openscience", path: "sessions" },
-  "cli:models": { section: "openscience", path: "models" },
-  "cli:codex": { section: "openscience", path: "models" },
-  "cli:sub-agents": { section: "openscience", path: "agents" },
-  "cli:skills": { section: "openscience", path: "skills" },
-  "cli:cli-runtime": { section: "openscience", path: "commands" },
-  "cli:connect": { section: "openscience", path: "ace" },
-  "cli:credentials": { section: "openscience", path: "ace" },
-  "cli:security": { section: "openscience", path: "permissions" },
-  "cli:feature-map": { section: "openscience", path: "commands" },
-  "cli:commands": { section: "openscience", path: "commands" },
-  "cli:web-ui": { section: "openscience", path: "workspace" },
-  "cli:server-mode": { section: "openscience", path: "workspace" },
+  account: RAW_CONFIGS["./content/account/docs.json"],
 };
 
 function readStoredProduct(): "atlas" | "cli" {
@@ -316,68 +238,22 @@ function readStoredProduct(): "atlas" | "cli" {
   return "cli";
 }
 
-type Route = { section: SectionKey; path: string };
-
-function defaultRoute(): Route {
-  return { section: "openscience", path: "index" };
-}
-
 function routeFromHash(): Route {
-  if (typeof window === "undefined") return defaultRoute();
-  const raw = decodeURIComponent(window.location.hash.replace(/^#\/?/, "")).replace(/\/$/, "");
-  if (!raw) return defaultRoute();
-  const segments = raw.split("/");
-  const maybeSection = segments[0] as SectionKey;
-  if (SECTION_KEYS.includes(maybeSection)) {
-    const path = segments.slice(1).join("/") || "index";
-    if (pageExists(maybeSection, path)) return { section: maybeSection, path };
-    return { section: maybeSection, path: "index" };
-  }
-  // Retired section names redirect into the current two-section scheme.
-  const aliasSection = SECTION_ALIASES[segments[0]];
-  if (aliasSection) {
-    const rawPath = segments.slice(1).join("/") || "index";
-    const path = PAGE_ALIASES[rawPath] ?? rawPath;
-    if (pageExists(aliasSection, path)) return { section: aliasSection, path };
-    return { section: aliasSection, path: "index" };
-  }
-  // Legacy single-segment URL: disambiguate via the stored product toggle.
-  const product = readStoredProduct();
-  const redirect = LEGACY_REDIRECTS[`${product}:${raw}`] ?? LEGACY_REDIRECTS[`cli:${raw}`] ?? LEGACY_REDIRECTS[`atlas:${raw}`];
-  if (redirect && pageExists(redirect.section, redirect.path)) return redirect;
-  return defaultRoute();
+  return parseRoute(typeof window === "undefined" ? "" : window.location.hash, readStoredProduct());
 }
 
-function pageHref(section: SectionKey, path: string): string {
-  return `#/${section}/${path}`;
-}
-
-// Module-level pointers updated on each render so the markdown renderer (which
-// can't take props through react-markdown) can resolve links and card icons.
-let CURRENT_SECTION: SectionKey = "openscience";
+// Shared by Markdown links and cards during the current render.
+let CURRENT_ROUTE: Route = { section: "openscience", path: "index" };
 
 function resolveHref(href: string | undefined): string | undefined {
-  if (!href) return href;
-  if (href.startsWith("http") || href.startsWith("#") || href.startsWith("mailto:")) return href;
-  if (href.startsWith("/")) {
-    const clean = href.slice(1).replace(/\/$/, "");
-    if (!clean) return pageHref(CURRENT_SECTION, "index");
-    const segments = clean.split("/");
-    const maybeSection = segments[0] as SectionKey;
-    if (SECTION_KEYS.includes(maybeSection)) {
-      const path = segments.slice(1).join("/") || "index";
-      if (pageExists(maybeSection, path)) return pageHref(maybeSection, path);
-    }
-    if (pageExists(CURRENT_SECTION, clean)) return pageHref(CURRENT_SECTION, clean);
-  }
-  return href;
+  return resolveLink(href, CURRENT_ROUTE);
 }
 
 function sectionForHref(href: string): SectionKey {
   const clean = href.replace(/^#\/?/, "").replace(/\/$/, "");
   const segments = clean.split("/");
   const maybeSection = segments[0] as SectionKey;
-  return SECTION_KEYS.includes(maybeSection) ? maybeSection : CURRENT_SECTION;
+  return SECTION_KEYS.includes(maybeSection) ? maybeSection : CURRENT_ROUTE.section;
 }
 
 function parseMdxAttrs(attrs: string): Record<string, string | boolean> {
@@ -490,29 +366,34 @@ function GitHubStars() {
 }
 
 function CopyButton({ text }: { text: string }) {
-  const [copied, setCopied] = useState(false);
+  const [status, setStatus] = useState("copy");
   return (
     <button
       type="button"
       className="docs-copy"
-      onClick={() => {
-        void navigator.clipboard.writeText(text);
-        setCopied(true);
-        window.setTimeout(() => setCopied(false), 1200);
+      onClick={async () => {
+        const copied = navigator.clipboard
+          ? await navigator.clipboard.writeText(text).then(() => true, () => false)
+          : false;
+        setStatus(copied ? "copied" : "select code to copy");
+        window.setTimeout(() => setStatus("copy"), 1800);
       }}
       aria-label="copy code"
       title="copy code"
     >
-      {copied ? <Check size={13} strokeWidth={1.8} /> : <Copy size={13} strokeWidth={1.8} />}
-      <span>{copied ? "copied" : "copy"}</span>
+      {status === "copied" ? <Check size={13} strokeWidth={1.8} /> : <Copy size={13} strokeWidth={1.8} />}
+      <span aria-live="polite">{status}</span>
     </button>
   );
 }
 
 const markdownComponents: Components = {
   h2({ children }) {
-    const id = String(children).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    const id = slug(extractCodeText(children));
     return <h2 id={id}>{children}</h2>;
+  },
+  h3({ children }) {
+    return <h3 id={slug(extractCodeText(children))}>{children}</h3>;
   },
   a({ href, children }) {
     const external = href?.startsWith("http");
@@ -683,13 +564,19 @@ export function DocumentationPage() {
   const { theme, toggle: toggleTheme } = useTheme();
   const [route, setRouteState] = useState<Route>(() => routeFromHash());
   const section = route.section;
-  CURRENT_SECTION = section;
+  CURRENT_ROUTE = route;
   const docPages = SECTION_DOC_PAGES[section];
   const config = SECTION_CONFIGS[section];
   const sectionMeta = SECTIONS.find((entry) => entry.key === section) ?? SECTIONS[0];
-  const activePage = docPages[route.path] ?? docPages.index;
+  const activePage = docPages[route.path] ?? {
+    path: route.path, title: "Page not found", description: "This documentation page does not exist.",
+    body: "Return to [OpenScience](/openscience/index) or [Synthetic Sciences](/account/index), or search the documentation.",
+    icon: SECTION_FALLBACK_ICON[section], headings: [],
+  };
   const [query, setQuery] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
+  const [searchIndex, setSearchIndex] = useState(0);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const navTabs = config.navigation.tabs;
   const orderedPaths = useMemo(
@@ -744,11 +631,15 @@ export function DocumentationPage() {
         const haystack = `${page.title} ${page.description} ${page.sectionLabel} ${body}`.toLowerCase();
         return haystack.includes(normalizedQuery);
       })
+      .sort((a, b) => {
+        const score = (page: SearchResult) => page.title.toLowerCase() === normalizedQuery ? 3 : page.title.toLowerCase().includes(normalizedQuery) ? 2 : page.description.toLowerCase().includes(normalizedQuery) ? 1 : 0;
+        return score(b) - score(a);
+      })
       .slice(0, 8);
   }, [query, section]);
 
   const navigate = (next: Route) => {
-    window.location.hash = pageHref(next.section, next.path);
+    window.location.hash = pageHref(next.section, next.path, next.anchor);
     setRouteState(next);
   };
 
@@ -760,18 +651,24 @@ export function DocumentationPage() {
 
   // Keep the URL canonical (legacy + bare hashes resolve to #/<section>/<page>).
   useEffect(() => {
-    const canonical = pageHref(route.section, route.path);
+    const canonical = pageHref(route.section, route.path, route.anchor);
     if (window.location.hash !== canonical) {
       window.history.replaceState(null, "", canonical);
     }
-  }, [route.section, route.path]);
+  }, [route]);
 
-  // Hash-based page changes do not trigger the browser's normal document
-  // navigation scroll reset. Without this, opening another guide can leave the
-  // reader halfway down the new page.
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-  }, [route.section, route.path]);
+    if (route.anchor) document.getElementById(route.anchor)?.scrollIntoView({ block: "start" });
+    else window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    setMenuOpen(false);
+    setSearchOpen(false);
+  }, [route.section, route.path, route.anchor]);
+
+  useEffect(() => {
+    document.title = activePage.title + " · Synthetic Sciences Docs";
+    const description = document.querySelector('meta[name="description"]');
+    description?.setAttribute("content", activePage.description);
+  }, [activePage.title, activePage.description]);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -805,26 +702,47 @@ export function DocumentationPage() {
           <input
             className="docs-search-input"
             aria-label="Search documentation"
+            role="combobox"
+            aria-autocomplete="list"
+            aria-expanded={searchOpen}
+            aria-controls="docs-search-results"
+            aria-activedescendant={searchOpen && searchResults.length ? `docs-search-${searchIndex}` : undefined}
+            onKeyDown={(event) => {
+              if (event.key === "Escape") { event.preventDefault(); event.stopPropagation(); setSearchOpen(false); return; }
+              if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+                event.preventDefault();
+                setSearchOpen(true);
+                setSearchIndex((index) => Math.max(0, Math.min(searchResults.length - 1, index + (event.key === "ArrowDown" ? 1 : -1))));
+              }
+              if (event.key === "Enter" && searchOpen && searchResults[searchIndex]) {
+                event.preventDefault();
+                navigate(searchResults[searchIndex]);
+                setQuery("");
+                setSearchOpen(false);
+              }
+            }}
             value={query}
             onBlur={() => window.setTimeout(() => setSearchOpen(false), 120)}
             onChange={(event) => {
               setQuery(event.target.value);
+              setSearchIndex(0);
               setSearchOpen(true);
             }}
-            onFocus={() => setSearchOpen(true)}
+            onFocus={() => { setSearchOpen(true); setSearchIndex(0); }}
             placeholder="Search all docs..."
             type="search"
           />
           <kbd>⌘K</kbd>
           {searchOpen ? (
-            <div className="docs-search-results" role="listbox" aria-label="documentation search results">
+            <div id="docs-search-results" className="docs-search-results" role="listbox" aria-label="documentation search results">
               {searchResults.length > 0 ? (
-                searchResults.map((page) => (
+                searchResults.map((page, index) => (
                   <a
                     key={`${page.section}/${page.path}`}
+                    id={`docs-search-${index}`}
                     href={pageHref(page.section, page.path)}
                     role="option"
-                    aria-selected={section === page.section && route.path === page.path}
+                    aria-selected={searchIndex === index}
                     onMouseDown={(event) => {
                       event.preventDefault();
                       navigate({ section: page.section, path: page.path });
@@ -858,7 +776,7 @@ export function DocumentationPage() {
             )}
             <span>{theme === "dark" ? "light" : "dark"}</span>
           </button>
-          <a className="docs-topbar-cta" href={config.navbar?.primary?.href ?? "https://app.syntheticsciences.ai/atlas"}>
+          <a className="docs-topbar-cta" href={config.navbar?.primary?.href ?? "https://app.syntheticsciences.ai/openscience"}>
             {(config.navbar?.primary?.label ?? "Open app").toLowerCase()}
             <ArrowUpRight size={13} strokeWidth={1.8} />
           </a>
@@ -887,8 +805,9 @@ export function DocumentationPage() {
         </div>
       </nav>
 
+      <button type="button" className="docs-menu-toggle" aria-controls="docs-sidebar" aria-expanded={menuOpen} onClick={() => setMenuOpen((open) => !open)}>Browse documentation</button>
       <div className="docs-shell">
-        <aside className="docs-sidebar" aria-label="documentation navigation">
+        <aside id="docs-sidebar" className={`docs-sidebar${menuOpen ? " docs-sidebar-open" : ""}`} aria-label="documentation navigation">
           <div className="docs-sidebar-title">
             <span>{sectionMeta.label}</span>
             <small>{sectionMeta.tagline}</small>
@@ -977,7 +896,7 @@ export function DocumentationPage() {
           <span>On this page</span>
           {activePage.headings.length > 0 ? (
             activePage.headings.map((heading) => (
-              <a key={heading} href={`#${heading.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}`}>
+              <a key={heading} href={pageHref(section, route.path, slug(heading))}>
                 {heading}
               </a>
             ))
@@ -998,6 +917,7 @@ export function DocumentationPage() {
         </aside>
       </div>
 
+      <footer className="docs-footer"><a href="/llms.txt">Documentation index</a><a href="/llms-full.txt">Full text</a><a href="https://github.com/synthetic-sciences/docs">Edit these docs</a></footer>
       <style>{docsCss}</style>
     </div>
   );
@@ -1927,6 +1847,10 @@ const docsCss = `
     font-size: 11px;
   }
 
+  .docs-menu-toggle { display: none; }
+  .docs-footer { display: flex; flex-wrap: wrap; justify-content: center; gap: 24px; padding: 24px; font-size: 12px; }
+  .docs-markdown h2, .docs-markdown h3 { scroll-margin-top: 150px; }
+  .docs-search-results a[aria-selected="true"] { background: var(--color-bg-subtle); }
   @media (max-width: 1180px) {
     .docs-shell {
       grid-template-columns: 224px minmax(0, 1fr);
@@ -1940,18 +1864,23 @@ const docsCss = `
   @media (max-width: 860px) {
     .docs-topbar {
       grid-template-columns: minmax(0, 1fr) auto;
-      padding: 0 16px;
+      padding: 12px 16px;
+      height: auto;
+      gap: 12px;
+      position: static;
     }
 
     .docs-search {
       grid-column: 1 / -1;
       order: 2;
-      display: none;
+      display: flex;
     }
 
     .docs-topbar nav a:not(.docs-topbar-cta) {
       display: none;
     }
+
+    .docs-sectionbar { top: 0; }
 
     .docs-sectionbar-inner {
       padding: 0 16px;
@@ -1966,6 +1895,8 @@ const docsCss = `
       padding: 22px 16px 64px;
     }
 
+    .docs-menu-toggle { display: block; margin: 16px 16px 0; padding: 10px 14px; border: 1px solid var(--color-border); border-radius: 6px; background: var(--color-bg-subtle); color: var(--color-text); }
+    .docs-sidebar:not(.docs-sidebar-open) { display: none; }
     .docs-sidebar {
       position: static;
       border: 1px solid var(--color-border);

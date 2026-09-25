@@ -1,0 +1,52 @@
+---
+title: "Wallet and billing"
+description: "Fund Ace, distinguish purchased and promotional credit, and control optional automatic charges."
+---
+
+Ace is pay as you go. Enabling access costs $0 and does not create a subscription or authorize automatic card charges. Purchased funds and valid promotional credits can fund managed requests without a saved card.
+
+## What is charged
+
+Managed inference and enhanced research search can debit the selected workspace's credit. Your own provider keys, supported subscriptions, local models, and user-owned compute use their own access and billing. Synthetic Sciences does not currently sell managed compute leases or host general-purpose agent jobs.
+
+OpenScience shows **Wallet**, **Your key**, **Subscription**, or **Local** beside classified model routes. Separately requested search and image services can have their own funding route. See [Ace](/openscience/ace), [Research search](/openscience/research-search), and [Image generation](/openscience/image-generation).
+
+## Purchased funds and promotional credit
+
+The Wallet is purchased balance. Promotional credit is a separate benefit with its original expiry; it is not purchased cash. The account must still have access, sufficient credit, and room under applicable usage limits.
+
+Choose the intended workspace, open **Billing**, then use the Wallet funding control to enter an amount and **Continue to Stripe**. Review the Wallet value, separate processing fee, and total charge before paying. The processing fee does not become Wallet value.
+
+## Optional auto reload
+
+| Control | Behavior |
+| --- | --- |
+| Reload amount | Fixed $20 of purchased Wallet value. |
+| Trigger | Purchased funds below $5. |
+| Payment | Saved card, with the separately disclosed processing fee. |
+| Authorization | Separate explicit opt-in in Billing. |
+| Monthly charge limit | Caps automatic card charges; must cover at least one complete reload charge. |
+
+Open **Billing → Auto reload → Set up**, review the displayed terms and card, set a monthly charge limit, then select **Turn on auto reload**. The amount and trigger are read-only; the charge limit is configurable. A monthly managed-usage limit is a separate control.
+
+Use **Manage → Turn off** to disable future reloads. Turning Ace access off also stops new managed work and reloads while preserving funds, cards, invoices, and limits. An already submitted charge or reserved request can still reconcile.
+
+Switching OpenScience to **Keys & subscriptions**, closing the app, or signing out does not cancel reload authorization. Manage it explicitly in Billing.
+
+## Rates and final charges
+
+Read **Customize → Models → Rates and limits** for the selected model and speed. Direct serving routes add no funding or service fee. An OpenRouter route includes its funding fee once in the displayed Wallet rate; do not add it again. Card processing is separate from model pricing.
+
+Input, output, cached input, cache writes, and long-context tiers can have different prices. Fixed schedules show exact rates; variable input/output rates say **Up to**, with cached prices shown as estimates. Standard and Fast can have different hosts and rates. The current catalog determines availability and disclosures.
+
+A temporary reservation is not the final charge. Once usage is confirmed, the charge is settled and unused reserved funds released. A failed or interrupted request may have completed paid work; inspect the result and its receipt before retrying.
+
+## Receipts and usage
+
+Billing shows recent payments and available hosted receipt links. Use **Manage in Stripe** for the saved payment method and billing details. A payment receipt records Wallet funding and its fee; [Usage reports](/account/usage) record model or service activity. They are different records.
+
+If a reload is in progress or being reconciled, wait for the payment status rather than creating duplicate payments. If the card was declined, review the displayed reason and update the card. Keep the workspace, payment or request identifier, time, and amount when contacting support.
+
+## Retired plans
+
+New subscriptions, Ace+, scheduled monthly top-ups, plan quotas, managed compute leases, and public agent jobs are retired. Existing transition records, paid-through access, and balances are preserved under the account's migration policy. Do not follow older Atlas quota or compute-purchase instructions.

@@ -1,0 +1,35 @@
+---
+title: "Evidence and portability"
+description: "Attach research evidence, preserve provenance, and export records without assuming every file is included."
+---
+
+## Keep evidence with the claim
+
+Use a node's **evidence** section to inspect and attach the material supporting its result. Keep the original data or an authorized retrieval reference, the analysis code, exact commands, environment versions, metrics, and final figures. Record missing evidence explicitly rather than implying it was checked.
+
+An attachment, repository reference, and external experiment link have different retention and access properties. Verify that a collaborator can actually open the evidence before calling the handoff complete.
+
+## Record a reproducible run
+
+At minimum, preserve:
+
+- Objective, hypothesis, and planned success criterion.
+- Dataset identifier or checksum, preprocessing, split, seed, and environment.
+- Exact command, code commit, resource budget, start and end state.
+- Metrics, output paths, logs, failed checks, and interpretation.
+
+Execution takes place in your tools and compute environment. Saving a graph record does not start a managed cloud job. See [OpenScience jobs](/openscience/jobs), [remote compute](/openscience/remote-compute), and [experiment tracking](/openscience/experiment-tracking).
+
+## Export records
+
+Use the node's **export as json**, **export as markdown**, or **export as pdf** controls. Structured subgraph exports preserve research records and relationships; readable summaries are useful for review. Inspect the selected nodes and descendant scope before exporting.
+
+Do not assume a graph export embeds every referenced dataset, remote artifact, repository checkout, or provider log. Retain those files separately, document access requirements, and inspect the export before deleting the source records.
+
+The account API includes subgraph export and import operations for integrations; see [API boundaries](/account/api). Use the current request contract and verify a small imported sample. Importing graph records is different from importing an [OpenScience conversation](/openscience/sessions).
+
+## Prepare a handoff
+
+Include a README describing the research question, graph scope, file locations, required access, exact reproduction steps, completed checks, and unresolved issues. Remove credentials and material the recipient may not access. Keep claims traceable to their evidence and distinguish an original result from your reproduction.
+
+For local research packages, follow [Share and hand off research](/openscience/team-workflows).

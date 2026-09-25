@@ -9,11 +9,11 @@ The workbench is free and open source under Apache-2.0. Models, compute, and ext
 
 ## Do I need an OpenScience account?
 
-Not for your own provider API key, supported provider sign-in, or local models. Sign in to use Ace and shared account-workspace connections.
+Yes for first-run setup. Ace is optional, and your own provider keys, supported subscriptions, and local models remain direct. An already configured installation can continue using those routes during an account-service outage. See [Account and workspaces](/openscience/account).
 
 ## Is Ace a subscription?
 
-Ace has no monthly subscription. It uses purchased Wallet funds, settled from the provider's reported cost plus a 5.5% funding fee, applied once per request, with no other markup; the card processing fee is shown separately at checkout. While automatic reloads are enabled, a purchased balance below $5 triggers a $20 reload.
+Ace has no monthly subscription. It uses purchased funds or valid promotional credits. Usage is calculated for the route that serves each request. Direct provider routes add no funding or service fee. OpenRouter routes include its funding fee (5.5% by default) once, already included in displayed Wallet rates; the card processing fee is shown separately at checkout. Auto reload requires separate consent and a saved card: a fixed $20 is added below $5 of purchased funds, plus the disclosed processing fee. You can configure the monthly automatic-charge limit, not the reload amount or trigger.
 
 ## Does switching to my own key turn off Ace reloads?
 
@@ -54,6 +54,14 @@ No. Ultra allows broader investigation and can use more resources. Choose it whe
 ## Can I trust a generated citation or scientific conclusion?
 
 Check it against the original source and saved analysis. Ask OpenScience to distinguish observations, source claims, and interpretation, and to retain uncertainties and failed checks.
+
+## How do I export usage?
+
+Open **Customize → Usage**, choose a source, date range, and model, then select **Export CSV**. See [Usage reports](/openscience/usage) for the distinction between Wallet charges and estimates.
+
+## Does a local model keep everything on my device?
+
+Only the model inference is local. Online tools, remote compute, and signed-in trace sharing can still send data off the device. Review [Privacy and data](/openscience/privacy).
 
 ## Where should I report a problem?
 

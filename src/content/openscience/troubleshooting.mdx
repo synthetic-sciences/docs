@@ -50,7 +50,13 @@ A pending reservation can reduce available funds before the final charge appears
 
 ## A response is slow or times out
 
-Check whether the app is connecting, waiting for output, receiving output, or running a tool. A wait before the first response can include connection and service processing time.
+The running header shows **Thinking** or the active tool, with elapsed time.
+Hover over it for connection and provider details. A wait before the first
+response can include connection and service processing time.
+
+Inference and Ace credential requests use fresh connections to avoid stale
+connection reuse in the bundled runtime. This prevents one source of long
+connection waits; it does not shorten a model's reasoning or an upstream queue.
 
 Start with a short request and verify the selected model. For a self-hosted model, check server load, memory, context size, and whether it can complete a request directly.
 
@@ -69,9 +75,17 @@ For Ollama, start `ollama serve` if needed. For LM Studio, start its local serve
 
 If a `--bare` request works but research tasks fail, verify tool calling and reduce the input or context size. See [Local models](/openscience/local-models).
 
+## Updating reports that OpenScience could not quit safely
+
+Finish active sessions and compute jobs, then retry the verified update. The desktop waits for all project runtimes to release their processes before it exits; the reported error identifies a failed disposal. It does not force an update over active work. A completed setup stays complete after an update, even if the onboarding flow has changed. An explicit setup reset still opens onboarding.
+
 ## Files are missing or the wrong copy opens
 
 Confirm that you opened the intended project. In Files, check **Project files** and **Session scratch** separately. Read the location shown in the preview.
+
+Local result links using `file:` or `sandbox:` open in Files. These prefixes do
+not grant access to a folder: the server still checks the current session's
+file permissions.
 
 For protected folders on macOS, grant the folder access the operating system requests to the app or terminal you are using, then reopen the folder. A project path must exist and be accessible on the machine running OpenScience.
 
@@ -82,6 +96,12 @@ Use [Files and storage](/openscience/files) for data locations and backups.
 Open **Customize → Tools** and **Customize → Compute**. Complete the relevant installation or connection action and test a small input.
 
 A skill's presence does not mean its dependencies are installed. A saved service key does not mean your account has access to every model or resource. Preserve the reported error and job identifier instead of repeatedly starting the same job.
+
+## Python or R repair reports a Windows file lock
+
+Update OpenScience, then retry **Set up or repair** in **Customize → Compute**. Repair rechecks both starters, and setup waits briefly for temporary Windows file locks to clear. A starter can show **Ready** while saving the setup status fails: the label reflects whether its interpreter runs.
+
+If `EPERM`, `EACCES`, or `EBUSY` persists, finish running Python or R work, close other OpenScience instances, and reopen the app before retrying. Keep the existing data folder. Add the full error text, including both rename paths, your Windows and OpenScience versions, and whether Python or R execution also fails to [issue #714](https://github.com/synthetic-sciences/openscience/issues/714).
 
 ## A connector will not connect
 

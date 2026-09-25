@@ -1,0 +1,36 @@
+---
+title: "Workspace API keys"
+description: "Create, use, and revoke keys that connect OpenScience to a specific workspace."
+---
+
+## Create a key
+
+1. Choose the intended workspace in the [dashboard](https://app.syntheticsciences.ai/workspaces).
+2. Open **API Keys** and select **New key**.
+3. Enter a name such as `Research laptop` or `CI runner`, then select **Create key**.
+4. Copy the secret from **Save your key** before selecting **Done**. It cannot be shown again after that panel closes.
+
+Current workspace keys begin with `osk_`. Existing keys may be marked **Legacy key**. A key's prefix identifies its format, not permission to use every account API.
+
+## Connect OpenScience
+
+Open **Customize → Models → Ace → Use an API key** and paste the key. For automated setup, the CLI supports `openscience login --key <workspace-key>`; replace the placeholder using the runner's secret store. Prefer the app's input for interactive setup so a secret is not saved in shell history.
+
+```bash
+openscience status
+openscience wallet show
+```
+
+Confirm the workspace before starting paid work. The key is pinned to its issuing workspace. A browser selection, project folder, or another signed-in account does not override its funding scope.
+
+## Inspect and revoke access
+
+The key list shows the name, creator, prefix, creation and last-used dates, and active or revoked status. Use a separate named key for each device or automation so you can revoke the right one.
+
+Select **Revoke** and confirm to stop clients using the key. Your permissions determine which keys you can revoke. A revoked key can then be removed from the list with **Delete**; its security audit record remains.
+
+Signing out of a device that uses a pasted key only forgets that local copy. It does not revoke the key for other clients. If a secret was exposed, revoke it, issue a replacement, and update every authorized client that used it.
+
+## Keep key types separate
+
+Workspace keys connect to Synthetic Sciences. Provider keys connect to OpenAI, Anthropic, Google, or another provider. Shared provider connections have their own [workspace controls](/account/shared-connections). None of these keys should appear in a repository, prompt, exported research package, or public issue.

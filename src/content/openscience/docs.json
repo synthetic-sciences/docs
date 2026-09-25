@@ -15,7 +15,7 @@
           },
           {
             "group": "Models and account",
-            "pages": ["models", "ace", "pricing", "local-models", "custom-providers"]
+            "pages": ["account", "models", "ace", "ace-models", "pricing", "usage", "local-models", "custom-providers"]
           },
           {
             "group": "Plan and continue",
@@ -23,7 +23,7 @@
           },
           {
             "group": "Personalize and get help",
-            "pages": ["preferences", "keyboard-shortcuts", "troubleshooting", "faq"]
+            "pages": ["preferences", "privacy", "keyboard-shortcuts", "troubleshooting", "faq"]
           }
         ]
       },
@@ -54,7 +54,7 @@
           },
           {
             "group": "Run substantial work",
-            "pages": ["compute", "jobs", "remote-compute"]
+            "pages": ["compute", "jobs", "remote-compute", "autoresearch"]
           }
         ]
       },

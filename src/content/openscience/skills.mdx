@@ -5,7 +5,9 @@ description: "Use reusable research procedures and add your own."
 
 A skill is a set of instructions and supporting files for a particular workflow. OpenScience loads relevant skills while working, or you can select one explicitly.
 
-The bundled library covers biology, chemistry, physics, machine learning, data engineering, scientific writing, and visualization. Browse the [skill directory](/openscience/skill-library) or your installed version:
+The library has two tiers. The **core** skills are the research procedures the agent always has on its index: research lookup, literature review, brainstorming, hypotheses, reproduce, autoresearch, compute, delegation, figures, schematics, paper writing (general and ML), citations, peer review, and sources. Their names and one-line summaries are in every Research request, and the agent loads one when the task matches. Everything else, roughly 340 skills covering biology, chemistry, physics, machine learning, data engineering, cloud GPU providers, scientific databases and documents, is the **library**: found by search, by category, or by exact name when the core index points at it (cloud providers and databases are listed there by name).
+
+Browse the [skill directory](/openscience/skill-library) or your installed version:
 
 ```bash
 openscience skill list --all
@@ -19,7 +21,7 @@ Use the directory to discover a procedure, then check the entry available in you
 
 ## Find and use a skill
 
-Open **Customize → Skills** and search by task or subject. Enable the skills you want available. In a conversation, type `/` and search the skill picker, or ask for the procedure in your request.
+Open **Customize → Skills**. The catalog is organised the way the agent uses it: **Core** first, in workflow order; **Personal** for the skills you wrote, installed or keep in the project; the **Library** as shelves by subject, each folded until you open it, with Activate all / Turn off all per shelf; and **Sources**, every directory feeding the catalog and any name that lost a collision. The views at the top (All, Core, Library, Personal, Off) narrow the list; search is one flat list across everything. In a conversation, type `/` for the same tiers, or ask for the procedure in your request.
 
 ```text
 Use the appropriate single-cell analysis skill to inspect this dataset.
@@ -31,7 +33,7 @@ A skill supplies guidance. It does not guarantee that every referenced package, 
 
 OpenScience searches the enabled library when it does not know an exact skill name. Search results are suggestions; instructions load only after selecting an available name. If a request includes both an unavailable name and a search query, OpenScience uses the query to find candidates instead of loading a guessed substitute.
 
-Choose **Browse all skills** in the conversation picker to open the searchable library. The list scrolls independently of the search and count controls. Selecting a skill prepares its slash command in the composer; it does not send your request.
+The `/` menu opens on Core, then pinned skills, the session actions, and the whole library by subject; typing filters all of it, and a library skill shows its subject on the right. Selecting a skill prepares its slash command in the composer; it does not send your request. Pin a skill in Customize → Skills to keep it near the top of the menu.
 
 A successful tool load appears in the conversation as **Loaded skill: name**, even when reasoning and activity are collapsed. Expand it to inspect the saved instructions, then **Load details** for the source and instruction hash. Searches and failed loads are labeled separately.
 
@@ -79,6 +81,20 @@ Before model fitting:
 ```
 
 Use `openscience skill edit leakage-checks` to revise it. `validate --strict` also fails on warnings.
+
+## Register a local skill directory
+
+A team pack, a vendor's collection or an air-gapped mirror can join the library without editing a config file or restarting. In **Customize → Skills**, choose **Add skill → Add a local folder**, enter the path and whether to keep it always (your config), for this project (the project config) or until the server restarts; the folder then appears under Sources with a remove control. The same is available through the API and SDK; the skills are scanned at once, nested category folders included:
+
+```bash
+curl -X POST http://127.0.0.1:4096/settings/skills/paths \
+  -H 'content-type: application/json' \
+  -d '{"path": "/data/team-skills", "persist": "global"}'
+```
+
+`persist` writes the absolute path to `skills.paths` in the global or the project `openscience.json` so it survives a restart; without it the root lives for this project's server process only. A missing or empty directory is rejected, and a directory that is already a root is refused rather than loaded twice. `GET /settings/skills/paths` lists every root feeding the catalog (bundled, project, user, installed, config, runtime) with the skills it won and the ones it lost to a same-named skill elsewhere; a skill that shadows another carries `shadows` with the losing paths, so a local edit that had no effect is explained. `DELETE /settings/skills/paths?path=…` removes a root, `POST /settings/skills/reload` rescans after files changed outside the app, and `GET /skill/{name}/content` returns a skill's instructions for clients without filesystem access.
+
+Custom roots load with project precedence: a same-named skill in a registered directory wins over the bundled and personal copies.
 
 ## Use project skills
 

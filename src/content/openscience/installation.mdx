@@ -6,6 +6,9 @@ description: "Install the desktop app or CLI, check your version, and keep your 
 ## Desktop app
 
 Open the [download page](https://openscience.sh/download) and choose your operating system and processor.
+The main download button suggests a build for your computer. The macOS, Windows,
+and Linux sections below it list all available desktop builds; check the processor
+label before downloading. Terminal install commands follow the desktop downloads.
 
 | Platform | Download |
 | --- | --- |
@@ -36,7 +39,7 @@ your first task.
 With Node.js and npm installed:
 
 ```bash
-npm install -g @synsci/openscience
+npm install -g @synsci/openscience@latest
 openscience --version
 openscience
 ```
@@ -57,13 +60,15 @@ Open a new terminal if `openscience` is not found after installation. The standa
 
 For Linux compatibility requirements and platform-specific CLI archives, check the release notes. Choose the build that matches your architecture and distribution.
 
-On macOS or Linux, you can also install the standalone CLI through the official
-[Homebrew tap](https://github.com/synthetic-sciences/homebrew-tap):
+## Desktop app and the command line
 
-```bash
-brew install synthetic-sciences/tap/openscience
-openscience --version
-```
+The app and `openscience` in a terminal are two doors into the same workspace, and they work side by side.
+
+The app carries its own copy of the command-line app inside the application bundle and updates it with the app. When the `openscience` on your PATH is that copy — `ls -l $(which openscience)` points into `OpenScience.app` or a `resources/sidecar` folder — `openscience upgrade` says so and sends you to **Customize → General → Check for updates**, instead of installing over the app's files. Install the CLI through npm or the standalone installer above if you would rather update it from a terminal.
+
+To use that copy from a terminal, open **Customize → General → Command line tool** and choose **Install**. The app links `~/.openscience/bin/openscience` to its own copy and adds that folder to your shell's startup file (`~/.zshrc`, `~/.bashrc`, or fish's `config.fish`) the same way the standalone installer does; open a new terminal afterwards. If your shell has no startup file yet, as on a new macOS account, the app creates one: `~/.zshrc` for zsh, `~/.bash_profile` for bash on macOS (`~/.bashrc` elsewhere), or `~/.config/fish/config.fish` for fish. The row says whether the tool is installed and on your PATH, and shows the line to add when no startup file could take it, such as one that is read-only. Each time the app launches it re-points its own link if the app was moved or reinstalled; it never creates a link you did not ask for and never replaces an `openscience` it did not create. `openscience uninstall` run from that link removes the link and the PATH line again; a startup file the app created stays, without the line. The Linux AppImage runs from a temporary mount and cannot be linked, so use the standalone installer on Linux; on Windows, install the CLI separately.
+
+While the app is running, `openscience` and `openscience web` open a browser tab on the server the app already started, with the same sessions and files, rather than starting a second one. Quit the app and the same command starts a server of its own.
 
 ## Verify the installation
 
@@ -79,6 +84,8 @@ openscience models
 
 Use the update controls in **Customize → General**. Follow the app's restart prompt when an update is ready. If an in-app update is unavailable on your platform, install the current desktop download.
 
+On macOS, subsequent updates can reuse unchanged parts of the last verified download. Click **Download** as usual; verification and restart work the same way. The first update, or an update without a usable cache, downloads the full app automatically. OpenScience keeps one update archive locally and replaces it as new updates are verified.
+
 For the CLI:
 
 ```bash
@@ -91,7 +98,7 @@ Or update an npm installation through npm:
 npm install -g @synsci/openscience@latest
 ```
 
-For a Homebrew installation, use `brew update` followed by `brew upgrade openscience`.
+A CLI that came with the desktop app is updated by the app; see [Desktop app and the command line](#desktop-app-and-the-command-line).
 
 Check `openscience --version` after updating and reopen the workspace. Read the [changelog](https://github.com/synthetic-sciences/openscience/blob/main/CHANGELOG.md) for behavior changes.
 
@@ -105,5 +112,7 @@ openscience uninstall
 ```
 
 The CLI keeps your work and settings by default. `--purge` also deletes OpenScience configuration and user data; export important sessions and back up project files before choosing it.
+
+Run from the desktop app's copy, `openscience uninstall` removes the command-line link and the PATH line but leaves the app itself, and says so. To finish, move `OpenScience.app` to the Trash on macOS, remove OpenScience from **Add or remove programs** on Windows, or delete the AppImage on Linux.
 
 See [Files and storage](/openscience/files) for export and backup guidance, and [Troubleshooting](/openscience/troubleshooting) if installation or startup fails.

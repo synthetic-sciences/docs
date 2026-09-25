@@ -1,141 +1,59 @@
-// Validates the docs navigation, internal links, and source quality.
-// - Every page referenced in a section's docs.json must exist on disk.
-// - Every internal MDX link / Card href (/section/page or /page) must resolve.
-// - Warns about page files that no nav references (orphans).
-// - Rejects long dash punctuation and unlabelled fenced code blocks.
-// Exits non-zero on any hard error so it can gate a build.
-
-import { readFileSync, readdirSync, existsSync, statSync } from "node:fs";
-import { join, dirname, relative } from "node:path";
+import { readFileSync, readdirSync } from "node:fs";
+import { join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { aliases, atlasAliases, headings, parseRoute, resolveLink, slug } from "../src/navigation.ts";
 
-const root = join(dirname(fileURLToPath(import.meta.url)), "..");
-const contentDir = join(root, "src", "content");
-
-const SECTIONS = ["openscience", "atlas"];
-
-function flattenPages(items) {
-  return items.flatMap((item) => (typeof item === "string" ? [item] : flattenPages(item.pages)));
-}
-
-function listPageFiles(section) {
-  const dir = join(contentDir, section);
-  const out = [];
-  const walk = (d) => {
-    for (const entry of readdirSync(d)) {
-      const full = join(d, entry);
-      if (statSync(full).isDirectory()) walk(full);
-      else if (/\.(mdx|md)$/.test(entry)) out.push(relative(dir, full).replace(/\.(mdx|md)$/, ""));
-    }
-  };
-  walk(dir);
-  return out;
-}
-
+const root = fileURLToPath(new URL("../src/content/", import.meta.url));
+const sections = ["openscience", "account"];
+const pages = new Map();
 const errors = [];
-const warnings = [];
+const flatten = (items) => items.flatMap((item) => typeof item === "string" ? [item] : flatten(item.pages));
 
-// section -> Set of page paths that exist on disk
-const filesBySection = {};
-for (const section of SECTIONS) {
-  filesBySection[section] = new Set(listPageFiles(section));
-}
-
-const pageExists = (section, path) =>
-  SECTIONS.includes(section) && filesBySection[section].has(path || "index");
-
-// 1. Nav config references resolve, and collect referenced pages.
-const navReferenced = {};
-for (const section of SECTIONS) {
-  navReferenced[section] = new Set();
-  const configPath = join(contentDir, section, "docs.json");
-  if (!existsSync(configPath)) {
-    errors.push(`Missing docs.json for section "${section}"`);
-    continue;
-  }
-  const config = JSON.parse(readFileSync(configPath, "utf8"));
-  const pages = config.navigation.tabs.flatMap((tab) =>
-    tab.groups.flatMap((group) => flattenPages(group.pages)),
-  );
-  for (const page of pages) {
-    navReferenced[section].add(page);
-    if (!filesBySection[section].has(page)) {
-      errors.push(`[nav] ${section}/docs.json references "${page}" but src/content/${section}/${page}.mdx is missing`);
-    }
-  }
-}
-
-// 2. Orphans: page files not referenced by their section nav.
-for (const section of SECTIONS) {
-  for (const file of filesBySection[section]) {
-    if (!navReferenced[section].has(file)) {
-      warnings.push(`[orphan] src/content/${section}/${file}.mdx is not referenced in ${section}/docs.json`);
-    }
-  }
-}
-
-// 3. Internal links in MDX (markdown links + Card/href).
-const linkRe = /\]\((\/[^)\s]+)\)/g;
-const hrefRe = /href=["'](\/[^"']+)["']/g;
-
-for (const section of SECTIONS) {
-  for (const file of filesBySection[section]) {
-    const filePath = existsSync(join(contentDir, section, `${file}.mdx`))
-      ? join(contentDir, section, `${file}.mdx`)
-      : join(contentDir, section, `${file}.md`);
-    const src = readFileSync(filePath, "utf8");
-
-    if (/[\u2014\u2013]/.test(src)) {
-      errors.push(`[style] ${section}/${file}.mdx contains an em dash or en dash`);
-    }
-
-    let inFence = false;
-    src.split("\n").forEach((line, index) => {
+for (const section of sections) {
+  const directory = join(root, section);
+  const config = JSON.parse(readFileSync(join(directory, "docs.json"), "utf8"));
+  const order = config.navigation.tabs.flatMap((tab) => tab.groups.flatMap((group) => flatten(group.pages)));
+  if (new Set(order).size !== order.length) errors.push(`${section}: duplicate navigation entry`);
+  for (const file of readdirSync(directory).filter((name) => name.endsWith(".mdx"))) {
+    const path = file.slice(0, -4);
+    const source = readFileSync(join(directory, file), "utf8");
+    if (!/^---\ntitle: ".+"\ndescription: ".+"\n(?:[\s\S]*?\n)?---/m.test(source)) errors.push(`${section}/${path}: missing quoted title or description`);
+    const body = source.replace(/^---\n[\s\S]*?\n---\n?/, "");
+    const anchors = headings(body, 3).map(slug);
+    if (new Set(anchors).size !== anchors.length) errors.push(`${section}/${path}: duplicate heading anchors`);
+    if (!order.includes(path)) errors.push(`${section}/${path}: missing from navigation`);
+    const state = { fence: false };
+    for (const line of body.split("\n")) {
       const fence = line.match(/^\s*```(.*)$/);
-      if (!fence) return;
-      if (!inFence && !fence[1].trim()) {
-        errors.push(`[code] ${section}/${file}.mdx:${index + 1} has a fenced code block without a language`);
-      }
-      inFence = !inFence;
-    });
-    if (inFence) {
-      errors.push(`[code] ${section}/${file}.mdx has an unclosed fenced code block`);
+      if (!fence) continue;
+      if (!state.fence && !fence[1].trim()) errors.push(`${section}/${path}: code block needs a language`);
+      state.fence = !state.fence;
     }
+    if (state.fence) errors.push(`${section}/${path}: unclosed code block`);
+    pages.set(`${section}/${path}`, { body, anchors, section, path });
+  }
+  for (const path of order) if (!pages.has(`${section}/${path}`)) errors.push(`${section}: missing page ${path}`);
+}
 
-    const hrefs = new Set();
-    let m;
-    while ((m = linkRe.exec(src))) hrefs.add(m[1]);
-    while ((m = hrefRe.exec(src))) hrefs.add(m[1]);
-
-    for (const href of hrefs) {
-      const clean = href.split("#")[0].replace(/\/$/, "");
-      if (!clean || clean === "/") continue;
-      const segments = clean.slice(1).split("/");
-      let targetSection;
-      let targetPath;
-      if (SECTIONS.includes(segments[0])) {
-        targetSection = segments[0];
-        targetPath = segments.slice(1).join("/") || "index";
-      } else {
-        targetSection = section;
-        targetPath = segments.join("/");
-      }
-      if (!pageExists(targetSection, targetPath)) {
-        errors.push(`[link] ${section}/${file}.mdx -> "${href}" does not resolve (${targetSection}/${targetPath})`);
-      }
-    }
+let links = 0;
+for (const [name, page] of pages) {
+  const prose = page.body.replace(/```[\s\S]*?```/g, "");
+  const hrefs = [...prose.matchAll(/\[[^\]]*\]\(([^)\s]+)\)|href=["']([^"']+)["']/g)].map((match) => match[1] ?? match[2]);
+  for (const href of hrefs) {
+    links++;
+    if (/^(https?:|mailto:|tel:)/.test(href)) { new URL(href); continue; }
+    const route = parseRoute(resolveLink(href, page));
+    const target = pages.get(`${route.section}/${route.path}`);
+    if (!target) errors.push(`${name}: broken link ${href}`);
+    else if (route.anchor && !target.anchors.includes(route.anchor)) errors.push(`${name}: missing anchor ${href}`);
   }
 }
-
-const total = SECTIONS.reduce((n, s) => n + filesBySection[s].size, 0);
-console.log(`Checked ${total} pages across ${SECTIONS.length} sections.`);
-if (warnings.length) {
-  console.log(`\n${warnings.length} warning(s):`);
-  for (const w of warnings) console.log("  " + w);
+for (const [old, path] of Object.entries(aliases)) {
+  if (!pages.has(`openscience/${path}`)) errors.push(`Missing OpenScience redirect target: ${old} -> ${path}`);
+  if (pages.has(`openscience/${old}`)) errors.push(`OpenScience redirect shadows page: ${old}`);
 }
-if (errors.length) {
-  console.error(`\n${errors.length} error(s):`);
-  for (const e of errors) console.error("  " + e);
-  process.exit(1);
+for (const [old, route] of Object.entries(atlasAliases)) {
+  if (!pages.has(`${route.section}/${route.path}`)) errors.push(`Missing Atlas redirect target: ${old}`);
 }
-console.log("\nAll nav entries, internal links, and content checks pass. No 404s.");
+if (errors.length) throw new Error(errors.join("\n"));
+console.log(`Validated ${pages.size} pages, ${links} links, heading anchors, navigation, and legacy redirects.`);

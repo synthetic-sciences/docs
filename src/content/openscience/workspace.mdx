@@ -44,9 +44,9 @@ Only refer to material you have permission to use. For large files, first ask fo
 
 ## Follow progress and steer the task
 
-The conversation shows the activity and tool results supplied during the run. Open an individual tool result when you need its inputs or output.
+The conversation shows the agent's prose in bright text and everything it did to get there in grey beneath one header per turn: thoughts (with their text when the provider shares it), files read, searches, commands, edits, delegations and questions, in order. While the turn runs the header names the call in flight ("Reading study.json") and the list is open; when it finishes the header reads "Worked for 46m 29s" and folds the list, leaving the answer, any failed call and any question that still needs you. Open an individual row when you need a tool's inputs or output.
 
-You can queue follow-up prompts while a response is running. Stop the current response when you need to change direction immediately. Inspect any files already written before asking it to retry or redo the work.
+You can send follow-up prompts while a response is running: they join the current turn and the agent answers them in order. Use the **Stop** button or Escape when you need to change direction immediately. Inspect any files already written before asking it to retry or redo the work.
 
 Use [Research controls](/openscience/agents) to choose planning, research effort, delegation, and when the agent asks for your input.
 
@@ -60,7 +60,7 @@ Ask for a text explanation alongside a visual result: what was measured, what th
 
 ## Undo and restore
 
-After a response finishes, use **Undo from here** or `/undo` to return to an earlier point. Review the confirmation, which identifies affected work and file changes. A restore action is available for reverted work.
+After a response finishes, use **Undo from here** to return to an earlier point. Review the confirmation, which identifies affected work and file changes. A restore action is available for reverted work.
 
 Undo is useful for trying a different analysis path. It does not reverse external payments, messages, or changes in a connected service. Use version control or backups for files you need to retain independently of conversation history.
 
@@ -68,6 +68,7 @@ Undo is useful for trying a different analysis path. It does not reverse externa
 
 Open **Customize** to manage:
 
+- **Workspaces** for each project's folders, read/write access, and default working location.
 - **Models** and **Local models** for model access.
 - **Skills** for reusable instructions.
 - **Tools** for scientific capability availability.
@@ -106,3 +107,23 @@ See [Sessions](/openscience/sessions) for continuing, exporting, and importing c
 - [Saved Results](/openscience/results): retain verified outputs, download, rename, and recover from Trash.
 - [Context and handoffs](/openscience/context): compact long work and prepare a continuation.
 - [Keyboard shortcuts](/openscience/keyboard-shortcuts) and [Preferences](/openscience/preferences): navigate and configure the interface.
+
+## Usage
+
+Open **Customize → Usage**, directly below Ace, to see activity by source.
+**Managed** shows your confirmed Wallet charges in the selected funding workspace
+across devices. **API keys**, **Local models**, and **Subscriptions** show activity
+from saved conversations on this device, across projects. API-key costs are
+estimates; subscription fees and local hardware costs are not included.
+
+Choose 7, 30, or 90 days, or enter custom **From** and **To** dates (up to 366 days,
+inclusive, in UTC). Filter by model and select tokens, cost, or requests in the
+daily chart. **Export CSV** at the bottom downloads daily model totals for the
+selected source, dates, and model, including token details and USD costs.
+
+New requests retain the route used at the time of the call. Older saved activity
+without that information appears under **Unclassified**; it may include managed
+calls and is kept separate from confirmed charges. Deleted conversations are not
+part of device usage, and inherited fork history is not counted twice.
+
+See [Usage reports and CSV exports](/openscience/usage) for reconciliation and report scope.

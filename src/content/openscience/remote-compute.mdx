@@ -27,6 +27,8 @@ Use [Compute jobs](/openscience/jobs) for the lifecycle after connection.
 
 Defaults can be changed for future work. A saved token alone is not the same as an enabled and tested connection. Begin with a small environment check and confirm that its output returns to the project.
 
+What Modal jobs can ask for: a GPU by Modal's type name (`T4`, `L4`, `A10`, `L40S`, `A100`, `A100-80GB`, `H100`, `H200`, `B200`; `H100:2` for two, up to eight per container, four for A10), up to 24 hours of wall time (the default is 60 minutes), and outbound network only when you enable it; it is off by default. Modal may serve an `A100` request on an 80 GB card and an `H100` request on an H200; `H100!` opts out of the upgrade. OpenScience talks to Modal through its JavaScript SDK and never runs `modal` CLI commands or Python apps of its own.
+
 ## Add an SSH host
 
 Supply the fields shown in **Remote hosts**:
@@ -60,6 +62,10 @@ A reachable host can still have unavailable partitions, exhausted quota, or a mi
 The Compute panel includes connections for TensorPool, Lambda, Prime Intellect, Vast.ai, and RunPod. Supported reviewed operations can inspect account information, resources, jobs, status, or availability, depending on the provider and installed integration.
 
 These connections do not imply automatic paid instance creation or arbitrary provider commands. If the panel reports credential-only access or a failed connection test, resolve that state before relying on it for a task.
+
+## Large inputs
+
+Modal jobs stage their inputs from the working directory. Everything a glob or the default sweep picks up must fit 100 MiB together, so an approval never covers bytes that were not listed. A file the request names by its exact path, such as a model checkpoint or a dataset, may be up to 2 GiB (4 GiB for a job in all); the approval card lists it with its size and hash. Name large files in `uploads` rather than compressing them to fit.
 
 ## Keep costs and outputs explicit
 

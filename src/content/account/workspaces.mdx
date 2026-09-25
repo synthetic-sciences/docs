@@ -1,0 +1,36 @@
+---
+title: "Workspaces and members"
+description: "Choose Personal or team funding, invite members, and manage access and spending permissions."
+---
+
+## Choose a workspace
+
+Use the [workspace selector](https://app.syntheticsciences.ai/workspaces) to choose Personal or a team you belong to. Each workspace has its own Wallet, access policy, keys, shared connections, and usage view. Personal is your own funding context; team access is governed by membership.
+
+Switching in the dashboard changes the pages you are viewing. An OpenScience device keeps its approved funding selection until you switch it in **Customize → General → Funding workspace**. A workspace API key stays bound to its issuing workspace.
+
+## Invite and manage members
+
+Members with management permission can open **Members → Invite member**, enter the recipient's address, and select the available role and spending policy. Share a returned one-time invitation link only with the invited person. The recipient must accept using the intended account.
+
+The Members page shows current members and pending invitations. Administrators can update permitted roles, revoke pending invitations, or remove members. Ordinary role assignment offers **Member** and **Admin**; ownership transfer is a separate settings action. Legacy roles can appear as read-only transition data.
+
+Server permissions determine which controls are available. If you lose access while a page is open, refresh the workspace rather than treating previously displayed controls as continuing authorization.
+
+## Set spending limits
+
+In Members, use **Limit** to set a member's monthly managed spend ceiling. Blank means no per-member limit; $0 blocks workspace-funded spend. Workspace policy and the available Wallet still apply.
+
+The member limit, workspace managed-usage limit, and optional auto-reload monthly charge limit serve different purposes. A reload limit caps card funding; it does not grant a member permission to spend. See [Wallet and billing](/account/billing).
+
+## Shared access is not shared research
+
+Membership can provide shared model or service credentials and managed usage. It does not automatically publish local OpenScience conversations or files. Private [Graphs](/account/graphs) and explicit collaborator access are separate from funding membership.
+
+Manage connections in [Shared connections](/account/shared-connections), and create device-specific credentials in [API keys](/account/api-keys).
+
+## Leave, transfer, or remove access
+
+Use the workspace Settings and Members controls available to your role. Check the impact before confirming ownership transfer or removal. Revoking membership can remove managed access and shared connections from affected clients; it does not revoke a person's separately owned provider credentials or delete their local project files.
+
+If a workspace link says **Workspace not found**, refresh the list and verify the signed-in account and membership. Do not create another workspace just to work around a temporary loading failure.

@@ -1,0 +1,39 @@
+---
+title: "API boundaries"
+description: "Choose the OpenScience local API or the account service without relying on retired Atlas contracts."
+---
+
+## Choose the correct service
+
+| Need | Interface |
+| --- | --- |
+| OpenScience sessions, operations, events, files, and local compute state | [OpenScience local API](/openscience/api), [server hosting](/openscience/server-hosting), and [TypeScript SDK](/openscience/extensions). |
+| Account access, workspace membership, Wallet, private Graphs, and Ascent entitlement | The authenticated Synthetic Sciences account service used by the dashboard. |
+| An old Atlas command or integration | Check [compatibility status](/account/compatibility); retained code does not establish a supported public endpoint. |
+
+Do not send a workspace key to a model provider or a provider key to the account service. Browser account actions and workspace keys can have different permissions; not every endpoint accepts every credential type.
+
+## Account route families
+
+The current dashboard uses these route families. They describe service boundaries, not a promise that all legacy Atlas routes remain available or that every route accepts workspace-key authentication.
+
+| Family | Current examples |
+| --- | --- |
+| Account context | `GET /api/account-context`, `GET /api/auth/status`. |
+| Workspaces | `/api/organizations`, with workspace-specific members, keys, billing, and usage routes. |
+| Account usage | `GET /api/credits/usage`. |
+| Private nodes | `GET /api/nodes`, `GET /api/nodes/{node_id}`, and staged create/update/commit operations. |
+| Sharing | `GET /api/sharing/{node_id}` and authorized sharing mutations. |
+| Export/import | `POST /api/export/subgraph`, `POST /api/import/subgraph`. |
+| Ascent | `GET /api/ascent/access`, `POST /api/ascent/access/request`, `GET /api/ascent/entitlement`. |
+| Trace privacy | `/api/v1/telemetry` with authenticated consent and deletion operations. |
+
+There is no single `/api/v1` prefix for all dashboard routes. Older docs that combine local CLI pseudo-commands and HTTP endpoints should not be used to build a new client.
+
+## Integrate with explicit contracts
+
+Verify the current route, request schema, authentication scope, and response shape for the operation you need. Use current revisions for graph writes and handle conflicts by re-reading the record. Where an operation defines idempotency, retain its identifier across uncertain retries; do not assume an arbitrary header makes every write idempotent.
+
+Usage APIs accept inclusive `since` and exclusive `until` timestamps. The dashboard converts inclusive UTC dates into those bounds and limits its report range to 366 days. Keep that distinction when comparing a custom report with a CSV export.
+
+Account billing, access, and privacy changes require their supported authorization flow. An ordinary model-access key does not confer administrator permissions. For a new automation, start with the documented [OpenScience CLI](/openscience/commands) or SDK, and keep account mutations in their supported dashboard workflow unless you have verified the integration contract.
