@@ -1,0 +1,10 @@
+OpenScience documentation
+
+The files in src/content/openscience are mirrored from
+https://github.com/synthetic-sciences/openscience and retain their upstream
+Apache License, Version 2.0. The exact revision is recorded in
+scripts/openscience-source.json. See LICENSE-OPENSCIENCE for the license and NOTICE-OPENSCIENCE for the
+upstream attribution notices.
+
+Scientific tool and skill catalogs link to their upstream source records;
+those resources retain their respective authorship and license notices.

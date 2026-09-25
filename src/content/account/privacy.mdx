@@ -1,0 +1,30 @@
+---
+title: "Account privacy and data"
+description: "Understand trace sharing, private research, usage visibility, and deletion boundaries."
+---
+
+## Local work and account data
+
+OpenScience project files and saved conversations live in its local storage and connected folders. Signing in provides account access and supported shared connections; it is not a complete backup or automatic file-sharing service.
+
+The selected model and online tools receive the context required for their requests. A local model keeps model inference local, but online search, connectors, remote compute, and trace sharing can still send data off the device. See [OpenScience privacy](/openscience/privacy).
+
+## Session traces
+
+Signed-in OpenScience installations share session traces by default unless a prior opt-out applies. They can include prompts, model context and responses, provider-visible reasoning, tool inputs and outputs, searches, errors, and reported usage. Known credentials are redacted, but private research can remain in these records.
+
+In OpenScience, open **Customize → General → Data & privacy → Share session traces** to stop uploads from that device and discard queued and rejected records. Account preferences can disable sharing across devices or exclude user-owned routes. Device settings cannot override an account opt-out.
+
+Trace delivery and the account usage charts are different records. Missing trace content does not establish that no paid request occurred, and a direct-provider usage estimate is not a Wallet debit.
+
+## Graph and workspace visibility
+
+Graphs are private to their owners and explicitly authorized collaborators. Public discovery and anonymous graph reads are not a default supported sharing path. Membership in a funding workspace does not automatically expose another member's research.
+
+Authorized workspace usage viewers can see managed totals and member attribution. That reporting permission does not grant access to the member's private prompts, files, or Graphs.
+
+## Opt out or delete
+
+Turning off future sharing and deleting stored account data are separate actions. Use the privacy controls and review the current [privacy policy](https://openscience.sh/privacy) for retention and deletion scope. Trace-data deletion does not delete local project files, revoke external provider keys, cancel card reload consent, or erase financial records.
+
+Export data you need before deleting it. Inspect exports before sharing, because they can contain research content and source references. Use private support for account data issues; keep secrets and private datasets out of public bug reports.

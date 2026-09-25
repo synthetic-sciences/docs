@@ -1,0 +1,32 @@
+---
+title: "Usage reports"
+description: "Inspect account and workspace activity, filter UTC dates and models, and export matching totals."
+---
+
+Open [Usage](https://app.syntheticsciences.ai/usage) for account activity, or choose a workspace and open its **Usage** page for workspace-funded activity.
+
+## Select the report scope
+
+Account usage distinguishes managed Wallet charges from reported API-key, local, ChatGPT, subscription, custom, and unclassified activity. User-owned costs are estimates and do not become Wallet charges. Subscription fees and your hardware costs are not included.
+
+Workspace reports show managed activity. Owners and members with usage-view permission see workspace totals and **Usage by member**. Other members see their own requests and spend in that workspace. A usage permission does not grant access to private research content.
+
+The desktop's **Customize → Usage** also reports saved local conversations across projects on that device. Its user-owned records can differ from the dashboard's reported account activity, especially when trace sharing is disabled. See [OpenScience usage](/openscience/usage).
+
+## Filter dates, source, and model
+
+Choose a date preset or custom **From** and **To** dates. Both dates are inclusive in UTC; the maximum range is 366 days. Choose the available source and model filters. Review the summary, daily activity chart, and model totals for that selection.
+
+Use **Refresh** after activity completes. A loading failure or permission error does not establish that no usage occurred. Confirm the account and workspace before comparing reports.
+
+## Export CSV
+
+Select **Export CSV** below the report. It exports all matching daily model/endpoint totals, including token details, USD cost, and billed or estimated cost basis. It is independent of the recent-request history's 50-row limit.
+
+The export is aggregated activity, not a conversation export or payment receipt. For managed records, input/output already include reported cache and reasoning detail. Preserve the provided total instead of recomputing it by adding every detail column. Retain cost precision when analyzing exports.
+
+## Reconcile with billing
+
+Use [Billing](/account/billing) for purchased funds, promotional balances, reservations, settled charges, and card receipts. Card payments can include processing fees and occur on different dates from model usage. Direct provider estimates should be reconciled with that provider's billing.
+
+For unexplained differences, keep the UTC date range, model, selected workspace, relevant CSV rows, and request identifier if available. Do not send prompts or secrets when a usage identifier is sufficient.

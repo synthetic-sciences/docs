@@ -7,10 +7,16 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "npm run export && vite build",
     "preview": "vite preview",
     "check-links": "node scripts/check-links.mjs",
-    "validate": "node scripts/check-links.mjs && vite build"
+    "validate": "npm run check:sync && npm run check-links && npm run typecheck && npm test && npm run build",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test test/*.test.mjs",
+    "test:e2e": "playwright test",
+    "export": "node scripts/export.mjs",
+    "sync:openscience": "node scripts/sync-openscience.mjs",
+    "check:sync": "node scripts/sync-openscience.mjs --check"
   },
   "dependencies": {
     "lucide-react": "^0.453.0",
@@ -24,6 +30,10 @@
     "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react": "^4.3.4",
     "typescript": "^5.6.3",
-    "vite": "^6.0.5"
+    "vite": "^6.0.5",
+    "@playwright/test": "1.63.0"
+  },
+  "engines": {
+    "node": ">=24"
   }
 }

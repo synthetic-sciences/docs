@@ -1,0 +1,53 @@
+---
+title: "Usage reports and CSV exports"
+description: "Filter activity by source, model, and date, and distinguish Wallet charges from local estimates."
+---
+
+Open **Customize → Usage** to review model activity. Choose the source first: the Managed report and the reports from saved conversations have different scopes.
+
+## Choose a source
+
+| Source | What the report includes | Cost basis |
+| --- | --- | --- |
+| Managed | Server-recorded usage available to the connected account and funding workspace. | Wallet charges. |
+| API keys | Provider-key and custom-route activity in saved conversations on this device, across projects. | Estimates; the provider bills you directly. |
+| Local models | Local model activity saved on this device. | No Ace model charge; hardware costs are not included. |
+| Subscriptions | ChatGPT and other subscription activity saved on this device. | Subscription fees are not included. |
+| Unclassified | Saved activity whose funding route could not be identified. | Do not infer a Wallet charge from an unclassified row. |
+
+Managed usage requires a connected account. Previously saved API-key and local activity can be viewed while signed out. A device report is not a complete history of work performed on other machines. Deleted conversations are excluded and inherited fork history is not counted twice. Older saved activity without a known route appears under Unclassified, including any managed calls that cannot be classified.
+
+## Filter the report
+
+1. Select **Last 7 days**, **Last 30 days**, **Last 90 days**, or **Custom dates**.
+2. Set **From** and **To** when you need a particular range. Both dates are inclusive and use UTC; a range can cover at most 366 days.
+3. Choose **All models** or a single model.
+4. Select **Tokens**, **Cost**, or **Requests** in **Daily activity**. Select or focus a day to inspect its totals.
+
+The summary shows cost, tokens, requests, and cached input. **By model** summarizes the same filtered records. **Refresh** reloads the report. A loading or connection error is not a confirmed zero-usage result.
+
+## Export the matching records
+
+Select **Export CSV** below the report. It exports the selected source, dates, and model filter as daily model/provider totals, including:
+
+- UTC date, provider, model, route, and request count.
+- Input, output, reasoning, cache-read, cache-write, and total tokens.
+- USD cost and its cost basis: **Wallet charge** or **Estimate**.
+
+Output tokens already include reported reasoning; do not add reasoning again. Cached-token fields explain the breakdown, rather than representing extra requests. A small positive cost can appear below one cent; do not round each row to dollars and cents before summing an export.
+
+The export is an activity report, not a payment invoice. It contains aggregate records, not prompts, complete responses, or project files.
+
+## Compare with dashboard usage
+
+The [dashboard Usage page](https://app.syntheticsciences.ai/usage) also supports date and model filters and CSV export. Its account view separates managed usage from reported user-owned routes. Those user-owned records depend on what has reached the account; they need not match a device with unshared local history.
+
+Workspace usage respects member permissions. Owners and members with usage-view permission can see workspace totals; other members see their own workspace usage. Dashboard CSV exports cover matching daily model/endpoint totals independently of the recent-request list's 50-row limit.
+
+## Reconcile an amount
+
+Use **Wallet** for settled managed charges and your provider's billing for direct usage. Card payments add purchased funds and can include a separately disclosed processing fee; they are not the same thing as model spend. Temporary reservations, unsettled requests, different date boundaries, and different account scopes can also explain a mismatch.
+
+For a single conversation, open its context indicator or run `openscience stats` for local session summaries. These views describe saved research activity and may have a different scope from account reports. If a discrepancy remains, retain the date range, funding workspace, model, request identifier, and relevant CSV rows for support.
+
+See [Pricing and usage](/openscience/pricing) for rates, reservations, and spending controls, and [Privacy and data](/openscience/privacy) for trace sharing.

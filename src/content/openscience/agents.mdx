@@ -52,25 +52,40 @@ In the research controls, delegation determines how readily OpenScience divides 
 
 These settings guide collaboration. They do not replace your action-approval settings or a service's spending controls.
 
-### Workers: Parallel or Fusion
+### Workers
 
-**Workers** chooses how delegated execution is run:
+The built-in workers are `explore` (a read-only scout for files, data, code and papers), five specialists built from one template: `ml`, `biology`, `physics`, `chemistry` and `data` (pipelines, processing, coding, visualization), and `general`, a plain worker for a multi-step brief that fits no specialty. Each specialist carries an index of its skill categories and the domain tools those need; the lead dispatches one by name through the Task tool, and independent workers run at the same time with no fixed cap.
 
-- **Parallel** (default): each execute task starts its own worker, and independent workers can run at the same time.
-- **Fusion**: the model you selected stays the lead and hands substantial, well-specified work to one persistent worker that runs on the **Worker model** from **Customize → Models**. The same worker is resumed for every execute task in the conversation, so it keeps its history instead of paying to rebuild context on each handoff. The lead keeps the scientific judgment: which claim is tested, whether the data supports it, fitting assumptions, inclusion rules and the conclusions.
+You can also hand a job to a worker yourself: type `@` in the composer and pick one (`@explore where is the early-stopping split decided?`). The message becomes that worker's brief, the lead waits for its report, and the worker's session opens from the delegation row. A worker's config can set `hidden: true` to keep it out of the `@` menu while the lead may still dispatch it.
 
-Fusion follows the "sidekick" pattern from Cognition's Devin Fusion: two capable agents with separate, persistent contexts, where the expensive model takes few actions and the cheaper one executes. Choose a cheaper worker model to save on execution; with no worker model set, Fusion still keeps one persistent worker but on the same model as the lead. The Tools menu shows the pair, delegated task cards show the handoff number and lineage, and the session cost readout includes what the worker spent. Each turn may make a bounded number of handoffs (six by default); the worker never publishes results or launches paid compute; those stay with the lead.
+A worker runs on its own configured model when the agent has one, otherwise on the **Worker model** from **Customize → Models**, otherwise on the lead's model. No built-in agent has a model in code; the recommended configuration is documented below. Workers work in the lead's own directory: the files they write there are the deliverables, and the lead reads them directly. The lead writes a self-contained brief with a definition of done, waits for the result (returned once, in a `<task_result>` envelope with a `task_id` that can resume the same worker), and integrates it; checking the lead's own output is never delegated. A worker started in the background returns immediately and wakes the lead with its result when it finishes. Workers cannot dispatch workers unless `subagent_depth` in `openscience.json` allows deeper nesting (default 1).
 
-Open a delegated task to inspect its tool activity and current assignment. Reused workers
-keep their earlier conversation, while the heading identifies their active assignment.
-Stopping the lead also cancels its active delegated work, including workers preparing
-to start. A stopped task's saved files and recorded tool results remain available.
+A delegated task shows as one line (what it is doing, which agent, its state and elapsed time) and streams nothing while it runs; open it for the result, its saved Results and **Open agent**, which shows the worker's own conversation. Stopping the lead also cancels its active delegated work. A stopped task's saved files and recorded tool results remain available.
 
-Saved worker Results carry immutable artifact and version IDs back to the lead.
-The lead can read these versions without access to the worker's private scratch.
 Only the latest assistant message's text after its final tool call counts as the
-handoff; earlier progress text cannot make an unfinished worker look complete.
-An empty handoff remains incomplete, even if the worker saved files.
+result; earlier progress text cannot make an unfinished worker look complete. A
+result without a Verification section (the command, its exit code, what it
+proves) is a claim, and the lead is told so.
+
+#### Recommended models
+
+Put the models you want each agent to use in `openscience.json`; nothing is hard-coded:
+
+```json
+{
+  "model": "openai/gpt-6-astra",
+  "agent": {
+    "explore": { "model": "google/gemini-3.8-flash" },
+    "ml": { "model": "openai/gpt-6-sol", "variant": "high" },
+    "biology": { "model": "openai/gpt-6-sol" },
+    "physics": { "model": "openai/gpt-6-sol" },
+    "chemistry": { "model": "openai/gpt-6-sol" },
+    "data": { "model": "openai/gpt-6-sol" }
+  }
+}
+```
+
+A worker on a different model than the lead uses its own `variant` (reasoning effort); on the lead's model it inherits the lead's. Add your own specialist the same way, with `mode: "subagent"`, `skills: ["<category>", ...]` for its domain index and a `permission` rule per domain tool it may use without a skill.
 
 Handoffs retain command receipt references and failures. A shell exit of zero
 describes the outer process; it does not establish that nested tests passed or
@@ -97,7 +112,7 @@ Use `/goal` for an objective you want to pursue across multiple steps:
 a figure, a methods note, and a list of unresolved limitations.
 ```
 
-Use `/status` to inspect progress. `/checkpoint` captures a recovery point; `/handoff` saves a continuation note and compacts the conversation. Commands offered as skills must be enabled in your setup.
+The session header shows progress and context usage. `/checkpoint` captures a recovery point; `/handoff` saves a continuation note and compacts the conversation. Commands offered as skills must be enabled in your setup.
 
 A persistent goal does not mean OpenScience can keep working while your computer or app is off. Save a checkpoint before interrupting a long task.
 
@@ -127,6 +142,8 @@ Review the analysis plan and identify unsupported assumptions.
 Explain each concern and suggest a check before the analysis runs.
 ```
 
-Save it as `analysis-reviewer.md` in the agent directory. Select it with `--agent analysis-reviewer`. A `primary` agent can lead a session, a `subagent` is for delegated tasks, and `all` supports both.
+Save it as `analysis-reviewer.md` in the agent directory. Select it with `--agent analysis-reviewer`, or in the app: once a second primary agent exists, an agent chip appears beside the model control in the composer, and `Tab` in an empty composer cycles through the primary agents. A `primary` agent can lead a session, a `subagent` is for delegated tasks and the `@` menu, and `all` supports both.
+
+Other frontmatter options: `model` (`provider/model-id`; a worker without one uses the lead's model), `temperature` and `top_p`, `steps` (a cap on agentic iterations, after which the agent is asked to summarize and list what remains), `color` (a hex value or a theme color such as `accent`), `disable`, and `permission.task` globs that decide which workers the agent may dispatch. The deprecated `tools:` map still loads; `openscience agent create` writes `permission:` rules.
 
 Custom definitions change the agent's instructions and permitted actions. Test a new profile on a small task before relying on it.

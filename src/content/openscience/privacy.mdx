@@ -1,0 +1,43 @@
+---
+title: "Privacy and data"
+description: "Understand local storage, model and tool requests, session trace sharing, and deletion controls."
+---
+
+OpenScience works with local projects, connected model providers, and optional online tools. Which data leaves your device depends on the connections and actions you use, as well as your trace-sharing settings.
+
+## Know where data goes
+
+| Surface | Data involved |
+| --- | --- |
+| Local project and app storage | Working files, saved conversations, scratch data, Results, and settings. |
+| Selected model route | The conversation context and attachments sent for inference. Ace uses a managed route; your own connection uses its provider. |
+| Search, connectors, and remote compute | Queries, selected inputs, and files required by the specific service or task. |
+| Session trace sharing | Diagnostic conversation and tool records uploaded under the account and device privacy settings. |
+
+Choosing a local model removes the remote model request. It does not disable online tools or signed-in trace sharing. Review both before assuming a task is offline.
+
+## Review session trace sharing
+
+While signed in, session traces are shared by default, including sessions using your own keys, subscriptions, and local models. Existing opt-outs remain in effect. Traces can include prompts and model context, provider-visible reasoning and responses, tool inputs and outputs, searches, errors, and reported usage.
+
+Open **Customize → General → Data & privacy → Share session traces** to turn off uploads from this device and discard queued and rejected records. Account preferences can disable sharing across devices or exclude user-owned routes. The device setting does not override an account opt-out. Signing out also stops uploads.
+
+The **Delivery** row distinguishes queued, acknowledged, and rejected records. Temporary failures can leave records waiting for retry. Large text may be truncated and binary attachments represented by metadata. Known credentials are redacted, but private research can still appear in prompts and tool output.
+
+The [privacy policy](https://openscience.sh/privacy) describes retention and account deletion controls. Disabling future uploads and deleting already stored account data are different actions. Review the scope of the deletion control before confirming it; telemetry deletion does not remove your local project, revoke external credentials, or reverse billing records.
+
+## Control file and tool access
+
+Connect only the folders needed for the project. Read approval requests before granting broader filesystem access, running code, publishing, or sending data to a service. See [Permissions](/openscience/permissions), [Projects](/openscience/projects), and [Connectors](/openscience/connectors).
+
+Instructions can guide how the agent handles data, but they are not a substitute for folder permissions or service access controls. Retrieved papers, pages, and tool output are evidence to inspect, not authority to disclose unrelated files or secrets.
+
+## Handle keys and exports
+
+Keep secrets in connection settings, supported environment variables, or your secret manager. Do not place them in prompts, project instructions, example files, or shared repositories. Removing a local connection does not revoke the key at its provider.
+
+Conversation exports and saved Results can contain research material. Inspect them before sharing and include only data the recipient may access. Account sign-in and trace uploads are not full project backups; keep your own copies of inputs, code, and outputs. See [Files and storage](/openscience/files) and [Share and hand off research](/openscience/team-workflows).
+
+## Report a privacy or security issue
+
+Use private account support for account data and payment details. Follow the [security reporting policy](https://github.com/synthetic-sciences/openscience/blob/main/SECURITY.md) for vulnerabilities. A public issue should contain a minimal reproduction with credentials and private research removed.

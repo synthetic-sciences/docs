@@ -1,0 +1,75 @@
+{
+  "name": "Synthetic Sciences",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Guides",
+        "groups": [
+          {
+            "group": "Get started",
+            "pages": [
+              "index",
+              "quickstart",
+              "authentication"
+            ]
+          },
+          {
+            "group": "Workspaces and access",
+            "pages": [
+              "workspaces",
+              "api-keys",
+              "shared-connections"
+            ]
+          },
+          {
+            "group": "Ace and your account",
+            "pages": [
+              "billing",
+              "usage",
+              "privacy",
+              "ascent"
+            ]
+          },
+          {
+            "group": "Private research",
+            "pages": [
+              "graphs",
+              "evidence",
+              "sharing"
+            ]
+          },
+          {
+            "group": "Reference and help",
+            "pages": [
+              "api",
+              "compatibility",
+              "troubleshooting"
+            ]
+          }
+        ]
+      }
+    ],
+    "global": {
+      "anchors": [
+        {
+          "anchor": "Dashboard",
+          "href": "https://app.syntheticsciences.ai"
+        },
+        {
+          "anchor": "Get OpenScience",
+          "href": "https://openscience.sh/download"
+        },
+        {
+          "anchor": "Privacy policy",
+          "href": "https://openscience.sh/privacy"
+        }
+      ]
+    }
+  },
+  "navbar": {
+    "primary": {
+      "label": "Open dashboard",
+      "href": "https://app.syntheticsciences.ai"
+    }
+  }
+}

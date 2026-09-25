@@ -30,7 +30,7 @@ Run `openscience --help` or `openscience <command> --help` for the options suppo
 | `openscience import <file>` | Import a session export. |
 | `openscience stats` | Show local usage statistics. |
 
-Important `run` options: `--model`, `--agent`, `--effort`, `--variant`, `--file`, `--title`, `--command`, `--format json`, `--bare`, `--attach`, `--deny-prompts`, and `--auto-approve`.
+Important `run` options: `--model`, `--agent`, `--effort`, `--variant`, `--file`, `--title`, `--command`, `--format json`, `--bare`, `--attach`, `--workspace`, `--delegation`, `--worker-model`, `--autonomy`, `--deadline`, `--deny-prompts`, and `--auto-approve`.
 
 See [Sessions](/openscience/sessions) for meanings and [Automation](/openscience/automation) for JSON events and exit codes.
 
@@ -67,6 +67,7 @@ See [Sessions](/openscience/sessions) for meanings and [Automation](/openscience
 | --- | --- |
 | `openscience login` | Sign in for Ace and account connections. |
 | `openscience login --no-browser` | Print browser sign-in instructions. |
+| `openscience login --key <workspace-key>` | Connect an existing workspace key; keep the secret out of shell history. |
 | `openscience logout` | Sign this device out. |
 | `openscience status` | Show account, model access, and Wallet; alias `whoami`. |
 | `openscience sync` | Refresh shared workspace connections. |
@@ -109,7 +110,7 @@ See [Sessions](/openscience/sessions) for meanings and [Automation](/openscience
 
 | Command | Purpose |
 | --- | --- |
-| `openscience upgrade [version]` | Update the CLI. |
+| `openscience upgrade [version]` | Update the CLI. On a copy that came with the desktop app, it points at the app's own updater instead. |
 | `openscience uninstall --dry-run` | Preview removal. |
 | `openscience uninstall` | Uninstall while keeping work and settings by default. |
 | `openscience debug paths` | Show resolved application directories. |

@@ -11,15 +11,21 @@ OpenScience can edit files, run commands, and use connected services. Choose the
 | --- | --- |
 | Ask always | Review actions that change files, use the network, run compute, or incur provider costs. |
 | Ask risky | Let routine reversible work proceed and review external, costly, or hard-to-reverse actions. |
-| Full access | Run without routine prompts, subject to provider and system restrictions. |
+| Full access | Run without routine prompts; paid compute asks once per time allowance. |
 
 An organization's policy may restrict the modes available. Use the more interactive option while learning a new project or reviewing unfamiliar inputs.
 
 The mode belongs to the project you set it in. Switching to a wider mode also settles prompts that are already waiting, so cards raised under **Ask risky** disappear once **Full access** covers them.
 
+In **Ask risky**, research searches and WebFetch reads from enabled Network groups or custom allowed domains proceed without another tool approval, including in delegated workers. The literature group includes arXiv, ACL Anthology, OpenReview, and major conference archives. A new destination or redirect outside that list still asks for network approval. **Ask always** still asks, and explicit tool rules remain effective in every mode. Local and private network addresses remain blocked by the retrieval broker.
+
+**Independence** controls how the agent handles decisions and questions. **Tools → Action approval** controls execution permissions; choosing Independent does not change that permission mode.
+
 ## Approval scopes
 
 Each request card offers **Allow once**, or **Allow** with a scope: **This conversation**, **This project**, and for network hosts and searches **Allow always** across the installation. Folder access has no installation-wide scope: a folder approved while working in one project is never reachable from another project, and the request card names the exact folder being granted.
+
+Paid compute is bounded by time rather than bound to one job. A Modal job card offers **Allow once** for that exact plan, or **Allow** for this conversation or this project together with a time allowance (four times the job's timeout, rounded to whole hours, between one and eight). Under an allowance, later Modal jobs in that scope run without a card while the sum of their timeouts fits; the card returns when a job would exceed what is left. A study's approval carries an allowance equal to its hour budget for the jobs that follow its runs, such as the final refit and an external baseline. **Full access** does not remove this card; it asks once per allowance. Full access does run package installs and other environment changes in the Python and R kernels without a card, as it already does for the same commands in the shell; **Ask risky** still asks for each exact change. **Customize → Permissions** lists every standing approval by what it covers, with a Revoke action.
 
 ## Network commands and publishing
 

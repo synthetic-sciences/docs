@@ -24,3 +24,10 @@ Thumbs.db
 
 # Mintlify
 .mintlify
+
+# Generated docs exports and browser results
+public/llms.txt
+public/llms-full.txt
+test-results/
+playwright-report/
+.worktrees/

@@ -1,0 +1,42 @@
+---
+title: "Private Graphs"
+description: "Keep research claims, hypotheses, results, and decisions connected to their evidence."
+---
+
+Open [Graphs](https://app.syntheticsciences.ai/graphs) in the dashboard to view research you own or can access. Graphs preserve research relationships independently of an OpenScience conversation. They are not a cloud copy of every local project.
+
+## Understand a node
+
+A node has an identity, title, summary, content, kind, lifecycle, outcome, and revision. It can also record a hypothesis, insights, parent relationships, evidence, tags, and repository provenance. Parent and child relationships show how one research step builds on another.
+
+| Information | Record |
+| --- | --- |
+| Claim or hypothesis | The statement, assumptions, expected observations, and what would disconfirm it. |
+| Experiment | The method, inputs, evaluation metric, success criterion, and resource constraints. |
+| Result | The observed outcome, uncertainty, evidence, and failed or incomplete checks. |
+| Decision | The chosen next step, rationale, and alternatives considered. |
+| Code provenance | Repository URL, branch, and exact commit when available. |
+
+Record an observation separately from your interpretation. A saved node or successful commit does not validate a scientific claim by itself.
+
+## Stage and commit research
+
+Draft nodes use the staged lifecycle. Edit the title, summary, content, and applicable research fields before committing. The node's commit checklist identifies missing fields such as kind, outcome, summary, hypothesis, insight, and attached artifacts or an explicit reason for no artifacts. Requirements depend on the node kind and outcome.
+
+Review the evidence and complete the checklist before committing. If a save reports a revision conflict, refresh the node and compare the latest record before retrying; do not blindly overwrite another update.
+
+## Continue and compare branches
+
+Create a child node to record a follow-up. Keep alternative approaches in separate branches so the original result and its evidence remain understandable. Record failed and inconclusive attempts as well as successful ones; they explain why you selected the next step.
+
+For a comparison, use the same data revision, evaluation split, metric definition, and resource budget. Link each candidate's outputs and record why you preferred one. OpenScience can help prepare [experiment records](/openscience/experiment-tracking) and [reproduction packages](/openscience/reproduction); those files are not automatically Graphs records.
+
+## Evidence, tags, and history
+
+Open a node to inspect its evidence, tags, repository provenance, and audit history. Follow source references before reusing a claim. An external URL can become unavailable or require separate access even when the node itself is accessible.
+
+Use [Evidence and portability](/account/evidence) for attachments and exports, and [Graph sharing](/account/sharing) for collaborator access.
+
+## Delete carefully
+
+Read the deletion confirmation and affected scope before deleting a node or branch. Parent relationships and descendant operations can affect more than the selected record. Keep an export and original evidence when retention matters; do not assume deletion can be undone.

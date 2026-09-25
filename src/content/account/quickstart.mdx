@@ -1,0 +1,39 @@
+---
+title: "Account setup"
+description: "Sign in, choose a workspace, connect OpenScience, and verify the first request."
+---
+
+## 1. Sign in
+
+Open [app.syntheticsciences.ai](https://app.syntheticsciences.ai) and complete the available sign-in flow. Use the same account when accepting a team invitation or requesting Ascent access.
+
+## 2. Choose a workspace
+
+Open the [workspace selector](https://app.syntheticsciences.ai/workspaces). Use Personal for your own funding and connections, or choose a team you belong to. Each workspace has its own Wallet, members, permissions, and keys.
+
+A workspace in the dashboard supplies funding and shared access. It does not automatically synchronize your local research folder or conversations. See [Workspaces and members](/account/workspaces).
+
+## 3. Connect OpenScience
+
+Install the [OpenScience app](/openscience/installation). During first-run setup choose **Continue with Synthetic Sciences**, approve the device in your browser, and return to the app. For terminal access:
+
+```bash
+openscience login
+openscience status
+```
+
+On a machine without a browser, `openscience login --no-browser` prints approval instructions. A [workspace API key](/account/api-keys) is another option.
+
+## 4. Choose how to run models
+
+- **Ace:** confirm access and purchased or promotional credit in the chosen workspace. Add funds if needed. A saved card and auto reload are optional.
+- **Keys & subscriptions:** connect your provider access in OpenScience. The provider bills those model requests directly.
+- **Local models:** connect your running endpoint in OpenScience. Model inference uses your hardware.
+
+Read [Wallet and billing](/account/billing) before enabling automatic reload. Changing model access in OpenScience does not revoke an existing reload authorization.
+
+## 5. Verify a small task
+
+Open an OpenScience project and ask it to summarize a small file you can check. Confirm the selected model and its funding label, inspect the result, then review **Customize → Usage** or the dashboard's **Usage** page.
+
+Before using private material, review [Privacy and data](/account/privacy). For account failures, use [Troubleshooting](/account/troubleshooting).

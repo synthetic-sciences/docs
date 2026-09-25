@@ -1,0 +1,38 @@
+---
+title: "Authentication and devices"
+description: "Understand browser sign-in, workspace-bound keys, device approval, and sign-out."
+---
+
+## Browser and device sign-in
+
+The dashboard uses your browser session. OpenScience uses an approved device connection or a workspace API key. Approve only a sign-in request you initiated, check the account and workspace, and return to OpenScience after approval.
+
+```bash
+openscience login
+openscience status
+openscience devices
+```
+
+The `devices` command shows this installation's sign-in. Manage other devices through your account settings. `openscience login --no-browser` supports approval from a browser on another machine.
+
+## Funding scope
+
+A device approval selects a funding workspace. In OpenScience, **Customize → General → Funding workspace → Switch workspace** starts a new approval flow. Changing only the dashboard workspace does not change the app's existing selection.
+
+A workspace API key is pinned to the workspace that issued it. A Personal key stays Personal even if you later select a team in the browser. New managed requests must have access to their selected workspace; they do not silently spend a different Wallet when access or funds are missing.
+
+## Sign out
+
+```bash
+openscience logout
+```
+
+For browser sign-in, the app attempts to revoke its device credential and removes local access. If remote revocation fails, remove the device through account settings. A pasted API key is forgotten locally without being revoked; revoke it in **API Keys** to stop other clients using it.
+
+Sign-out preserves local research and separately connected provider credentials. It stops this device's account trace uploads, but does not delete already stored account data or disable auto reload. See [Privacy](/account/privacy) and [Billing](/account/billing).
+
+## Recover a connection
+
+Check `openscience status` after browser approval. If the workspace is missing, verify your account, invitation, and membership. If a key is revoked, create and connect a replacement. Do not paste secrets into support issues or screenshots.
+
+For a configured installation, an account-service outage does not reroute or bill your direct provider and local model connections through Ace. Managed access and shared credentials still require the corresponding service and authorization.

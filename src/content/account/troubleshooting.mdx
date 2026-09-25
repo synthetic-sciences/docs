@@ -1,0 +1,40 @@
+---
+title: "Account troubleshooting"
+description: "Resolve sign-in, membership, funding, usage, and Ascent access problems."
+---
+
+## Device approval does not finish
+
+Return to OpenScience after browser approval and run `openscience status`. Verify the account and workspace you approved. For a machine without a browser, use `openscience login --no-browser`. Do not approve an unrelated request or share the device secret.
+
+## Workspace not found
+
+Refresh [workspaces](https://app.syntheticsciences.ai/workspaces), check the signed-in account, and confirm the invitation was accepted. Membership can be removed after a page loads. A browser workspace switch does not change a device or API key's existing funding scope.
+
+## Ace cannot start a request
+
+Check the selected funding workspace, managed-access permission, valid purchased or promotional credit, and applicable monthly limits. A saved card alone is not credit or auto-reload consent. Personal provider and local routes have separate credentials and availability.
+
+If auto reload is enabled, inspect Billing for a pending payment, card decline, missing payment method, or reached monthly charge limit. Resolve the displayed cause before repeatedly retrying a paid task.
+
+## Payment is pending or declined
+
+Billing reports whether a reload is in progress, with the bank, or being reconciled. The Wallet updates when the payment is confirmed. For a declined card, review the reason and use **Update card** or **Manage in Stripe**. A submitted charge can still settle after auto reload is disabled.
+
+Do not create another payment just because a receipt or balance update is delayed. Keep the workspace, amount, time, and payment identifier for private support.
+
+## Usage looks different
+
+Compare the same UTC dates, model, source, and funding workspace. Local reports reflect saved device conversations; account reports reflect received records; workspace permissions can restrict totals. Reservations, provider estimates, settled charges, and card-funding receipts are distinct. See [Usage reports](/account/usage).
+
+## Shared connection is unavailable
+
+Verify workspace membership and the device's funding selection, then run `openscience sync`. Ask an authorized administrator to check the shared connection. A local key or environment variable may take precedence over that shared connection.
+
+## Ascent has no download
+
+Check the signed-in account's [Ascent page](https://app.syntheticsciences.ai/ascent). Pending review, denied access, an unverified entitlement, and an approved account waiting for a build are different states. Follow the page's current status; Wallet funding does not grant access.
+
+## Ask for help
+
+Include the affected interface, installed OpenScience version, steps, time, workspace, exact error, and request identifier when available. Share only the minimum evidence needed. Use private support for payments or account data and [OpenScience issues](https://github.com/synthetic-sciences/openscience/issues) for a reproducible product bug with private material removed.

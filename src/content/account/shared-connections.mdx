@@ -1,0 +1,33 @@
+---
+title: "Shared connections"
+description: "Let authorized members use workspace provider and service connections without confusing them with personal keys."
+---
+
+## Connect at the right scope
+
+Use the selected workspace's shared-credentials page when you intend to provide a connection to the team. Managing these connections requires the corresponding workspace permission. A provider key connected locally in OpenScience remains personal; it is not automatically published to the workspace.
+
+Choose the supported provider or service, enter the required fields, and follow its verification flow. A saved credential does not guarantee access to every model, resource, or paid feature that provider offers.
+
+## Refresh OpenScience
+
+Confirm the device's **Funding workspace**, then select **Customize → General → Sync now**, or run:
+
+```bash
+openscience sync
+openscience status
+```
+
+Your saved local provider key, explicit environment key, or provider sign-in takes precedence over a shared connection. If the app continues using a personal credential, inspect those sources before replacing the shared key.
+
+## Billing and scope
+
+A shared provider connection uses that provider's access and terms. It is distinct from managed Ace usage billed to the Wallet. The model picker and request's funding route help identify the connection in use. A paid search or image request can use a different route from the chat model.
+
+Workspace connections do not upload or synchronize every research folder. Use [OpenScience handoffs](/openscience/team-workflows) for files and [Graphs](/account/graphs) for explicit research sharing.
+
+## Replace or remove a connection
+
+Check which devices or workflows depend on a shared credential before removing it. Update the connection, verify it, and refresh affected clients. Removing a stored credential does not revoke it at the original provider; use the provider's controls when revocation is required.
+
+If a member cannot use it, check their workspace membership, connection permissions, selected funding workspace, and provider error. Do not share the raw secret in a support message or invitation.

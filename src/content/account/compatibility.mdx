@@ -1,0 +1,30 @@
+---
+title: "Atlas compatibility and migration"
+description: "Find current workflows when an older Atlas page, command, package, or bookmark no longer applies."
+---
+
+Atlas is retired as a public website and package offer. Use OpenScience for active research work and the Synthetic Sciences dashboard for account services and private Graphs. Do not install the retired Atlas package as a prerequisite for either.
+
+## Replace older workflows
+
+| Older guide or feature | Current path |
+| --- | --- |
+| Atlas installation or agent onboarding | [Install OpenScience](/openscience/installation) and [connect your account](/account/quickstart). |
+| Atlas web application | [Synthetic Sciences dashboard](https://app.syntheticsciences.ai). Old `/atlas`, `/install`, `/guide`, and `/docs` app bookmarks redirect to OpenScience. |
+| Research graph, nodes, and evidence | [Private Graphs](/account/graphs) and [Evidence and portability](/account/evidence). |
+| Atlas skills or research-loop recipes | [OpenScience skills](/openscience/skills), [experiment tracking](/openscience/experiment-tracking), and [autoresearch](/openscience/autoresearch). |
+| Managed compute leases and hosted jobs | Connect [your own compute](/openscience/compute) and use [jobs](/openscience/jobs). These are not account-hosted compute offers. |
+| Quotas, Ace+, or a new monthly plan | [Prepaid Ace and optional auto reload](/account/billing). |
+| Atlas MCP-era setup | Use the current [OpenScience connectors](/openscience/connectors) or [local API](/openscience/api) for supported integrations. |
+
+## Existing installations and records
+
+The `@synsci/atlas` package name, `atlas` command, some `thk_` keys, and historical API or database identifiers can remain in retained compatibility code and records. Their presence does not mean every old command is active or every old endpoint is mounted.
+
+Keep existing research exports and record the version and exact command when diagnosing an old installation. Do not assume a broad command registry proves server availability. Use the current dashboard for account changes and verify the supported interface before adapting automation.
+
+Existing balances, paid-through access, and historical billing records are preserved under the migration policy. A retired subscription or quota description is not an offer to purchase a new plan.
+
+## Preserve research before changing tools
+
+Keep copies of source files, graph exports, run records, and evidence. OpenScience session imports and Graphs imports are different formats; neither is a universal importer for all historic Atlas data. Review [Evidence and portability](/account/evidence) and [OpenScience handoffs](/openscience/team-workflows), then verify a small restored sample before depending on a migration.
